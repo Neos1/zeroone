@@ -3,5 +3,4 @@ import User from '.';
 
 export default ({ title: 'Header (User)' });
 
-export const Sipmleuser = () => <User />
-;
+export const SimpleUser = () => <User />;
