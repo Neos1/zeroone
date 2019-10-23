@@ -10,6 +10,7 @@ import LangSwitcher from './components/LangSwitcher';
 import Dropdown from './components/Dropdown';
 import Explanation from './components/Explanation';
 import Logo from './components/Logo';
+import Heading from './components/Heading';
 
 const options = [
   { label: '0x295856bcf02b2017607e4f61cfc1573fd05d511f', value: '1' },
@@ -42,6 +43,11 @@ const App = () => (
       proident proident laborum.
     </Explanation>
     <Logo />
+
+    <Heading>
+      {'Заголовок'}
+      {'Nulla sit minim laboris excepteur.'}
+    </Heading>
   </div>
 );
 export default App;
