@@ -6,6 +6,8 @@
     position: relative;
     padding: 8px 15px 8px 5px;
     border-bottom: 1px solid $lightGrey;
+    cursor: pointer;
+    transition: .2s linear;
     &-line {
       position: absolute;
       top: 100%;
@@ -14,6 +16,17 @@
       background-color: $primary;
       transition: .2s ease-in;
     }
+    &:hover {
+      border-color: $border;
+      .dropdown__arrow {
+        svg {
+          path {
+            opacity: 1;
+            stroke: $border;
+          }
+        }
+      }
+    }
 
   }
   &__arrow {
@@ -21,8 +34,15 @@
     top: 50%;
     right:  0;
     font-size: 0;
-    transform: translateY(-50%) rotate(180deg);
+    transform: translateY(-50%) rotate(0deg);
     transition: .2s;
+    svg {
+      path {
+        opacity: 1;
+        transition: .2s;
+        stroke: $lightGrey;
+      }
+    }
   }
   &__icon {
     position: relative;
@@ -55,7 +75,7 @@
     transition: .3s ease-in-out;
   }
   &__option {
-
+    cursor: pointer;
   }
 
   &--opened {
@@ -63,9 +83,26 @@
       &-line {
         width: 100%;
       }
+      &:hover {
+        .dropdown__arrow {
+          transform: translateY(-50%)rotate(180deg);
+          svg {
+            path {
+              opacity: 1;
+              stroke: $primary;
+            }
+          }
+        }
+      }
     }
     .dropdown__arrow {
-      transform: translateY(-50%)rotate(0);
+      transform: translateY(-50%)rotate(180deg);
+      svg {
+        path {
+          opacity: 1;
+          stroke: $primary;
+        }
+      }
     }
     .dropdown__options {
       height: 100px;
