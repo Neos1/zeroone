@@ -9,6 +9,7 @@ import {
 import LangSwitcher from './components/LangSwitcher';
 import Dropdown from './components/Dropdown';
 import Explanation from './components/Explanation';
+import Logo from './components/Logo';
 
 const options = [
   { label: '0x295856bcf02b2017607e4f61cfc1573fd05d511f', value: '1' },
@@ -40,6 +41,7 @@ const App = () => (
       Mollit voluptate ullamco exercitation aliquip enim ullamco est ad ex sit
       proident proident laborum.
     </Explanation>
+    <Logo />
   </div>
 );
 export default App;
