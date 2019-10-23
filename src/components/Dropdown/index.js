@@ -28,23 +28,25 @@ class Dropdown extends Component {
 
   render() {
     const { children, options } = this.props;
-    const { opened, selectedLabel } = this.state;
+    const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option, index) => (
-      <p
+      <button
+        type="button"
         className="dropdown__option"
         data-value={option.value}
-        key={`option-${index}`}
+        key={`option-${index + 1}`}
         onClick={this.selectOption.bind(this, option)}
+        onKeyDown={this.selectOption.bind(this, option)}
       >
         {option.label}
-      </p>
+      </button>
     ));
 
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`}>
-        <p className="dropdown__head" onClick={this.toggleOptions.bind(this)}>
+        <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions.bind(this)} onClick={this.toggleOptions.bind(this)}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}
-          <span className="dropdown__selected">
+          <span className="dropdown__selected" data-value={selectedValue}>
             {selectedLabel || 'Выберите кошелек'}
             <span className="dropdown__arrow">
               {' '}
@@ -52,7 +54,7 @@ class Dropdown extends Component {
             </span>
           </span>
           <div className="dropdown__head-line" />
-        </p>
+        </button>
         <div className="dropdown__options">
           {getOptions}
         </div>

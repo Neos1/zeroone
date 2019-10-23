@@ -8,3 +8,7 @@
   font-weight: 400;
   font-family: "Grotesk";
 }
+
+::-webkit-scrollbar-thumb {
+  border: 1px solid $border;
+}

@@ -2,15 +2,21 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  button {
+    background: transparent;
+    outline: none;
+  }
   &__head {
     position: relative;
     padding: 8px 15px 8px 5px;
+    border: unset;
     border-bottom: 1px solid $lightGrey;
     cursor: pointer;
     transition: .2s linear;
     &-line {
       position: absolute;
       top: 100%;
+      left: 0;
       width: 0;
       height: 1px;
       background-color: $primary;
@@ -70,11 +76,17 @@
     top: 100%;
     height: 0;
     max-height: 100px;
+    padding: 5px 10px;
     overflow-x: hidden;
     overflow-y: auto;
+    border: 1px solid #E1E4E8;
+    opacity: 0;
     transition: .3s ease-in-out;
   }
   &__option {
+    display: block;
+    padding: 10px 0;
+    border: none;
     cursor: pointer;
   }
 
@@ -106,6 +118,7 @@
     }
     .dropdown__options {
       height: 100px;
+      opacity: 1;
     }
   }
 }
