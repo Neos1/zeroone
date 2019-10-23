@@ -19,9 +19,12 @@ Input.propTypes = {
   children: propTypes.element.isRequired,
   type: propTypes.string.isRequired,
   placeholder: propTypes.string.isRequired,
-  className: propTypes.string.isRequired,
+  className: propTypes.string,
   errorText: propTypes.string.isRequired,
   required: propTypes.bool.isRequired,
+};
+Input.defaultProps = {
+  className: '',
 };
 
 export default Input;

@@ -1,0 +1,74 @@
+@import '../../assets/styles/partials/variables';
+.dropdown {
+  position: relative;
+  display: inline-block;
+  &__head {
+    position: relative;
+    padding: 8px 15px 8px 5px;
+    border-bottom: 1px solid $lightGrey;
+    &-line {
+      position: absolute;
+      top: 100%;
+      width: 0;
+      height: 1px;
+      background-color: $primary;
+      transition: .2s ease-in;
+    }
+
+  }
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    right:  0;
+    font-size: 0;
+    transform: translateY(-50%) rotate(180deg);
+    transition: .2s;
+  }
+  &__icon {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    svg {
+      vertical-align: middle;
+    }
+    &:after {
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 1px;
+      height: 13px;
+      background-color: $lightGrey;
+      transform: translate(-50%, -50%);
+      content: "";
+    }
+  }
+  &__selected {
+    vertical-align: middle;
+  }
+  &__options {
+    position: absolute;
+    top: 100%;
+    height: 0;
+    max-height: 100px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: .3s ease-in-out;
+  }
+  &__option {
+
+  }
+
+  &--opened {
+    .dropdown__head {
+      &-line {
+        width: 100%;
+      }
+    }
+    .dropdown__arrow {
+      transform: translateY(-50%)rotate(0);
+    }
+    .dropdown__options {
+      height: 100px;
+    }
+  }
+}
