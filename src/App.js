@@ -8,6 +8,7 @@ import {
 } from './components/Icons';
 import LangSwitcher from './components/LangSwitcher';
 import Dropdown from './components/Dropdown';
+import Explanation from './components/Explanation';
 
 const options = [
   { label: '0x295856bcf02b2017607e4f61cfc1573fd05d511f', value: '1' },
@@ -27,6 +28,18 @@ const App = () => (
 
 
     <Dropdown options={options}><CreditCard /></Dropdown>
+
+    <Explanation>
+      Sunt commodo ea est magna duis duis. Id exercitation minim duis nostrud anim
+      non commodo labore aliquip est laborum.
+      Aliqua non fugiat id consectetur.
+      Amet reprehenderit exercitation adipisicing sint minim et mollit veniam duis
+      et aliqua dolor sint.
+      Dolore non non ea et id nostrud mollit do pariatur do aute consectetur fugiat sint.
+      Laborum officia aliquip ut aliquip officia proident occaecat amet labore deserunt.
+      Mollit voluptate ullamco exercitation aliquip enim ullamco est ad ex sit
+      proident proident laborum.
+    </Explanation>
   </div>
 );
 export default App;

@@ -1,0 +1,11 @@
+@import '../../assets/styles/partials/variables';
+.explanation {
+  display: inline-block;
+  padding: 5px;
+  color: $border;
+  font-size: 12px;
+  &__string {
+    padding-left: 10px;
+    border-left: 1px solid $border;
+  }
+}

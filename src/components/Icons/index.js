@@ -105,3 +105,16 @@ export const DropdownArrow = () => (
     <path opacity="0.5" d="M1 1L5 5L9 1" stroke="black" />
   </svg>
 );
+export const IconInfo = () => (
+  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 22.9528C17.5228 22.9528 22 18.4756 22 12.9528C22 7.42991 17.5228 2.95276 12 2.95276C6.47715 2.95276 2 7.42991 2 12.9528C2 18.4756 6.47715 22.9528 12 22.9528Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 16.9528V12.9528" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 8.95276H12.01" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+export const CloseIcon = () => (
+  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.247314" y="9.22632" width="12.9376" height="1.11751" transform="rotate(-45 0.247314 9.22632)" fill="#E1E4E8" />
+    <rect x="1.26392" y="0.078083" width="12.9376" height="1.11751" transform="rotate(45 1.26392 0.078083)" fill="#E1E4E8" />
+  </svg>
+);
