@@ -8,15 +8,14 @@ class Dropdown extends Component {
   constructor() {
     super();
     this.state = {
-      opened: false,
       selectedValue: '',
       selectedLabel: '',
     };
   }
 
   toggleOptions = () => {
-    const { opened } = this.state;
-    this.setState({ opened: !opened });
+    const { toggleOptions } = this.props;
+    toggleOptions();
   }
 
   selectOption = ({ value, label }) => {
@@ -28,8 +27,8 @@ class Dropdown extends Component {
   }
 
   render() {
-    const { children, options: data } = this.props;
-    const { opened, selectedLabel, selectedValue } = this.state;
+    const { children, options: data, opened } = this.props;
+    const { selectedLabel, selectedValue } = this.state;
 
     const options = data.map((option) => (
       <DropdownOption
@@ -63,6 +62,8 @@ class Dropdown extends Component {
 Dropdown.propTypes = {
   children: propTypes.element,
   options: propTypes.arrayOf(propTypes.object).isRequired,
+  opened: propTypes.bool.isRequired,
+  toggleOptions: propTypes.func.isRequired,
 };
 Dropdown.defaultProps = {
   children: '',
