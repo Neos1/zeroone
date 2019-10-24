@@ -4,9 +4,11 @@
   font-size: 0;
   border: 1px solid $primary;
   cursor: pointer;
+
   &__image {
     vertical-align: middle;
   }
+
   &__wallet {
     margin: 0 10px;
     font-size: 12px;
@@ -15,6 +17,7 @@
       display: none;
     }
   }
+  
   &:hover {
     .user__wallet {
       &--full {

@@ -7,12 +7,17 @@ const Input = ({
 }) => (
   <div className={`${styles.field} ${className}`}>
     {children}
-    <input className="field__input" type={type} placeholder={placeholder} required={required} />
-    <span className="field__label">{placeholder}</span>
-    <p className="field__error-text">
+    <input
+      className={styles.field__input}
+      type={type}
+      placeholder={placeholder}
+      required={required}
+    />
+    <span className={styles.field__label}>{placeholder}</span>
+    <p className={styles['field__error-text']}>
       {errorText}
     </p>
-    <div className="field__line" />
+    <div className={styles.field__line} />
   </div>
 );
 Input.propTypes = {

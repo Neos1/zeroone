@@ -1,15 +1,15 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { IconInfo, CloseIcon } from '../Icons';
+import { InfoIcon, CloseIcon } from '../Icons';
 import styles from './Alert.scss';
 
 const Alert = ({ children, visible }) => (
-  <div className={`${styles.alert} ${visible ? 'alert--visible' : ''}`}>
-    <IconInfo />
-    <span className="alert__text">
+  <div className={`${styles.alert} ${visible ? styles['alert--visible'] : ''}`}>
+    <InfoIcon />
+    <span className={styles.alert__text}>
       {children}
     </span>
-    <span className="alert__close">
+    <span className={styles.alert__close}>
       <CloseIcon />
     </span>
   </div>

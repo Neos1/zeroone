@@ -4,7 +4,7 @@ import styles from './Button.scss';
 
 export const Button = ({ children, className }) => (
   <button type="button" className={`${styles.btn} ${className}`}>
-    <span className="btn__text">
+    <span className={styles.btn__text}>
       {children}
     </span>
   </button>
@@ -18,7 +18,7 @@ Button.propTypes = {
 export const IconButton = ({ children, className }) => (
   <button type="button" className={`${styles.btn} ${className}`}>
     {children[0]}
-    <span className="btn__text">
+    <span className={styles.btn__text}>
       {children[1]}
     </span>
   </button>

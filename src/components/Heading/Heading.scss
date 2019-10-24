@@ -2,12 +2,14 @@
 
 .heading {
   text-align: center;
+
   &--main {
     margin-bottom: 5px;
     color: $primary;
     font-weight: bold;
     font-size: 24px;
   }
+  
   &--sub {
     color: $secondary;
     font-size: 14px;

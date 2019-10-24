@@ -6,6 +6,7 @@
   width: 16px;
   height: 16px;
   cursor: default;
+
   &__icon {
     position: relative;
     display: inline-block;
@@ -15,7 +16,7 @@
     font-size: 11px;
     line-height: 15px;
     text-align: center;
-    transition: .2s;
+    transition: 0.2s;
     &::before {
       position: absolute;
       top: 50%;
@@ -26,7 +27,7 @@
       background-color: $white;
       border: 1px solid $border;
       transform: translate(-50%, -50%) rotate(-45deg);
-      transition: .2s;
+      transition: 0.2s;
       content: '';
     }
     &:hover {
@@ -41,6 +42,7 @@
       }
     }
   }
+  
   &__text {
     position: absolute;
     top:50%; 
@@ -53,6 +55,6 @@
     transform: translate(-1px, 2px);
     visibility: hidden;
     opacity: 0;
-    transition: .2s;
+    transition: 0.2s;
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { DropdownArrow } from '../Icons';
+import DropdownOption from '../DropdownOption/DropdownOption';
+import { DropdownArrowIcon } from '../Icons';
 import styles from './Dropdown.scss';
 
 class Dropdown extends Component {
@@ -13,50 +14,46 @@ class Dropdown extends Component {
     };
   }
 
-  toggleOptions() {
+  toggleOptions = () => {
     const { opened } = this.state;
     this.setState({ opened: !opened });
   }
 
-  selectOption(selected) {
+  selectOption = ({ value, label }) => {
     this.setState({
-      selectedLabel: selected.label,
-      selectedValue: selected.value,
+      selectedLabel: label,
+      selectedValue: value,
     });
     this.toggleOptions();
   }
 
   render() {
-    const { children, options } = this.props;
+    const { children, options: data } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
-    const getOptions = options.map((option, index) => (
-      <button
-        type="button"
-        className="dropdown__option"
-        data-value={option.value}
-        key={`option-${index + 1}`}
-        onClick={this.selectOption.bind(this, option)}
-        onKeyDown={this.selectOption.bind(this, option)}
-      >
-        {option.label}
-      </button>
+
+    const options = data.map((option) => (
+      <DropdownOption
+        label={option.label}
+        value={option.value}
+        select={this.selectOption}
+      />
     ));
 
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`}>
-        <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions.bind(this)} onClick={this.toggleOptions.bind(this)}>
-          {children ? <span className="dropdown__icon">{children}</span> : ''}
-          <span className="dropdown__selected" data-value={selectedValue}>
+        <button type="button" className={styles.dropdown__head} onClick={this.toggleOptions}>
+          {children ? <span className={styles.dropdown__icon}>{children}</span> : ''}
+          <span className={styles.dropdown__selected} data-value={selectedValue}>
             {selectedLabel || 'Выберите кошелек'}
             <span className="dropdown__arrow">
               {' '}
-              <DropdownArrow />
+              <DropdownArrowIcon />
             </span>
           </span>
-          <div className="dropdown__head-line" />
+          <div className={styles['dropdown__head-line']} />
         </button>
-        <div className="dropdown__options">
-          {getOptions}
+        <div className={styles.dropdown__options}>
+          {options}
         </div>
       </div>
     );
@@ -70,5 +67,6 @@ Dropdown.propTypes = {
 Dropdown.defaultProps = {
   children: '',
 };
+
 
 export default Dropdown;

@@ -4,17 +4,20 @@
   position: relative;
   display: inline-block;
   border: 2px solid $primary;
+
   span{
     display: inline-block;
     vertical-align: middle;
     transition: 0.2s linear;
   }
+
   &__dark {
     padding: 4px 5px;
     color: $white;
     font-size: 32px;
     background-color: $primary;
   }
+
   &__light {
     position: relative;
     padding: 15px;
@@ -23,6 +26,7 @@
     font-size: 12px;
     background-color: $white;
   }
+  
   &:hover {
     .logo {
       &__dark, &__light {

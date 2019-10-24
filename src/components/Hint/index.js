@@ -5,8 +5,8 @@ import styles from './Hint.scss';
 
 const Hint = ({ children }) => (
   <div className={`${styles.hint}`}>
-    <span className="hint__icon"> ? </span>
-    <span className="hint__text">
+    <span className={styles.hint__icon}> ? </span>
+    <span className={styles.hint__text}>
       {children}
     </span>
   </div>

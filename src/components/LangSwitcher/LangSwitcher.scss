@@ -2,6 +2,7 @@
 
 .lang {
   display: inline-block;
+  
   &--selected {
     position: relative;
     display: block;
@@ -27,18 +28,20 @@
       border-style: solid;
       border-width: 6px 3px 0 3px;
       transform: translateY(-50%);
-      transition: .2s;
+      transition: 0.2s;
       content: '';
     }
   }
+
   &__options {
     display: inline-block;
     padding: 5px 10px;
     border: 1px solid $border;
     visibility: hidden;
     opacity: 0;
-    transition: .2s linear;
+    transition: 0.2s linear;
   }
+  
   &__option {
     display: block;
     padding: 5px 0;

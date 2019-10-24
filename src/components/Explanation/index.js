@@ -4,7 +4,7 @@ import styles from './Explanation.scss';
 
 const Explanation = ({ children }) => (
   <p className={`${styles.explanation}`}>
-    <p className="explanation__string">{children}</p>
+    <p className={styles.explanation__string}>{children}</p>
   </p>
 );
 

@@ -2,17 +2,19 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  
   button {
     background: transparent;
     outline: none;
   }
+
   &__head {
     position: relative;
     padding: 8px 15px 8px 5px;
     border: unset;
     border-bottom: 1px solid $lightGrey;
     cursor: pointer;
-    transition: .2s linear;
+    transition: 0.2s linear;
     &-line {
       position: absolute;
       top: 100%;
@@ -20,7 +22,7 @@
       width: 0;
       height: 1px;
       background-color: $primary;
-      transition: .2s ease-in;
+      transition: 0.2s ease-in;
     }
     &:hover {
       border-color: $border;
@@ -33,23 +35,24 @@
         }
       }
     }
-
   }
+
   &__arrow {
     position: absolute;
     top: 50%;
     right:  0;
     font-size: 0;
     transform: translateY(-50%) rotate(0deg);
-    transition: .2s;
+    transition: 0.2s;
     svg {
       path {
         opacity: 1;
-        transition: .2s;
+        transition: 0.2s;
         stroke: $lightGrey;
       }
     }
   }
+
   &__icon {
     position: relative;
     display: inline-block;
@@ -68,9 +71,11 @@
       content: "";
     }
   }
+
   &__selected {
     vertical-align: middle;
   }
+
   &__options {
     position: absolute;
     top: 100%;
@@ -82,8 +87,9 @@
     background-color: $white;
     border: 1px solid #E1E4E8;
     opacity: 0;
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
   }
+
   &__option {
     display: block;
     padding: 10px 0;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard } from '../Icons';
+import { CreditCardIcon } from '../Icons';
 import Dropdown from '.';
 
 export default ({ title: 'Dropdown' });
@@ -9,4 +9,4 @@ const options = [
   { label: '0x00000000000000000000000000', value: '3' },
 ];
 
-export const WalletDropdown = () => <Dropdown options={options}><CreditCard /></Dropdown>;
+export const WalletDropdown = () => <Dropdown options={options}><CreditCardIcon /></Dropdown>;

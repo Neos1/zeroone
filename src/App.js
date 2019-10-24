@@ -4,7 +4,7 @@ import {
 } from './components/Button';
 import Input from './components/Input';
 import {
-  Password, CreditCard,
+  PasswordIcon, CreditCardIcon,
 } from './components/Icons';
 import LangSwitcher from './components/LangSwitcher';
 import Dropdown from './components/Dropdown';
@@ -24,12 +24,12 @@ const App = () => (
     <Button className="btn--big btn--white">приувет</Button>
 
     <Input type="password" required={false} className="" placeholder="Введите пароль" errorText="Вы ошиблись, смиритесь и исправьтесь">
-      <Password />
+      <PasswordIcon />
     </Input>
     <LangSwitcher />
 
 
-    <Dropdown options={options}><CreditCard /></Dropdown>
+    <Dropdown options={options}><CreditCardIcon /></Dropdown>
 
     <Explanation>
       Sunt commodo ea est magna duis duis. Id exercitation minim duis nostrud anim

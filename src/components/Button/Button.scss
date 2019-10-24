@@ -8,15 +8,17 @@
   outline: none;
   cursor: pointer;
   transition: 0.2s linear;
+
   svg,
   &__text {
     vertical-align: middle;
   }
+
   svg {
     margin-right: 10px;
     path,
     circle {
-      transition: 0.2s;
+      transition: 00.2s;
     }
   }
 
@@ -26,15 +28,18 @@
     font-weight: bold;
     font-size: 14px;
   }
+
   &--default {
     min-width: 232px;
     padding: 18px 0;
     font-size: 12px;
   }
+
   &--small {
     min-width: 124px;
     padding: 5px;
   }
+
   &--black {
     color: $white;
     background-color: $primary;
@@ -48,6 +53,7 @@
       border-color: $primary;
     }
   }
+
   &--link {
     color: $linkColor;
     background-color: transparent;
@@ -67,6 +73,7 @@
       }
     }
   }
+
   &--white {
     color: $primary;
     background-color: $white;
@@ -106,6 +113,7 @@
       }
     }
   }
+
   &--dashed {
     color: $grey;
     border-style: dashed;
@@ -116,6 +124,7 @@
       color: $white;
     }
   }
+  
   &--noborder {
     border: none;
   }
