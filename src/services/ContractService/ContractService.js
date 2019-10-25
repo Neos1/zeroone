@@ -14,6 +14,16 @@ class ContractService {
   createTxData(method, params) {
     return this.contract.methods[method](params).encodeABI();
   }
+
+  /**
+   * calling contract method
+   * @param {string} method method, which will be called
+   * @param {string} from address of caller
+   */
+  async callMethod(method, from) {
+    const data = await this.contract.methods[method]().call({ from });
+    return data;
+  }
 }
 
 export default ContractService;
