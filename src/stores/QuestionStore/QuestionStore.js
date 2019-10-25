@@ -4,11 +4,11 @@ import { observable, action, computed } from 'mobx';
  * Contains methods for working
  */
 class QuestionStore {
-  @observable questions;
+  @observable _questions;
 
 
   constructor() {
-    this.questions = [];
+    this._questions = [];
   }
 
   /**
@@ -25,7 +25,7 @@ class QuestionStore {
    * @param {object} question Question which will be added
    */
   @action addQuestion = (question) => {
-    this.questions.push(question);
+    this._questions.push(question);
   }
 
   /**
@@ -34,7 +34,7 @@ class QuestionStore {
    * @param {number} id id of question
    * @returns {object} question matched by id
    */
-  @action getQuestionById = (id) => this.questions.filter((question) => question.id === id)
+  @action getQuestionById = (id) => this._questions.filter((question) => question.id === id)
 
 
   /**
