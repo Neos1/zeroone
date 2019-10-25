@@ -28,9 +28,9 @@ class WalletService {
 
   /**
    * Recover wallet from 12-word recover phrase
-   * @param {string} seedPhrase  - 12 word recover phrase
+   * @param {string} mnemonic - 12 word recover phrase
    */
-  recoverWallet(seedPhrase) {
+  recoverWallet(mnemonic) {
 
   }
 }
