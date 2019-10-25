@@ -13,7 +13,6 @@ class HistoryStore {
     // this.votings.push(voting)
   }
 
-
   /**
    * Getting full info about one voting, selected by id
    * @function

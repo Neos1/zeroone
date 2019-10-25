@@ -9,14 +9,12 @@ class web3Service {
    */
   constructor(providerUrl) {
     this.web3 = new Web3();
-    this.gasPrice = this.web3.utils.toHex(1000000000);
-    this.gasLimit = this.web3.utils.toHex(21000);
     this.provider = '';
     this.address2nonce = {};
     this.createProvider(providerUrl)
       .then((provider) => {
         this.setProvider(provider);
-      }).catch((e) => new Error('this.web3 error: createProvider', e));
+      }).catch((e) => new Error('web3 error: createProvider', e));
   }
 
   /**
