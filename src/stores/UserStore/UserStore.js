@@ -3,10 +3,11 @@ import { observable, action, computed } from 'mobx';
  * Describes store with user data
  */
 class UserStore {
-  @observable userInfo = {
-    address: '',
-    balance: 0,
-  };
+  @observable encryptedWallet = ''
+
+  @observable address: '';
+
+  @observable balance: 0;
 
   /**
    * Signing transactions with private key
