@@ -44,9 +44,9 @@ class web3Service {
    * @param {string} txData Raw transaction (without 0x)
    * @param {string} from User, who send transaction
    */
-  sendTransaction(txData, from) {
+  sendSignedTransaction(txData) {
     this.address2nonce[from] += 1;
-    return this.web3.sendSignedTransaction(`0x${txData}`, from);
+    return this.web3.sendSignedTransaction(`0x${txData}`);
   }
 
   /**

@@ -24,5 +24,13 @@ class WalletService {
   recoverWallet(mnemonic) {
 
   }
+
+  /**
+   * Write encrypted wallet to file
+   * @param {string} encryptedWallet
+   */
+  writeWalletToFile(encryptedWallet) {
+
+  }
 }
 export default WalletService;
