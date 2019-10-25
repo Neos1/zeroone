@@ -1,3 +1,3 @@
-import HistoryStore from './HistoryStore';
+import historyStore from './HistoryStore';
 
-export default HistoryStore;
+export default historyStore;
