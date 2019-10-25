@@ -1,5 +1,7 @@
 import { observable, action, computed } from 'mobx';
-
+/**
+ * Describes store with user data
+ */
 class UserStore {
   @observable userInfo = {
     address: '',
@@ -8,6 +10,7 @@ class UserStore {
 
   /**
    * Signing transactions with private key
+   * @function
    * @param {string} password password which was used to encode Keystore V3
    */
   @action singTransaction = (password) => {
@@ -15,6 +18,8 @@ class UserStore {
   }
 
   /**
+   * Sending transaction from user
+   * @function
    * @param {string} txData Raw transaction
    */
   @action sendTransaction = (txData) => {
