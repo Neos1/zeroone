@@ -1,20 +1,11 @@
 /** Service for working with wallets */
 class WalletService {
   /**
-   * Constructor
-   * @constructor
-   * @param {string} encryptedWallet - JSON String with Keystore V3
+   * Decrypts wallet
+   * @param {string} encryptedWallet JSON keystoreV3
+   * @param {string} password password for decrypting
    */
-  constructor() {
-    this.encryptedWallet = '';
-  }
-
-
-  /**
-   * Encrypts wallet
-   * @param {string} encryptedWallet
-   */
-  readWallet(encryptedWallet) {
+  readWallet(encryptedWallet, password) {
 
   }
 
