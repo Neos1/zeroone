@@ -34,7 +34,6 @@ class web3Service {
 
   /**
    * sets this.web3 provider instance
-   * inits connection
    * @param {string} url this.web3 socket connection url
    */
   setProvider(provider) {
