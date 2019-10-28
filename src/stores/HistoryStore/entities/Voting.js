@@ -13,16 +13,6 @@ class Voting {
     this.questionId = questionId;
     this.params = params;
   }
-
-  /**
-   * getting stats of voting on click
-   * @function
-   * @return {Array} stats of voting
-   */
-  getVotingStats() {
-    const stats = [];
-    return stats;
-  }
 }
 
 export default Voting;

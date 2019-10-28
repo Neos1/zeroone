@@ -7,7 +7,7 @@ class ContractService {
   }
 
   /**
-   * Creates transs
+   * Creates transaction
    * @param {string} method
    * @param {array} params
    */
