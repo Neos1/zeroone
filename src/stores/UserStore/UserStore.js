@@ -5,9 +5,9 @@ import { observable, action, computed } from 'mobx';
 class UserStore {
   @observable encryptedWallet = ''
 
-  @observable address: '';
+  @observable address = '';
 
-  @observable balance: 0;
+  @observable balance = 0;
 
   /**
    * Signing transactions with private key
@@ -26,8 +26,14 @@ class UserStore {
   @action sendTransaction = (txData) => {
 
   };
+
+  /**
+   * Getting user Ethereum balance
+   */
+  @action getEthBalance = () => {
+    this.balance = 0;
+    return false;
+  }
 }
 
-const userStore = new UserStore();
-
-export default userStore;
+export default UserStore;

@@ -3,15 +3,19 @@ import { observable, action, computed } from 'mobx';
  * class for working with userGroup
  */
 class UsergroupStore {
-  @observable groupInfo = {
-    alias: '',
-    description: '',
-    address: '',
-    totalSupply: 0,
-    tokenSymbol: '',
-    tokenType: '',
-    usersList: [],
-  }
+  @observable alias = '';
+
+  @observable description = '';
+
+  @observable address = '';
+
+  @observable totalSupply = 0;
+
+  @observable tokenSymbol = '';
+
+  @observable tokenType = '';
+
+  @observable usersList = [];
 
   /**
    * @constructor

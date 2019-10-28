@@ -2,10 +2,18 @@
 class WalletService {
   /**
    * Decrypts wallet
-   * @param {string} encryptedWallet JSON keystoreV3
+   * @param {string} url path to wallet
    * @param {string} password password for decrypting
    */
-  readWallet(encryptedWallet, password) {
+  readWalletFromFile(url, password) {
+
+  }
+
+  /**
+   * Write encrypted wallet to file
+   * @param {string} encryptedWallet
+   */
+  writeWalletToFile(encryptedWallet) {
 
   }
 
@@ -22,14 +30,6 @@ class WalletService {
    * @param {string} mnemonic - 12 word recover phrase
    */
   recoverWallet(mnemonic) {
-
-  }
-
-  /**
-   * Write encrypted wallet to file
-   * @param {string} encryptedWallet
-   */
-  writeWalletToFile(encryptedWallet) {
 
   }
 }

@@ -65,5 +65,4 @@ class HistoryStore {
     return false;
   }
 }
-const historyStore = new HistoryStore();
-export default historyStore;
+export default HistoryStore;

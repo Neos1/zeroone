@@ -1,9 +1,8 @@
 import { observable, action, computed } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
-import userStore from '../UserStore';
-
-import { historyStore as HistoryStore } from '../HistoryStore';
+import UserStore from '../UserStore';
+import HistoryStore from '../HistoryStore';
 
 /**
  * Class implements whole project
@@ -17,7 +16,7 @@ class ProjectStore {
 
   @observable historyStore = new HistoryStore();
 
-  @observable userStore = new userStore();
+  @observable userStore = new UserStore();
 
   /**
    * Starting of voting
