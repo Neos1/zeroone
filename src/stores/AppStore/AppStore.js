@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import UserStore from '../UserStore';
+import ProjectStore from '../ProjectStore';
 
 export default class AppStore {
   @observable walletList = [];
@@ -7,6 +8,9 @@ export default class AppStore {
   @observable projectList = [];
 
   @observable userStore = new UserStore()
+
+  @observable projectStore;
+
 
   /**
    * Getting list of url's for sending this to wallet service
@@ -26,7 +30,18 @@ export default class AppStore {
     this.projectList.push(project);
   }
 
+  /**
+   * Adding encrypted Wallet to userStore
+   */
   @action setUserWallet = (encryptedWallet) => {
     this.userStore.setEncryptedWallet(encryptedWallet);
+  }
+
+  /**
+   * initiating project
+   * @param {string} address adress of project
+   */
+  @action initProject(address) {
+    this.projectStore = new ProjectStore(address);
   }
 }

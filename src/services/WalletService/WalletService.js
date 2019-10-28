@@ -20,6 +20,7 @@ class WalletService {
   /**
    * Creates new wallet
    * @param {string} password - combination of symbols which will be allow decode wallet
+   * @returns {array} Encrypted wallet and seed
    */
   createWallet(password) {
 
@@ -28,6 +29,7 @@ class WalletService {
   /**
    * Recover wallet from 12-word recover phrase
    * @param {string} mnemonic - 12 word recover phrase
+   * @returns {object} wallet object
    */
   recoverWallet(mnemonic) {
 
