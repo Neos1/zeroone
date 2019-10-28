@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
 import HistoryStore from '../HistoryStore';
+import { votingStates } from '../../constants';
 
 /**
  * Class implements whole project
@@ -10,12 +11,6 @@ class ProjectStore {
   @observable projectAddress = ''
 
   @observable prepared = 0;
-
-  @observable votingStats = {
-    default: 0,
-    prepared: 1,
-    active: 2,
-  }
 
   @observable userGrops = [];
 
@@ -34,7 +29,7 @@ class ProjectStore {
    * Starting of voting
    */
   @action startVoting() {
-    this.prepared = this.votingStats.active;
+    this.prepared = votingStates.active;
   }
 
   /**
@@ -46,7 +41,7 @@ class ProjectStore {
     /**
      * Bunch of code
      */
-    this.prepared = this.votingStats.prepared;
+    this.prepared = votingStates.prepared;
   }
 
 

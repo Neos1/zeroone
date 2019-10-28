@@ -11,7 +11,7 @@ class UserStore {
   @observable balance = 0;
 
 
-  @action setEncryptedWallet = (wallet) => {
+  @action setEncryptedWallet(wallet) {
     this.encryptedWallet = wallet;
   }
 
@@ -20,7 +20,7 @@ class UserStore {
    * @param password password for decoding
    * @return {bool} is password correct
    */
-  @action checkPassword = (password) => {
+  @action checkPassword(password) {
     walletService.checkPassword(this.encryptedWallet, password);
   }
 
@@ -31,7 +31,7 @@ class UserStore {
    * @param {string} password password which was used to encode Keystore V3
    * @return Signed TX data
    */
-  @action singTransaction = (data, password) => {
+  @action singTransaction(data, password) {
 
   }
 
@@ -40,15 +40,15 @@ class UserStore {
    * @function
    * @param {string} txData Raw transaction
    */
-  @action sendTransaction = (txData) => {
+  @action sendTransaction(txData) {
 
-  };
+  }
 
   /**
    * Getting user Ethereum balance
    * @return {number} balance in ETH
    */
-  @action getEthBalance = () => {
+  @action getEthBalance() {
     this.balance = 0;
     return false;
   }

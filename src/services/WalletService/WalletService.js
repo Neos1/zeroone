@@ -4,6 +4,7 @@ class WalletService {
    * Decrypts wallet
    * @param {string} url path to wallet
    * @param {string} password password for decrypting
+   * @returns {object} Wallet instance
    */
   readWalletFromFile(url, password) {
 
@@ -12,6 +13,7 @@ class WalletService {
   /**
    * Write encrypted wallet to file
    * @param {string} encryptedWallet
+   * @return {bool} write status: 1 - success, 2 - error
    */
   writeWalletToFile(encryptedWallet) {
 
@@ -20,7 +22,7 @@ class WalletService {
   /**
    * Creates new wallet
    * @param {string} password - combination of symbols which will be allow decode wallet
-   * @returns {array} Encrypted wallet and seed
+   * @returns {object} encryptedWallet,seed
    */
   createWallet(password) {
 
@@ -45,5 +47,4 @@ class WalletService {
 
   }
 }
-const walletService = new WalletService();
 export default walletService;

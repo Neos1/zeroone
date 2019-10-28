@@ -17,19 +17,6 @@ class Question {
     this.text = text;
     this.params = params;
   }
-
-  /**
-   * select question for voting initialization
-   * @return {object} data about question
-   */
-  selectQuestionForVoting() {
-    const {
-      id, groupId, caption, text, params,
-    } = this;
-    return {
-      id, groupId, caption, text, params,
-    };
-  }
 }
 
 export default Question;

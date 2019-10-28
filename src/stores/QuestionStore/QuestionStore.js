@@ -7,7 +7,6 @@ import Question from './entities/Question';
 class QuestionStore {
   @observable _questions;
 
-
   constructor(projectAddress) {
     this._questions = [];
     this.fetchQuestionsCount(projectAddress);

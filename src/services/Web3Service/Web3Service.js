@@ -40,17 +40,10 @@ class web3Service {
   }
 
   /**
-   * sets wallet to web3 by private key
-   * @param {string} privateKey private key
-   */
-  setWallet(privateKey) {
-    this.web3.eth.accounts.wallet.add(privateKey);
-  }
-
-  /**
    * Sending transaction to contract
    * @param {string} txData Raw transaction (without 0x)
    * @param {string} from User, who send transaction
+   * @return {Promise} promise with web3 transaction PromiEvent
    */
   sendSignedTransaction(txData) {
     this.address2nonce[from] += 1;
@@ -72,6 +65,14 @@ class web3Service {
         resolve(this.address2nonce[address]);
       }
     });
+  }
+
+  /**
+   * Decreasing nonce of address
+   * @param {string} address address, for which we decrease nonce
+   */
+  decreaseNonce(address) {
+    if (this.address2nonce[address]) this.address2nonce[address] -= 1;
   }
 }
 export default web3Service;

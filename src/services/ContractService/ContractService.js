@@ -19,9 +19,10 @@ class ContractService {
    * calling contract method
    * @param {string} method method, which will be called
    * @param {string} from address of caller
+   * @param params parameters for method
    */
-  async callMethod(method, from, params) {
-    const data = await this.contract.methods[method](params).call({ from });
+  async callMethod(method, from, ...params) {
+    const data = await this.contract.methods[method](...params).call({ from });
     return data;
   }
 }
