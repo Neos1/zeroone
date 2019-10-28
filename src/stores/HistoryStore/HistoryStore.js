@@ -1,16 +1,27 @@
 import { observable, action, computed } from 'mobx';
+import Voting from './entities/Voting';
 
 class HistoryStore {
   @observable votings = [];
 
+  /**
+   * recieving voting length for fetching them from contract
+   * @function
+   * @param {string} address user address
+   * @returns {number} count of votings
+   */
+  @action fetchVotingsCount = (address) => {
+
+  }
 
   /**
    * recieving voting for local using
    * @function
-   * @param {string} address project address
+   * @param {string} address user address
    */
-  @action recieveVotings = (address) => {
-    // this.votings.push(voting)
+  @action fetchVotings = (address) => {
+    const data = {};
+    this.votings.push(new Voting(data));
   }
 
   /**

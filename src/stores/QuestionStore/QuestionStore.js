@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import Question from './entities/Question';
 
 /**
  * Contains methods for working
@@ -12,10 +13,21 @@ class QuestionStore {
   }
 
   /**
+   * Recieving questions count for fetching them from contract
+   * @function
+   * @param {string} address user address
+   * @returns {number} count of questions
+   */
+  @action fetchQuestionsCount = (address) => {
+
+  }
+
+  /**
    * Recieving question from contract
    * @function
+   * @param {string} address user address
    */
-  @action recieveQuestions = () => {
+  @action fetchQuestions = (address) => {
 
   }
 
@@ -25,7 +37,7 @@ class QuestionStore {
    * @param {object} question Question which will be added
    */
   @action addQuestion = (question) => {
-    this._questions.push(question);
+    this._questions.push(new Question(question));
   }
 
   /**
