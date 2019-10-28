@@ -3,6 +3,8 @@ import { observable, action, computed } from 'mobx';
  * class for working with userGroup
  */
 class UsergroupStore {
+  @observable id = '';
+
   @observable alias = '';
 
   @observable description = '';
@@ -20,6 +22,7 @@ class UsergroupStore {
   /**
    * @constructor
    * @param {object} groupInfo  Contains info about group
+   * @param {string} groupInfo.id id of usergroup
    * @param {string} groupInfo.alias Name of the group in contract
    * @param {string} groupInfo.description Description about userGroup
    * @param {string} groupInfo.address Address of smart-contract
@@ -28,11 +31,16 @@ class UsergroupStore {
    * @param {Array} groupInfo.usersList List of users
    */
   constructor({
-    alias, description, address, totalSupply, tokenSymbol, tokenType,
+    id, alias, description, address, totalSupply, tokenSymbol, tokenType, usersList,
   }) {
-    this.groupInfo = Object.assign(this.groupInfo, {
-      alias, description, address, totalSupply, tokenSymbol, tokenType,
-    });
+    this.id = id;
+    this.alias = alias;
+    this.description = description;
+    this.address = address;
+    this.totalSupply = totalSupply;
+    this.tokenSymbol = tokenSymbol;
+    this.tokenType = tokenType;
+    this.usersList = usersList;
   }
 
   /**

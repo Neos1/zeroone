@@ -1,28 +1,40 @@
 import { observable, action, computed } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
-import UserStore from '../UserStore';
 import HistoryStore from '../HistoryStore';
 
 /**
  * Class implements whole project
  */
 class ProjectStore {
-  @observable prepared = false;
+  @observable projectAddress = ''
+
+  @observable prepared = 0;
+
+  @observable votingStats = {
+    default: 0,
+    prepared: 1,
+    active: 2,
+  }
 
   @observable userGrops = [];
 
-  @observable questionStore = new QuestionStore();
+  @observable questionStore;
 
-  @observable historyStore = new HistoryStore();
+  @observable historyStore;
 
-  @observable userStore = new UserStore();
+  constructor(projectAddress) {
+    this.projectAddress = projectAddress;
+    this.questionStore = new QuestionStore(projectAddress);
+    this.historyStore = new HistoryStore(projectAddress);
+    this.userGrops = this.fetchUserGroups(projectAddress);
+  }
 
   /**
    * Starting of voting
    */
   @action startVoting() {
-    this.prepared = false;
+    this.prepared = this.votingStats.active;
   }
 
   /**
@@ -34,13 +46,28 @@ class ProjectStore {
     /**
      * Bunch of code
      */
-    this.prepared = true;
+    this.prepared = this.votingStats.prepared;
+  }
+
+
+  /**
+   * getting usergroups lentgh from contract
+   */
+  @action fetchUserGroupsLength = () => {
+    /**
+     *  get usergroups length, then
+     * for 1 to length
+     * this.fetchUserGroups(id)
+     */
   }
 
   /**
    * getting usergroups from contract
+   * @param {number} projectAddress address of project
+   * @return {array} list of usergroups
    */
-  @action getuserGroups = () => {
+  @action fetchUserGroups = (projectAddress) => {
+    this.fetchUserGroupsLength(projectAddress);
     const data = {};
     this.userGrops.push(new UsergroupStore(data));
   }

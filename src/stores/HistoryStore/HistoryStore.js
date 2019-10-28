@@ -4,6 +4,10 @@ import Voting from './entities/Voting';
 class HistoryStore {
   @observable votings = [];
 
+  constructor(projectAddress) {
+    this.fetchVotings(projectAddress);
+  }
+
   /**
    * recieving voting length for fetching them from contract
    * @function
@@ -20,14 +24,15 @@ class HistoryStore {
    * @param {string} address user address
    */
   @action fetchVotings = (address) => {
-    const data = {};
-    this.votings.push(new Voting(data));
+    this.fetchVotingsCount(address);
+    this.votings.push(new Voting());
   }
 
   /**
    * Getting full info about one voting, selected by id
    * @function
    * @param {number} id id of voting
+   * @return {object} selected voting
    */
   @action getVotingsById = (id) => this.votings.filter((voting) => voting.id === id)
 
@@ -35,6 +40,7 @@ class HistoryStore {
    * Getting stats about votes in voting, selected by id
    * @function
    * @param {number} id id of voting
+   * @return {array} stats
    */
   @action getVotingStats = (id) => {}
 
@@ -46,6 +52,7 @@ class HistoryStore {
    * @param {number} params.descision filter voting by descision
    * @param {string} params.dateFrom filter voting by startTime
    * @param {string} params.dateTo  filter voting by endTime
+   * @return {array} Filtered question
    */
   @action filterVotings = (params) => {}
 

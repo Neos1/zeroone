@@ -8,8 +8,9 @@ class QuestionStore {
   @observable _questions;
 
 
-  constructor() {
+  constructor(projectAddress) {
     this._questions = [];
+    this.fetchQuestionsCount(projectAddress);
   }
 
   /**
@@ -28,7 +29,11 @@ class QuestionStore {
    * @param {string} address user address
    */
   @action fetchQuestions = (address) => {
-
+    this.fetchQuestionsCount(address);
+    /**
+     * gets the question
+     */
+    this.addQuestion(data);
   }
 
   /**
@@ -55,7 +60,7 @@ class QuestionStore {
    * @returns {Array} list of all questions
    */
   @computed get questions() {
-
+    return this._questions;
   }
 }
 

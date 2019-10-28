@@ -32,5 +32,16 @@ class WalletService {
   recoverWallet(mnemonic) {
 
   }
+
+  /**
+   * Checking wallet for creating txDaat
+   * @param {string} wallet encryptedWallet
+   * @param {string} password password
+   * @return {bool} is password correct
+   */
+  checkPassword(wallet, password) {
+
+  }
 }
-export default WalletService;
+const walletService = new WalletService();
+export default walletService;

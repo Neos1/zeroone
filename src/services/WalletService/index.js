@@ -1,3 +1,3 @@
-import WalletService from './WalletService';
+import walletService from './WalletService';
 
-export default WalletService;
+export default walletService;
