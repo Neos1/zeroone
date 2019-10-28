@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
 import HistoryStore from '../HistoryStore';
