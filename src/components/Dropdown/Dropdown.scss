@@ -8,7 +8,9 @@
   }
   &__head {
     position: relative;
+    width: 100%;
     padding: 8px 15px 8px 5px;
+    text-align: left;
     border: unset;
     border-bottom: 1px solid $lightGrey;
     cursor: pointer;

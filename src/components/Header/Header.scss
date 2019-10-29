@@ -1,7 +1,7 @@
 @import '../../assets/styles/partials/variables';
 
 .header {
-  position: absolute;
+  position: relative;
   top: 30px;
   left: 50%;
   display: flex;
@@ -13,6 +13,18 @@
   transform: translateX(-50%);
   &__nav {
     color: $primary;
+    background-color: #FAFBFC;
+  }
+  &__line {
+    position: absolute;
+    top: 50%;
+    left: 54%;
+    z-index: -1;
+    width: 80%;
+    height: 1px;
+    background-color: $lightGrey;
+    border: none;
+    transform: translate(-50%, -50%);
   }
   &__link {
     margin: 0 30px;

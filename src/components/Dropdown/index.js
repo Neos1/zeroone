@@ -49,7 +49,6 @@ class Dropdown extends Component {
           <span className="dropdown__selected" data-value={selectedValue}>
             {selectedLabel || 'Выберите кошелек'}
             <span className="dropdown__arrow">
-              {' '}
               <DropdownArrow />
             </span>
           </span>
