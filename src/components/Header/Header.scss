@@ -1,0 +1,24 @@
+@import '../../assets/styles/partials/variables';
+
+.header {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items:center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1120px;
+  transform: translateX(-50%);
+  &__nav {
+    color: $primary;
+  }
+  &__link {
+    margin: 0 30px;
+    transition: .2s linear;
+    &.active{
+      font-weight: bold;
+    } 
+  }
+}
