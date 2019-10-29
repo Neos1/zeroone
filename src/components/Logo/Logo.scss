@@ -3,14 +3,14 @@
 .logo {
   position: relative;
   display: inline-block;
-  border: 2px solid $primary;
+  border: 3px solid $primary;
   span{
     display: inline-block;
     vertical-align: middle;
     transition: 0.2s linear;
   }
   &__dark {
-    padding: 4px 5px;
+    padding: 3.5px 5px;
     color: $white;
     font-size: 32px;
     background-color: $primary;

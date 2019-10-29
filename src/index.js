@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './App';
+import { Provider } from 'mobx-react';
+import SimpleRouter from './components/Router/SimpleRouter';
 import './assets/styles/style.scss';
 
 /**
@@ -10,6 +11,8 @@ import './assets/styles/style.scss';
  */
 
 render(
-  <App />,
+  <Provider>
+    <SimpleRouter />
+  </Provider>,
   document.getElementById('root'),
 );
