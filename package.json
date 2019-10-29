@@ -29,6 +29,7 @@
     "react-router-dom": "^5.1.2",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
+    "web3": "^1.2.2",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.8.2"
   },
@@ -70,7 +71,7 @@
       "@babel/preset-env"
     ],
     "plugins": [
-      "@babel/plugin-transform-async-to-generator",
+      "@babel/plugin-transform-runtime",
       [
         "@babel/plugin-proposal-decorators",
         {
