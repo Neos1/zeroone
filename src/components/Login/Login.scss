@@ -1,0 +1,42 @@
+@import '../../assets/styles/partials/variables';
+.form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  background-color: $white;
+  border: 1px solid $lightGrey;
+  transform: translate(-50%, -50%);
+  &__block {
+    padding: 60px 90px;
+    text-align: center;
+    .heading {
+      margin-bottom: 60px;
+    }
+    .dropdown {
+      width: 100%;
+      margin: 10px 0;
+    }
+    .field {
+      width: 100%;
+      margin: 10px 0;
+    }
+    .btn {
+      display: block;
+      margin: 10px auto;
+      &--default {
+        width: 100%;
+        margin: 20px 0;
+      }
+    }
+  }
+  &__submit {
+    text-align: center;
+  }
+  .btn--back {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
