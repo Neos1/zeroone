@@ -7,7 +7,7 @@ class WalletService {
    * @returns {object} Wallet instance
    */
   readWalletFromFile(url, password) {
-
+    return (this, url, password);
   }
 
   /**
@@ -16,7 +16,7 @@ class WalletService {
    * @return {bool} write status: 1 - success, 2 - error
    */
   writeWalletToFile(encryptedWallet) {
-
+    return (this, encryptedWallet);
   }
 
   /**
@@ -25,7 +25,7 @@ class WalletService {
    * @returns {object} encryptedWallet,seed
    */
   createWallet(password) {
-
+    return (this, password);
   }
 
   /**
@@ -34,7 +34,7 @@ class WalletService {
    * @returns {object} wallet object
    */
   recoverWallet(mnemonic) {
-
+    return (this, mnemonic);
   }
 
   /**
@@ -44,7 +44,7 @@ class WalletService {
    * @return {bool} is password correct
    */
   checkPassword(wallet, password) {
-
+    return (this, wallet, password);
   }
 }
-export default walletService;
+export default WalletService;

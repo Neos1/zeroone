@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
@@ -9,7 +9,7 @@ import ContractService from '../../services/ContractService';
 class RootStore {
   @observable projectStore;
 
-  @observable AppStore = new AppStore();
+  @observable appStore = new AppStore();
 
   @observable userStore = new UserStore()
 
@@ -27,5 +27,11 @@ class RootStore {
   @action initProject(address) {
     this.projectStore = new ProjectStore(address);
   }
+
+  @computed get stores() {
+    const { appStore, userStore } = this;
+    return { appStore, userStore };
+  }
 }
-export default RootStore;
+const rootStore = new RootStore();
+export default rootStore;

@@ -18,9 +18,7 @@ class QuestionStore {
    * @param {string} address user address
    * @returns {number} count of questions
    */
-  @action fetchQuestionsCount = (address) => {
-
-  }
+  @action fetchQuestionsCount = (address) => address
 
   /**
    * Recieving question from contract
@@ -32,7 +30,7 @@ class QuestionStore {
     /**
      * gets the question
      */
-    this.addQuestion(data);
+    this.addQuestion();
   }
 
   /**

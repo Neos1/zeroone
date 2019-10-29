@@ -42,6 +42,7 @@ class ProjectStore {
      * Bunch of code
      */
     this.prepared = votingStates.prepared;
+    return (questionId, parameters);
   }
 
 

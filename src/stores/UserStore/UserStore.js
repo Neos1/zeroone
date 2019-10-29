@@ -1,9 +1,11 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import walletService from '../../services/WalletService';
 /**
  * Describes store with user data
  */
 class UserStore {
+  @observable authorized = false;
+
   @observable encryptedWallet = ''
 
   @observable address = '';
@@ -32,7 +34,7 @@ class UserStore {
    * @return Signed TX data
    */
   @action singTransaction(data, password) {
-
+    return (this.balance, data, password);
   }
 
   /**
@@ -41,7 +43,7 @@ class UserStore {
    * @param {string} txData Raw transaction
    */
   @action sendTransaction(txData) {
-
+    return (this.balance, txData);
   }
 
   /**

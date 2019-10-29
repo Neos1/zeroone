@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 /**
  * class for working with userGroup
  */
@@ -53,6 +53,8 @@ class UsergroupStore {
       .then((balance) => {
         this.addUser(address, balance);
       }) */
+    this.address = address;
+    return (this.address, address);
   }
 
   /**
@@ -73,7 +75,7 @@ class UsergroupStore {
    * @param {number} count number of tokens
    */
   @action transferTokens(from, to, count) {
-
+    return (this.tokenType, from, to, count);
   }
 }
 

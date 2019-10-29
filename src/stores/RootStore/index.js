@@ -1,3 +1,3 @@
-import RootStore from './RootStore';
+import rootStore from './RootStore';
 
-export default RootStore;
+export default rootStore;

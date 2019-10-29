@@ -42,7 +42,7 @@ class ContractService {
    * @param {string} from address who calls method
    */
   async fetchVoting(id, from) {
-    const data = await this.contract.methods.getVoting(...params).call({ from });
+    const data = await this.contract.methods.getVoting(id).call({ from });
     return data;
   }
 
@@ -52,7 +52,7 @@ class ContractService {
    * @param {string} from address, who calls
    */
   async fetchVotingStats(id, from) {
-    const data = await this.contract.methods.getVotingStats(...params).call({ from });
+    const data = await this.contract.methods.getVotingStats(id).call({ from });
     return data;
   }
 
@@ -63,14 +63,14 @@ class ContractService {
    * @param params parameters of voting
    */
   async startVoting(id, from, params) {
-
+    return (this, id, from, params);
   }
 
   /**
    * Finishes the voting
    */
   async finishVoting() {
-
+    return this;
   }
 }
 

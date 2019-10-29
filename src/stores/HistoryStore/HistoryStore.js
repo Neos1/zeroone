@@ -14,9 +14,7 @@ class HistoryStore {
    * @param {string} address user address
    * @returns {number} count of votings
    */
-  @action fetchVotingsCount = (address) => {
-
-  }
+  @action fetchVotingsCount = (address) => address
 
   /**
    * recieving voting for local using
@@ -42,7 +40,7 @@ class HistoryStore {
    * @param {number} id id of voting
    * @return {array} stats
    */
-  @action getVotingStats = (id) => {}
+  @action getVotingStats = (id) => id
 
   /**
    * filtering voting by given parameters
@@ -54,14 +52,14 @@ class HistoryStore {
    * @param {string} params.dateTo  filter voting by endTime
    * @return {array} Filtered question
    */
-  @action filterVotings = (params) => {}
+  @action filterVotings = (params) => params
 
   /**
    * @function
    * @return {bool} True if project have not ended voting
    */
   @computed get isVotingActive() {
-    return false;
+    return this.votings;
   }
 
   /**
@@ -69,7 +67,7 @@ class HistoryStore {
    * @return {array} list of votings
    */
   @computed get votingsList() {
-    return false;
+    return this.votings;
   }
 }
 export default HistoryStore;

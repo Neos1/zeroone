@@ -1,8 +1,9 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
+import { fs, PATH_TO_WALLETS } from '../../constants';
 
 
 class AppStore {
-  @observable walletList = [];
+  @observable walletList = {};
 
   @observable projectList = [];
 
@@ -11,8 +12,9 @@ class AppStore {
    * @function
    */
   @action readWalletList = () => {
-    const wallet = '';
-    this.walletList.push(wallet);
+    this.walletList = [];
+    const files = fs.readdirSync(PATH_TO_WALLETS);
+    return files;
   }
 
   /**
@@ -29,6 +31,11 @@ class AppStore {
    */
   @action setUserWallet = (encryptedWallet) => {
     this.userStore.setEncryptedWallet(encryptedWallet);
+  }
+
+  @computed get wallets() {
+    const wallets = Object.keys(this.walletList);
+    return wallets.map((wallet) => ({ label: `0x${wallet}`, value: `0x${wallet}` }));
   }
 }
 

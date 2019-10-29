@@ -9,12 +9,8 @@ class web3Service {
    */
   constructor(providerUrl) {
     this.web3 = new Web3();
-    this.provider = '';
+    this.provider = providerUrl;
     this.address2nonce = {};
-    this.createProvider(providerUrl)
-      .then((provider) => {
-        this.setProvider(provider);
-      }).catch((e) => new Error('web3 error: createProvider', e));
   }
 
   /**
@@ -23,11 +19,7 @@ class web3Service {
    * @return {Promise<object>} this.web3 provider instance
    */
   createProvider(url) {
-    return new Promise((resolve, reject) => {
-      if (!url) reject(new Error('No provider specified'));
-      const provider = new WebsocketProvider(url);
-      resolve(provider);
-    });
+    return (this.address2nonce, url);
   }
 
   /**
@@ -45,7 +37,7 @@ class web3Service {
    * @param {string} from User, who send transaction
    * @return {Promise} promise with web3 transaction PromiEvent
    */
-  sendSignedTransaction(txData) {
+  sendSignedTransaction(txData, from) {
     this.address2nonce[from] += 1;
     return this.web3.sendSignedTransaction(`0x${txData}`);
   }
