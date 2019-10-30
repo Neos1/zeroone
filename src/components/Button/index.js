@@ -13,7 +13,10 @@ export const Button = ({ children, className, onClick }) => (
 Button.propTypes = {
   children: propTypes.string.isRequired,
   className: propTypes.string.isRequired,
-  onClick: propTypes.func.isRequired,
+  onClick: propTypes.func,
+};
+Button.defaultProps = {
+  onClick: () => false,
 };
 
 export const IconButton = ({ children, className, onClick }) => (
@@ -28,5 +31,8 @@ export const IconButton = ({ children, className, onClick }) => (
 IconButton.propTypes = {
   children: propTypes.arrayOf(propTypes.node).isRequired,
   className: propTypes.string.isRequired,
-  onClick: propTypes.func.isRequired,
+  onClick: propTypes.func,
+};
+IconButton.defaultProps = {
+  onClick: () => false,
 };

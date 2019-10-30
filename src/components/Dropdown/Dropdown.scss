@@ -71,11 +71,16 @@
     }
   }
   &__selected {
+    display: inline-block;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     vertical-align: middle;
   }
   &__options {
     position: absolute;
     top: 100%;
+    z-index: 1;
     height: 0;
     max-height: 100px;
     padding: 5px 10px;

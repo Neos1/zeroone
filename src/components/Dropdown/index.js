@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { DropdownArrow } from '../Icons';
 import styles from './Dropdown.scss';
+import DropdownOption from '../DropdownOption';
 
 class Dropdown extends Component {
   constructor() {
@@ -13,16 +14,18 @@ class Dropdown extends Component {
     };
   }
 
-  toggleOptions() {
+  toggleOptions = () => {
     const { opened } = this.state;
     this.setState({ opened: !opened });
   }
 
-  selectOption(selected) {
+  selectOption = (selected) => {
+    const { onSelect } = this.props;
     this.setState({
-      selectedLabel: selected.label,
-      selectedValue: selected.value,
+      selectedLabel: selected,
+      selectedValue: selected,
     });
+    onSelect(selected);
     this.toggleOptions();
   }
 
@@ -30,21 +33,13 @@ class Dropdown extends Component {
     const { children, options } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option, index) => (
-      <button
-        type="button"
-        className="dropdown__option"
-        data-value={option.value}
-        key={`option-${index + 1}`}
-        onClick={this.selectOption.bind(this, option)}
-        onKeyDown={this.selectOption.bind(this, option)}
-      >
-        {option.label}
-      </button>
+      <DropdownOption key={`${index + 1}`} label={option.label} value={option.label} select={this.selectOption} />
     ));
 
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`}>
-        <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions.bind(this)} onClick={this.toggleOptions.bind(this)}>
+        <input type="hidden" value={selectedValue} />
+        <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}
           <span className="dropdown__selected" data-value={selectedValue}>
             {selectedLabel || 'Выберите кошелек'}
@@ -65,6 +60,7 @@ class Dropdown extends Component {
 Dropdown.propTypes = {
   children: propTypes.element,
   options: propTypes.arrayOf(propTypes.object).isRequired,
+  onSelect: propTypes.func.isRequired,
 };
 Dropdown.defaultProps = {
   children: '',

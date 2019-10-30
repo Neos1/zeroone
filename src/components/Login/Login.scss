@@ -40,3 +40,40 @@
     transform: translateX(-50%);
   }
 }
+.seed {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  &__word {
+    display: inline-block;
+    width: 33%;
+    margin-bottom: 30px;
+    text-align: left;
+    &-id {
+      display: inline-block;
+      margin-right: 10px;
+      color: #181818;
+      opacity: .5;
+    
+    }
+    &-text {
+      font-weight: bold;
+    }
+  }
+  .field {
+    position: relative;
+    width: 30%;
+    padding: 8px 5px;
+    &:before {
+      left: 30px;
+    }
+    &__input {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 65%;
+      margin-left: 0;
+      transform: translateY(-50%);
+    }
+  }
+}
