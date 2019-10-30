@@ -1,3 +1,5 @@
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-multi-spaces */
 import { observable, action, computed } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
@@ -7,18 +9,27 @@ import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
 
 class RootStore {
+  // stores
   @observable projectStore;
 
-  @observable appStore = new AppStore();
+  @observable appStore;
 
-  @observable userStore = new UserStore()
+  @observable userStore ;
 
   // services
-  @observable walletService = new WalletService();
+  @observable walletService ;
 
-  @observable contractService = new ContractService();
+  @observable contractService ;
 
-  @observable Web3Service = new Web3Service();
+  @observable Web3Service ;
+
+  constructor() {
+    this.appStore = new AppStore(this);
+    this.userStore = new UserStore(this);
+    this.walletService = new WalletService();
+    this.contractService = new ContractService();
+    this.Web3Service = new Web3Service();
+  }
 
   /**
    * initiating project
@@ -28,10 +39,11 @@ class RootStore {
     this.projectStore = new ProjectStore(address);
   }
 
+
   @computed get stores() {
     const { appStore, userStore } = this;
     return { appStore, userStore };
   }
 }
-const rootStore = new RootStore();
+const rootStore = window.rootStore =  new RootStore();
 export default rootStore;

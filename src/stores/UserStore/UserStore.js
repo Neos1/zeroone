@@ -1,17 +1,23 @@
 import { observable, action } from 'mobx';
-import walletService from '../../services/WalletService';
 /**
  * Describes store with user data
  */
 class UserStore {
   @observable authorized = false;
 
-  @observable encryptedWallet = ''
+  @observable encryptedWallet = '';
+
+  @observable privateKey = '';
+
+  @observable _mnemonic = ['spray', 'trap', 'flush', 'awful', 'before', 'prosper', 'gold', 'typical', 'siege', 'mule', 'great', 'bone'];
 
   @observable address = '';
 
   @observable balance = 0;
 
+  constructor(rootStore) {
+    this.rootStore = rootStore;
+  }
 
   @action setEncryptedWallet(wallet) {
     this.encryptedWallet = wallet;
@@ -23,7 +29,27 @@ class UserStore {
    * @return {bool} is password correct
    */
   @action checkPassword(password) {
-    walletService.checkPassword(this.encryptedWallet, password);
+    this.rootStore.walletService.checkPassword(this.encryptedWallet, password);
+  }
+
+  @action createWallet(password) {
+    this.rootStore.walletService.createWallet(password).then((data) => {
+      const { v3wallet, mnemonic, privateKey } = data;
+      this.setEncryptedWallet(v3wallet);
+      this._mnemonic = mnemonic;
+      this.privateKey = privateKey;
+    });
+  }
+
+  @action readWallet(password) {
+    this.rootStore.walletService.readWallet(this.encryptedWallet, password).then((data) => {
+      this.privateKey = data.privateKey;
+    });
+  }
+
+  @action recoverWallet() {
+    const seed = this._mnemonic.join(' ');
+    this.rootStore.walletService.recoverWallet(seed);
   }
 
   /**
@@ -53,6 +79,10 @@ class UserStore {
   @action getEthBalance() {
     this.balance = 0;
     return false;
+  }
+
+  set mnemonic(mnemonic) {
+    this._mnemonic = mnemonic.split('');
   }
 }
 
