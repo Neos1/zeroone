@@ -2,6 +2,8 @@
 /* eslint-disable class-methods-use-this */
 import WorkerWrapper from './entities/WorkerWrapper';
 import WalletWorker from '../../workers/wallet.worker';
+import { fs, path, PATH_TO_WALLETS } from '../../constants';
+
 
 const bip39 = require('bip39');
 /** Service for working with wallets */
@@ -14,8 +16,13 @@ class WalletService {
    * @param {string} password password for decrypting
    * @returns {object} Wallet instance
    */
-  readWalletFromFile(url, password) {
-    return (this, url, password);
+  readWallet(input, password) {
+    const data = {
+      action: 'read',
+      input,
+      password,
+    };
+    return worker.send(data);
   }
 
   /**
@@ -24,7 +31,11 @@ class WalletService {
    * @return {bool} write status: 1 - success, 2 - error
    */
   writeWalletToFile(encryptedWallet) {
-    return (this, encryptedWallet);
+    let date = new Date();
+    date = `${date.getUTCFullYear()}-${date.getUTCDate()}-${date.getUTCDay()}T${date.getUTCHours()}-${date.getUTCMinutes()}-${date.getUTCSeconds()}.${date.getMilliseconds() * 1000000}Z`;
+    const walletName = (JSON.parse(encryptedWallet)).address;
+    const name = `UTC--${date}--${walletName}`;
+    fs.writeFileSync(path.join(PATH_TO_WALLETS, `${name}.json`), encryptedWallet, 'utf8');
   }
 
   /**
@@ -47,7 +58,11 @@ class WalletService {
    * @returns {object} wallet object
    */
   recoverWallet(mnemonic) {
-    return (this, mnemonic);
+    const data = {
+      action: 'recover',
+      mnemonic,
+    };
+    worker.send(data);
   }
 
   /**
