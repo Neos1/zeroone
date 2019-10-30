@@ -1,4 +1,12 @@
+/* eslint-disable no-console */
+/* eslint-disable class-methods-use-this */
+import WorkerWrapper from './entities/WorkerWrapper';
+import WalletWorker from '../../workers/wallet.worker';
+
+const bip39 = require('bip39');
 /** Service for working with wallets */
+
+const worker = new WorkerWrapper(new WalletWorker());
 class WalletService {
   /**
    * Decrypts wallet
@@ -25,7 +33,12 @@ class WalletService {
    * @returns {object} encryptedWallet,seed
    */
   createWallet(password) {
-    return (this, password);
+    const data = {
+      action: 'create',
+      password,
+      mnemonic: bip39.generateMnemonic(),
+    };
+    return worker.send(data);
   }
 
   /**
