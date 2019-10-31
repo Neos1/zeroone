@@ -5,11 +5,17 @@ import { observable, action } from 'mobx';
 class UserStore {
   @observable authorized = false;
 
+  @observable logging = false;
+
+  @observable redirectToProjects = false;
+
   @observable encryptedWallet = '';
 
   @observable privateKey = '';
 
-  @observable _mnemonic = ['spray', 'trap', 'flush', 'awful', 'before', 'prosper', 'gold', 'typical', 'siege', 'mule', 'great', 'bone'];
+  @observable _mnemonic = [];
+
+  @observable _mnemonicRepeat = [];
 
   @observable address = '';
 
@@ -29,21 +35,41 @@ class UserStore {
    * @return {bool} is password correct
    */
   @action checkPassword(password) {
-    this.rootStore.walletService.checkPassword(this.encryptedWallet, password);
+    const wallet = JSON.stringify(this.encryptedWallet);
+    this.rootStore.walletService.readWallet(wallet, password);
   }
 
   @action createWallet(password) {
-    this.rootStore.walletService.createWallet(password).then((data) => {
-      const { v3wallet, mnemonic, privateKey } = data;
-      this.setEncryptedWallet(v3wallet);
-      this._mnemonic = mnemonic.split(' ');
-      this.privateKey = privateKey;
+    return new Promise((resolve, reject) => {
+      this.rootStore.walletService.createWallet(password).then((data) => {
+        if (data.v3wallet) {
+          const { v3wallet, mnemonic, privateKey } = data;
+          this.setEncryptedWallet(v3wallet);
+          this._mnemonic = mnemonic.split(' ');
+          this.privateKey = privateKey;
+          // eslint-disable-next-line no-console
+          resolve(true);
+        } else {
+          reject(new Error('Error on creating wallet'));
+        }
+      });
     });
   }
 
   @action readWallet(password) {
-    this.rootStore.walletService.readWallet(this.encryptedWallet, password).then((data) => {
-      this.privateKey = data.privateKey;
+    this.logging = true;
+    const wallet = JSON.stringify(this.encryptedWallet);
+    return new Promise((resolve, reject) => {
+      this.rootStore.walletService.readWallet(wallet, password).then((data) => {
+        if (data.privateKey) {
+          this.privateKey = data.privateKey;
+          this.authorized = true;
+          this.redirectToProjects = true;
+          resolve(data.privateKey);
+        } else {
+          reject();
+        }
+      });
     });
   }
 
