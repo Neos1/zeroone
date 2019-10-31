@@ -38,6 +38,11 @@ class Login extends Component {
     userStore.login();
   }
 
+  createKey = () => {
+    const { appStore } = this.props;
+    appStore.setMasterState('createWallet', 'passwordInput');
+  }
+
   render() {
     const { appStore } = this.props;
     const { loading } = this.state;
@@ -45,14 +50,18 @@ class Login extends Component {
       <Container>
         <Header isMenu isLogged={false} />
         <div className={styles.form}>
-          {!loading ? <InputForm appStore={appStore} submit={this.Login} /> : <LoadingBlock /> }
+          {
+            !loading
+              ? <InputForm appStore={appStore} submit={this.Login} createKey={this.createKey} />
+              : <LoadingBlock />
+          }
         </div>
       </Container>
     );
   }
 }
 
-const InputForm = ({ appStore, submit }) => (
+const InputForm = ({ appStore, submit, createKey }) => (
   <FormBlock>
     <Heading>
       {'Вход в систему'}
@@ -67,7 +76,7 @@ const InputForm = ({ appStore, submit }) => (
     <div className={styles.form__submit}>
       <Button className="btn--default btn--black" onClick={() => submit()}> Войти </Button>
       <NavLink to="/create">
-        <Button className="btn--link"> Создать новый ключ </Button>
+        <Button className="btn--link" onClick={() => createKey()}> Создать новый ключ </Button>
       </NavLink>
       <NavLink to="/restore">
         <Button className="btn--link"> Забыли пароль? </Button>
@@ -93,6 +102,7 @@ Login.propTypes = {
 InputForm.propTypes = {
   appStore: propTypes.object.isRequired,
   submit: propTypes.func.isRequired,
+  createKey: propTypes.func.isRequired,
 };
 
 

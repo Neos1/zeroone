@@ -21,32 +21,25 @@ class CreateWallet extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      state: 'default',
     };
   }
 
-  createWallet = () => {
-    this.setState({
-      state: 'loading',
-    });
-
-    setTimeout(() => {
-      this.setState({
-        state: 'seed',
-      });
-    }, 2000);
+  createWallet = (password) => {
+    const { appStore, userStore } = this.props;
+    appStore.setMasterState('createWallet', 'creating');
+    userStore.createWallet(password);
   }
 
   render() {
-    const { state } = this.state;
-    const { userStore } = this.props;
+    const { userStore, appStore } = this.props;
+    const { masterSubState } = appStore;
     return (
       <Container>
         <Header isMenu isLogged={false} />
         <div className={styles.form}>
-          {state === 'default' ? <PasswordForm submit={this.createWallet} /> : ''}
-          {state === 'loading' ? <CreationLoader /> : ''}
-          {state === 'seed' ? <SeedScreen seed={userStore._mnemonic} /> : ''}
+          {masterSubState === '0' ? <PasswordForm submit={this.createWallet} /> : ''}
+          {masterSubState === '1' ? <CreationLoader /> : ''}
+          {masterSubState === '2' ? <SeedScreen seed={userStore._mnemonic} /> : ''}
           <NavLink to="/">
             <IconButton className="btn--link btn--noborder btn--back">
               <BackIcon />
@@ -116,6 +109,7 @@ const SeedWord = ({ word, id }) => (
 
 CreateWallet.propTypes = {
   userStore: propTypes.object.isRequired,
+  appStore: propTypes.object.isRequired,
 };
 
 PasswordForm.propTypes = {

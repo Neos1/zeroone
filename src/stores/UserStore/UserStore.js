@@ -36,7 +36,7 @@ class UserStore {
     this.rootStore.walletService.createWallet(password).then((data) => {
       const { v3wallet, mnemonic, privateKey } = data;
       this.setEncryptedWallet(v3wallet);
-      this._mnemonic = mnemonic;
+      this._mnemonic = mnemonic.split(' ');
       this.privateKey = privateKey;
     });
   }
