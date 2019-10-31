@@ -7,6 +7,61 @@ class AppStore {
 
   @observable projectList = [];
 
+  @observable masterState = 0;
+
+  @observable masterSubState = null;
+
+  @observable masterStates = {
+    login: 0,
+    createWallet: 1,
+    selectProject: 2,
+    createProject: 3,
+    projectWithTokens: 4,
+    projectWithoutTokens: 5,
+    connectProject: 6,
+    uploadProject: 7,
+  }
+
+  @observable masterSubStates = {
+    createWallet: {
+      passwordInput: 0,
+      creating: 1,
+      showSeed: 2,
+      checkSeed: 3,
+      checking: 4,
+      finish: 5,
+    },
+    createProject: {
+      withTokens: 0,
+      withoutTokens: 1,
+    },
+    projectWithTokens: {
+      inputAddress: 0,
+      checkingAddress: 1,
+      tokenInfo: 2,
+      inputData: 3,
+    },
+    projectWithoutTokens: {
+      createToken: 0,
+      uploadToken: 1,
+      alert: 2,
+      inputData: 3,
+    },
+    connectProject: {
+      inputData: 0,
+      checkingProject: 1,
+      alert: 2,
+    },
+    uploadProject: {
+      compiling: 0,
+      sending: 1,
+      hash: 2,
+      reciept: 3,
+      uploadQuestions: 4,
+      success: 5,
+    },
+  }
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.readWalletList();
@@ -25,8 +80,6 @@ class AppStore {
       walletObject[wallet.address] = wallet;
       this.walletList = Object.assign(this.walletList, walletObject);
     });
-    // eslint-disable-next-line no-console
-    console.log(files);
   }
 
   /**
@@ -55,6 +108,12 @@ class AppStore {
   @action setUserWallet = (encryptedWallet) => {
     this.userStore.setEncryptedWallet(encryptedWallet);
   }
+
+  @action setMasterState(state, subState) {
+    this.masterState = this.masterStates[state];
+    this.masterSubState = subState !== undefined ? this.masterSubStates[state][subState] : 0;
+  }
+
 
   @computed get wallets() {
     const wallets = Object.keys(this.walletList);
