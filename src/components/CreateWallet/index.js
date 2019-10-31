@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import Container from '../Container';
 import Header from '../Header';
 import FormBlock from '../FormBlock';
@@ -12,8 +12,10 @@ import { Password, BackIcon } from '../Icons';
 import Input from '../Input';
 import { Button, IconButton } from '../Button';
 import Loader from '../Loader';
+import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
 
 import styles from '../Login/Login.scss';
+
 
 @inject('userStore', 'appStore')
 @observer
@@ -21,25 +23,44 @@ class CreateWallet extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      redirect: false,
     };
   }
 
-  createWallet = (password) => {
+  createWallet = () => {
     const { appStore, userStore } = this.props;
     appStore.setMasterState('createWallet', 'creating');
-    userStore.createWallet(password);
+    userStore.createWallet('password').then((result) => {
+      if (!result) appStore.setMasterState('createWallet', 'passwordInput');
+      this.setState({ redirect: true });
+    });
   }
 
   render() {
-    const { userStore, appStore } = this.props;
+    console.log(this.props);
+    const { appStore } = this.props;
     const { masterSubState } = appStore;
+    const { redirect } = this.state;
+    const CreateForm = new CreateWalletForm({
+      hooks: {
+        onSuccess(form) {
+          console.log(form);
+        },
+        onError(form) {
+          console.log(form);
+        },
+      },
+    });
+
+    if (redirect) {
+      return <Redirect to="/showSeed" />;
+    }
     return (
       <Container>
         <Header isMenu isLogged={false} />
         <div className={styles.form}>
-          {masterSubState === '0' ? <PasswordForm submit={this.createWallet} /> : ''}
-          {masterSubState === '1' ? <CreationLoader /> : ''}
-          {masterSubState === '2' ? <SeedScreen seed={userStore._mnemonic} /> : ''}
+          {masterSubState === 0 ? <PasswordForm submit={this.createWallet} form={CreateForm} /> : ''}
+          {masterSubState === 1 ? <CreationLoader /> : ''}
           <NavLink to="/">
             <IconButton className="btn--link btn--noborder btn--back">
               <BackIcon />
@@ -54,21 +75,23 @@ class CreateWallet extends Component {
   }
 }
 
-const PasswordForm = ({ submit }) => (
+const PasswordForm = ({ form }) => (
   <FormBlock>
     <Heading>
       {'Создание пароля'}
       {'Будет использоваться для входа в кошелек и подтверждения транзакций'}
     </Heading>
-    <Input type="password" required={false} placeholder="Введите пароль" errorText="Вы ошиблись, смиритесь и исправьтесь">
-      <Password />
-    </Input>
-    <Input type="password" required={false} placeholder="Введите пароль" errorText="Вы ошиблись, смиритесь и исправьтесь">
-      <Password />
-    </Input>
-    <div className={styles.form__submit}>
-      <Button className="btn--default btn--black" onClick={() => { submit(); }}> Продолжить </Button>
-    </div>
+    <form form={form} onSubmit={form.onSubmit}>
+      <Input type="password" field={form.$('password')}>
+        <Password />
+      </Input>
+      <Input type="password" field={form.$('passwordConfirm')}>
+        <Password />
+      </Input>
+      <div className={styles.form__submit}>
+        <Button type="submit" className="btn--default btn--black"> Продолжить </Button>
+      </div>
+    </form>
   </FormBlock>
 );
 
@@ -82,47 +105,13 @@ const CreationLoader = () => (
   </FormBlock>
 );
 
-const SeedScreen = ({ seed }) => (
-  <FormBlock>
-    <Heading>
-      {'Резервная фраза'}
-      {'Нужна для восстановления пароля'}
-    </Heading>
-    <div className={styles.seed}>
-      {seed.map((word, id) => (
-        <SeedWord {...{ word, id }} />
-      ))}
-    </div>
-    <div className={styles.form__submit}>
-      <NavLink to="/checkSeed">
-        <Button className="btn--default btn--black"> Продолжить </Button>
-      </NavLink>
-    </div>
-  </FormBlock>
-);
-const SeedWord = ({ word, id }) => (
-  <p className="seed__word">
-    <span className="seed__word-id">{id + 1}</span>
-    <span className="seed__word-text">{('*').repeat(word.length)}</span>
-  </p>
-);
-
 CreateWallet.propTypes = {
   userStore: propTypes.object.isRequired,
   appStore: propTypes.object.isRequired,
 };
 
 PasswordForm.propTypes = {
-  submit: propTypes.func.isRequired,
+  form: propTypes.object.isRequired,
 };
-
-SeedScreen.propTypes = {
-  seed: propTypes.arrayOf(propTypes.string).isRequired,
-};
-SeedWord.propTypes = {
-  id: propTypes.number.isRequired,
-  word: propTypes.string.isRequired,
-};
-
 
 export default CreateWallet;

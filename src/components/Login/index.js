@@ -1,7 +1,9 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import propTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import Container from '../Container';
 import Header from '../Header';
 import FormBlock from '../FormBlock';
@@ -11,6 +13,7 @@ import { CreditCard, Password } from '../Icons';
 import Input from '../Input';
 import { Button } from '../Button';
 import Loader from '../Loader';
+import LoginForm from '../../stores/FormsStore/LoginForm';
 
 import styles from './Login.scss';
 
@@ -21,7 +24,6 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
     };
   }
 
@@ -30,29 +32,44 @@ class Login extends Component {
     appStore.readWalletList();
   }
 
-  Login = () => {
-    const { userStore } = this.props;
-    this.setState({
-      loading: true,
-    });
-    userStore.login();
-  }
-
   createKey = () => {
     const { appStore } = this.props;
     appStore.setMasterState('createWallet', 'passwordInput');
   }
 
   render() {
-    const { appStore } = this.props;
-    const { loading } = this.state;
+    // eslint-disable-next-line no-unused-vars
+    const { appStore, userStore } = this.props;
+    const { logging } = userStore;
+    const loginForm = new LoginForm({
+      hooks: {
+        onSuccess(form) {
+          userStore.readWallet(form.values().password).then((data) => {
+            console.log(data);
+          });
+        },
+        onError(form) {
+          alert('Form has errors');
+          console.log(form.errors());
+        },
+      },
+    });
+
+    if (userStore.redirectToProjects) return <Redirect to="/projects" />;
     return (
       <Container>
         <Header isMenu isLogged={false} />
         <div className={styles.form}>
           {
-            !loading
-              ? <InputForm appStore={appStore} submit={this.Login} createKey={this.createKey} />
+            !logging
+              ? (
+                <InputForm
+                  appStore={appStore}
+                  form={loginForm}
+                  createKey={this.createKey}
+                  onChange={this.getPassword}
+                />
+              )
               : <LoadingBlock />
           }
         </div>
@@ -61,27 +78,32 @@ class Login extends Component {
   }
 }
 
-const InputForm = ({ appStore, submit, createKey }) => (
+const InputForm = ({
+  appStore, form, createKey,
+}) => (
   <FormBlock>
     <Heading>
       {'Вход в систему'}
       {'Приготовьтесь к новой эре в сфере голосования'}
     </Heading>
-    <Dropdown options={appStore.wallets} onSelect={appStore.selectWallet}>
-      <CreditCard />
-    </Dropdown>
-    <Input type="password" required={false} placeholder="Введите пароль" errorText="Вы ошиблись, смиритесь и исправьтесь">
-      <Password />
-    </Input>
-    <div className={styles.form__submit}>
-      <Button className="btn--default btn--black" onClick={() => submit()}> Войти </Button>
-      <NavLink to="/create">
-        <Button className="btn--link" onClick={() => createKey()}> Создать новый ключ </Button>
-      </NavLink>
-      <NavLink to="/restore">
-        <Button className="btn--link"> Забыли пароль? </Button>
-      </NavLink>
-    </div>
+    <form form={form} onSubmit={form.onSubmit}>
+      <Dropdown options={appStore.wallets} onSelect={appStore.selectWallet}>
+        <CreditCard />
+      </Dropdown>
+      <Input type="password" field={form.$('password')}>
+        <Password />
+      </Input>
+      <div className={styles.form__submit}>
+        <Button className="btn--default btn--black" type="submit"> Войти </Button>
+        <NavLink to="/create">
+          <Button className="btn--link" onClick={() => createKey()}> Создать новый ключ </Button>
+        </NavLink>
+        <NavLink to="/restore">
+          <Button className="btn--link" disabled={form.loading}> Забыли пароль? </Button>
+        </NavLink>
+      </div>
+    </form>
+
   </FormBlock>
 );
 
@@ -101,8 +123,8 @@ Login.propTypes = {
 };
 InputForm.propTypes = {
   appStore: propTypes.object.isRequired,
-  submit: propTypes.func.isRequired,
   createKey: propTypes.func.isRequired,
+  form: propTypes.object.isRequired,
 };
 
 
