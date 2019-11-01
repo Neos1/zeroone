@@ -23,9 +23,9 @@ const SimpleRouter = () => (
       <Route path="/showSeed" exact component={withRouter(ShowSeed)} />
       <Route path="/checkSeed" exact component={withRouter(InputSeed)} />
       <Route path="/projects" exact component={withRouter(ProjectList)} />
-      <Route path="/createProject" exact component={withRouter(CreateNewProject)} />
-      <Route path="/addExisiting" exact component={withRouter(AddExistingProject)} />
-      <Route path="/newProject" exact component={withRouter(AddNewProject)} />
+      <Route path="/createProject" exact component={withRouter(AddNewProject)} />
+      <Route path="/addExisting" exact component={withRouter(AddExistingProject)} />
+      <Route path="/newProject" exact component={withRouter(CreateNewProject)} />
       <Route path="/createWithTokens" exact component={withRouter(CreateNewProjectWithTokens)} />
       <Route path="/createWithoutTokens" exact component={withRouter(CreateNewProjectWithoutTokens)} />
       <Route path="/uploading" exact component={withRouter(ProjectUploading)} />
