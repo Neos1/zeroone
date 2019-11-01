@@ -44,9 +44,7 @@ class Login extends Component {
     const loginForm = new LoginForm({
       hooks: {
         onSuccess(form) {
-          userStore.readWallet(form.values().password).then((data) => {
-            console.log(data);
-          });
+          userStore.readWallet(form.values().password);
         },
         onError(form) {
           alert('Form has errors');
@@ -55,7 +53,7 @@ class Login extends Component {
       },
     });
 
-    if (userStore.redirectToProjects) return <Redirect to="/projects" />;
+    if (userStore.authorized) return <Redirect to="/projects" />;
     return (
       <Container>
         <Header isMenu isLogged={false} />

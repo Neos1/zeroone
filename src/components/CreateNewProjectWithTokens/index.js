@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
-const CreateNewProjectWithTokens = () => (
-  <div>
-      CreateNewProjectWithTokens
-    <NavLink to="/uploading">upload</NavLink>
+class CreateNewProjectWithTokens extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-  </div>
-);
+  render() {
+    return (
+      <div>
+        CreateNewProjectWithTokens
+        <NavLink to="/uploading">upload</NavLink>
+      </div>
+    );
+  }
+}
 
 export default CreateNewProjectWithTokens;

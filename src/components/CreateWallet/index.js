@@ -37,7 +37,6 @@ class CreateWallet extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { appStore } = this.props;
     const { masterSubState } = appStore;
     const { redirect } = this.state;
