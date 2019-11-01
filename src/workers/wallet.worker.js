@@ -6,29 +6,37 @@ const bip39 = require('bip39');
 const walletHdPath = "m/44'/60'/0'/0/0";
 
 const createWallet = ({ id, payload: { mnemonic, password, action } }) => {
-  const wallet = hdKey.fromMasterSeed(bip39.mnemonicToSeedSync(mnemonic))
-    .derivePath(walletHdPath)
-    .deriveChild(0)
-    .getWallet();
+  try {
+    const wallet = hdKey.fromMasterSeed(bip39.mnemonicToSeedSync(mnemonic))
+      .derivePath(walletHdPath)
+      .deriveChild(0)
+      .getWallet();
 
-  const privateKey = wallet.getPrivateKeyString();
-  const v3wallet = wallet.toV3(password);
+    const privateKey = wallet.getPrivateKeyString();
+    const v3wallet = wallet.toV3(password);
 
-  const payload = {
-    action,
-    privateKey,
-    wallet,
-    v3wallet,
-    mnemonic,
-  };
-  return { id, payload };
+    const payload = {
+      action,
+      privateKey,
+      wallet,
+      v3wallet,
+      mnemonic,
+    };
+    return { id, payload };
+  } catch (e) {
+    return { id, payload: { e } };
+  }
 };
 
 const readWallet = ({ id, payload: { input, password } }) => {
-  const data = {
-    privateKey: ejsWallet.fromV3(input, password).getPrivateKeyString(),
-  };
-  return { id, payload: data };
+  try {
+    const data = {
+      privateKey: ejsWallet.fromV3(input, password).getPrivateKeyString(),
+    };
+    return { id, payload: data };
+  } catch (e) {
+    return { id, payload: e };
+  }
 };
 
 

@@ -64,9 +64,9 @@ class UserStore {
         if (data.privateKey) {
           this.privateKey = data.privateKey;
           this.authorized = true;
-          this.redirectToProjects = true;
           resolve(data.privateKey);
         } else {
+          this.logging = false;
           reject();
         }
       });

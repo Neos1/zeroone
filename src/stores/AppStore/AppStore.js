@@ -1,5 +1,7 @@
 import { observable, action, computed } from 'mobx';
-import { fs, path, PATH_TO_WALLETS } from '../../constants';
+import {
+  fs, path, PATH_TO_WALLETS, ROOT_DIR,
+} from '../../constants';
 
 
 class AppStore {
@@ -97,8 +99,8 @@ class AppStore {
    * @function
    */
   @action readProjectList = () => {
-    const project = {};
-    this.projectList.push(project);
+    const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json')));
+    this.projectList = config.projects;
   }
 
   /**

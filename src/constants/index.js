@@ -9,6 +9,10 @@ export const votingStates = {
 export const fs = window.require('fs');
 export const path = window.require('path');
 
+export const ROOT_DIR = window.__ENV === 'production'
+  ? window.process.env.PORTABLE_EXECUTABLE_DIR
+  : path.join(window.process.env.INIT_CWD, './src/');
+
 export const PATH_TO_WALLETS = window.__ENV === 'production'
   ? path.join(window.process.env.PORTABLE_EXECUTABLE_DIR, './wallets/')
   : path.join(window.process.env.INIT_CWD, './src/wallets/');
