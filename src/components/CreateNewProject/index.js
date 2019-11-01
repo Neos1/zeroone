@@ -29,13 +29,13 @@ class CreateNewProject extends Component {
               {'Выберите подходящий вам вариант'}
             </Heading>
             <div className={styles.create}>
-              <NavLink to="/addExisting">
+              <NavLink to="/createWithTokens">
                 <IconButton className="btn--big btn--white icon--top">
                   <Ethereum />
                   Подключить контракт и создать проект
                 </IconButton>
               </NavLink>
-              <NavLink to="/newProject">
+              <NavLink to="/createWithoutTokens">
                 <IconButton className="btn--big btn--white icon--top">
                   <CreateToken />
                   Создать новые токены и проект
