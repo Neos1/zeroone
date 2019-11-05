@@ -94,34 +94,15 @@
     display: inline-block;
   }
 }
-.create {
+.create, .add-project {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   &>a {
-    width: 45%;
-  }
-  .btn--white {
-    display: inline-block;
-    width: 100%;
-    padding: 15px;
-    svg {
-      height: 25px;
-      margin: 0 0 10px;
-      path {
-        fill: $white;
-      }
-    }
-  }
-}
-.add-project {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  a {
     display: inline-block;
     width: calc(50% - 5px);
-    .btn {
+    .btn--white {
+      display: inline-block;
       width: 100%;
       svg {
         path {
@@ -135,6 +116,18 @@
             stroke: $white;
           }
         }
+      }
+    }
+  }
+} 
+.create {
+  .btn--white {
+    padding: 15px;
+    svg {
+      height: 25px;
+      margin: 0 0 10px;
+      path {
+        fill: $white;
       }
     }
   }

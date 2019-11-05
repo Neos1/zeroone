@@ -70,6 +70,7 @@ const LoadingBlock = () => (
     <Loader />
   </FormBlock>
 );
+
 const MessageBlock = () => (
   <FormBlock>
     <Heading>
