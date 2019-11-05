@@ -23,7 +23,6 @@ class Input extends Component {
     const {
       children, field, className,
     } = this.props;
-    console.log(field);
     return (
       <div className={`${styles.field} ${className}`}>
         {children}
