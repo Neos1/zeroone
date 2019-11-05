@@ -16,6 +16,9 @@
       }
     }
   }
+  &--ultrawide {
+    width: 1062px;
+  }
   &__block {
     padding: 60px 90px;
     text-align: center;
@@ -131,4 +134,9 @@
       }
     }
   }
+}
+.progress {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
 }
