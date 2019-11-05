@@ -5,7 +5,7 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
 import Header from '../Header';
-import { CreateToken } from '../Icons';
+import { CreateToken, ChainIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
@@ -16,10 +16,10 @@ const AddNewProject = () => (
     <div className={`${styles.form}`}>
       <FormBlock className="form__block">
         <Heading>
-          {'Создание нового проекта'}
-          {'Выберите подходящий вам вариант'}
+          {'Добавление проекта'}
+          {'Cоздайте новый или подключите уже существующий'}
         </Heading>
-        <div className={styles.create}>
+        <div className={styles['add-project']}>
           <NavLink to="/newProject">
             <IconButton className="btn--white">
               <CreateToken />
@@ -28,7 +28,7 @@ const AddNewProject = () => (
           </NavLink>
           <NavLink to="/addExisting">
             <IconButton className="btn--white">
-              <CreateToken />
+              <ChainIcon />
               Подключить
             </IconButton>
           </NavLink>

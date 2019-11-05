@@ -50,8 +50,8 @@ class AddExistingProject extends Component {
 const InputBlock = ({ onSubmit }) => (
   <FormBlock className="form__block">
     <Heading>
-      {'Создание нового проекта'}
-      {'Выберите подходящий вам вариант'}
+      {'Подключить проект'}
+      {'Cоздайте новый или подключите уже существующий'}
     </Heading>
     <form>
       <div className={styles.form__submit}>

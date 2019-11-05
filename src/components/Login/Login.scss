@@ -114,3 +114,28 @@
     }
   }
 }
+.add-project {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  a {
+    display: inline-block;
+    width: calc(50% - 5px);
+    .btn {
+      width: 100%;
+      svg {
+        path {
+          fill: $white
+        }
+      }
+      &:active {
+        svg {
+          path {
+            fill: $primary;
+            stroke: $white;
+          }
+        }
+      }
+    }
+  }
+}
