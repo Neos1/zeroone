@@ -18,6 +18,9 @@
   }
   &--ultrawide {
     width: 1062px;
+    .form__block {
+      padding: 70px 90px 110px;
+    }
   }
   &__block {
     padding: 60px 90px;
