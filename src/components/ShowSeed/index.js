@@ -8,8 +8,9 @@ import Container from '../Container';
 import Header from '../Header';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
+import Explanation from '../Explanation';
 import { IconButton, Button } from '../Button';
-import { BackIcon } from '../Icons';
+import { BackIcon, EyeIcon, CrossedEyeIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
@@ -40,7 +41,7 @@ class ShowSeed extends Component {
     const { visible } = this.state;
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={styles.form}>
           <FormBlock>
             <Heading>
@@ -64,6 +65,16 @@ class ShowSeed extends Component {
               Назад
             </IconButton>
           </NavLink>
+          <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
+            <Explanation>
+              <p> Фраза дает полный контроль над вашей учетной записью </p>
+              <p> Обязательно запишите и не сообщайте ее никому </p>
+            </Explanation>
+            <IconButton onClick={this.toggleWords} className="btn--white btn--show-seed">
+              {!visible ? <EyeIcon /> : <CrossedEyeIcon />}
+              {!visible ? 'Показать фразу' : 'Скрыть фразу'}
+            </IconButton>
+          </div>
         </div>
       </Container>
     );

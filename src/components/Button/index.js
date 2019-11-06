@@ -28,10 +28,12 @@ export const IconButton = ({
   children, type, className, onClick,
 }) => (
   <button type={type} className={`${styles.btn} ${className}`} onClick={() => onClick()}>
-    {children[0]}
-    <span className="btn__text">
-      {children[1]}
-    </span>
+    <p>
+      {children[0]}
+      <span className="btn__text">
+        {children[1]}
+      </span>
+    </p>
   </button>
 );
 

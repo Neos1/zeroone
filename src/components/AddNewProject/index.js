@@ -5,14 +5,14 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
 import Header from '../Header';
-import { CreateToken, ChainIcon } from '../Icons';
+import { CreateToken, ChainIcon, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
 
 const AddNewProject = () => (
   <Container>
-    <Header isMenu isLogged={false} />
+    <Header />
     <div className={`${styles.form}`}>
       <FormBlock className="form__block">
         <Heading>
@@ -34,6 +34,12 @@ const AddNewProject = () => (
           </NavLink>
         </div>
       </FormBlock>
+      <NavLink to="/projects">
+        <IconButton className="btn--link btn--noborder btn--back">
+          <BackIcon />
+          Назад
+        </IconButton>
+      </NavLink>
     </div>
   </Container>
 );

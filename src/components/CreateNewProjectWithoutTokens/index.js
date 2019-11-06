@@ -1,15 +1,23 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
-import { Button } from '../Button';
+import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
 import Header from '../Header';
 import Loader from '../Loader';
 import Indicator from '../Indicator';
+import Explanation from '../Explanation';
+import Input from '../Input';
+import {
+  BackIcon, Password, TokenSymbol, TokenCount, TokenName,
+} from '../Icons';
 
+import CreateTokenForm from '../../stores/FormsStore/CreateToken';
+import CreateProjectForm from '../../stores/FormsStore/CreateProject';
 import styles from '../Login/Login.scss';
 
 @inject('userStore', 'appStore')
@@ -21,6 +29,13 @@ class CreateNewProjectWithoutTokens extends Component {
       position: 'token',
       step: 1,
     };
+  }
+
+  returnToContractConnecting = () => {
+    this.setState({
+      position: 'token',
+      step: 1,
+    });
   }
 
   createToken = () => {
@@ -51,35 +66,105 @@ class CreateNewProjectWithoutTokens extends Component {
   render() {
     const { position, step } = this.state;
     if (position === 'uploading') return <Redirect to="/uploading" />;
+    const { createToken, gotoUploading } = this;
+    const CreateToken = new CreateTokenForm({
+      hooks: {
+        onSuccess(form) {
+          createToken();
+          console.log(form.values());
+        },
+        onError(form) {
+          console.log(form);
+        },
+      },
+    });
+    const CreateProject = new CreateProjectForm({
+      hooks: {
+        onSuccess(form) {
+          gotoUploading();
+          console.log(form.values());
+        },
+        onError(form) {
+          console.log(form);
+        },
+      },
+    });
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={styles.form}>
           <StepIndicator step={step} count={2} />
-          {position === 'token' ? <CreateTokenData onSubmit={this.createToken} /> : ''}
+          {position === 'token' ? <CreateTokenData form={CreateToken} /> : ''}
           {position === 'creation' ? <LoadingBlock /> : ''}
           {position === 'tokenCreated' ? <TokenCreationAlert onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData onSubmit={this.gotoUploading} /> : ''}
+          {position === 'projectInfo' ? <InputProjectData form={CreateProject} onClick={this.returnToContractConnecting} /> : ''}
         </div>
       </Container>
     );
   }
 }
 
-const CreateTokenData = ({ onSubmit }) => (
+const CreateTokenData = inject('userStore')(observer(({ userStore: { address }, form }) => (
   <FormBlock>
     <Heading>
       {'Создание токенов'}
       {''}
     </Heading>
-    <form>
-      <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
+    <form form={form} onSubmit={form.onSubmit}>
+      <div className={`${styles.form__explanation} ${styles['form__explanation--left']}`}>
+        <Explanation>
+          <p>
+            Контракт будет загружен в сеть при помощи кошелька:
+            <p>{address}</p>
+          </p>
+          <p>
+            Баланс:
+            <p>0,1023147932 ETH </p>
+          </p>
+          <p>Токены зачислятся на этот кошелек После их можно будет распределить</p>
+        </Explanation>
       </div>
+      <Input field={form.$('name')}>
+        <TokenName />
+      </Input>
+      <div className={styles.form__group}>
+        <Input field={form.$('symbol')}>
+          <TokenSymbol />
+        </Input>
+        <Input field={form.$('count')}>
+          <TokenCount />
+        </Input>
+      </div>
+      <Input field={form.$('password')}>
+        <Password />
+      </Input>
+      <div className={styles.form__submit}>
+        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+      </div>
+      <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
+        <Explanation>
+          <p>
+            Символом токена называется его сокращенно название. Например: ETH, BTC и т.п.
+          </p>
+        </Explanation>
+        <Explanation>
+          <p>
+            Общее число токенов задаете вы.
+            В дальнейшем их можно будет распределить
+            между участниками проекта
+          </p>
+        </Explanation>
+      </div>
+      <NavLink to="/newProject">
+        <IconButton className="btn--link btn--noborder btn--back">
+          <BackIcon />
+          Назад
+        </IconButton>
+      </NavLink>
     </form>
-    <NavLink to="/uploading">upload</NavLink>
   </FormBlock>
-);
+)));
+
 const LoadingBlock = () => (
   <FormBlock>
     <Heading>
@@ -104,16 +189,33 @@ const TokenCreationAlert = ({ onSubmit }) => (
   </FormBlock>
 );
 
-const InputProjectData = ({ onSubmit }) => (
+const InputProjectData = ({ form, onClick }) => (
   <FormBlock>
     <Heading>
       {'Создание проекта'}
       {'Контракт проекта будет загружен в сеть при помощи кошелька'}
     </Heading>
-    <form>
+    <form form={form} onSubmit={form.onSubmit}>
+      <Input field={form.$('name')}>
+        <TokenName />
+      </Input>
+      <Input field={form.$('password')}>
+        <Password />
+      </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
+        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
       </div>
+      <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
+        <Explanation>
+          <p>
+            Название задается вами и отображается в списке проектов
+          </p>
+        </Explanation>
+      </div>
+      <IconButton className="btn--link btn--noborder btn--back" onClick={() => { onClick(); }}>
+        <BackIcon />
+          Назад
+      </IconButton>
     </form>
   </FormBlock>
 );
@@ -138,13 +240,14 @@ const StepIndicator = ({ step, count }) => (
 
 
 CreateTokenData.propTypes = {
-  onSubmit: propTypes.func.isRequired,
+  form: propTypes.object.isRequired,
 };
 TokenCreationAlert.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
 InputProjectData.propTypes = {
-  onSubmit: propTypes.func.isRequired,
+  form: propTypes.object.isRequired,
+  onClick: propTypes.func.isRequired,
 };
 StepIndicator.propTypes = {
   step: propTypes.number.isRequired,

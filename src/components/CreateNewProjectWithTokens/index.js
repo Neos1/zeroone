@@ -1,17 +1,25 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
-import { Button } from '../Button';
+import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
 import Header from '../Header';
 import Loader from '../Loader';
 import Indicator from '../Indicator';
+import Explanation from '../Explanation';
+import {
+  BackIcon, Address, TokenName, Password,
+} from '../Icons';
+import ConnectTokenForm from '../../stores/FormsStore/ConnectToken';
+import CreateProjectForm from '../../stores/FormsStore/CreateProject';
 
 
 import styles from '../Login/Login.scss';
+import Input from '../Input';
 
 @inject('userStore', 'appStore')
 @observer
@@ -22,6 +30,13 @@ class CreateNewProjectWithTokens extends Component {
       position: 'token',
       step: 1,
     };
+  }
+
+  returnToTokenAddress=() => {
+    this.setState({
+      position: 'token',
+      step: 1,
+    });
   }
 
   checkToken = () => {
@@ -52,34 +67,64 @@ class CreateNewProjectWithTokens extends Component {
   render() {
     const { position, step } = this.state;
     if (position === 'uploading') return <Redirect to="/uploading" />;
+    const { gotoUploading } = this;
+    const connectToken = new ConnectTokenForm({
+      hooks: {
+        onSuccess(form) {
+          console.log(form.values());
+        },
+        onError(form) {
+          console.log(`ALARM ${form}`);
+        },
+      },
+    });
+
+    const createProject = new CreateProjectForm({
+      hooks: {
+        onSuccess(form) {
+          gotoUploading();
+          console.log(form.values());
+        },
+        onError(form) {
+          console.log(form);
+        },
+      },
+    });
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={styles.form}>
           <StepIndicator step={step} count={3} />
-          {position === 'token' ? <InputTokenAddress onSubmit={this.checkToken} /> : ''}
+          {position === 'token' ? <InputTokenAddress form={connectToken} onSubmit={this.checkToken} /> : ''}
           {position === 'check' ? <LoadingBlock /> : ''}
           {position === 'tokenChecked' ? <ContractConfirmation onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData onSubmit={this.gotoUploading} /> : ''}
+          {position === 'projectInfo' ? <InputProjectData form={createProject} onClick={this.returnToTokenAddress} /> : ''}
         </div>
       </Container>
-
     );
   }
 }
 
-const InputTokenAddress = ({ onSubmit }) => (
+const InputTokenAddress = ({ form }) => (
   <FormBlock>
     <Heading>
       {'Подключение контракта'}
       {'Владелец этого контракта будет считаться и владельцем создаваемого проекта'}
     </Heading>
-    <form>
+    <form form={form} onSubmit={form.onSubmit}>
+      <Input field={form.$('address')}>
+        <Address />
+      </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
+        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
       </div>
+      <NavLink to="/newProject">
+        <IconButton className="btn--link btn--noborder btn--back">
+          <BackIcon />
+          Назад
+        </IconButton>
+      </NavLink>
     </form>
-    <NavLink to="/uploading">upload</NavLink>
   </FormBlock>
 );
 
@@ -107,16 +152,33 @@ const ContractConfirmation = ({ onSubmit }) => (
   </FormBlock>
 );
 
-const InputProjectData = ({ onSubmit }) => (
+const InputProjectData = ({ form, onClick }) => (
   <FormBlock>
     <Heading>
       {'Создание проекта'}
       {'Контракт проекта будет загружен в сеть при помощи кошелька'}
     </Heading>
-    <form>
+    <form form={form} onSubmit={form.onSubmit}>
+      <Input field={form.$('name')}>
+        <TokenName />
+      </Input>
+      <Input field={form.$('password')}>
+        <Password />
+      </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
+        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
       </div>
+      <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
+        <Explanation>
+          <p>
+            Название задается вами и отображается в списке проектов
+          </p>
+        </Explanation>
+      </div>
+      <IconButton className="btn--link btn--noborder btn--back" onClick={() => { onClick(); }}>
+        <BackIcon />
+          Назад
+      </IconButton>
     </form>
   </FormBlock>
 );
@@ -142,13 +204,14 @@ const StepIndicator = ({ step, count }) => (
 
 
 InputTokenAddress.propTypes = {
-  onSubmit: propTypes.func.isRequired,
+  form: propTypes.object.isRequired,
 };
 ContractConfirmation.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
 InputProjectData.propTypes = {
-  onSubmit: propTypes.func.isRequired,
+  form: propTypes.object.isRequired,
+  onClick: propTypes.func.isRequired,
 };
 StepIndicator.propTypes = {
   step: propTypes.number.isRequired,

@@ -12,6 +12,8 @@ import { Password, BackIcon } from '../Icons';
 import Input from '../Input';
 import { Button, IconButton } from '../Button';
 import Loader from '../Loader';
+import Explanation from '../Explanation';
+import Indicator from '../Indicator';
 import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
 
 import styles from '../Login/Login.scss';
@@ -40,10 +42,11 @@ class CreateWallet extends Component {
     const { appStore } = this.props;
     const { masterSubState } = appStore;
     const { redirect } = this.state;
+    const { createWallet } = this;
     const CreateForm = new CreateWalletForm({
       hooks: {
-        onSuccess(form) {
-          console.log(form);
+        onSuccess() {
+          createWallet();
         },
         onError(form) {
           console.log(form);
@@ -56,7 +59,7 @@ class CreateWallet extends Component {
     }
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={styles.form}>
           {masterSubState === 0 ? <PasswordForm submit={this.createWallet} form={CreateForm} /> : ''}
           {masterSubState === 1 ? <CreationLoader /> : ''}
@@ -67,8 +70,6 @@ class CreateWallet extends Component {
             </IconButton>
           </NavLink>
         </div>
-
-
       </Container>
     );
   }
@@ -89,6 +90,36 @@ const PasswordForm = ({ form }) => (
       </Input>
       <div className={styles.form__submit}>
         <Button type="submit" className="btn--default btn--black"> Продолжить </Button>
+      </div>
+      <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
+        <Explanation>
+          <p>
+            Пароль задается на английской раскладке
+            <br />
+            И должен содержать:
+          </p>
+          <p>
+            <ul>
+              <li>
+                <Indicator />
+                {' '}
+                цифру
+                {' '}
+              </li>
+              <li>
+                <Indicator />
+                {' '}
+                заглавную букву
+                {' '}
+              </li>
+              <li>
+                <Indicator />
+                {' '}
+                спецсимвол
+              </li>
+            </ul>
+          </p>
+        </Explanation>
       </div>
     </form>
   </FormBlock>

@@ -36,7 +36,7 @@ class ProjectList extends Component {
     ));
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={`${styles.form} ${styles['form--wide']}`}>
           <FormBlock className="form__block--wide">
             <Heading>

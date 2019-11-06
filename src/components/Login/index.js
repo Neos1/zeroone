@@ -56,7 +56,7 @@ class Login extends Component {
     if (userStore.authorized) return <Redirect to="/projects" />;
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={styles.form}>
           {
             !logging

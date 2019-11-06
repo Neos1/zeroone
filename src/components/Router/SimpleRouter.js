@@ -3,7 +3,7 @@ import {
   MemoryRouter, Route, Switch, withRouter,
 } from 'react-router-dom';
 
-import Login from '../Login';
+// import Login from '../Login';
 import CreateWallet from '../CreateWallet';
 import InputSeed from '../InputSeed';
 import ShowSeed from '../ShowSeed';
@@ -18,7 +18,7 @@ import ProjectUploading from '../ProjectUploading';
 const SimpleRouter = () => (
   <MemoryRouter>
     <Switch>
-      <Route path="/" exact component={withRouter(Login)} />
+      <Route path="/" exact component={withRouter(AddExistingProject)} />
       <Route path="/create" exact component={withRouter(CreateWallet)} />
       <Route path="/showSeed" exact component={withRouter(ShowSeed)} />
       <Route path="/checkSeed" exact component={withRouter(InputSeed)} />

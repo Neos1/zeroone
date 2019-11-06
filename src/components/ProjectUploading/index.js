@@ -27,7 +27,7 @@ class ProjectUploading extends Component {
     const { step } = this.state;
     return (
       <Container>
-        <Header isMenu isLogged={false} />
+        <Header />
         <div className={`${styles.form} ${styles['form--ultrawide']}`}>
           <FormBlock>
             <Heading>

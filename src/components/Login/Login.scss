@@ -54,6 +54,38 @@
     left: 50%;
     transform: translateX(-50%);
   }
+  &__explanation {
+    position: absolute;
+    top: 50%;
+    width: 60%;
+    text-align: left;
+    transform: translateY(-50%);
+    &--left {
+      right: 100%;
+
+    }
+    &--right {
+      left: 102%;
+    }
+    ul {
+      list-style: none;
+      .indicator {
+        margin: 7px 5px;
+        vertical-align: middle;
+      }
+    }
+  }
+  &__group {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    .field {
+      width: 45%;
+      &__input {
+        width: 70%;
+      }
+    }
+  }
 }
 .seed {
   display: flex;
@@ -89,6 +121,19 @@
       width: 65%;
       margin-left: 0;
       transform: translateY(-50%);
+      &:not(:placeholder-shown) {
+        & ~ .field__line {
+          width: 0%;
+        }
+      }
+      &:focus {
+        & ~ .field__line {
+          width: 100%;
+        }
+      }
+    }
+    &__line {
+      width: 0;
     }
   }
 }
@@ -97,7 +142,10 @@
   flex-flow: row wrap;
   justify-content: space-between;
   .btn {
-    display: inline-block;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
   }
 }
 .create, .add-project {
@@ -136,6 +184,12 @@
         fill: $white;
       }
     }
+  }
+  &__label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 14px;
   }
 }
 .progress {

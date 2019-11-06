@@ -48,6 +48,7 @@
     }
   }
   &--link {
+    padding: 0;
     color: $linkColor;
     background-color: transparent;
     border-bottom: 1px solid $linkColor;
@@ -117,6 +118,30 @@
   }
   &--noborder {
     border: none;
+  }
+  &--show-seed {
+    padding: 15px;
+    svg {
+      path{
+        fill: $white;
+      }
+    }
+    &:hover {
+      svg {
+        path{
+          fill: $white;
+          stroke: $primary;
+        }
+      }
+    }
+    &:active {
+      svg {
+        path{
+          fill: $primary;
+          stroke: $white;
+        }
+      }
+    }
   }
   &.icon--top{
     svg {
