@@ -13,7 +13,7 @@ class UserStore {
 
   @observable privateKey = '';
 
-  @observable _mnemonic = [];
+  @observable _mnemonic = ['spray', 'trap', 'flush', 'awful', 'before', 'prosper', 'gold', 'typical', 'siege', 'mule', 'great', 'bone'];
 
   @observable _mnemonicRepeat = [];
 
@@ -27,6 +27,7 @@ class UserStore {
 
   @action setEncryptedWallet(wallet) {
     this.encryptedWallet = wallet;
+    this.address = `0x${wallet.address}`;
   }
 
   /**
