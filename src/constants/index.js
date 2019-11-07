@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable import/prefer-default-export */
 
 export const votingStates = {
@@ -20,3 +21,7 @@ export const PATH_TO_WALLETS = window.__ENV === 'production'
 export const PATH_TO_CONTRACTS = window.__ENV === 'production'
   ? path.join(window.process.env.PORTABLE_EXECUTABLE_DIR, './contracts/')
   : path.join(window.process.env.INIT_CWD, './src/contracts/');
+
+export const SOL_PATH_REGEXP = new RegExp(/(\"|\')((\.{1,2}\/){1,})(\w+\/){0,}?(\w+\.(?:sol))(\"|\')/g);
+export const SOL_IMPORT_REGEXP = new RegExp(/(import)*.(\"|\')((\.{1,2}\/){1,})(\w+\/){0,}?(\w+\.(?:sol))(\"|\')(;)/g);
+export const SOL_VERSION_REGEXP = new RegExp(/(pragma).(solidity).((\^)?)([0-9](.)?){1,}/g);

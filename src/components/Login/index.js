@@ -44,7 +44,7 @@ class Login extends Component {
     const loginForm = new LoginForm({
       hooks: {
         onSuccess(form) {
-          userStore.readWallet(form.values().password);
+          userStore.login(form.values().password);
         },
         onError(form) {
           alert('Form has errors');

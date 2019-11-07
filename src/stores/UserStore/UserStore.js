@@ -1,4 +1,7 @@
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 import { observable, action } from 'mobx';
+import { Transaction as Tx } from 'ethereumjs-tx';
 /**
  * Describes store with user data
  */
@@ -57,17 +60,25 @@ class UserStore {
     });
   }
 
-  @action readWallet(password) {
+  @action login(password) {
     this.logging = true;
+    this.readWallet(password).then((buffer) => {
+      if (!(buffer instanceof Error)) {
+        this.privateKey = buffer;
+        this.authorized = true;
+      } else {
+        this.logging = false;
+      }
+    });
+  }
+
+  @action readWallet(password) {
     const wallet = JSON.stringify(this.encryptedWallet);
     return new Promise((resolve, reject) => {
       this.rootStore.walletService.readWallet(wallet, password).then((data) => {
         if (data.privateKey) {
-          this.privateKey = data.privateKey;
-          this.authorized = true;
           resolve(data.privateKey);
         } else {
-          this.logging = false;
           reject();
         }
       });
@@ -87,7 +98,20 @@ class UserStore {
    * @return Signed TX data
    */
   @action singTransaction(data, password) {
-    return (this.balance, data, password);
+    return new Promise((resolve, reject) => {
+      // eslint-disable-next-line consistent-return
+      this.readWallet(password).then((buffer) => {
+        if (buffer instanceof Error) return false;
+        const privateKey = Buffer.from(
+          buffer,
+          'hex',
+        );
+        const tx = new Tx(data, { chain: 'ropsten' });
+        tx.sign(privateKey);
+        const serialized = tx.serialize().toString('hex');
+        resolve(serialized);
+      });
+    });
   }
 
   /**

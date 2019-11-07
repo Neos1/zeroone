@@ -7,6 +7,7 @@ import ProjectStore from '../ProjectStore';
 import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
+import { fs, path, ROOT_DIR } from '../../constants';
 
 class RootStore {
   // stores
@@ -24,11 +25,13 @@ class RootStore {
   @observable Web3Service ;
 
   constructor() {
+    const configRaw = fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8');
+    const config = JSON.parse(configRaw);
     this.appStore = new AppStore(this);
     this.userStore = new UserStore(this);
     this.walletService = new WalletService();
-    this.contractService = new ContractService();
-    this.Web3Service = new Web3Service();
+    this.Web3Service = new Web3Service(config.host);
+    this.contractService = new ContractService(this);
   }
 
   /**

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
@@ -28,6 +29,7 @@ class CreateNewProjectWithoutTokens extends Component {
     this.state = {
       position: 'token',
       step: 1,
+      tokenAddr: '',
     };
   }
 
@@ -38,15 +40,31 @@ class CreateNewProjectWithoutTokens extends Component {
     });
   }
 
-  createToken = () => {
+  createToken = (form) => {
+    const { appStore } = this.props;
     this.setState({
       position: 'creation',
     });
-    setTimeout(() => {
-      this.setState({
-        position: 'tokenCreated',
-      });
-    }, 2000);
+
+    const { name, symbol, count } = form.values();
+    const deployArgs = [name, symbol, count];
+    appStore.deployContract('ERC20', deployArgs).then((hash) => {
+      console.log(hash);
+      // eslint-disable-next-line no-unused-vars
+      const interval = setInterval(() => {
+        // eslint-disable-next-line consistent-return
+        appStore.checkReciept(hash).then((reciept) => {
+          if (typeof reciept === 'object') {
+            this.setState({
+              tokenAddr: reciept.contractAddress,
+              position: 'tokenCreated',
+            });
+            console.log(reciept.contractAddress);
+            clearInterval(interval);
+          }
+        });
+      }, 5000);
+    });
   }
 
   gotoProjectInfo = () => {
@@ -70,8 +88,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const CreateToken = new CreateTokenForm({
       hooks: {
         onSuccess(form) {
-          createToken();
-          console.log(form.values());
+          createToken(form);
         },
         onError(form) {
           console.log(form);
@@ -238,7 +255,9 @@ const StepIndicator = ({ step, count }) => (
   </div>
 );
 
-
+CreateNewProjectWithoutTokens.propTypes = {
+  appStore: propTypes.object.isRequired,
+};
 CreateTokenData.propTypes = {
   form: propTypes.object.isRequired,
 };
