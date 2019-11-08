@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-// import propTypes from 'prop-types';
+import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -21,6 +21,12 @@ class ProjectUploading extends Component {
     this.state = {
       step: 0,
     };
+  }
+
+  componentDidMount() {
+    const { newTokens } = this.props;
+    // eslint-disable-next-line no-console
+    console.log(`newTokens = ${newTokens}`);
   }
 
   render() {
@@ -87,6 +93,8 @@ class ProjectUploading extends Component {
 }
 
 // //ProjectUploading.propTypes = {};
-
+ProjectUploading.propTypes = {
+  newTokens: propTypes.bool.isRequired,
+};
 
 export default ProjectUploading;

@@ -33,9 +33,9 @@ class WalletService {
   writeWalletToFile(encryptedWallet) {
     let date = new Date();
     date = `${date.getUTCFullYear()}-${date.getUTCDate()}-${date.getUTCDay()}T${date.getUTCHours()}-${date.getUTCMinutes()}-${date.getUTCSeconds()}.${date.getMilliseconds() * 1000000}Z`;
-    const walletName = (JSON.parse(encryptedWallet)).address;
+    const walletName = encryptedWallet.address;
     const name = `UTC--${date}--${walletName}`;
-    fs.writeFileSync(path.join(PATH_TO_WALLETS, `${name}.json`), encryptedWallet, 'utf8');
+    fs.writeFileSync(path.join(PATH_TO_WALLETS, `${name}.json`), JSON.stringify(encryptedWallet, null, '\t'), 'utf8');
   }
 
   /**
@@ -43,11 +43,12 @@ class WalletService {
    * @param {string} password - combination of symbols which will be allow decode wallet
    * @returns {object} encryptedWallet,seed
    */
-  createWallet(password) {
+  createWallet(password, seed = '') {
+    const mnemonic = seed === '' ? bip39.generateMnemonic() : seed;
     const data = {
       action: 'create',
       password,
-      mnemonic: bip39.generateMnemonic(),
+      mnemonic,
     };
     return worker.send(data);
   }
@@ -58,11 +59,15 @@ class WalletService {
    * @returns {object} wallet object
    */
   recoverWallet(mnemonic) {
-    const data = {
-      action: 'recover',
-      mnemonic,
-    };
-    worker.send(data);
+    return new Promise((resolve, reject) => {
+      if (bip39.validateMnemonic) {
+        const data = {
+          action: 'recover',
+          mnemonic,
+        };
+        resolve(worker.send(data));
+      } else reject();
+    });
   }
 
   /**
@@ -71,8 +76,8 @@ class WalletService {
    * @param {string} password password
    * @return {bool} is password correct
    */
-  checkPassword(wallet, password) {
-    return (this, wallet, password);
+  validateMnemonic(mnemonic) {
+    return bip39.validateMnemonic(mnemonic);
   }
 }
 export default WalletService;

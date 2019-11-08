@@ -32,11 +32,6 @@ class Login extends Component {
     appStore.readWalletList();
   }
 
-  createKey = () => {
-    const { appStore } = this.props;
-    appStore.setMasterState('createWallet', 'passwordInput');
-  }
-
   render() {
     // eslint-disable-next-line no-unused-vars
     const { appStore, userStore } = this.props;
@@ -77,7 +72,7 @@ class Login extends Component {
 }
 
 const InputForm = ({
-  appStore, form, createKey,
+  appStore, form,
 }) => (
   <FormBlock>
     <Heading>
@@ -94,7 +89,7 @@ const InputForm = ({
       <div className={styles.form__submit}>
         <Button className="btn--default btn--black" type="submit"> Войти </Button>
         <NavLink to="/create">
-          <Button className="btn--link" onClick={() => createKey()}> Создать новый ключ </Button>
+          <Button className="btn--link"> Создать новый ключ </Button>
         </NavLink>
         <NavLink to="/restore">
           <Button className="btn--link" disabled={form.loading}> Забыли пароль? </Button>
@@ -121,7 +116,6 @@ Login.propTypes = {
 };
 InputForm.propTypes = {
   appStore: propTypes.object.isRequired,
-  createKey: propTypes.func.isRequired,
   form: propTypes.object.isRequired,
 };
 

@@ -5,7 +5,7 @@ const bip39 = require('bip39');
 
 const walletHdPath = "m/44'/60'/0'/0/0";
 
-const createWallet = ({ id, payload: { mnemonic, password, action } }) => {
+const createWallet = ({ id, payload: { mnemonic, password = '', action } }) => {
   try {
     const wallet = hdKey.fromMasterSeed(bip39.mnemonicToSeedSync(mnemonic))
       .derivePath(walletHdPath)

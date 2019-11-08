@@ -39,16 +39,19 @@ class CreateNewProjectWithTokens extends Component {
     });
   }
 
-  checkToken = () => {
+  checkToken = (form) => {
+    const { address } = form.values();
+    const { appStore } = this.props;
     this.setState({
       position: 'check',
     });
-    setTimeout(() => {
+    appStore.checkErc(address).then(({ totalSupply, symbol }) => {
+      console.log(totalSupply, symbol);
       this.setState({
         position: 'tokenChecked',
         step: 2,
       });
-    }, 2000);
+    });
   }
 
   gotoProjectInfo = () => {
@@ -67,11 +70,11 @@ class CreateNewProjectWithTokens extends Component {
   render() {
     const { position, step } = this.state;
     if (position === 'uploading') return <Redirect to="/uploading" />;
-    const { gotoUploading } = this;
+    const { gotoUploading, checkToken } = this;
     const connectToken = new ConnectTokenForm({
       hooks: {
         onSuccess(form) {
-          console.log(form.values());
+          checkToken(form);
         },
         onError(form) {
           console.log(`ALARM ${form}`);
@@ -138,19 +141,30 @@ const LoadingBlock = () => (
   </FormBlock>
 );
 
-const ContractConfirmation = ({ onSubmit }) => (
+const ContractConfirmation = inject('appStore')(observer(({ appStore: { ERC }, onSubmit }) => (
   <FormBlock>
     <Heading>
       {'Контракт успешно подключен!'}
       {'Проверьте правильность данных перед тем, как продолжить'}
     </Heading>
     <form>
+      <div className="form__token">
+        <div className="form__token-half">
+          <p className="form__token-label">Символ токена</p>
+          <p className="form__token-value">{ERC.symbol}</p>
+        </div>
+        <div className="form__token-divider" />
+        <div className="form__token-half">
+          <p className="form__token-label">Баланс</p>
+          <p className="form__token-value">{ERC.totalSupply}</p>
+        </div>
+      </div>
       <div className={styles.form__submit}>
         <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
       </div>
     </form>
   </FormBlock>
-);
+)));
 
 const InputProjectData = ({ form, onClick }) => (
   <FormBlock>
@@ -202,7 +216,9 @@ const StepIndicator = ({ step, count }) => (
   </div>
 );
 
-
+CreateNewProjectWithTokens.propTypes = {
+  appStore: propTypes.object.isRequired,
+};
 InputTokenAddress.propTypes = {
   form: propTypes.object.isRequired,
 };

@@ -26,27 +26,34 @@ class CreateWallet extends Component {
     super(props);
     this.state = {
       redirect: false,
+      loading: false,
     };
   }
 
-  createWallet = () => {
-    const { appStore, userStore } = this.props;
-    appStore.setMasterState('createWallet', 'creating');
-    userStore.createWallet('password').then((result) => {
-      if (!result) appStore.setMasterState('createWallet', 'passwordInput');
+  createWallet = (form) => {
+    const { userStore, recover } = this.props;
+    const { _mnemonic } = userStore;
+    const values = form.values();
+    const seed = _mnemonic.join(' ');
+    this.setState({ loading: true });
+    userStore.createWallet(values.password, seed).then(() => {
+      if (recover) {
+        userStore.saveWalletToFile();
+      }
       this.setState({ redirect: true });
+    }).catch(() => {
+      this.setState({ loading: false });
     });
   }
 
   render() {
-    const { appStore } = this.props;
-    const { masterSubState } = appStore;
-    const { redirect } = this.state;
+    const { recover } = this.props;
+    const { redirect, loading } = this.state;
     const { createWallet } = this;
     const CreateForm = new CreateWalletForm({
       hooks: {
-        onSuccess() {
-          createWallet();
+        onSuccess(form) {
+          createWallet(form);
         },
         onError(form) {
           console.log(form);
@@ -55,15 +62,17 @@ class CreateWallet extends Component {
     });
 
     if (redirect) {
-      return <Redirect to="/showSeed" />;
+      return recover ? <Redirect to="/creatingSuccess" /> : <Redirect to="/showSeed" />;
     }
     return (
       <Container>
         <Header />
         <div className={styles.form}>
-          {masterSubState === 0 ? <PasswordForm submit={this.createWallet} form={CreateForm} /> : ''}
-          {masterSubState === 1 ? <CreationLoader /> : ''}
-          <NavLink to="/">
+          {!loading
+            ? <PasswordForm submit={this.createWallet} form={CreateForm} />
+            : <CreationLoader />}
+
+          <NavLink to={`${recover ? '/restore' : '/'}`}>
             <IconButton className="btn--link btn--noborder btn--back">
               <BackIcon />
               Назад
@@ -137,7 +146,7 @@ const CreationLoader = () => (
 
 CreateWallet.propTypes = {
   userStore: propTypes.object.isRequired,
-  appStore: propTypes.object.isRequired,
+  recover: propTypes.bool.isRequired,
 };
 
 PasswordForm.propTypes = {

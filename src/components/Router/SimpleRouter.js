@@ -14,6 +14,7 @@ import CreateNewProjectWithoutTokens from '../CreateNewProjectWithoutTokens';
 import AddExistingProject from '../AddExisitingProject';
 import AddNewProject from '../AddNewProject';
 import ProjectUploading from '../ProjectUploading';
+import CreationAlert from '../CreationAlert';
 
 const SimpleRouter = () => (
   <MemoryRouter>
@@ -21,14 +22,18 @@ const SimpleRouter = () => (
       <Route path="/" exact component={withRouter(Login)} />
       <Route path="/create" exact component={withRouter(CreateWallet)} />
       <Route path="/showSeed" exact component={withRouter(ShowSeed)} />
-      <Route path="/checkSeed" exact component={withRouter(InputSeed)} />
+      <Route path="/checkSeed" exact component={withRouter(() => (<InputSeed recover={false} />))} />
+      <Route path="/restore" exact component={withRouter(() => (<InputSeed recover />))} />
+      <Route path="/recoverPassword" exact component={withRouter(() => (<CreateWallet recover />))} />
+      <Route path="/creatingSuccess" exact component={withRouter(() => (<CreationAlert success />))} />
       <Route path="/projects" exact component={withRouter(ProjectList)} />
       <Route path="/createProject" exact component={withRouter(AddNewProject)} />
       <Route path="/addExisting" exact component={withRouter(AddExistingProject)} />
       <Route path="/newProject" exact component={withRouter(CreateNewProject)} />
       <Route path="/createWithTokens" exact component={withRouter(CreateNewProjectWithTokens)} />
       <Route path="/createWithoutTokens" exact component={withRouter(CreateNewProjectWithoutTokens)} />
-      <Route path="/uploading" exact component={withRouter(ProjectUploading)} />
+      <Route path="/uploadWithExistingTokens" exact component={withRouter(() => (<ProjectUploading newTokens={false} />))} />
+      <Route path="/uploadWithNewTokens" exact component={withRouter(() => (<ProjectUploading newTokens />))} />
     </Switch>
   </MemoryRouter>
 );

@@ -66,9 +66,9 @@ class UserStore {
       if (!(buffer instanceof Error)) {
         this.privateKey = buffer;
         this.authorized = true;
-      } else {
-        this.logging = false;
       }
+    }).catch(() => {
+      this.logging = false;
     });
   }
 
@@ -85,9 +85,18 @@ class UserStore {
     });
   }
 
-  @action recoverWallet() {
-    const seed = this._mnemonic.join(' ');
-    this.rootStore.walletService.recoverWallet(seed);
+  @action recoverWallet(mnemonic) {
+    return this.rootStore.walletService.recoverWallet(mnemonic);
+  }
+
+  @action saveWalletToFile() {
+    const { walletService } = this.rootStore;
+    walletService.writeWalletToFile(this.encryptedWallet);
+  }
+
+  @action isSeedValid(mnemonic) {
+    const { walletService } = this.rootStore;
+    return walletService.validateMnemonic(mnemonic);
   }
 
   /**

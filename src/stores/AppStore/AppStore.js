@@ -9,9 +9,9 @@ class AppStore {
 
   @observable projectList = [];
 
-  @observable masterState = 0;
+  @observable ERC = {
 
-  @observable masterSubState = null;
+  }
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -71,7 +71,21 @@ class AppStore {
     });
   }
 
-  @action checkReciept(hash) {
+  @action checkErc(address) {
+    const { contractService } = this.rootStore;
+    return new Promise((resolve, reject) => {
+      contractService.checkTokens(address).then((data) => {
+        if (data.totalSupply) {
+          this.ERC = { ...data };
+          resolve(data);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  @action checkReceipt(hash) {
     const { Web3Service: { web3 } } = this.rootStore;
     return web3.eth.getTransactionReceipt(hash);
   }

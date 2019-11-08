@@ -21,6 +21,11 @@ class ContractService {
     this._contract = instance;
   }
 
+  /**
+   * compiling contracts and returning type of compiled contract, bytecode & abi
+   * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
+   * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
+   */
   compileContract(type) {
     this.combineContract(type);
     return new Promise((resolve, reject) => {
@@ -48,6 +53,10 @@ class ContractService {
     });
   }
 
+  /**
+   * reading all imports in main contract file and importing all files in one output file
+   * @param {string} type type of project - ERC20 for ERC-20 tokens, Project for project contract
+   */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
     let imports;
@@ -80,6 +89,15 @@ class ContractService {
     fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${dir}output.sol`), mainContract, 'utf8');
   }
 
+  /**
+   * Sendind transaction with contract to blockchain
+   * @param {object} params parameters for deploying
+   * @param {string} params.type ERC20 if deploying ERC20 token, Project - if project contract
+   * @param {array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
+   * @param {string} params.bytecode bytecode of contract
+   * @param {JSON} params.abi JSON interface of contract
+   * @returns {Promise} Promise of web3.sendSignedTransaction which resolves on txHash
+   */
   deployContract({
     type, deployArgs, bytecode, abi,
   }) {
@@ -116,6 +134,17 @@ class ContractService {
    */
   createTxData(method, params) {
     return this.contract.methods[method](params).encodeABI();
+  }
+
+  async checkTokens(address) {
+    const { rootStore: { Web3Service, userStore } } = this;
+    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ERC20.abi')));
+    const contract = Web3Service.createContractInstance(abi);
+    contract.options.address = address;
+    const totalSupply = await contract.methods.totalSupply().call();
+    const symbol = await contract.methods.symbol().call();
+
+    return { totalSupply, symbol };
   }
 
   /**

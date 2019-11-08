@@ -49,17 +49,16 @@ class CreateNewProjectWithoutTokens extends Component {
     const { name, symbol, count } = form.values();
     const deployArgs = [name, symbol, count];
     appStore.deployContract('ERC20', deployArgs).then((hash) => {
-      console.log(hash);
       // eslint-disable-next-line no-unused-vars
       const interval = setInterval(() => {
         // eslint-disable-next-line consistent-return
-        appStore.checkReciept(hash).then((reciept) => {
-          if (typeof reciept === 'object') {
+        appStore.checkReceipt(hash).then((receipt) => {
+          if (typeof receipt === 'object') {
             this.setState({
-              tokenAddr: reciept.contractAddress,
+              tokenAddr: receipt.contractAddress,
               position: 'tokenCreated',
             });
-            console.log(reciept.contractAddress);
+            console.log(receipt.contractAddress);
             clearInterval(interval);
           }
         });
@@ -83,7 +82,7 @@ class CreateNewProjectWithoutTokens extends Component {
 
   render() {
     const { position, step } = this.state;
-    if (position === 'uploading') return <Redirect to="/uploading" />;
+    if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     const { createToken, gotoUploading } = this;
     const CreateToken = new CreateTokenForm({
       hooks: {
