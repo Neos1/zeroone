@@ -27,12 +27,8 @@ class ProjectList extends Component {
 
   render() {
     const { appStore: { projectList } } = this.props;
-    const projects = projectList.map((project) => (
-      <Button className="btn--big btn--white">
-        {' '}
-        {project.name}
-        {' '}
-      </Button>
+    const projects = projectList.map((project, index) => (
+      <Button key={`${index + 1}`} className="btn--big btn--white">{project.name}</Button>
     ));
     return (
       <Container>

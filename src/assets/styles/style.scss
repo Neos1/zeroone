@@ -56,6 +56,7 @@ svg {
       width: 42px;
       height: 42px;
       path {
+        transition: .2s;
         fill: rgba($color: $primary, $alpha: .5);
       }
     }
@@ -71,6 +72,7 @@ svg {
   .stroke-still {
     stroke-dasharray: 2;
     stroke-width: 4;
+    transition: .2s;
     stroke: rgba($color: $primary, $alpha: .5);
   }
   
@@ -94,7 +96,15 @@ svg {
     }
   }
   &.success{
+    .progress-block__icon {
+      &>svg {
+        path {
+          fill: rgba($color: $primary, $alpha: 1);
+        }
+      }
+    }
     .stroke-still {
+      stroke-dasharray: 0;
       stroke: rgba($color: $primary, $alpha: 1);
     }
     & > img {
@@ -102,7 +112,7 @@ svg {
     }
     .progress-line{
       width: 96px;
-      border-top: 2px solid rgba($color: $primary, $alpha: .5);
+      border-top: 2px solid rgba($color: $primary, $alpha: 1);
       opacity: 1;
     }
 

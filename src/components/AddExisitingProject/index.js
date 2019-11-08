@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import { Button } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -14,8 +15,10 @@ import ConnectProjectForm from '../../stores/FormsStore/ConnectProject';
 
 import styles from '../Login/Login.scss';
 import Input from '../Input';
-import { Address } from '../Icons';
+import { Address, TokenName } from '../Icons';
 
+@inject('appStore')
+@observer
 class AddExistingProject extends Component {
   constructor(props) {
     super(props);
@@ -24,25 +27,30 @@ class AddExistingProject extends Component {
     };
   }
 
-  connectProject = () => {
+  connectProject = (form) => {
+    const { appStore } = this.props;
+    const { name, address } = form.values();
     this.setState({
       step: 'loading',
     });
+    appStore.checkProject(address)
+      .then(() => {
+        this.setState({ step: 'success' });
+        appStore.addProjectToList({ name, address });
+      })
+      .catch(() => {
 
-    setTimeout(() => {
-      this.setState({
-        step: 'success',
       });
-    }, 5000);
   }
 
   render() {
     const { step } = this.state;
+    const { connectProject } = this;
 
     const connectForm = new ConnectProjectForm({
       hooks: {
         onSuccess(form) {
-          console.log(form.values());
+          connectProject(form);
         },
         onError(form) {
           console.log(`ALARM ${form}`);
@@ -69,6 +77,9 @@ const InputBlock = ({ form }) => (
       {'Cоздайте новый или подключите уже существующий'}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
+      <Input field={form.$('name')}>
+        <TokenName />
+      </Input>
       <Input field={form.$('address')}>
         <Address />
       </Input>
@@ -113,7 +124,9 @@ const MessageBlock = () => (
     </NavLink>
   </FormBlock>
 );
-
+AddExistingProject.propTypes = {
+  appStore: propTypes.object.isRequired,
+};
 InputBlock.propTypes = {
   form: propTypes.object.isRequired,
 };

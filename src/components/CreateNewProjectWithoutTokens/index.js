@@ -41,29 +41,47 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   createToken = (form) => {
-    const { appStore } = this.props;
+    const { appStore, userStore } = this.props;
     this.setState({
       position: 'creation',
     });
 
-    const { name, symbol, count } = form.values();
+    const {
+      name, symbol, count, password,
+    } = form.values();
+
+    console.log(form.values());
+
     const deployArgs = [name, symbol, count];
-    appStore.deployContract('ERC20', deployArgs).then((hash) => {
-      // eslint-disable-next-line no-unused-vars
-      const interval = setInterval(() => {
-        // eslint-disable-next-line consistent-return
-        appStore.checkReceipt(hash).then((receipt) => {
-          if (typeof receipt === 'object') {
-            this.setState({
-              tokenAddr: receipt.contractAddress,
-              position: 'tokenCreated',
-            });
-            console.log(receipt.contractAddress);
-            clearInterval(interval);
-          }
-        });
-      }, 5000);
-    });
+
+    userStore.readWallet(password)
+      .then((buffer) => {
+        console.log(buffer);
+        if (!(buffer instanceof Error)) {
+          console.log('Погнали деплоить');
+          appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
+          // eslint-disable-next-line no-unused-vars
+            const interval = setInterval(() => {
+            // eslint-disable-next-line consistent-return
+              appStore.checkReceipt(hash).then((receipt) => {
+                if (typeof receipt === 'object') {
+                  this.setState({
+                    tokenAddr: receipt.contractAddress,
+                    position: 'tokenCreated',
+                  });
+                  appStore.deployArgs = [receipt.contractAddress];
+                  clearInterval(interval);
+                }
+              });
+            }, 5000);
+          });
+        } else {
+          this.setState({
+            position: 'token',
+            step: 1,
+          });
+        }
+      });
   }
 
   gotoProjectInfo = () => {
@@ -74,10 +92,24 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
 
-  gotoUploading = () => {
-    this.setState({
-      position: 'uploading',
-    });
+  gotoUploading = (form) => {
+    const { userStore, appStore } = this.props;
+    const { name, password } = form.values();
+    appStore.name = name;
+    appStore.password = password;
+
+    userStore.readWallet(password)
+      .then(() => {
+        this.setState({
+          position: 'uploading',
+        });
+      })
+      .catch(() => {
+        this.setState({
+          position: 'projectInfo',
+          step: 2,
+        });
+      });
   }
 
   render() {
@@ -97,8 +129,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const CreateProject = new CreateProjectForm({
       hooks: {
         onSuccess(form) {
-          gotoUploading();
-          console.log(form.values());
+          gotoUploading(form);
         },
         onError(form) {
           console.log(form);
@@ -256,6 +287,7 @@ const StepIndicator = ({ step, count }) => (
 
 CreateNewProjectWithoutTokens.propTypes = {
   appStore: propTypes.object.isRequired,
+  userStore: propTypes.object.isRequired,
 };
 CreateTokenData.propTypes = {
   form: propTypes.object.isRequired,

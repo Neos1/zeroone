@@ -51,6 +51,7 @@ class CreateNewProjectWithTokens extends Component {
         position: 'tokenChecked',
         step: 2,
       });
+      appStore.deployArgs = [address];
     });
   }
 
@@ -61,7 +62,11 @@ class CreateNewProjectWithTokens extends Component {
     });
   }
 
-  gotoUploading = () => {
+  gotoUploading = (form) => {
+    const { appStore } = this.props;
+    const { name, password } = form.values();
+    appStore.name = name;
+    appStore.password = password;
     this.setState({
       position: 'uploading',
     });
@@ -85,8 +90,7 @@ class CreateNewProjectWithTokens extends Component {
     const createProject = new CreateProjectForm({
       hooks: {
         onSuccess(form) {
-          gotoUploading();
-          console.log(form.values());
+          gotoUploading(form);
         },
         onError(form) {
           console.log(form);

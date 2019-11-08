@@ -8,6 +8,12 @@ class ConnectProjectForm extends ExtendedForm {
   setup() {
     return {
       fields: [{
+        name: 'name',
+        type: 'text',
+        label: 'Project Name',
+        placeholder: 'Придумайте название проекта',
+        rules: 'required|string',
+      }, {
         name: 'address',
         type: 'text',
         label: 'Token Address',

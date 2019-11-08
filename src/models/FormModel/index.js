@@ -7,7 +7,6 @@ import validatorjs from 'validatorjs';
 class ExtendedForm extends Form {
   constructor(data) {
     const { hooks } = data || {};
-    console.log({ hooks });
     super();
     extendObservable(this, { loading: false });
     Object.keys(hooks).forEach((hook) => {

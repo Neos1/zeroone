@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import {
-  fs, path, PATH_TO_WALLETS, ROOT_DIR,
+  fs, path, PATH_TO_WALLETS, ROOT_DIR, PATH_TO_CONTRACTS,
 } from '../../constants';
 
 
@@ -12,6 +12,12 @@ class AppStore {
   @observable ERC = {
 
   }
+
+  @observable deployArgs = [];
+
+  @observable name = ''
+
+  @observable password=''
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -60,12 +66,12 @@ class AppStore {
     this.userStore.setEncryptedWallet(encryptedWallet);
   }
 
-  @action deployContract(type, deployArgs) {
+  @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
     return new Promise((resolve) => {
       contractService.compileContract(type).then(({ bytecode, abi }) => {
         resolve(contractService.deployContract({
-          type, deployArgs, bytecode, abi,
+          type, deployArgs, bytecode, abi, password,
         }));
       });
     });
@@ -83,6 +89,45 @@ class AppStore {
         }
       });
     });
+  }
+
+  @action checkProject(address) {
+    const { contractService } = this.rootStore;
+    return new Promise((resolve, reject) => {
+      contractService.checkProject(address)
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(() => { reject(); });
+    });
+  }
+
+  @action async deployQuestions(address) {
+    const { Web3Service, contractService } = this.rootStore;
+    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi'), 'utf8'));
+    const contract = Web3Service.createContractInstance(abi);
+    contract.options.address = address;
+    contractService.setContract(contract);
+    const { countOfUploaded, totalCount } = contractService.checkQuestions();
+    let idx = countOfUploaded === 0 ? 1 : countOfUploaded;
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve) => {
+      while (idx <= totalCount) {
+        // eslint-disable-next-line no-await-in-loop
+        await contractService.sendQuestion(countOfUploaded);
+        idx += 1;
+        // eslint-disable-next-line no-console
+        console.log(`uploaded ${idx}`);
+      }
+      resolve();
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  @action addProjectToList(data) {
+    const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8'));
+    config.projects.push(data);
+    fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'));
   }
 
   @action checkReceipt(hash) {

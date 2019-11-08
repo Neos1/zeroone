@@ -95,7 +95,6 @@ class InputSeed extends Component {
 }
 
 const InputBlock = ({ form, seed }) => (
-
   <form form={form} onSubmit={form.onSubmit}>
     <div className={styles.seed}>
       {seed.map((word, index) => (
@@ -108,7 +107,6 @@ const InputBlock = ({ form, seed }) => (
       <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
     </div>
   </form>
-
 );
 
 InputSeed.propTypes = {

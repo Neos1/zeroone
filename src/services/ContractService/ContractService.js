@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
@@ -5,7 +7,7 @@
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
 import {
-  fs, PATH_TO_CONTRACTS, path, SOL_IMPORT_REGEXP, SOL_PATH_REGEXP, SOL_VERSION_REGEXP,
+  fs, PATH_TO_CONTRACTS, path, SOL_IMPORT_REGEXP, SOL_PATH_REGEXP, SOL_VERSION_REGEXP, ROOT_DIR,
 } from '../../constants';
 
 /**
@@ -17,7 +19,7 @@ class ContractService {
     this.rootStore = rootStore;
   }
 
-  set contract(instance) {
+  setContract(instance) {
     this._contract = instance;
   }
 
@@ -99,7 +101,7 @@ class ContractService {
    * @returns {Promise} Promise of web3.sendSignedTransaction which resolves on txHash
    */
   deployContract({
-    type, deployArgs, bytecode, abi,
+    type, deployArgs, bytecode, abi, password,
   }) {
     const { rootStore: { Web3Service, userStore } } = this;
     const { address } = userStore;
@@ -118,7 +120,7 @@ class ContractService {
 
     return new Promise((resolve, reject) => {
       Web3Service.formTxData(address, tx, maxGasPrice).then((formedTx) => {
-        userStore.singTransaction(formedTx, 'T3sting!').then((signedTx) => {
+        userStore.singTransaction(formedTx, password).then((signedTx) => {
           Web3Service.sendSignedTransaction(`0x${signedTx}`).then((txHash) => {
             resolve(txHash);
           });
@@ -143,8 +145,18 @@ class ContractService {
     contract.options.address = address;
     const totalSupply = await contract.methods.totalSupply().call();
     const symbol = await contract.methods.symbol().call();
-
     return { totalSupply, symbol };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  checkProject(address) {
+    const { rootStore: { Web3Service, userStore } } = this;
+    return new Promise((resolve, reject) => {
+      Web3Service.web3.eth.getCode(address).then((bytecode) => {
+        if (bytecode === '0x') reject();
+        resolve(bytecode);
+      });
+    });
   }
 
   /**
@@ -166,6 +178,90 @@ class ContractService {
   async fetchQuestion(id, from) {
     const data = await this.contract.methods.getQuestion(id).call({ from });
     return data;
+  }
+
+  getSystemQuestions() {
+    this.sysQuestions = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './sysQuestions.json'), 'utf8'));
+  }
+
+  async checkQuestions() {
+    this.getSystemQuestions();
+    const countOfUploaded = await this.contract.getCount().call();
+    const totalCount = Object.keys(this.sysQuestions).length;
+    return ({ countOfUploaded, totalCount });
+  }
+
+  sendQuestion(idx) {
+    const {
+      Web3Service, Web3Service: { web3 }, userStore, appStore: { password },
+    } = this.rootStore;
+    const sysQuestion = this.sysQuestions[idx];
+
+    // eslint-disable-next-line consistent-return
+    this.getQuestion(idx).then((result) => {
+      if (result.caption === '') {
+        const { address } = userStore;
+        const {
+          id, group, name, caption, time, method, formula, parameters,
+        } = sysQuestion;
+
+        const preparedFormula = this.convertFormula(formula);
+        const params = parameters.map((param) => web3.utils.utf8ToHex(param));
+        const contractAddr = this._contract.options.address;
+
+        // eslint-disable-next-line max-len
+        const dataTx = this.contract.methods.saveNewQuestion([id, group, time], 0, name, caption, contractAddr, method, preparedFormula, params).encodeABI();
+        const maxGasPrice = 10000000000;
+        const rawTx = {
+          to: contractAddr,
+          data: dataTx,
+          gasLimit: 8000000,
+          value: '0x0',
+        };
+
+        return new Promise((resolve, reject) => {
+          Web3Service.formTxData(address, rawTx, maxGasPrice)
+            .then((formedTx) => {
+              userStore.singTransaction(formedTx, password)
+                .then((signedTx) => {
+                  Web3Service.sendSignedTransaction(signedTx)
+                    .then((txHash) => {
+                      const interval = setInterval(() => {
+                        web3.eth.getTransactionReciept(txHash).then((receipt) => {
+                          if (typeof receipt === 'object') {
+                            clearInterval(interval);
+                            resolve();
+                          }
+                        });
+                      }, 5000);
+                    });
+                });
+            });
+        });
+      }
+    });
+  }
+
+  convertFormula(formula) {
+    const FORMULA_REGEXP = new RegExp(/(group)|((?:[a-zA-Z0-9]{1,}))|((quorum|positive))|(>=|<=)|([0-9%]{1,})|(quorum|all)/g);
+    const matched = formula.match(FORMULA_REGEXP);
+
+    const convertedFormula = [];
+
+    matched[0] === 'group' ? convertedFormula.push(0) : convertedFormula.push(1);
+    matched[1] === 'Owners' ? convertedFormula.push(1) : convertedFormula.push(2);
+    matched[3] === 'quorum' ? convertedFormula.push(0) : convertedFormula.push(1);
+    matched[4] === '<=' ? convertedFormula.push(0) : convertedFormula.push(1);
+    convertedFormula.push(Number(matched[5]));
+
+    if (matched.length === 9) {
+      matched[8] === 'quorum' ? convertedFormula.push(0) : convertedFormula.push(1);
+    }
+    return convertedFormula;
+  }
+
+  getQuestion(id) {
+    return this._contract.methods.question(id).call();
   }
 
   /**

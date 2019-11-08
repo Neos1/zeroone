@@ -6,8 +6,8 @@ const ProgressBlock = ({
 }) => (
   <div className={`progress-block ${state === index ? 'active' : ''} ${state > index ? 'success' : ''}`}>
     <svg width="80" height="80" viewBox="0 0 80 80">
-      <polyline className="line-cornered stroke-still" points="5,0 80,0 80,80" strokeWidth="10" fill="none" />
-      <polyline className="line-cornered stroke-still" points="0,0 0,80 75,80" strokeWidth="10" fill="none" />
+      <polyline className="line-cornered stroke-still" points="0,0 80,0 80,80" strokeWidth="10" fill="none" />
+      <polyline className="line-cornered stroke-still" points="0,0 0,80 80,80" strokeWidth="10" fill="none" />
       <polyline className="line-cornered stroke-animation" points="0,40 0,0 80,0 80,40" strokeWidth="10" fill="none" />
       <polyline className="line-cornered stroke-animation" points="0,40 0,80 80,80 80,40" strokeWidth="10" fill="none" />
     </svg>

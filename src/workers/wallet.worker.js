@@ -60,7 +60,6 @@ onmessage = (e) => {
       break;
   }
 
-  // console.log(response);
 
   if (response instanceof Error) {
     response = null;

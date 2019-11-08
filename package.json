@@ -6,9 +6,10 @@
   "scripts": {
     "render-test": "jest",
     "dev": "webpack-dev-server --hot --config webpack.dev.js",
-    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron  ./src/electron.js\"",
+    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && NODE_ENV=development electron  ./src/electron.js\"",
     "storybook": "start-storybook",
-    "docs": "jsdoc -c ./jsdoc.json"
+    "docs": "jsdoc -c ./jsdoc.json",
+    "build": "webpack --config webpack.dev.js && electron-builder"
   },
   "author": "neos1.com",
   "license": "ISC",
@@ -19,13 +20,12 @@
     "@namics/stylelint-bem": "^6.1.0",
     "bip39": "^3.0.2",
     "browser-solc": "^1.0.0",
-    "electron": "^7.0.0",
     "electron-is-dev": "^1.1.0",
     "electron-localshortcut": "^3.1.0",
     "ethereumjs-tx": "^2.1.1",
-    "ethereumjs-util": "^6.1.0",
+    "ethereumjs-util": "^6.2.0",
     "ethereumjs-wallet": "^0.6.3",
-    "mobx": "^5.14.2",
+    "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "mobx-react-form": "^2.0.8",
     "mobx-utils": "^5.5.1",
@@ -53,6 +53,7 @@
     "concurrently": "^5.0.0",
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
+    "electron": "^7.1.1",
     "electron-builder": "^21.2.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
@@ -92,5 +93,33 @@
         }
       ]
     ]
+  },
+  "build": {
+    "files": [
+      "build/**/*",
+      "src/wallets/**/*",
+      "src/contracts/**/*",
+      "src/config.json",
+      "src/electron.js"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": "deb"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "nsis": {
+      "warningsAsErrors": false
+    },
+    "portable": {
+      "artifactName": "voter_portable--win.exe"
+    },
+    "compression": "store",
+    "asar": false
   }
 }
