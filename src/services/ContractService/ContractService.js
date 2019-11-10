@@ -105,7 +105,7 @@ class ContractService {
   }) {
     const { rootStore: { Web3Service, userStore } } = this;
     const { address } = userStore;
-    const maxGasPrice = 10000000000;
+    const maxGasPrice = 30000000000;
     const contract = Web3Service.createContractInstance(abi);
     const txData = contract.deploy({
       data: `0x${bytecode}`,
@@ -186,19 +186,19 @@ class ContractService {
 
   async checkQuestions() {
     this.getSystemQuestions();
-    const countOfUploaded = await this.contract.getCount().call();
+    const countOfUploaded = await this._contract.methods.getCount().call();
     const totalCount = Object.keys(this.sysQuestions).length;
     return ({ countOfUploaded, totalCount });
   }
 
-  sendQuestion(idx) {
+  async sendQuestion(idx) {
     const {
       Web3Service, Web3Service: { web3 }, userStore, appStore: { password },
     } = this.rootStore;
     const sysQuestion = this.sysQuestions[idx];
 
     // eslint-disable-next-line consistent-return
-    this.getQuestion(idx).then((result) => {
+    await this.getQuestion(idx).then((result) => {
       if (result.caption === '') {
         const { address } = userStore;
         const {
@@ -210,8 +210,8 @@ class ContractService {
         const contractAddr = this._contract.options.address;
 
         // eslint-disable-next-line max-len
-        const dataTx = this.contract.methods.saveNewQuestion([id, group, time], 0, name, caption, contractAddr, method, preparedFormula, params).encodeABI();
-        const maxGasPrice = 10000000000;
+        const dataTx = this._contract.methods.saveNewQuestion([id, group, time], 0, name, caption, contractAddr, method, preparedFormula, params).encodeABI();
+        const maxGasPrice = 30000000000;
         const rawTx = {
           to: contractAddr,
           data: dataTx,
@@ -219,17 +219,22 @@ class ContractService {
           value: '0x0',
         };
 
+
         return new Promise((resolve, reject) => {
           Web3Service.formTxData(address, rawTx, maxGasPrice)
             .then((formedTx) => {
+              console.log(formedTx);
               userStore.singTransaction(formedTx, password)
                 .then((signedTx) => {
-                  Web3Service.sendSignedTransaction(signedTx)
+                  Web3Service.sendSignedTransaction(`0x${signedTx}`)
                     .then((txHash) => {
+                      console.log(txHash);
                       const interval = setInterval(() => {
-                        web3.eth.getTransactionReciept(txHash).then((receipt) => {
-                          if (typeof receipt === 'object') {
+                        web3.eth.getTransactionReceipt(txHash).then((receipt) => {
+                          // eslint-disable-next-line valid-typeof
+                          if (receipt != null) {
                             clearInterval(interval);
+                            console.log(receipt);
                             resolve();
                           }
                         });

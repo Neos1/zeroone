@@ -6,7 +6,7 @@
   "scripts": {
     "render-test": "jest",
     "dev": "webpack-dev-server --hot --config webpack.dev.js",
-    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && NODE_ENV=development electron  ./src/electron.js\"",
+    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron  ./src/electron.js\"",
     "storybook": "start-storybook",
     "docs": "jsdoc -c ./jsdoc.json",
     "build": "webpack --config webpack.dev.js && electron-builder"
@@ -36,7 +36,7 @@
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
     "validatorjs": "^3.17.1",
-    "web3": "^1.2.2",
+    "web3": "^1.0.0-beta.34",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.8.2"
   },
@@ -52,6 +52,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^5.0.0",
     "copy-webpack-plugin": "^5.0.4",
+    "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
     "electron": "^7.1.1",
     "electron-builder": "^21.2.0",

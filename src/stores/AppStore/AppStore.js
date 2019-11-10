@@ -108,19 +108,15 @@ class AppStore {
     const contract = Web3Service.createContractInstance(abi);
     contract.options.address = address;
     contractService.setContract(contract);
-    const { countOfUploaded, totalCount } = contractService.checkQuestions();
-    let idx = countOfUploaded === 0 ? 1 : countOfUploaded;
+    const { countOfUploaded, totalCount } = await contractService.checkQuestions();
+    // eslint-disable-next-line no-console
+    console.log({ countOfUploaded, totalCount });
+    let idx = Number(countOfUploaded) === 0 ? 1 : Number(countOfUploaded);
     // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve) => {
-      while (idx <= totalCount) {
-        // eslint-disable-next-line no-await-in-loop
-        await contractService.sendQuestion(countOfUploaded);
-        idx += 1;
-        // eslint-disable-next-line no-console
-        console.log(`uploaded ${idx}`);
-      }
-      resolve();
-    });
+    for (idx; idx <= totalCount; idx += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      await contractService.sendQuestion(idx);
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this

@@ -74,7 +74,7 @@ class CreateNewProjectWithTokens extends Component {
 
   render() {
     const { position, step } = this.state;
-    if (position === 'uploading') return <Redirect to="/uploading" />;
+    if (position === 'uploading') return <Redirect to="/uploadWithExistingTokens" />;
     const { gotoUploading, checkToken } = this;
     const connectToken = new ConnectTokenForm({
       hooks: {

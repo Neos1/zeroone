@@ -47,9 +47,7 @@ class ProjectUploading extends Component {
               });
               appStore.addProjectToList({ name, address: receipt.contractAddress });
               clearInterval(interval);
-              appStore.deployQuestions().then(() => {
-                // eslint-disable-next-line no-alert
-                alert('success');
+              appStore.deployQuestions(receipt.contractAddress).then(() => {
               });
             }
           });
