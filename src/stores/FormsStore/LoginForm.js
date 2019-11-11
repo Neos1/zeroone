@@ -11,7 +11,8 @@ class LoginForm extends ExtendedForm {
         type: 'password',
         label: 'Password',
         placeholder: 'Введите пароль',
-        rules: 'required|string|same:password',
+        rules: 'required|string',
+        error: 'Проверьте правильность ввода',
       }],
     };
   }

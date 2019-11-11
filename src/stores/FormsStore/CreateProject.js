@@ -18,7 +18,7 @@ class СreateProjectForm extends ExtendedForm {
         type: 'password',
         label: 'Password',
         placeholder: 'Введите пароль',
-        rules: 'required|string|between:5,25',
+        rules: 'required|string',
       }],
     };
   }

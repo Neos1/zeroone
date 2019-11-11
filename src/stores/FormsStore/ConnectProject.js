@@ -12,13 +12,13 @@ class ConnectProjectForm extends ExtendedForm {
         type: 'text',
         label: 'Project Name',
         placeholder: 'Придумайте название проекта',
-        rules: 'required|string',
+        rules: 'required|string|between:3,10',
       }, {
         name: 'address',
         type: 'text',
         label: 'Token Address',
         placeholder: 'Введите адрес контракта',
-        rules: 'required|string|between:42,42',
+        rules: 'required|string|regex:/(0x)+([0-9 a-f A-F]){40}/g',
       }],
     };
   }
