@@ -41,7 +41,7 @@ class ProjectUploading extends Component {
         });
         const interval = setInterval(() => {
           appStore.checkReceipt(txHash).then((receipt) => {
-            if (typeof receipt === 'object') {
+            if (receipt) {
               this.setState({
                 step: 4,
                 address: receipt.contractAddress,

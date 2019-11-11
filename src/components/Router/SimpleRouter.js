@@ -29,6 +29,7 @@ const SimpleRouter = () => (
       <Route path="/userInfo" exact component={withRouter(() => (<DisplayUserInfo recover />))} />
       <Route path="/recoverPassword" exact component={withRouter(() => (<CreateWallet recover />))} />
       <Route path="/creatingSuccess" exact component={withRouter(() => (<CreationAlert success />))} />
+      <Route path="/recoverSuccess" exact component={withRouter(() => (<CreationAlert recover />))} />
       <Route path="/projects" exact component={withRouter(ProjectList)} />
       <Route path="/createProject" exact component={withRouter(AddNewProject)} />
       <Route path="/addExisting" exact component={withRouter(AddExistingProject)} />

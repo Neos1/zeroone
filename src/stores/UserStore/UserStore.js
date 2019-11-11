@@ -79,6 +79,7 @@ class UserStore {
   }
 
   @action login(password) {
+    const { appStore } = this.rootStore;
     this.logging = true;
     this.readWallet(password).then((buffer) => {
       if (!(buffer instanceof Error)) {
@@ -87,6 +88,7 @@ class UserStore {
       }
     }).catch(() => {
       this.logging = false;
+      appStore.displayAlert('Неверный пароль', 3000);
     });
   }
 
@@ -104,8 +106,9 @@ class UserStore {
   }
 
   @action saveWalletToFile() {
-    const { walletService } = this.rootStore;
+    const { walletService, appStore } = this.rootStore;
     walletService.writeWalletToFile(this.encryptedWallet);
+    appStore.readWalletList();
   }
 
   @action isSeedValid(mnemonic) {

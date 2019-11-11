@@ -12,12 +12,32 @@ class Dropdown extends Component {
       selectedValue: '',
       selectedLabel: '',
     };
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
 
   toggleOptions = () => {
     const { opened } = this.state;
     this.setState({ opened: !opened });
   }
+
+  closeOptions = () => {
+    this.setState({ opened: false });
+  }
+
 
   selectOption = (selected) => {
     const { onSelect } = this.props;
@@ -29,6 +49,14 @@ class Dropdown extends Component {
     this.toggleOptions();
   }
 
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.closeOptions();
+    }
+  }
+
+
   render() {
     const { children, options } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
@@ -37,7 +65,7 @@ class Dropdown extends Component {
     ));
 
     return (
-      <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`}>
+      <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
         <input type="hidden" value={selectedValue} />
         <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}

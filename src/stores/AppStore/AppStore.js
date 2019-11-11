@@ -11,13 +11,17 @@ class AppStore {
 
   @observable ERC = {
 
-  }
+  };
 
   @observable deployArgs = [];
 
-  @observable name = ''
+  @observable name = '';
 
-  @observable password=''
+  @observable password='';
+
+  @observable alertVisible = false;
+
+  @observable alertText = '';
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -130,6 +134,18 @@ class AppStore {
   @action checkReceipt(hash) {
     const { Web3Service: { web3 } } = this.rootStore;
     return web3.eth.getTransactionReceipt(hash);
+  }
+
+  @action displayAlert(text, timeOut) {
+    this.alertVisible = true;
+    this.alertText = text;
+    setTimeout(() => {
+      this.alertVisible = false;
+    }, timeOut);
+  }
+
+  @action closeAlert() {
+    this.alertVisible = false;
   }
 
   @computed get wallets() {

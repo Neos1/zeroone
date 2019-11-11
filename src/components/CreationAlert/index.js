@@ -10,16 +10,16 @@ import Heading from '../Heading';
 import styles from '../Login/Login.scss';
 
 
-const CreationAlert = ({ success = false }) => (
+const CreationAlert = ({ success = false, recover = false }) => (
   <Container>
     <Header />
     <div className={styles.form}>
       <FormBlock>
         <Heading>
-          {'Создание кошелька'}
-          {success
-            ? 'Кошелек создан успешно'
-            : 'Произошла ошибка, попробуйте еще раз'}
+          {success ? 'Создание кошелька' : ''}
+          {success ? 'Кошелек успешно создан' : ''}
+          {recover ? 'Восстановление кошелька' : ''}
+          {recover ? 'Кошелек успешно восстанолен' : ''}
         </Heading>
         <NavLink to="/">
           <Button className="btn--default btn--black">
@@ -32,5 +32,6 @@ const CreationAlert = ({ success = false }) => (
 );
 CreationAlert.propTypes = {
   success: propTypes.bool.isRequired,
+  recover: propTypes.bool.isRequired,
 };
 export default CreationAlert;

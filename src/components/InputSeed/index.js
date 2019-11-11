@@ -42,7 +42,7 @@ class InputSeed extends Component {
   }
 
   render() {
-    const { userStore, recover } = this.props;
+    const { userStore, appStore, recover } = this.props;
     const { _mnemonic: seed } = userStore;
     const { loading, redirect } = this.state;
     const { setRedirect, toggleLoading } = this;
@@ -50,31 +50,34 @@ class InputSeed extends Component {
       hooks: {
         onSuccess(form) {
           const values = Object.values(form.values());
-          console.log(values);
           userStore._mnemonic = values;
           const mnemonic = values.join(' ');
-          toggleLoading();
-          if (recover) {
-            userStore.recoverWallet(mnemonic)
-              .then((data) => {
-                console.log(data);
-                userStore.setEncryptedWallet(data.v3wallet);
-                userStore.getEthBalance();
+          if (userStore.isSeedValid(mnemonic)) {
+            toggleLoading();
+            if (recover) {
+              userStore.recoverWallet(mnemonic)
+                .then((data) => {
+                  console.log(data);
+                  userStore.setEncryptedWallet(data.v3wallet);
+                  userStore.getEthBalance();
+                  setRedirect();
+                });
+            } else if (!recover) {
+              if (userStore.isSeedValid(mnemonic)) {
+                userStore.saveWalletToFile();
                 setRedirect();
-              });
-          } else if (!recover) {
-            if (userStore.isSeedValid(mnemonic)) {
-              userStore.saveWalletToFile();
-              setRedirect();
+              }
             }
+          } else {
+            appStore.displayAlert('Проверьте правильность заполнения полей', 2000);
           }
         },
         onError(form) {
+          appStore.displayAlert('Заполните все поля', 2000);
           console.log(`ALARM ${form}`);
         },
       },
     });
-
     if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
     return (
       <Container>
@@ -116,6 +119,7 @@ const InputBlock = ({ form, seed }) => (
 
 InputSeed.propTypes = {
   userStore: propTypes.object.isRequired,
+  appStore: propTypes.object.isRequired,
   recover: propTypes.bool.isRequired,
 };
 

@@ -41,9 +41,8 @@ class Login extends Component {
         onSuccess(form) {
           userStore.login(form.values().password);
         },
-        onError(form) {
-          alert('Form has errors');
-          console.log(form.errors());
+        onError() {
+          appStore.displayAlert('Заполните все поля', 3000);
         },
       },
     });

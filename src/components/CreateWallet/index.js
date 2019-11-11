@@ -36,16 +36,14 @@ class CreateWallet extends Component {
     this.setState({ loading: true });
     console.log(userStore.encryptedWallet, values.password);
     if (recover) {
-      userStore.recoverWallet(values.password).then((data) => {
-        console.log(data);
+      userStore.recoverWallet(values.password).then(() => {
         this.setState({ redirect: true });
         userStore.saveWalletToFile();
       }).catch(() => {
         this.setState({ loading: false });
       });
     } else {
-      userStore.createWallet(values.password).then((data) => {
-        console.log(data);
+      userStore.createWallet(values.password).then(() => {
         this.setState({ redirect: true });
       }).catch(() => {
         this.setState({ loading: false });
@@ -62,36 +60,31 @@ class CreateWallet extends Component {
         onSuccess(form) {
           createWallet(form);
         },
-        onError(form) {
-          console.log(form);
+        onError() {
+
         },
       },
     });
 
     if (redirect) {
-      return recover ? <Redirect to="/creatingSuccess" /> : <Redirect to="/showSeed" />;
+      return recover ? <Redirect to="/recoverSuccess" /> : <Redirect to="/showSeed" />;
     }
     return (
       <Container>
         <Header />
         <div className={styles.form}>
           {!loading
-            ? <PasswordForm submit={this.createWallet} form={CreateForm} />
+            ? <PasswordForm submit={this.createWallet} form={CreateForm} state={recover} />
             : <CreationLoader />}
 
-          <NavLink to={`${recover ? '/restore' : '/'}`}>
-            <IconButton className="btn--link btn--noborder btn--back">
-              <BackIcon />
-              Назад
-            </IconButton>
-          </NavLink>
+
         </div>
       </Container>
     );
   }
 }
 
-const PasswordForm = ({ form }) => (
+const PasswordForm = ({ form, state }) => (
   <FormBlock>
     <Heading>
       {'Создание пароля'}
@@ -138,6 +131,12 @@ const PasswordForm = ({ form }) => (
         </Explanation>
       </div>
     </form>
+    <NavLink to={`${state ? '/restore' : '/'}`}>
+      <IconButton className="btn--link btn--noborder btn--back">
+        <BackIcon />
+         Назад
+      </IconButton>
+    </NavLink>
   </FormBlock>
 );
 
@@ -158,6 +157,7 @@ CreateWallet.propTypes = {
 
 PasswordForm.propTypes = {
   form: propTypes.object.isRequired,
+  state: propTypes.bool.isRequired,
 };
 
 export default CreateWallet;

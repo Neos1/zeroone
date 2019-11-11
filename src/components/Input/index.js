@@ -26,7 +26,7 @@ class Input extends Component {
     return (
       <div className={`${styles.field} ${className}`}>
         {children}
-        <input className="field__input" {...field.bind()} onChange={this.handleOnChange.bind(this)} />
+        <input className="field__input" {...field.bind()} value={field.value} onChange={this.handleOnChange.bind(this)} />
         <span className="field__label">{field.placeholder}</span>
         <p className="field__error-text">
           {field.error}

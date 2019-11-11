@@ -232,7 +232,7 @@ class ContractService {
                       const interval = setInterval(() => {
                         web3.eth.getTransactionReceipt(txHash).then((receipt) => {
                           // eslint-disable-next-line valid-typeof
-                          if (receipt != null) {
+                          if (receipt) {
                             clearInterval(interval);
                             console.log(receipt);
                             resolve();

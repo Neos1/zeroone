@@ -49,22 +49,16 @@ class CreateNewProjectWithoutTokens extends Component {
     const {
       name, symbol, count, password,
     } = form.values();
-
-    console.log(form.values());
-
-    const deployArgs = [name, symbol, count];
-
+    const deployArgs = [name, symbol, Number(count)];
     userStore.readWallet(password)
       .then((buffer) => {
-        console.log(buffer);
         if (!(buffer instanceof Error)) {
-          console.log('Погнали деплоить');
           appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
           // eslint-disable-next-line no-unused-vars
             const interval = setInterval(() => {
             // eslint-disable-next-line consistent-return
               appStore.checkReceipt(hash).then((receipt) => {
-                if (typeof receipt === 'object') {
+                if (receipt) {
                   this.setState({
                     tokenAddr: receipt.contractAddress,
                     position: 'tokenCreated',
@@ -75,12 +69,13 @@ class CreateNewProjectWithoutTokens extends Component {
               });
             }, 5000);
           });
-        } else {
-          this.setState({
-            position: 'token',
-            step: 1,
-          });
         }
+      }).catch(() => {
+        this.setState({
+          position: 'token',
+          step: 1,
+        });
+        appStore.displayAlert('Неверный пароль, попробуйте еще раз', 3000);
       });
   }
 
@@ -109,10 +104,12 @@ class CreateNewProjectWithoutTokens extends Component {
           position: 'projectInfo',
           step: 2,
         });
+        appStore.displayAlert('Ошибка, попробуйте еще раз', 3000);
       });
   }
 
   render() {
+    const { appStore } = this.props;
     const { position, step } = this.state;
     if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     const { createToken, gotoUploading } = this;
@@ -121,8 +118,8 @@ class CreateNewProjectWithoutTokens extends Component {
         onSuccess(form) {
           createToken(form);
         },
-        onError(form) {
-          console.log(form);
+        onError() {
+          appStore.displayAlert('Проверьте правильность заполнения полей', 3000);
         },
       },
     });
@@ -131,8 +128,8 @@ class CreateNewProjectWithoutTokens extends Component {
         onSuccess(form) {
           gotoUploading(form);
         },
-        onError(form) {
-          console.log(form);
+        onError() {
+          appStore.displayAlert('Проверьте правильность заполнения полей', 3000);
         },
       },
     });

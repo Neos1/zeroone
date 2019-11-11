@@ -39,11 +39,15 @@ class AddExistingProject extends Component {
         appStore.addProjectToList({ name, address });
       })
       .catch(() => {
-
+        appStore.displayAlert('Произошла ошибка, попробуйте еще раз', 3000);
+        this.state = {
+          step: 'default',
+        };
       });
   }
 
   render() {
+    const { appStore } = this.props;
     const { step } = this.state;
     const { connectProject } = this;
 
@@ -52,8 +56,8 @@ class AddExistingProject extends Component {
         onSuccess(form) {
           connectProject(form);
         },
-        onError(form) {
-          console.log(`ALARM ${form}`);
+        onError() {
+          appStore.displayAlert('Произошла ошибка, проверьте корректность адреса', 3000);
         },
       },
     });
