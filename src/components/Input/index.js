@@ -35,10 +35,11 @@ Input.propTypes = {
   children: propTypes.element.isRequired,
   className: propTypes.string,
   field: propTypes.object.isRequired,
-  onInput: propTypes.func.isRequired,
+  onInput: propTypes.func,
 };
 Input.defaultProps = {
   className: '',
+  onInput: () => null,
 };
 
 export default Input;

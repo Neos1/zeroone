@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
@@ -16,10 +17,8 @@ const CreationAlert = ({ success = false, recover = false }) => (
     <div className={styles.form}>
       <FormBlock>
         <Heading>
-          {success ? 'Создание кошелька' : ''}
-          {success ? 'Кошелек успешно создан' : ''}
-          {recover ? 'Восстановление кошелька' : ''}
-          {recover ? 'Кошелек успешно восстанолен' : ''}
+          {success ? 'Создание кошелька' : recover ? 'Восстановление кошелька' : ''}
+          {success ? 'Кошелек успешно создан' : recover ? 'Кошелек успешно восстанолен' : ''}
         </Heading>
         <NavLink to="/">
           <Button className="btn--default btn--black">

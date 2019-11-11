@@ -18,7 +18,7 @@ class UserStore {
 
   @observable _mnemonic = Array(12);
 
-  @observable _mnemonicRepeat = [];
+  @observable _mnemonicRepeat = Array(12);
 
   @observable address = '';
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-empty */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
@@ -9,13 +10,13 @@ import Container from '../Container';
 import Header from '../Header';
 import Heading from '../Heading';
 import Input from '../Input';
-import SeedForm from '../../stores/FormsStore/SeedForm';
 
 import styles from '../Login/Login.scss';
 import FormBlock from '../FormBlock';
 import { Button, IconButton } from '../Button';
 import { BackIcon } from '../Icons';
 import Loader from '../Loader';
+import SeedInput from './SeedForm';
 
 
 @inject('appStore', 'userStore')
@@ -41,43 +42,40 @@ class InputSeed extends Component {
     });
   }
 
-  render() {
+  submitForm=(form) => {
     const { userStore, appStore, recover } = this.props;
+    const values = Object.values(form.values());
+    userStore.mnemonicRepeat = values;
+    const mnemonic = values.join(' ');
+    if (userStore.isSeedValid(mnemonic)) {
+      this.toggleLoading();
+      if (recover) {
+        userStore.recoverWallet(mnemonic)
+          .then((data) => {
+            userStore.setEncryptedWallet(data.v3wallet);
+            userStore.getEthBalance();
+            this.setRedirect();
+          });
+      } else if (!recover) {
+        if (userStore.isSeedValid(mnemonic)) {
+          userStore.saveWalletToFile();
+          this.setRedirect();
+        }
+      }
+    } else {
+      appStore.displayAlert('Проверьте правильность заполнения полей', 2000);
+    }
+  }
+
+  showError=() => {
+    const { appStore } = this.props;
+    appStore.displayAlert('Заполните все поля', 2000);
+  }
+
+  render() {
+    const { userStore, recover } = this.props;
     const { _mnemonic: seed } = userStore;
     const { loading, redirect } = this.state;
-    const { setRedirect, toggleLoading } = this;
-    const seedForm = new SeedForm({
-      hooks: {
-        onSuccess(form) {
-          const values = Object.values(form.values());
-          userStore._mnemonic = values;
-          const mnemonic = values.join(' ');
-          if (userStore.isSeedValid(mnemonic)) {
-            toggleLoading();
-            if (recover) {
-              userStore.recoverWallet(mnemonic)
-                .then((data) => {
-                  console.log(data);
-                  userStore.setEncryptedWallet(data.v3wallet);
-                  userStore.getEthBalance();
-                  setRedirect();
-                });
-            } else if (!recover) {
-              if (userStore.isSeedValid(mnemonic)) {
-                userStore.saveWalletToFile();
-                setRedirect();
-              }
-            }
-          } else {
-            appStore.displayAlert('Проверьте правильность заполнения полей', 2000);
-          }
-        },
-        onError(form) {
-          appStore.displayAlert('Заполните все поля', 2000);
-          console.log(`ALARM ${form}`);
-        },
-      },
-    });
     if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
     return (
       <Container>
@@ -88,7 +86,7 @@ class InputSeed extends Component {
               {'Проверка резервной фразы'}
               {loading ? 'Проверяется фраза' : 'Введите  фразу, которую вы записали'}
             </Heading>
-            {loading ? <Loader /> : <InputBlock form={seedForm} seed={seed} />}
+            {loading ? <Loader /> : <SeedInput submit={this.submitForm} seed={seed} error={this.showError} />}
           </FormBlock>
           <NavLink to={`${recover ? '/' : '/showSeed'}`}>
             <IconButton className="btn--link btn--noborder btn--back">
@@ -102,20 +100,6 @@ class InputSeed extends Component {
   }
 }
 
-const InputBlock = ({ form, seed }) => (
-  <form form={form} onSubmit={form.onSubmit}>
-    <div className={styles.seed}>
-      {seed.map((word, index) => (
-        <Input type="text" field={form.$(`word_${index + 1}`)} placeholder="">
-          <span>{index + 1}</span>
-        </Input>
-      ))}
-    </div>
-    <div className={styles.form__submit}>
-      <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
-    </div>
-  </form>
-);
 
 InputSeed.propTypes = {
   userStore: propTypes.object.isRequired,
@@ -123,9 +107,5 @@ InputSeed.propTypes = {
   recover: propTypes.bool.isRequired,
 };
 
-InputBlock.propTypes = {
-  form: propTypes.object.isRequired,
-  seed: propTypes.arrayOf(propTypes.string).isRequired,
-};
 
 export default InputSeed;
