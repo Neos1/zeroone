@@ -3,20 +3,17 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Container from '../Container';
 import Header from '../Header';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
-import { Password, BackIcon } from '../Icons';
-import Input from '../Input';
-import { Button, IconButton } from '../Button';
 import Loader from '../Loader';
-import Explanation from '../Explanation';
-import Indicator from '../Indicator';
-import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
-
 import styles from '../Login/Login.scss';
+
+import PasswordForm from './PasswordForm';
+import passwordValidation from '../../utils/PasswordValidation';
+import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
 
 
 @inject('userStore', 'appStore')
@@ -56,7 +53,7 @@ class CreateWallet extends Component {
     const { recover } = this.props;
     const { redirect, loading } = this.state;
     const { createWallet } = this;
-    const CreateForm = new CreateWalletForm({
+    const createForm = new CreateWalletForm({
       hooks: {
         onSuccess(form) {
           createWallet(form);
@@ -66,7 +63,6 @@ class CreateWallet extends Component {
         },
       },
     });
-
 
     if (redirect) {
       return recover ? <Redirect to="/recoverSuccess" /> : <Redirect to="/showSeed" />;
@@ -78,9 +74,10 @@ class CreateWallet extends Component {
           {!loading
             ? (
               <PasswordForm
+                form={createForm}
                 submit={this.createWallet}
-                form={CreateForm}
                 state={recover}
+                onInput={passwordValidation}
               />
             )
             : <CreationLoader />}
@@ -92,63 +89,6 @@ class CreateWallet extends Component {
   }
 }
 
-const PasswordForm = ({
-  form, state,
-}) => (
-  <FormBlock>
-    <Heading>
-      {'Создание пароля'}
-      {'Будет использоваться для входа в кошелек и подтверждения транзакций'}
-    </Heading>
-    <form form={form} onSubmit={form.onSubmit}>
-      <Input type="password" field={form.$('password')}>
-        <Password />
-      </Input>
-      <Input type="password" field={form.$('passwordConfirm')}>
-        <Password />
-      </Input>
-      <div className={styles.form__submit}>
-        <Button type="submit" className="btn--default btn--black"> Продолжить </Button>
-      </div>
-      <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
-        <Explanation>
-          <p>
-            Пароль задается на английской раскладке
-            <br />
-            И должен содержать:
-          </p>
-          <p>
-            <ul>
-              <li>
-                <Indicator />
-                {' '}
-                цифру
-                {' '}
-              </li>
-              <li>
-                <Indicator />
-                {' '}
-                заглавную букву
-                {' '}
-              </li>
-              <li>
-                <Indicator />
-                {' '}
-                спецсимвол
-              </li>
-            </ul>
-          </p>
-        </Explanation>
-      </div>
-    </form>
-    <NavLink to={`${state ? '/restore' : '/'}`}>
-      <IconButton className="btn--link btn--noborder btn--back">
-        <BackIcon />
-         Назад
-      </IconButton>
-    </NavLink>
-  </FormBlock>
-);
 
 const CreationLoader = () => (
   <FormBlock>
@@ -165,9 +105,5 @@ CreateWallet.propTypes = {
   recover: propTypes.bool.isRequired,
 };
 
-PasswordForm.propTypes = {
-  form: propTypes.object.isRequired,
-  state: propTypes.bool.isRequired,
-};
 
 export default CreateWallet;

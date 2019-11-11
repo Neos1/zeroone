@@ -8,8 +8,9 @@ import styles from './Input.scss';
 @observer
 class Input extends Component {
   handleOnChange = (e) => {
-    const { field } = this.props;
+    const { field, onInput } = this.props;
     field.onChange(e);
+    onInput(field.value);
   }
 
   render() {
