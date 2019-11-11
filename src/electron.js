@@ -19,7 +19,11 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, './build/ballot/index.html')}`);
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
+  // eslint-disable-next-line no-unused-expressions
+  isDev
+    ? process.env.NODE_ENV = 'production'
+    : process.env.NODE_ENV = 'development';
   mainWindow.on('closed', () => mainWindow = null);
 
   electronLocalshortcut.register(mainWindow, 'F12', () => {

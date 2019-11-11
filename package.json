@@ -2,16 +2,20 @@
   "name": "zero_one-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/electron.js",
+  "author": {
+    "name":"",
+    "email":"pavkahanov@neos1.com"
+  },
   "scripts": {
     "render-test": "jest",
     "dev": "webpack-dev-server --hot --config webpack.dev.js",
+    "build": "webpack --mode=production --config webpack.dev.js && NODE_ENV=production electron-builder",
     "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron  ./src/electron.js\"",
+    "electron-build": "NODE_ENV=production electron-builder",
     "storybook": "start-storybook",
-    "docs": "jsdoc -c ./jsdoc.json",
-    "build": "webpack --config webpack.dev.js && electron-builder"
+    "docs": "jsdoc -c ./jsdoc.json"
   },
-  "author": "neos1.com",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.6.4",
@@ -54,8 +58,8 @@
     "copy-webpack-plugin": "^5.0.4",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
-    "electron": "^7.1.1",
-    "electron-builder": "^21.2.0",
+    "electron": "^3.0.11",
+    "electron-builder": "^20.38.3",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^6.5.1",
