@@ -50,6 +50,8 @@ class InputSeed extends Component {
       hooks: {
         onSuccess(form) {
           const values = Object.values(form.values());
+          console.log(values);
+          userStore._mnemonic = values;
           const mnemonic = values.join(' ');
           toggleLoading();
           if (recover) {

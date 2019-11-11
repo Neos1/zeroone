@@ -16,7 +16,7 @@ class UserStore {
 
   @observable privateKey = '';
 
-  @observable _mnemonic = ['spray', 'trap', 'flush', 'awful', 'before', 'prosper', 'gold', 'typical', 'siege', 'mule', 'great', 'bone'];
+  @observable _mnemonic = Array(12);
 
   @observable _mnemonicRepeat = [];
 
@@ -60,6 +60,24 @@ class UserStore {
     });
   }
 
+  @action recoverWallet(password) {
+    const seed = this._mnemonic.join(' ');
+    return new Promise((resolve, reject) => {
+      this.rootStore.walletService.createWallet(password, seed).then((data) => {
+        if (data.v3wallet) {
+          const { v3wallet, mnemonic, privateKey } = data;
+          this.setEncryptedWallet(v3wallet);
+          this._mnemonic = mnemonic.split(' ');
+          this.privateKey = privateKey;
+          // eslint-disable-next-line no-console
+          resolve(data);
+        } else {
+          reject(new Error('Error on creating wallet'));
+        }
+      });
+    });
+  }
+
   @action login(password) {
     this.logging = true;
     this.readWallet(password).then((buffer) => {
@@ -83,10 +101,6 @@ class UserStore {
         }
       });
     });
-  }
-
-  @action recoverWallet(mnemonic) {
-    return this.rootStore.walletService.recoverWallet(mnemonic);
   }
 
   @action saveWalletToFile() {

@@ -32,18 +32,25 @@ class CreateWallet extends Component {
 
   createWallet = (form) => {
     const { userStore, recover } = this.props;
-    const { _mnemonic } = userStore;
     const values = form.values();
-    const seed = _mnemonic.join(' ');
     this.setState({ loading: true });
-    userStore.createWallet(values.password, seed).then(() => {
-      if (recover) {
+    console.log(userStore.encryptedWallet, values.password);
+    if (recover) {
+      userStore.recoverWallet(values.password).then((data) => {
+        console.log(data);
+        this.setState({ redirect: true });
         userStore.saveWalletToFile();
-      }
-      this.setState({ redirect: true });
-    }).catch(() => {
-      this.setState({ loading: false });
-    });
+      }).catch(() => {
+        this.setState({ loading: false });
+      });
+    } else {
+      userStore.createWallet(values.password).then((data) => {
+        console.log(data);
+        this.setState({ redirect: true });
+      }).catch(() => {
+        this.setState({ loading: false });
+      });
+    }
   }
 
   render() {
