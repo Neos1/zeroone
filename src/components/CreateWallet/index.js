@@ -51,6 +51,7 @@ class CreateWallet extends Component {
     }
   }
 
+
   render() {
     const { recover } = this.props;
     const { redirect, loading } = this.state;
@@ -66,6 +67,7 @@ class CreateWallet extends Component {
       },
     });
 
+
     if (redirect) {
       return recover ? <Redirect to="/recoverSuccess" /> : <Redirect to="/showSeed" />;
     }
@@ -74,7 +76,13 @@ class CreateWallet extends Component {
         <Header />
         <div className={styles.form}>
           {!loading
-            ? <PasswordForm submit={this.createWallet} form={CreateForm} state={recover} />
+            ? (
+              <PasswordForm
+                submit={this.createWallet}
+                form={CreateForm}
+                state={recover}
+              />
+            )
             : <CreationLoader />}
 
 
@@ -84,7 +92,9 @@ class CreateWallet extends Component {
   }
 }
 
-const PasswordForm = ({ form, state }) => (
+const PasswordForm = ({
+  form, state,
+}) => (
   <FormBlock>
     <Heading>
       {'Создание пароля'}

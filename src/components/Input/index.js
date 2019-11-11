@@ -7,14 +7,7 @@ import styles from './Input.scss';
 
 @observer
 class Input extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
-  handleOnChange(e) {
+  handleOnChange = (e) => {
     const { field } = this.props;
     field.onChange(e);
   }
@@ -26,7 +19,7 @@ class Input extends Component {
     return (
       <div className={`${styles.field} ${className}`}>
         {children}
-        <input className="field__input" {...field.bind()} value={field.value} onChange={this.handleOnChange.bind(this)} />
+        <input className="field__input" {...field.bind()} value={field.value} onChange={this.handleOnChange} />
         <span className="field__label">{field.placeholder}</span>
         <p className="field__error-text">
           {field.error}
@@ -41,6 +34,7 @@ Input.propTypes = {
   children: propTypes.element.isRequired,
   className: propTypes.string,
   field: propTypes.object.isRequired,
+  onInput: propTypes.func.isRequired,
 };
 Input.defaultProps = {
   className: '',
