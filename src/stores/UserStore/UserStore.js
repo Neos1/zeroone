@@ -136,9 +136,10 @@ class UserStore {
    * Getting user Ethereum balance
    * @return {number} balance in ETH
    */
-  @action getEthBalance() {
-    this.balance = 0;
-    return false;
+  @action async getEthBalance() {
+    const { Web3Service: { web3 } } = this.rootStore;
+    console.log(await web3.eth.getBalance(this.address));
+    this.balance = await web3.eth.getBalance(this.address);
   }
 
   set mnemonic(mnemonic) {

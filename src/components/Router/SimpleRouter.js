@@ -15,6 +15,8 @@ import AddExistingProject from '../AddExisitingProject';
 import AddNewProject from '../AddNewProject';
 import ProjectUploading from '../ProjectUploading';
 import CreationAlert from '../CreationAlert';
+import DisplayUserInfo from '../DisplayUserInfo';
+
 
 const SimpleRouter = () => (
   <MemoryRouter>
@@ -24,6 +26,7 @@ const SimpleRouter = () => (
       <Route path="/showSeed" exact component={withRouter(ShowSeed)} />
       <Route path="/checkSeed" exact component={withRouter(() => (<InputSeed recover={false} />))} />
       <Route path="/restore" exact component={withRouter(() => (<InputSeed recover />))} />
+      <Route path="/userInfo" exact component={withRouter(() => (<DisplayUserInfo recover />))} />
       <Route path="/recoverPassword" exact component={withRouter(() => (<CreateWallet recover />))} />
       <Route path="/creatingSuccess" exact component={withRouter(() => (<CreationAlert success />))} />
       <Route path="/projects" exact component={withRouter(ProjectList)} />

@@ -55,6 +55,9 @@ class InputSeed extends Component {
           if (recover) {
             userStore.recoverWallet(mnemonic)
               .then((data) => {
+                console.log(data);
+                userStore.setEncryptedWallet(data.v3wallet);
+                userStore.getEthBalance();
                 setRedirect();
               });
           } else if (!recover) {
@@ -70,7 +73,7 @@ class InputSeed extends Component {
       },
     });
 
-    if (redirect) return recover ? <Redirect to="/recoverPassword" /> : <Redirect to="/creatingSuccess" />;
+    if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
     return (
       <Container>
         <Header />

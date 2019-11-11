@@ -117,6 +117,7 @@ class AppStore {
       // eslint-disable-next-line no-await-in-loop
       await contractService.sendQuestion(idx);
     }
+    Promise.resolve();
   }
 
   // eslint-disable-next-line class-methods-use-this
