@@ -78,7 +78,7 @@ const InputForm = ({
       {'Приготовьтесь к новой эре в сфере голосования'}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
-      <Dropdown options={appStore.wallets} field={form.$('wallet')} onSelect={appStore.selectWallet}>
+      <Dropdown options={appStore.wallets} subOptions={appStore.balances} field={form.$('wallet')} onSelect={appStore.selectWallet}>
         <CreditCard />
       </Dropdown>
       <Input type="password" field={form.$('password')}>

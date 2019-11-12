@@ -59,11 +59,23 @@ class Dropdown extends Component {
 
 
   render() {
-    const { children, options, field } = this.props;
+    const {
+      children, options, field, subOptions,
+    } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
+
     const getOptions = options.map((option, index) => (
-      <DropdownOption key={`${index + 1}`} label={option.label} value={option.label} select={this.selectOption} />
+      <DropdownOption
+        key={`${index + 1}`}
+        label={option.label}
+        value={option.label}
+        subOption={subOptions[option.label.replace('0x', '')]}
+        select={this.selectOption}
+      />
     ));
+    // eslint-disable-next-line no-console
+
+
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
         <input type="hidden" value={field.value} />
@@ -88,11 +100,13 @@ class Dropdown extends Component {
 Dropdown.propTypes = {
   children: propTypes.element,
   options: propTypes.arrayOf(propTypes.object).isRequired,
+  subOptions: propTypes.object,
   onSelect: propTypes.func.isRequired,
   field: propTypes.object.isRequired,
 };
 Dropdown.defaultProps = {
   children: '',
+  subOptions: {},
 };
 
 export default Dropdown;

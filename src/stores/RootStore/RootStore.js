@@ -27,10 +27,10 @@ class RootStore {
   constructor() {
     const configRaw = fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8');
     const config = JSON.parse(configRaw);
+    this.Web3Service = new Web3Service(config.host);
     this.appStore = new AppStore(this);
     this.userStore = new UserStore(this);
     this.walletService = new WalletService();
-    this.Web3Service = new Web3Service(config.host);
     this.contractService = new ContractService(this);
   }
 
