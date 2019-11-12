@@ -13,9 +13,9 @@ import Header from '../Header';
 import styles from '../Login/Login.scss';
 import ProgressBlock from './ProgressBlock';
 import {
-  CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon,
+  CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon, Login,
 } from '../Icons';
-import { Button } from '../Button';
+import { Button, IconButton } from '../Button';
 
 @inject('userStore', 'appStore')
 @observer
@@ -134,7 +134,10 @@ const AlertBlock = () => (
       {'Проект успешно создан!'}
       {'Теперь можно начать работу с ним или выбрать другой проект'}
     </Heading>
-    <Button className="btn--default btn--black" type="submit"> К подключенному проекту </Button>
+    <IconButton className="btn--default btn--black" type="submit">
+      {<Login />}
+      {'К подключенному проекту'}
+    </IconButton>
     <NavLink to="/projects">
       <Button className="btn--text btn--link btn--noborder" type="submit"> Выбрать другой проект </Button>
     </NavLink>

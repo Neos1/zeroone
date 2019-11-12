@@ -45,6 +45,12 @@
       color: $primary;
       background-color: $white;
       border-color: $lightGrey;
+      svg {
+        path {
+          transition: 0.2s;
+          stroke: $primary;
+        }
+      }
     }
     &:active {
       border-color: $primary;

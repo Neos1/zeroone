@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Button } from '../Button';
+import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -15,7 +15,7 @@ import ConnectProjectForm from '../../stores/FormsStore/ConnectProject';
 
 import styles from '../Login/Login.scss';
 import Input from '../Input';
-import { Address, TokenName } from '../Icons';
+import { Address, TokenName, Login } from '../Icons';
 
 @inject('appStore')
 @observer
@@ -125,7 +125,10 @@ const MessageBlock = () => (
       {'Проект успешно подключен!'}
       {'Теперь можно начать работу с ним или выбрать другой проект'}
     </Heading>
-    <Button className="btn--default btn--black" type="submit"> К подключенному проекту </Button>
+    <IconButton className="btn--default btn--black" type="submit">
+      {<Login />}
+      {'К подключенному проекту'}
+    </IconButton>
     <NavLink to="/projects">
       <Button className="btn--text btn--link btn--noborder" type="submit"> Выбрать другой проект </Button>
     </NavLink>
