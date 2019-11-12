@@ -23,6 +23,9 @@ ProgressBlock.propTypes = {
   text: propTypes.string.isRequired,
   index: propTypes.number.isRequired,
   state: propTypes.number.isRequired,
-  noline: propTypes.bool.isRequired,
+  noline: propTypes.bool,
+};
+ProgressBlock.defaultProps = {
+  noline: false,
 };
 export default ProgressBlock;
