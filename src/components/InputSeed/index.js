@@ -47,6 +47,7 @@ class InputSeed extends Component {
     const values = Object.values(form.values());
     userStore.mnemonicRepeat = values;
     const mnemonic = values.join(' ');
+    console.log(mnemonic);
     if (userStore.isSeedValid(mnemonic)) {
       this.toggleLoading();
       if (recover) {

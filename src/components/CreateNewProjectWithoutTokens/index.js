@@ -49,7 +49,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const {
       name, symbol, count, password,
     } = form.values();
-    const deployArgs = [name, symbol, count];
+    const deployArgs = [name, symbol, Number(count)];
     userStore.readWallet(password)
       .then((buffer) => {
         if (!(buffer instanceof Error)) {
