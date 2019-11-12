@@ -45,8 +45,7 @@ class CreateNewProjectWithTokens extends Component {
     this.setState({
       position: 'check',
     });
-    appStore.checkErc(address).then(({ totalSupply, symbol }) => {
-      console.log(totalSupply, symbol);
+    appStore.checkErc(address).then(() => {
       this.setState({
         position: 'tokenChecked',
         step: 2,
@@ -81,8 +80,7 @@ class CreateNewProjectWithTokens extends Component {
         onSuccess(form) {
           checkToken(form);
         },
-        onError(form) {
-          console.log(`ALARM ${form}`);
+        onError() {
         },
       },
     });
@@ -92,8 +90,7 @@ class CreateNewProjectWithTokens extends Component {
         onSuccess(form) {
           gotoUploading(form);
         },
-        onError(form) {
-          console.log(form);
+        onError() {
         },
       },
     });

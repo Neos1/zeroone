@@ -116,7 +116,6 @@ class AppStore {
     contractService.setContract(contract);
     const { countOfUploaded, totalCount } = await contractService.checkQuestions();
     // eslint-disable-next-line no-console
-    console.log({ countOfUploaded, totalCount });
     let idx = Number(countOfUploaded) === 0 ? 1 : Number(countOfUploaded);
     // eslint-disable-next-line no-async-promise-executor
     for (idx; idx <= totalCount; idx += 1) {

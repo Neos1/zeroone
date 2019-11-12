@@ -31,7 +31,6 @@ class CreateWallet extends Component {
     const { userStore, recover } = this.props;
     const values = form.values();
     this.setState({ loading: true });
-    console.log(userStore.encryptedWallet, values.password);
     if (recover) {
       userStore.recoverWallet(values.password).then(() => {
         this.setState({ redirect: true });

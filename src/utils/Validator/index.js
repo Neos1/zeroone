@@ -11,7 +11,6 @@ validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes)
   }
   this.messages._setAttributeNames(modified);
   // eslint-disable-next-line no-console
-  console.log(this.messages);
 };
 
 const rules = {

@@ -24,7 +24,7 @@ const createWallet = ({ id, payload: { mnemonic, password = '', action } }) => {
     };
     return { id, payload };
   } catch (e) {
-    return { id, payload: { e } };
+    return { id, payload: { privateKey: null } };
   }
 };
 
@@ -35,7 +35,11 @@ const readWallet = ({ id, payload: { input, password } }) => {
     };
     return { id, payload: data };
   } catch (e) {
-    return { id, payload: e };
+    const data = {
+      privateKey: null,
+      error: 'Wrong passphrase',
+    };
+    return { id, payload: data };
   }
 };
 
@@ -60,10 +64,6 @@ onmessage = (e) => {
       break;
   }
 
-
-  if (response instanceof Error) {
-    response = null;
-  }
-
+  // eslint-disable-next-line no-restricted-globals
   self.postMessage(response);
 };

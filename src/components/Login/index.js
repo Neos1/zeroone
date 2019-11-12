@@ -46,8 +46,6 @@ class Login extends Component {
         },
       },
     });
-
-    console.log(loginForm.state.options.get());
     if (userStore.authorized) return <Redirect to="/projects" />;
     return (
       <Container>

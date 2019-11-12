@@ -96,11 +96,13 @@ class UserStore {
     const wallet = JSON.stringify(this.encryptedWallet);
     return new Promise((resolve, reject) => {
       this.rootStore.walletService.readWallet(wallet, password).then((data) => {
-        if (data.privateKey) {
+        if (data.privateKey !== null) {
           resolve(data.privateKey);
         } else {
           reject();
         }
+      }).catch(() => {
+        reject();
       });
     });
   }
@@ -155,7 +157,6 @@ class UserStore {
    */
   @action async getEthBalance() {
     const { Web3Service: { web3 } } = this.rootStore;
-    console.log(await web3.eth.getBalance(this.address));
     this.balance = await web3.eth.getBalance(this.address);
   }
 
