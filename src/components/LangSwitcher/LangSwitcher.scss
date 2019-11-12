@@ -2,27 +2,31 @@
 
 .lang {
   display: inline-block;
-  &--selected {
-    position: relative;
-    display: block;
-    padding: 5px 0;
-    font-weight: bold;
-    &:hover {
-      & + .lang__options {
-        visibility: visible;
-        opacity: 1;
-      }
+  &--opened {
+    .lang__options {
+      visibility: visible;
+      opacity: 1;
+    }
+    .lang--selected{
       &:after {
         border-color: transparent transparent $primary transparent;
         border-width: 0px 3px 6px 3px;
       }
     }
+  }
+  &--selected {
+    position: relative;
+    display: block;
+    padding: 5px 0;
+    font-weight: bold;
+    cursor: pointer;
     &:after {
       top: 50%;
       right: 0;
       display: inline-block;
       width: 0;
       height: 0;
+      margin-left: 5px;
       border-color: $primary transparent transparent transparent;
       border-style: solid;
       border-width: 6px 3px 0 3px;
@@ -34,15 +38,13 @@
   &__options {
     position: absolute;
     display: inline-block;
+    width: max-content;
     padding: 5px 10px;
     border: 1px solid $border;
     visibility: hidden;
     opacity: 0;
     transition: .2s linear;
-    &-opened {
-      visibility: visible;
-      opacity: 1;
-    }
+    
   }
   &__option {
     display: block;
