@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import styles from './LangSwitcher.scss';
+import i18n from '../../i18n';
 
 
 class LangSwitcher extends Component {
@@ -38,6 +39,7 @@ class LangSwitcher extends Component {
     const value = e.target.getAttribute('data-value');
     this.setState({ value });
     this.toggleOptions();
+    i18n.changeLanguage(value);
   }
 
   closeOptions = () => {
@@ -62,8 +64,7 @@ class LangSwitcher extends Component {
         </span>
         <div className="lang__options">
           <span className="lang__option" data-value="RUS" onClick={this.selectOption}> Русский (RUS)</span>
-          <span className="lang__option" data-value="ENG" onClick={this.selectOption}> Русский (ENG)</span>
-          <span className="lang__option" data-value="ESP" onClick={this.selectOption}> Русский (ESP)</span>
+          <span className="lang__option" data-value="ENG" onClick={this.selectOption}> English (ENG)</span>
         </div>
       </div>
     );

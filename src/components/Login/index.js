@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Header from '../Header';
 import FormBlock from '../FormBlock';
@@ -14,6 +15,7 @@ import Input from '../Input';
 import { Button } from '../Button';
 import Loader from '../Loader';
 import LoginForm from '../../stores/FormsStore/LoginForm';
+
 
 import styles from './Login.scss';
 
@@ -69,13 +71,13 @@ class Login extends Component {
   }
 }
 
-const InputForm = ({
-  appStore, form,
+const InputForm = withTranslation(['headings'])(({
+  appStore, form, t,
 }) => (
   <FormBlock>
     <Heading>
-      {'Вход в систему'}
-      {'Приготовьтесь к новой эре в сфере голосования'}
+      {t('login.heading')}
+      {t('login.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Dropdown options={appStore.wallets} subOptions={appStore.balances} field={form.$('wallet')} onSelect={appStore.selectWallet}>
@@ -94,19 +96,18 @@ const InputForm = ({
         </NavLink>
       </div>
     </form>
-
   </FormBlock>
-);
+));
 
-const LoadingBlock = () => (
+const LoadingBlock = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
-      {'Вход в систему'}
-      {'Приготовьтесь к новой эре в сфере голосования'}
+      {t('login.heading')}
+      {t('login.subheading')}
     </Heading>
     <Loader />
   </FormBlock>
-);
+));
 
 Login.propTypes = {
   appStore: propTypes.object.isRequired,
@@ -118,4 +119,4 @@ InputForm.propTypes = {
 };
 
 
-export default Login;
+export default withTranslation()(Login);

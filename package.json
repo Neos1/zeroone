@@ -4,8 +4,8 @@
   "description": "",
   "main": "./src/electron.js",
   "author": {
-    "name":"",
-    "email":"pavkahanov@neos1.com"
+    "name": "",
+    "email": "pavkahanov@neos1.com"
   },
   "scripts": {
     "render-test": "jest",
@@ -29,6 +29,8 @@
     "ethereumjs-tx": "^2.1.1",
     "ethereumjs-util": "^6.2.0",
     "ethereumjs-wallet": "^0.6.3",
+    "i18next": "^19.0.0",
+    "i18next-xhr-backend": "^3.2.2",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "mobx-react-form": "^2.0.8",
@@ -36,6 +38,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-i18next": "^11.1.0",
     "react-router-dom": "^5.1.2",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
