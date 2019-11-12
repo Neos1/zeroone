@@ -5,8 +5,8 @@ import styles from './Dropdown.scss';
 import DropdownOption from '../DropdownOption';
 
 class Dropdown extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       opened: false,
       selectedValue: '',
@@ -40,11 +40,12 @@ class Dropdown extends Component {
 
 
   selectOption = (selected) => {
-    const { onSelect } = this.props;
+    const { onSelect, field } = this.props;
     this.setState({
       selectedLabel: selected,
       selectedValue: selected,
     });
+    field.set(selected);
     onSelect(selected);
     this.toggleOptions();
   }
@@ -58,19 +59,18 @@ class Dropdown extends Component {
 
 
   render() {
-    const { children, options } = this.props;
+    const { children, options, field } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option, index) => (
       <DropdownOption key={`${index + 1}`} label={option.label} value={option.label} select={this.selectOption} />
     ));
-
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
-        <input type="hidden" value={selectedValue} />
+        <input type="hidden" value={field.value} />
         <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}
           <span className="dropdown__selected" data-value={selectedValue}>
-            {selectedLabel || 'Выберите кошелек'}
+            {selectedLabel || field.placeholder }
             <span className="dropdown__arrow">
               <DropdownArrow />
             </span>
@@ -89,6 +89,7 @@ Dropdown.propTypes = {
   children: propTypes.element,
   options: propTypes.arrayOf(propTypes.object).isRequired,
   onSelect: propTypes.func.isRequired,
+  field: propTypes.object.isRequired,
 };
 Dropdown.defaultProps = {
   children: '',

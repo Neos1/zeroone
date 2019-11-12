@@ -30,7 +30,7 @@ export const IconButton = ({
   children, type, disabled, className, onClick,
 }) => (
   <button type={type} disabled={disabled} className={`${styles.btn} ${className}`} onClick={() => onClick()}>
-    <p>
+    <p className="btn__content">
       {children[0]}
       <span className="btn__text">
         {children[1]}

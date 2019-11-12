@@ -40,6 +40,12 @@ class LangSwitcher extends Component {
     this.toggleOptions();
   }
 
+  closeOptions = () => {
+    this.setState({
+      opened: false,
+    });
+  }
+
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.closeOptions();

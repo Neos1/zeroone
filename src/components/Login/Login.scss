@@ -12,7 +12,7 @@
     .form__block {
       padding: 60px 50px;
       .btn {
-        margin: 0 0 10px;
+        //margin: 0 0 10px;
       }
     }
   }
@@ -159,14 +159,16 @@
   }
 }
 .projects {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-row-gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
   .btn {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
+    margin: 0;
   }
 }
 .create, .add-project {

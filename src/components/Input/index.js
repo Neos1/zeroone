@@ -7,6 +7,12 @@ import styles from './Input.scss';
 
 @observer
 class Input extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
+
   handleOnChange = (e) => {
     const { field, onInput } = this.props;
     field.onChange(e);
@@ -18,7 +24,7 @@ class Input extends Component {
       children, field, className,
     } = this.props;
     return (
-      <div className={`${styles.field} ${className}`}>
+      <div className={`${styles.field} ${field.error ? 'field--error' : ''} ${className}`}>
         {children}
         <input className="field__input" {...field.bind()} value={field.value} onChange={this.handleOnChange} />
         <span className="field__label">{field.placeholder}</span>

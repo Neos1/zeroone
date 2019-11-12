@@ -7,12 +7,18 @@ class LoginForm extends ExtendedForm {
   setup() {
     return {
       fields: [{
+        name: 'wallet',
+        type: 'text',
+        label: 'Wallet',
+        placeholder: 'Выберите кошелек',
+        rules: 'required|string',
+      }, {
         name: 'password',
         type: 'password',
         label: 'Password',
         placeholder: 'Введите пароль',
         rules: 'required|string',
-        error: 'Проверьте правильность ввода',
+
       }],
     };
   }

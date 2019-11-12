@@ -42,7 +42,7 @@ class InputSeed extends Component {
     });
   }
 
-  submitForm=(form) => {
+  submitForm = (form) => {
     const { userStore, appStore, recover } = this.props;
     const values = Object.values(form.values());
     userStore.mnemonicRepeat = values;
@@ -67,7 +67,7 @@ class InputSeed extends Component {
     }
   }
 
-  showError=() => {
+  showError = () => {
     const { appStore } = this.props;
     appStore.displayAlert('Заполните все поля', 2000);
   }

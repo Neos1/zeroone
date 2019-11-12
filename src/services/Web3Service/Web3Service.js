@@ -32,7 +32,7 @@ class web3Service {
         return this.getGasPrice()
           .then((gasPrice) => {
             transaction.gasPrice = new BN(gasPrice).lte(new BN(maxGasPrice))
-              ? maxGasPrice
+              ? gasPrice
               : maxGasPrice;
             return Promise.resolve(gas);
           })

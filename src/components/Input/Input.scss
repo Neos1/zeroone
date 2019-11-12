@@ -44,6 +44,7 @@
   }
   &__error-text {
     position: absolute;
+    top: 35px;
     width: 100%;
     font-size: 11px;
     text-align: center;
@@ -52,9 +53,10 @@
   }
   &__line {
     position: absolute;
-    bottom: 0;
-    height: 1px;
+    bottom: -1px;
+    left: 0;
     width: 0;
+    height: 1px;
     background-color: $primary;
     transition: 0.3s ease-in;
   }

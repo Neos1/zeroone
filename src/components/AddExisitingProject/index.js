@@ -103,6 +103,9 @@ const InputBlock = ({ form }) => (
         </Explanation>
       </div>
     </form>
+    <NavLink to="/createProject">
+      <Button className="btn--text btn--link btn--noborder" type="submit"> Назад </Button>
+    </NavLink>
   </FormBlock>
 );
 
