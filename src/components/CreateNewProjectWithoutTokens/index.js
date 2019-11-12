@@ -49,7 +49,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const {
       name, symbol, count, password,
     } = form.values();
-    const deployArgs = [name, symbol, Number(count)];
+    const deployArgs = [name, symbol, count];
     userStore.readWallet(password)
       .then((buffer) => {
         if (!(buffer instanceof Error)) {
@@ -66,7 +66,7 @@ class CreateNewProjectWithoutTokens extends Component {
                   appStore.deployArgs = [receipt.contractAddress];
                   clearInterval(interval);
                 }
-              });
+              }).catch(() => { appStore.displayAlert('Нет соединения с хостом, проверьте подключение к сети', 3000); });
             }, 5000);
           });
         }

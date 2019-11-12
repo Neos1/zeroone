@@ -89,6 +89,10 @@ svg {
     color: #37474F;
     font-size: 12px;
     opacity: .5;
+    span {
+      display: block;
+      margin-bottom: 10px;
+    }
     &+strong {
       display: inline-block;
       width: 165%;

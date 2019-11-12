@@ -12,14 +12,18 @@ const ProgressBlock = ({
       <polyline className="line-cornered stroke-animation" points="0,40 0,80 80,80 80,40" strokeWidth="10" fill="none" />
     </svg>
     <div className="progress-block__icon">
-      {children}
+      {children[0] ? children[0] : children}
     </div>
-    <p>{text}</p>
+    <p>
+      <span>{text}</span>
+      <span>{children[1] ? children[1] : ''}</span>
+    </p>
+
     {!noline ? <div className="progress-line" /> : ''}
   </div>
 );
 ProgressBlock.propTypes = {
-  children: propTypes.element.isRequired,
+  children: propTypes.arrayOf(propTypes.node).isRequired,
   text: propTypes.string.isRequired,
   index: propTypes.number.isRequired,
   state: propTypes.number.isRequired,

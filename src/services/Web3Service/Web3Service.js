@@ -9,9 +9,10 @@ class web3Service {
    * @constructor
    * @param {string} provider - provider for this.web3
    */
-  constructor(url) {
+  constructor(url, rootStore) {
     this.web3 = new Web3(new Web3.providers.HttpProvider(url));
     this.address2nonce = {};
+    this.rootStore = rootStore;
   }
 
   createContractInstance(abi) {
@@ -32,7 +33,7 @@ class web3Service {
         return this.getGasPrice()
           .then((gasPrice) => {
             transaction.gasPrice = new BN(gasPrice).lte(new BN(maxGasPrice))
-              ? gasPrice
+              ? maxGasPrice
               : maxGasPrice;
             return Promise.resolve(gas);
           })

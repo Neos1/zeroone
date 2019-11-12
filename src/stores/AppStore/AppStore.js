@@ -27,6 +27,10 @@ class AppStore {
 
   @observable alertTimeout = '';
 
+  @observable uploadedQuestion = 0;
+
+  @observable countOfQuestions = 0;
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.readWalletList();
@@ -121,12 +125,15 @@ class AppStore {
     contract.options.address = address;
     contractService.setContract(contract);
     const { countOfUploaded, totalCount } = await contractService.checkQuestions();
+    this.countOfQuestions = Number(totalCount);
+    this.uploadedQuestion = Number(countOfUploaded);
     // eslint-disable-next-line no-console
     let idx = Number(countOfUploaded) === 0 ? 1 : Number(countOfUploaded);
     // eslint-disable-next-line no-async-promise-executor
     for (idx; idx <= totalCount; idx += 1) {
       // eslint-disable-next-line no-await-in-loop
       await contractService.sendQuestion(idx);
+      this.uploadedQuestion += 1;
     }
     Promise.resolve();
   }

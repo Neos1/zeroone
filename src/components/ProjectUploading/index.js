@@ -54,7 +54,7 @@ class ProjectUploading extends Component {
                 });
               });
             }
-          });
+          }).catch(() => { appStore.displayAlert('Нет соединения с хостом, проверьте подключение к сети', 3000); });
         }, 2000);
       });
   }
@@ -75,7 +75,7 @@ class ProjectUploading extends Component {
   }
 }
 
-const Progress = ({ step }) => (
+const Progress = inject('appStore')(observer(({ appStore, step }) => (
   <FormBlock>
     <Heading>
       {'Загружаем контракт'}
@@ -117,11 +117,16 @@ const Progress = ({ step }) => (
         noline
       >
         <QuestionUploadingIcon />
+        <span>
+          {appStore.uploadedQuestion}
+          {'/'}
+          {appStore.countOfQuestions}
+        </span>
       </ProgressBlock>
     </div>
 
   </FormBlock>
-);
+)));
 
 const AlertBlock = () => (
   <FormBlock>
@@ -142,6 +147,7 @@ ProjectUploading.propTypes = {
 };
 Progress.propTypes = {
   step: propTypes.number.isRequired,
+  appStore: propTypes.object.isRequired,
 };
 
 export default ProjectUploading;
