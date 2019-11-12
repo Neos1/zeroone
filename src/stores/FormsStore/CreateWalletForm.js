@@ -12,13 +12,13 @@ class CreateWalletForm extends ExtendedForm {
         type: 'password',
         label: 'Password',
         placeholder: 'Введите пароль',
-        rules: 'required|string|regex:/(?=(?=.*[!&$%&? "])+(?=[a-z]*[A-Z])+(?=[^0-9]*[0-9])).{6,}/g',
+        rules: 'required|password',
       }, {
         name: 'passwordConfirm',
         type: 'password',
         label: 'Password Confirmation',
         placeholder: 'Подтвердите пароль',
-        rules: 'required|string|same:password',
+        rules: 'required|same:password',
       }],
     };
   }

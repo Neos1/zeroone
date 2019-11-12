@@ -2,7 +2,7 @@
 import { extendObservable, action } from 'mobx';
 import { Form } from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
-import validatorjs from 'validatorjs';
+import plugins from '../../utils/Validator';
 
 class ExtendedForm extends Form {
   constructor(data) {
@@ -16,7 +16,7 @@ class ExtendedForm extends Form {
 
   // eslint-disable-next-line class-methods-use-this
   plugins() {
-    return { dvr: dvr(validatorjs) };
+    return { dvr: dvr(plugins.dvr) };
   }
 
   hooks() {

@@ -17,7 +17,7 @@ class LoginForm extends ExtendedForm {
         type: 'password',
         label: 'Password',
         placeholder: 'Введите пароль',
-        rules: 'required|string',
+        rules: 'required|password',
 
       }],
     };
