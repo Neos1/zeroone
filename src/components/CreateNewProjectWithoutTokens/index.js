@@ -148,7 +148,7 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 }
 
-const CreateTokenData = inject('userStore')(observer(({ userStore: { address }, form }) => (
+const CreateTokenData = inject('userStore', 'appStore')(observer(({ userStore: { address }, appStore: { balances }, form }) => (
   <FormBlock>
     <Heading>
       {'Создание токенов'}
@@ -163,7 +163,10 @@ const CreateTokenData = inject('userStore')(observer(({ userStore: { address }, 
           </p>
           <p>
             Баланс:
-            <p>0,1023147932 ETH </p>
+            <p>
+              {(balances[address.replace('0x', '')] / 1.0e18).toFixed(5)}
+              {' ETH'}
+            </p>
           </p>
           <p>Токены зачислятся на этот кошелек После их можно будет распределить</p>
         </Explanation>
