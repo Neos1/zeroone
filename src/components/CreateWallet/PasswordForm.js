@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-
+import { withTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -12,7 +12,7 @@ import Indicator from '../Indicator';
 import styles from '../Login/Login.scss';
 import passwordValidation from '../../utils/PasswordValidation';
 
-
+@withTranslation(['headings'])
 class PasswordForm extends Component {
   constructor(props) {
     super(props);
@@ -27,14 +27,14 @@ class PasswordForm extends Component {
   }
 
   render() {
-    const { state, form } = this.props;
+    const { state, form, t } = this.props;
     const { validity } = this.state;
 
     return (
       <FormBlock>
         <Heading>
-          {'Создание пароля'}
-          {'Будет использоваться для входа в кошелек и подтверждения транзакций'}
+          {t('headings:passwordCreation.heading')}
+          {t('headings:passwordCreation.subheading')}
         </Heading>
         <form form={form} onSubmit={form.onSubmit}>
           <Input type="password" field={form.$('password')} onInput={this.handleInput}>
@@ -97,5 +97,6 @@ class PasswordForm extends Component {
 PasswordForm.propTypes = {
   state: propTypes.bool.isRequired,
   form: propTypes.func.isRequired,
+  t: propTypes.func.isRequired,
 };
 export default PasswordForm;

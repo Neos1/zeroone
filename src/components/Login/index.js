@@ -19,7 +19,6 @@ import LoginForm from '../../stores/FormsStore/LoginForm';
 
 import styles from './Login.scss';
 
-
 @inject('userStore', 'appStore')
 @observer
 class Login extends Component {
@@ -102,8 +101,8 @@ const InputForm = withTranslation(['headings'])(({
 const LoadingBlock = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
-      {t('login.heading')}
-      {t('login.subheading')}
+      {t('headings.logging.heading')}
+      {t('headings.logging.subheading')}
     </Heading>
     <Loader />
   </FormBlock>

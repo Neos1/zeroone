@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import headingsEn from './locales/en/headings';
-import headingsRu from './locales/ru/headings';
+import headingsEn from './locales/ENG/headings';
+import headingsRu from './locales/RUS/headings';
 
 const resources = {
   ENG: {
@@ -16,8 +16,8 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    fallbackLng: 'en',
-    lng: 'ru',
+    fallbackLng: 'ENG',
+    lng: 'RUS',
     react: {
       wait: false,
       bindI18n: 'languageChanged loaded',

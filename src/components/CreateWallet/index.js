@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Header from '../Header';
 import FormBlock from '../FormBlock';
@@ -89,15 +90,15 @@ class CreateWallet extends Component {
 }
 
 
-const CreationLoader = () => (
+const CreationLoader = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
-      {'Создание пароля'}
-      {'Будет использоваться для входа в кошелек и подтверждения транзакций'}
+      {t('headings:passwordCreation.heading')}
+      {t('headings:passwordCreation.subheading')}
     </Heading>
     <Loader />
   </FormBlock>
-);
+));
 
 CreateWallet.propTypes = {
   userStore: propTypes.object.isRequired,
@@ -105,4 +106,4 @@ CreateWallet.propTypes = {
 };
 
 
-export default CreateWallet;
+export default withTranslation()(CreateWallet);
