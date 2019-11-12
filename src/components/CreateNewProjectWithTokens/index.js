@@ -123,7 +123,7 @@ const InputTokenAddress = ({ form }) => (
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" disabled={form.loading} type="submit"> Продолжить </Button>
       </div>
       <NavLink to="/newProject">
         <IconButton className="btn--link btn--noborder btn--back">
@@ -184,7 +184,7 @@ const InputProjectData = ({ form, onClick }) => (
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" disabled={form.loading} type="submit"> Продолжить </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>

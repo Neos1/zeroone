@@ -36,7 +36,7 @@ class SeedInput extends Component {
           ))}
         </div>
         <div className={styles.form__submit}>
-          <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+          <Button className="btn--default btn--black" disabled={seedForm.loading} type="submit"> Продолжить </Button>
         </div>
       </form>
     );

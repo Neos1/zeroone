@@ -2,7 +2,7 @@
 .field {
   position: relative;
   display: inline-block;
-  padding: 8px 5px;
+  padding: 0 5px;
   text-align: left;
   border-bottom: 1px solid $lightGrey;
   svg {
@@ -12,6 +12,7 @@
   &__input {
     width: 85%;
     margin-left: 20px;
+    padding: 8px 0;
     vertical-align: middle;
     background: transparent;
     border: none;

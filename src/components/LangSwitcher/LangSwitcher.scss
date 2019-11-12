@@ -39,6 +39,10 @@
     visibility: hidden;
     opacity: 0;
     transition: .2s linear;
+    &-opened {
+      visibility: visible;
+      opacity: 1;
+    }
   }
   &__option {
     display: block;

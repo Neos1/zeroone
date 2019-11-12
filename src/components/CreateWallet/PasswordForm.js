@@ -44,7 +44,7 @@ class PasswordForm extends Component {
             <Password />
           </Input>
           <div className={styles.form__submit}>
-            <Button type="submit" className="btn--default btn--black"> Продолжить </Button>
+            <Button type="submit" disabled={form.loading} className="btn--default btn--black"> Продолжить </Button>
           </div>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>

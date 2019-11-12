@@ -4,9 +4,9 @@ import propTypes from 'prop-types';
 import styles from './Button.scss';
 
 export const Button = ({
-  children, type, className, onClick,
+  children, type, disabled, className, onClick,
 }) => (
-  <button type={type} className={`${styles.btn} ${className}`} onClick={() => onClick()}>
+  <button type={type} disabled={disabled} className={`${styles.btn} ${className}`} onClick={() => onClick()}>
     <span className="btn__text">
       {children}
     </span>
@@ -17,17 +17,19 @@ Button.propTypes = {
   children: propTypes.string.isRequired,
   className: propTypes.string.isRequired,
   onClick: propTypes.func,
+  disabled: propTypes.bool,
   type: propTypes.string,
 };
 Button.defaultProps = {
   type: 'button',
+  disabled: false,
   onClick: () => false,
 };
 
 export const IconButton = ({
-  children, type, className, onClick,
+  children, type, disabled, className, onClick,
 }) => (
-  <button type={type} className={`${styles.btn} ${className}`} onClick={() => onClick()}>
+  <button type={type} disabled={disabled} className={`${styles.btn} ${className}`} onClick={() => onClick()}>
     <p>
       {children[0]}
       <span className="btn__text">
@@ -41,9 +43,11 @@ IconButton.propTypes = {
   children: propTypes.arrayOf(propTypes.node).isRequired,
   className: propTypes.string.isRequired,
   onClick: propTypes.func,
+  disabled: propTypes.bool,
   type: propTypes.string,
 };
 IconButton.defaultProps = {
   type: 'button',
+  disabled: false,
   onClick: () => false,
 };

@@ -183,7 +183,7 @@ const CreateTokenData = inject('userStore')(observer(({ userStore: { address }, 
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" type="submit" disabled={form.loading}> Продолжить </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -247,7 +247,7 @@ const InputProjectData = ({ form, onClick }) => (
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" disabled={form.loading} type="submit"> Продолжить </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>

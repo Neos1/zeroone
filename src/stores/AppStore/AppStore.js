@@ -23,6 +23,8 @@ class AppStore {
 
   @observable alertText = '';
 
+  @observable alertTimeout = '';
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.readWalletList();
@@ -139,7 +141,10 @@ class AppStore {
   @action displayAlert(text, timeOut) {
     this.alertVisible = true;
     this.alertText = text;
-    setTimeout(() => {
+    if (typeof this.alertTimeout === 'number') {
+      clearTimeout(this.alertTimeout);
+    }
+    this.alertTimeout = setTimeout(() => {
       this.alertVisible = false;
     }, timeOut);
   }
