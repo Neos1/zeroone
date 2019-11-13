@@ -16,7 +16,7 @@ validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes)
 
 const rules = {
   password: {
-    function: (value) => value.match(/(?=(?=.*[!&$%&? "])+(?=[a-z]*[A-Z])+(?=[^0-9]*[0-9])).{6,}/g),
+    function: (value) => value.match(/(?=(?=.*[!@#$%^&*()_\-+=~])+(?=[a-z A-Z])+(?=[^0-9])).{6,}/g),
   },
   address: {
     function: (value) => value.match(/(0x)+([0-9 a-f A-F]){40}/g),

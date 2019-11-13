@@ -203,16 +203,21 @@ const InputProjectData = withTranslation()(({ t, form, onClick }) => (
   </FormBlock>
 ));
 
-const StepIndicator = ({ step, count }) => (
+const StepIndicator = withTranslation()(({ t, step, count }) => (
   <div className="step-indicator">
     <p>
-      Шаг
-      {' '}
-      <span>{step}</span>
-      {' '}
-      из
-      {' '}
-      <span>{count}</span>
+      {t('other:step')}
+      <span>
+        {' '}
+        {step}
+        {' '}
+      </span>
+      {t('other:from')}
+      <span>
+        {' '}
+        {count}
+        {' '}
+      </span>
     </p>
     <p>
       <Indicator checked={step >= 1} />
@@ -220,7 +225,7 @@ const StepIndicator = ({ step, count }) => (
       <Indicator checked={step >= 3} />
     </p>
   </div>
-);
+));
 
 CreateNewProjectWithTokens.propTypes = {
   appStore: propTypes.object.isRequired,

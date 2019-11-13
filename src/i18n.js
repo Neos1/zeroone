@@ -8,6 +8,8 @@ import buttonsEn from './locales/ENG/buttons';
 import buttonsRu from './locales/RUS/buttons';
 import fieldsEn from './locales/ENG/fields';
 import fieldsRu from './locales/RUS/fields';
+import otherEn from './locales/ENG/other';
+import otherRu from './locales/RUS/other';
 
 
 const resources = {
@@ -16,12 +18,14 @@ const resources = {
     explanations: explanationsEn,
     buttons: buttonsEn,
     fields: fieldsEn,
+    other: otherEn,
   },
   RUS: {
     headings: headingsRu,
     explanations: explanationsRu,
     buttons: buttonsRu,
     fields: fieldsRu,
+    other: otherRu,
   },
 };
 
