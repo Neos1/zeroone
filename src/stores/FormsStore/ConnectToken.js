@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
 
 /* eslint-disable no-alert */
@@ -11,7 +12,7 @@ class ConnectTokenForm extends ExtendedForm {
         name: 'address',
         type: 'text',
         label: 'Token Address',
-        placeholder: 'Введите адрес контракта',
+        placeholder: i18n.t('fields:contractAddress'),
         rules: 'required|string|address',
       }],
     };

@@ -3,7 +3,7 @@ const headings = {
   logging: { heading: 'Выполняется вход', subheading: 'Это не займет много времени' },
   passwordCreation: { heading: 'Создание пароля', subheading: 'Будет использоваться для входа в кошелек и подтверждения транзакций' },
   showSeed: { heading: 'Резервная фраза', subheading: 'Нужна для восстановления пароля' },
-  seedCheck: { heading: 'Проверка резервной фразы', subheading: 'Введите  фразу, которую вы записали' },
+  seedCheck: { heading: 'Проверка резервной фразы', subheading: ['Проверяется фраза', 'Введите  фразу, которую вы записали'] },
   projects: { heading: 'Выбор проекта', subheading: 'Выберите проект или создайте новый' },
   addingProject: { heading: 'Добавление проекта', subheading: 'Cоздайте новый или подключите уже существующий' },
   сonnectProject: { heading: 'Подключить проект', subheading: 'Подключите уже существующий проект' },

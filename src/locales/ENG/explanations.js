@@ -8,7 +8,7 @@ const explanations = {
   },
   seed: ['The phrase gives you complete control over your account', 'Be sure to write down and do’t tell it to anyone'],
   project: { name: 'The project title is set by you and appears in the project selection page', address: 'The address is provided by the creator of the project' },
-  tokens: {
+  token: {
     left:
       {
         wallet: 'The contract will be uploaded to the network by a wallet:',

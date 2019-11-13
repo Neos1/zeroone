@@ -5,7 +5,7 @@ const headings = {
   addingProject: { heading: 'Adding a project', subheading: 'Create a new one or connect already existing' },
   passwordCreation: { heading: 'Password creation', subheading: 'Will be used to enter the wallet and transactions confirmation' },
   showSeed: { heading: 'Reserve phrase', subheading: 'Will  be used for password recovery' },
-  seedCheck: { heading: 'Reserve phrase check', subheading: 'Enter the phrase u wrote down' },
+  seedCheck: { heading: 'Reserve phrase check', subheading: ['Checking the seed', 'Enter the phrase u wrote down'] },
   сonnectProject: { heading: 'Project connecting', subheading: 'Create a new one or connect already existing' },
   projectChecking: { heading: 'Checking the project address', subheading: 'It does not take much time' },
   projectConnected: { heading: 'Project is connected!', subheading: 'Now you can start working with it or choose another project' },

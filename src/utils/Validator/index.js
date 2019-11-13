@@ -1,4 +1,5 @@
 import validatorjs from 'validatorjs';
+import i18n from 'i18next';
 
 
 validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes) {
@@ -16,34 +17,39 @@ validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes)
 const rules = {
   password: {
     function: (value) => value.match(/(?=(?=.*[!&$%&? "])+(?=[a-z]*[A-Z])+(?=[^0-9]*[0-9])).{6,}/g),
-    message: 'Пароль не соответствует требованиям',
   },
   address: {
     function: (value) => value.match(/(0x)+([0-9 a-f A-F]){40}/g),
-    message: 'Введите валидный адрес',
-  },
-  required: {
-    function: (value) => value !== '',
-    message: 'Обязательное поле',
-  },
-  string: {
-    function: (value) => typeof value === 'string',
-    message: 'Поле должно быть строкой',
-  },
-  numeric: {
-    // eslint-disable-next-line no-restricted-globals
-    function: (value) => !isNaN(Number(value)),
-    message: 'Значение должно быть числом',
   },
 };
+
 
 const plugins = {
   dvr: {
     package: validatorjs,
     extend: ({ validator }) => {
+      // eslint-disable-next-line no-console
+      const { language } = i18n;
+      const languages = {
+        RUS: 'ru',
+        ENG: 'en',
+      };
       Object.keys(rules).forEach(
         (key) => validator.register(key, rules[key].function, rules[key].message),
       );
+      validator.useLang(languages[language]);
+      validator.setMessages('en', {
+        required: 'The :attribute field is required.',
+        same: 'Fields must be same',
+        password: 'Field value not valid',
+        address: 'Enter valid address',
+      });
+      validator.setMessages('ru', {
+        required: 'Поле обязательно для заполнения',
+        same: 'Поля должны содержать одинаковые значения',
+        password: 'Пароль не соответствует требованиям',
+        address: 'Введите валидный адрес',
+      });
       validator.stopOnError(true);
     },
   },

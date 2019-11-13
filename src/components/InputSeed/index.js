@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Heading from '../Heading';
 import Input from '../Input';
@@ -17,7 +18,7 @@ import { BackIcon } from '../Icons';
 import Loader from '../Loader';
 import SeedInput from './SeedForm';
 
-
+@withTranslation()
 @inject('appStore', 'userStore')
 @observer
 
@@ -73,7 +74,7 @@ class InputSeed extends Component {
   }
 
   render() {
-    const { userStore, recover } = this.props;
+    const { userStore, recover, t } = this.props;
     const { _mnemonic: seed } = userStore;
     const { loading, redirect } = this.state;
     if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
@@ -82,15 +83,15 @@ class InputSeed extends Component {
         <div className={styles.form}>
           <FormBlock>
             <Heading>
-              {'Проверка резервной фразы'}
-              {loading ? 'Проверяется фраза' : 'Введите  фразу, которую вы записали'}
+              {t('headings:seedCheck.heading')}
+              {loading ? t('headings:seedCheck.subheading.0') : t('headings:seedCheck.subheading.1')}
             </Heading>
             {loading ? <Loader /> : <SeedInput submit={this.submitForm} seed={seed} error={this.showError} />}
           </FormBlock>
           <NavLink to={`${recover ? '/' : '/showSeed'}`}>
             <IconButton className="btn--link btn--noborder btn--back">
               <BackIcon />
-              Назад
+              {t('buttons:back')}
             </IconButton>
           </NavLink>
         </div>
@@ -104,6 +105,7 @@ InputSeed.propTypes = {
   userStore: propTypes.object.isRequired,
   appStore: propTypes.object.isRequired,
   recover: propTypes.bool.isRequired,
+  t: propTypes.func.isRequired,
 };
 
 

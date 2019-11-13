@@ -6,6 +6,8 @@ import explanationsEn from './locales/ENG/explanations';
 import explanationsRu from './locales/RUS/explanations';
 import buttonsEn from './locales/ENG/buttons';
 import buttonsRu from './locales/RUS/buttons';
+import fieldsEn from './locales/ENG/fields';
+import fieldsRu from './locales/RUS/fields';
 
 
 const resources = {
@@ -13,11 +15,13 @@ const resources = {
     headings: headingsEn,
     explanations: explanationsEn,
     buttons: buttonsEn,
+    fields: fieldsEn,
   },
   RUS: {
     headings: headingsRu,
     explanations: explanationsRu,
     buttons: buttonsRu,
+    fields: fieldsRu,
   },
 };
 

@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
 
 /* eslint-disable no-alert */
@@ -11,13 +12,13 @@ class CreateWalletForm extends ExtendedForm {
         name: 'password',
         type: 'password',
         label: 'Password',
-        placeholder: 'Введите пароль',
+        placeholder: i18n.t('fields:enterPassword'),
         rules: 'required|password',
       }, {
         name: 'passwordConfirm',
         type: 'password',
         label: 'Password Confirmation',
-        placeholder: 'Подтвердите пароль',
+        placeholder: i18n.t('fields:repeatPassword'),
         rules: 'required|same:password',
       }],
     };

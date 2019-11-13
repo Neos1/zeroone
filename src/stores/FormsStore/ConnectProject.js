@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
 
 /* eslint-disable no-alert */
@@ -11,13 +12,13 @@ class ConnectProjectForm extends ExtendedForm {
         name: 'name',
         type: 'text',
         label: 'Project Name',
-        placeholder: 'Придумайте название проекта',
+        placeholder: i18n.t('fields:projectTitle'),
         rules: 'required|string|between:3,10',
       }, {
         name: 'address',
         type: 'text',
         label: 'Token Address',
-        placeholder: 'Введите адрес контракта',
+        placeholder: i18n.t('fields:contractAddress'),
         rules: 'required|string|address',
       }],
     };
