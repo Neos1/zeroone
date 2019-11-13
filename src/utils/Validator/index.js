@@ -45,7 +45,7 @@ const plugins = {
         address: 'Enter valid address',
       });
       validator.setMessages('ru', {
-        required: 'Поле обязательно для заполнения',
+        required: 'Обязательное поле',
         same: 'Поля должны содержать одинаковые значения',
         password: 'Пароль не соответствует требованиям',
         address: 'Введите валидный адрес',
