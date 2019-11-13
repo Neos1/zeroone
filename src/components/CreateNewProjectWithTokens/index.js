@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -107,44 +108,46 @@ class CreateNewProjectWithTokens extends Component {
   }
 }
 
-const InputTokenAddress = ({ form }) => (
+const InputTokenAddress = withTranslation()(({ t, form }) => (
   <FormBlock>
     <Heading>
-      {'Подключение контракта'}
-      {'Владелец этого контракта будет считаться и владельцем создаваемого проекта'}
+      {t('headings:existingTokens.heading')}
+      {t('headings:existingTokens.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('address')}>
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={form.loading} type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" disabled={form.loading} type="submit">
+          {t('buttons:continue')}
+        </Button>
       </div>
       <NavLink to="/newProject">
         <IconButton className="btn--link btn--noborder btn--back">
           <BackIcon />
-          Назад
+          {t('buttons:back')}
         </IconButton>
       </NavLink>
     </form>
   </FormBlock>
-);
+));
 
-const LoadingBlock = () => (
+const LoadingBlock = withTranslation(({ t }) => (
   <FormBlock>
     <Heading>
-      {'Проверяем адрес контракта'}
-      {'Это не займет много времени'}
+      {t('headings:checkingTokens.heading')}
+      {t('headings:checkingTokens.subheading')}
     </Heading>
     <Loader />
   </FormBlock>
-);
+));
 
-const ContractConfirmation = inject('appStore')(observer(({ appStore: { ERC }, onSubmit }) => (
+const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t, appStore: { ERC }, onSubmit }) => (
   <FormBlock>
     <Heading>
-      {'Контракт успешно подключен!'}
-      {'Проверьте правильность данных перед тем, как продолжить'}
+      {t('headings:checkingTokensConfirm.heading')}
+      {t('headings:checkingTokensConfirm.subheading')}
     </Heading>
     <form>
       <div className="form__token">
@@ -159,17 +162,19 @@ const ContractConfirmation = inject('appStore')(observer(({ appStore: { ERC }, o
         </div>
       </div>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
+        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}>
+          {t('buttons:continue')}
+        </Button>
       </div>
     </form>
   </FormBlock>
-)));
+))));
 
-const InputProjectData = ({ form, onClick }) => (
+const InputProjectData = withTranslation()(({ t, form, onClick }) => (
   <FormBlock>
     <Heading>
-      {'Создание проекта'}
-      {'Контракт проекта будет загружен в сеть при помощи кошелька'}
+      {t('headings:projectCreating.heading')}
+      {t('headings:projectCreating.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>
@@ -179,22 +184,24 @@ const InputProjectData = ({ form, onClick }) => (
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={form.loading} type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" disabled={form.loading} type="submit">
+          {t('buttons:continue')}
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
           <p>
-            Название задается вами и отображается в списке проектов
+            {t('explanations:project.name')}
           </p>
         </Explanation>
       </div>
       <IconButton className="btn--link btn--noborder btn--back" onClick={() => { onClick(); }}>
         <BackIcon />
-          Назад
+        {t('buttons:back')}
       </IconButton>
     </form>
   </FormBlock>
-);
+));
 
 const StepIndicator = ({ step, count }) => (
   <div className="step-indicator">

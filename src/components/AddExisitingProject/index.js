@@ -15,7 +15,9 @@ import ConnectProjectForm from '../../stores/FormsStore/ConnectProject';
 
 import styles from '../Login/Login.scss';
 import Input from '../Input';
-import { Address, TokenName, Login } from '../Icons';
+import {
+  Address, TokenName, Login, BackIcon,
+} from '../Icons';
 
 @inject('appStore')
 @observer
@@ -47,7 +49,7 @@ class AddExistingProject extends Component {
   }
 
   render() {
-    const { appStore } = this.props;
+    const { appStore, t } = this.props;
     const { step } = this.state;
     const { connectProject } = this;
 
@@ -67,13 +69,19 @@ class AddExistingProject extends Component {
           {step === 'default' ? <InputBlock form={connectForm} /> : ''}
           {step === 'loading' ? <LoadingBlock /> : ''}
           {step === 'success' ? <MessageBlock /> : ''}
+          <NavLink to="/createProject">
+            <IconButton className="btn--text btn--link btn--noborder" type="submit">
+              <BackIcon />
+              {t('buttons:back')}
+            </IconButton>
+          </NavLink>
         </div>
       </Container>
 
     );
   }
 }
-const InputBlock = withTranslation(['headings'])(({ t, form }) => (
+const InputBlock = withTranslation()(({ t, form }) => (
   <FormBlock className="form__block">
     <Heading>
       {t('headings:сonnectProject.heading')}
@@ -87,28 +95,28 @@ const InputBlock = withTranslation(['headings'])(({ t, form }) => (
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" type="submit">
+          {t('buttons:continue')}
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
           <p>
-            Название задается вами и отображается в списке проектов
+            {t('explanations:project.name')}
           </p>
         </Explanation>
         <Explanation>
           <p>
-            Адрес сообщает  создатель проекта
+            {t('explanations:project.address')}
           </p>
         </Explanation>
       </div>
     </form>
-    <NavLink to="/createProject">
-      <Button className="btn--text btn--link btn--noborder" type="submit"> Назад </Button>
-    </NavLink>
+
   </FormBlock>
 ));
 
-const LoadingBlock = withTranslation(['headings'])(({ t }) => (
+const LoadingBlock = withTranslation()(({ t }) => (
   <FormBlock>
     <Heading>
       {t('headings:projectChecking.heading')}
@@ -118,7 +126,7 @@ const LoadingBlock = withTranslation(['headings'])(({ t }) => (
   </FormBlock>
 ));
 
-const MessageBlock = withTranslation(['headings'])(({ t }) => (
+const MessageBlock = withTranslation()(({ t }) => (
   <FormBlock>
     <Heading>
       {t('headings:projectConnected.heading')}
@@ -126,7 +134,7 @@ const MessageBlock = withTranslation(['headings'])(({ t }) => (
     </Heading>
     <IconButton className="btn--default btn--black" type="submit">
       {<Login />}
-      {'К подключенному проекту'}
+      {t('buttons:toConnectedProject')}
     </IconButton>
     <NavLink to="/projects">
       <Button className="btn--text btn--link btn--noborder" type="submit"> Выбрать другой проект </Button>
@@ -135,6 +143,7 @@ const MessageBlock = withTranslation(['headings'])(({ t }) => (
 ));
 AddExistingProject.propTypes = {
   appStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 InputBlock.propTypes = {
   form: propTypes.object.isRequired,

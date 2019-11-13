@@ -22,13 +22,13 @@ const AddNewProject = withTranslation()(({ t }) => (
           <NavLink to="/newProject">
             <IconButton className="btn--white">
               <CreateToken />
-                Создать
+              {t('buttons:create')}
             </IconButton>
           </NavLink>
           <NavLink to="/addExisting">
             <IconButton className="btn--white">
               <ChainIcon />
-              Подключить
+              {t('buttons:connect')}
             </IconButton>
           </NavLink>
         </div>
@@ -36,7 +36,7 @@ const AddNewProject = withTranslation()(({ t }) => (
       <NavLink to="/projects">
         <IconButton className="btn--link btn--noborder btn--back">
           <BackIcon />
-          Назад
+          {t('buttons:back')}
         </IconButton>
       </NavLink>
     </div>

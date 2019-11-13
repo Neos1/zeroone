@@ -68,7 +68,7 @@ class Login extends Component {
   }
 }
 
-const InputForm = withTranslation(['headings'])(({
+const InputForm = withTranslation()(({
   appStore, form, t,
 }) => (
   <FormBlock>
@@ -84,19 +84,19 @@ const InputForm = withTranslation(['headings'])(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit"> Войти </Button>
+        <Button className="btn--default btn--black" type="submit">{t('buttons:continue')}</Button>
         <NavLink to="/create">
-          <Button className="btn--link"> Создать новый ключ </Button>
+          <Button className="btn--link">{t('buttons:newWallet')}</Button>
         </NavLink>
         <NavLink to="/restore">
-          <Button className="btn--link" disabled={form.loading}> Забыли пароль? </Button>
+          <Button className="btn--link" disabled={form.loading}>{t('buttons:forgotPassword')}</Button>
         </NavLink>
       </div>
     </form>
   </FormBlock>
 ));
 
-const LoadingBlock = withTranslation(['headings'])(({ t }) => (
+const LoadingBlock = withTranslation()(({ t }) => (
   <FormBlock>
     <Heading>
       {t('headings:logging.heading')}

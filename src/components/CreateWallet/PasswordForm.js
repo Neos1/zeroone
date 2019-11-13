@@ -12,7 +12,7 @@ import Indicator from '../Indicator';
 import styles from '../Login/Login.scss';
 import passwordValidation from '../../utils/PasswordValidation';
 
-@withTranslation(['headings'])
+@withTranslation()
 class PasswordForm extends Component {
   constructor(props) {
     super(props);
@@ -44,38 +44,32 @@ class PasswordForm extends Component {
             <Password />
           </Input>
           <div className={styles.form__submit}>
-            <Button type="submit" disabled={form.loading} className="btn--default btn--black"> Продолжить </Button>
+            <Button type="submit" disabled={form.loading} className="btn--default btn--black">{t('buttons:continue')}</Button>
           </div>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>
               <p>
-              Пароль задается на английской раскладке
+                { t('explanations:passwordCreating.0')}
                 <br />
-              И должен содержать:
+                { t('explanations:passwordCreating.1')}
               </p>
               <p>
                 <ul>
                   <li>
                     <Indicator checked={validity.Num} />
-                    {' '}
-                  цифру
-                    {' '}
+                    { t('explanations:passwordRules.numeric')}
                   </li>
                   <li>
                     <Indicator checked={validity.High} />
-                    {' '}
-                  заглавную букву
-                    {' '}
+                    { t('explanations:passwordRules.upperCase')}
                   </li>
                   <li>
                     <Indicator checked={validity.Char} />
-                    {' '}
-                  спецсимвол
+                    { t('explanations:passwordRules.symbol')}
                   </li>
                   <li>
                     <Indicator checked={validity.Length} />
-                    {' '}
-                  не менее 6 знаков
+                    { t('explanations:passwordRules.length')}
                   </li>
                 </ul>
               </p>
@@ -85,7 +79,7 @@ class PasswordForm extends Component {
         <NavLink to={`${state ? '/restore' : '/'}`}>
           <IconButton className="btn--link btn--noborder btn--back">
             <BackIcon />
-           Назад
+            {t('buttons:back')}
           </IconButton>
         </NavLink>
       </FormBlock>

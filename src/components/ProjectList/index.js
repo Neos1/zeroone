@@ -11,7 +11,7 @@ import { AddIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
-
+@withTranslation()
 @inject('appStore')
 @observer
 class ProjectList extends Component {
@@ -44,7 +44,7 @@ class ProjectList extends Component {
               <NavLink to="/createProject">
                 <IconButton className="btn--big btn--white btn--dashed">
                   <AddIcon />
-                  Добавить проект
+                  {t('buttons:addProject')}
                 </IconButton>
               </NavLink>
             </div>

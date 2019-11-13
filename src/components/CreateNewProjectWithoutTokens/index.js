@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -147,27 +148,29 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 }
 
-const CreateTokenData = inject('userStore', 'appStore')(observer(({ userStore: { address }, appStore: { balances }, form }) => (
+const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation()(({
+  t, userStore: { address }, appStore: { balances }, form,
+}) => (
   <FormBlock>
     <Heading>
-      {'Создание токенов'}
-      {''}
+      {t('headings:newTokens.heading')}
+      {t('headings:newTokens.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <div className={`${styles.form__explanation} ${styles['form__explanation--left']}`}>
         <Explanation>
           <p>
-            Контракт будет загружен в сеть при помощи кошелька:
+            {t('explanations:token.left.wallet')}
             <p>{address}</p>
           </p>
           <p>
-            Баланс:
+            {t('explanations:token.left.balance')}
             <p>
               {(balances[address.replace('0x', '')] / 1.0e18).toFixed(5)}
               {' ETH'}
             </p>
           </p>
-          <p>Токены зачислятся на этот кошелек После их можно будет распределить</p>
+          <p>{t('explanations:token.left.tokens')}</p>
         </Explanation>
       </div>
       <Input field={form.$('name')}>
@@ -190,56 +193,56 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(({ userStore: {
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
           <p>
-            Символом токена называется его сокращенно название. Например: ETH, BTC и т.п.
+            {t('explanations:token.right.symbol')}
           </p>
         </Explanation>
         <Explanation>
           <p>
-            Общее число токенов задаете вы.
-            В дальнейшем их можно будет распределить
-            между участниками проекта
+            {t('explanations:token.right.count')}
           </p>
         </Explanation>
       </div>
       <NavLink to="/newProject">
         <IconButton className="btn--link btn--noborder btn--back">
           <BackIcon />
-          Назад
+          {t('buttons:back')}
         </IconButton>
       </NavLink>
     </form>
   </FormBlock>
-)));
+))));
 
-const LoadingBlock = () => (
+const LoadingBlock = withTranslation()(({ t }) => (
   <FormBlock>
     <Heading>
-      {'Создаем токены ERC20'}
-      {'Это не займет много времени'}
+      {t('headings:tokensCreating.heading')}
+      {t('headings:tokensCreating.subheading')}
     </Heading>
     <Loader />
   </FormBlock>
-);
+));
 
-const TokenCreationAlert = ({ onSubmit }) => (
+const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
   <FormBlock>
     <Heading>
-      {'Токены успешно созданы!'}
-      {'Теперь нужно создать проект'}
+      {t('headings:tokensCreated.heading')}
+      {t('headings:tokensCreated.subheading')}
     </Heading>
     <form>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}> Продолжить </Button>
+        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}>
+          {t('buttons:continue')}
+        </Button>
       </div>
     </form>
   </FormBlock>
-);
+));
 
-const InputProjectData = ({ form, onClick }) => (
+const InputProjectData = withTranslation()(({ form, onClick, t }) => (
   <FormBlock>
     <Heading>
-      {'Создание проекта'}
-      {'Контракт проекта будет загружен в сеть при помощи кошелька'}
+      {t('headings:projectCreating.heading')}
+      {t('headings:projectCreating.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>
@@ -254,17 +257,17 @@ const InputProjectData = ({ form, onClick }) => (
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
           <p>
-            Название задается вами и отображается в списке проектов
+            {t('explanations:project.name')}
           </p>
         </Explanation>
       </div>
       <IconButton className="btn--link btn--noborder btn--back" onClick={() => { onClick(); }}>
         <BackIcon />
-          Назад
+        {t('buttons:back')}
       </IconButton>
     </form>
   </FormBlock>
-);
+));
 
 const StepIndicator = ({ step, count }) => (
   <div className="step-indicator">

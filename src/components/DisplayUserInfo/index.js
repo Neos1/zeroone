@@ -1,6 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -8,14 +9,14 @@ import { Button } from '../Button';
 import styles from '../Login/Login.scss';
 
 
-const DisplayUserInfo = inject('userStore')(observer(({ userStore: { balance, address } }) => (
+const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, userStore: { balance, address } }) => (
   <Container>
     <div className={styles.form}>
       {' '}
       <FormBlock>
         <Heading>
-          {'Процесс восстановления кошелька'}
-          {'Проверьте правильность данных перед тем, как продолжить'}
+          {t('headings:walletRestoring.heading')}
+          {t('headings:walletRestoring.subheading')}
         </Heading>
         <form>
           <div className="form__token">
@@ -31,13 +32,13 @@ const DisplayUserInfo = inject('userStore')(observer(({ userStore: { balance, ad
           </div>
           <div className={styles.form__submit}>
             <NavLink to="/recoverPassword">
-              <Button className="btn--default btn--black" type="button"> Продолжить </Button>
+              <Button className="btn--default btn--black" type="button">{t('buttons:continue')}</Button>
             </NavLink>
           </div>
         </form>
       </FormBlock>
     </div>
   </Container>
-)));
+))));
 
 export default DisplayUserInfo;

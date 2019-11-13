@@ -19,5 +19,8 @@ const headings = {
   projectCreating: { heading: 'Создание проекта', subheading: 'Контракт проекта будет загружен в сеть при помощи кошелька' },
   uploadingProject: { heading: 'Загружаем контракт', subheading: 'Это может занять до 5 минут' },
   projectCreated: { heading: 'Проект успешно создан!', subheading: 'Теперь можно начать работу с ним или выбрать другой проект' },
+  walletRestored: { heading: 'Восстановление кошелька', subheading: 'Кошелек успешно восстанолен' },
+  walletCreated: { heading: 'Создание кошелька', subheading: 'Кошелек успешно создан' },
+  walletRestoring: { heading: 'Процесс восстановления кошелька', subheading: 'Проверьте правильность данных перед тем, как продолжить' },
 };
 export default headings;

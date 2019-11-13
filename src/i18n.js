@@ -4,15 +4,20 @@ import headingsEn from './locales/ENG/headings';
 import headingsRu from './locales/RUS/headings';
 import explanationsEn from './locales/ENG/explanations';
 import explanationsRu from './locales/RUS/explanations';
+import buttonsEn from './locales/ENG/buttons';
+import buttonsRu from './locales/RUS/buttons';
+
 
 const resources = {
   ENG: {
     headings: headingsEn,
     explanations: explanationsEn,
+    buttons: buttonsEn,
   },
   RUS: {
     headings: headingsRu,
     explanations: explanationsRu,
+    buttons: buttonsRu,
   },
 };
 

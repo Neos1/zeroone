@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { NavLink, Redirect } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -36,15 +37,15 @@ class ShowSeed extends Component {
   }
 
   render() {
-    const { userStore } = this.props;
+    const { userStore, t } = this.props;
     const { visible } = this.state;
     return (
       <Container>
         <div className={styles.form}>
           <FormBlock>
             <Heading>
-              {'Резервная фраза'}
-              {'Нужна для восстановления пароля'}
+              {t('headings:showSeed.heading')}
+              {t('headings:showSeed.subheading')}
             </Heading>
             <div className={styles.seed}>
               {userStore._mnemonic.map((word, id) => (
@@ -89,6 +90,7 @@ const SeedWord = ({ word, id, visible }) => (
 ShowSeed.propTypes = {
   userStore: propTypes.object.isRequired,
   appStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 SeedWord.propTypes = {
   id: propTypes.number.isRequired,
@@ -96,4 +98,4 @@ SeedWord.propTypes = {
   visible: propTypes.bool.isRequired,
 };
 
-export default ShowSeed;
+export default withTranslation()(ShowSeed);

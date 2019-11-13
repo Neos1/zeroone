@@ -19,5 +19,8 @@ const headings = {
   projectCreating: { heading: 'Creating a project', subheading: 'The project contract will be uploaded to the network by a wallet' },
   uploadingProject: { heading: 'Uploading a contract', subheading: 'It can take up to 5 minutes' },
   projectCreated: { heading: 'Contract is created!', subheading: 'Now you can start working with it or choose another project' },
+  walletRestored: { heading: 'Wallet restoring', subheading: 'Wallet is succesfully restored' },
+  walletCreated: { heading: 'Wallet creating', subheading: 'Wallet is succesfully created' },
+  walletRestoring: { heading: 'Wallet restoring', subheading: 'Check the data accuracy before continuing' },
 };
 export default headings;
