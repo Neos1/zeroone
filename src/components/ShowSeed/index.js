@@ -54,24 +54,24 @@ class ShowSeed extends Component {
             </div>
             <div className={styles.form__submit}>
               <NavLink to="/checkSeed">
-                <Button className="btn--default btn--black"> Продолжить </Button>
+                <Button className="btn--default btn--black">{t('buttons:continue')}</Button>
               </NavLink>
             </div>
           </FormBlock>
           <NavLink to="/">
             <IconButton className="btn--link btn--noborder btn--back">
               <BackIcon />
-              Назад
+              {t('buttons:back')}
             </IconButton>
           </NavLink>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>
-              <p> Фраза дает полный контроль над вашей учетной записью </p>
-              <p> Обязательно запишите и не сообщайте ее никому </p>
+              <p>{t('explanations:seed.0')}</p>
+              <p>{t('explanations:seed.1')}</p>
             </Explanation>
             <IconButton onClick={this.toggleWords} className="btn--white btn--show-seed">
               {!visible ? <EyeIcon /> : <CrossedEyeIcon />}
-              {!visible ? 'Показать фразу' : 'Скрыть фразу'}
+              {!visible ? t('buttons:showSeed') : t('buttons:hideSeed')}
             </IconButton>
           </div>
         </div>

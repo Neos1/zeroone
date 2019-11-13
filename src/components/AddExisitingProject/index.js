@@ -49,7 +49,7 @@ class AddExistingProject extends Component {
   }
 
   render() {
-    const { appStore, t } = this.props;
+    const { appStore } = this.props;
     const { step } = this.state;
     const { connectProject } = this;
 
@@ -63,18 +63,13 @@ class AddExistingProject extends Component {
         },
       },
     });
+
     return (
       <Container>
         <div className={`${styles.form}`}>
           {step === 'default' ? <InputBlock form={connectForm} /> : ''}
           {step === 'loading' ? <LoadingBlock /> : ''}
           {step === 'success' ? <MessageBlock /> : ''}
-          <NavLink to="/createProject">
-            <IconButton className="btn--text btn--link btn--noborder" type="submit">
-              <BackIcon />
-              {t('buttons:back')}
-            </IconButton>
-          </NavLink>
         </div>
       </Container>
 
@@ -112,7 +107,12 @@ const InputBlock = withTranslation()(({ t, form }) => (
         </Explanation>
       </div>
     </form>
-
+    <NavLink to="/createProject">
+      <IconButton className="btn--text btn--link btn--noborder btn--back" type="submit">
+        <BackIcon />
+        {t('buttons:back')}
+      </IconButton>
+    </NavLink>
   </FormBlock>
 ));
 
@@ -137,13 +137,12 @@ const MessageBlock = withTranslation()(({ t }) => (
       {t('buttons:toConnectedProject')}
     </IconButton>
     <NavLink to="/projects">
-      <Button className="btn--text btn--link btn--noborder" type="submit"> Выбрать другой проект </Button>
+      <Button className="btn--text btn--link btn--noborder" type="submit">{t('buttons:otherProjects')}</Button>
     </NavLink>
   </FormBlock>
 ));
 AddExistingProject.propTypes = {
   appStore: propTypes.object.isRequired,
-  t: propTypes.func.isRequired,
 };
 InputBlock.propTypes = {
   form: propTypes.object.isRequired,
