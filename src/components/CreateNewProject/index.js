@@ -6,7 +6,6 @@ import { IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Header from '../Header';
 import { Ethereum, CreateToken, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
@@ -21,7 +20,6 @@ class CreateNewProject extends Component {
   render() {
     return (
       <Container>
-        <Header />
         <div className={`${styles.form} ${styles['form--wide']}`}>
           <FormBlock className="form__block--wide">
             <Heading>

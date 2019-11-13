@@ -6,7 +6,6 @@ import { observer, inject } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import Container from '../Container';
-import Header from '../Header';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Loader from '../Loader';
@@ -69,7 +68,6 @@ class CreateWallet extends Component {
     }
     return (
       <Container>
-        <Header />
         <div className={styles.form}>
           {!loading
             ? (

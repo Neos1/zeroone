@@ -7,7 +7,6 @@ import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Header from '../Header';
 import Loader from '../Loader';
 import Indicator from '../Indicator';
 import Explanation from '../Explanation';
@@ -96,7 +95,6 @@ class CreateNewProjectWithTokens extends Component {
     });
     return (
       <Container>
-        <Header />
         <div className={styles.form}>
           <StepIndicator step={step} count={3} />
           {position === 'token' ? <InputTokenAddress form={connectToken} onSubmit={this.checkToken} /> : ''}

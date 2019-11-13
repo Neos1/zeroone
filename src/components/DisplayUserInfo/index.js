@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
 import Container from '../Container';
-import Header from '../Header';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import { Button } from '../Button';
@@ -11,7 +10,6 @@ import styles from '../Login/Login.scss';
 
 const DisplayUserInfo = inject('userStore')(observer(({ userStore: { balance, address } }) => (
   <Container>
-    <Header />
     <div className={styles.form}>
       {' '}
       <FormBlock>

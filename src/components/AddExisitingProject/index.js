@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Header from '../Header';
 import Loader from '../Loader';
 import Explanation from '../Explanation';
 import ConnectProjectForm from '../../stores/FormsStore/ConnectProject';
@@ -63,7 +63,6 @@ class AddExistingProject extends Component {
     });
     return (
       <Container>
-        <Header />
         <div className={`${styles.form}`}>
           {step === 'default' ? <InputBlock form={connectForm} /> : ''}
           {step === 'loading' ? <LoadingBlock /> : ''}
@@ -74,11 +73,11 @@ class AddExistingProject extends Component {
     );
   }
 }
-const InputBlock = ({ form }) => (
+const InputBlock = withTranslation(['headings'])(({ t, form }) => (
   <FormBlock className="form__block">
     <Heading>
-      {'Подключить проект'}
-      {'Cоздайте новый или подключите уже существующий'}
+      {t('headings:сonnectProject.heading')}
+      {t('headings:сonnectProject.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>
@@ -107,23 +106,23 @@ const InputBlock = ({ form }) => (
       <Button className="btn--text btn--link btn--noborder" type="submit"> Назад </Button>
     </NavLink>
   </FormBlock>
-);
+));
 
-const LoadingBlock = () => (
+const LoadingBlock = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
-      {'Проверяем адрес проекта'}
-      {'Это не займет много времени'}
+      {t('headings:projectChecking.heading')}
+      {t('headings:projectChecking.subheading')}
     </Heading>
     <Loader />
   </FormBlock>
-);
+));
 
-const MessageBlock = () => (
+const MessageBlock = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
-      {'Проект успешно подключен!'}
-      {'Теперь можно начать работу с ним или выбрать другой проект'}
+      {t('headings:projectConnected.heading')}
+      {t('headings:projectConnected.subheading')}
     </Heading>
     <IconButton className="btn--default btn--black" type="submit">
       {<Login />}
@@ -133,7 +132,7 @@ const MessageBlock = () => (
       <Button className="btn--text btn--link btn--noborder" type="submit"> Выбрать другой проект </Button>
     </NavLink>
   </FormBlock>
-);
+));
 AddExistingProject.propTypes = {
   appStore: propTypes.object.isRequired,
 };

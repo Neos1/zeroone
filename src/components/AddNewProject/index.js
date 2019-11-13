@@ -4,7 +4,6 @@ import { IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Header from '../Header';
 import { CreateToken, ChainIcon, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
@@ -12,7 +11,6 @@ import styles from '../Login/Login.scss';
 
 const AddNewProject = () => (
   <Container>
-    <Header />
     <div className={`${styles.form}`}>
       <FormBlock className="form__block">
         <Heading>

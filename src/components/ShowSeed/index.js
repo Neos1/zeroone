@@ -5,7 +5,6 @@ import propTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { NavLink, Redirect } from 'react-router-dom';
 import Container from '../Container';
-import Header from '../Header';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Explanation from '../Explanation';
@@ -41,7 +40,6 @@ class ShowSeed extends Component {
     const { visible } = this.state;
     return (
       <Container>
-        <Header />
         <div className={styles.form}>
           <FormBlock>
             <Heading>

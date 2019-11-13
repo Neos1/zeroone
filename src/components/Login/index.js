@@ -6,7 +6,6 @@ import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import Container from '../Container';
-import Header from '../Header';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Dropdown from '../Dropdown';
@@ -50,7 +49,6 @@ class Login extends Component {
     if (userStore.authorized) return <Redirect to="/projects" />;
     return (
       <Container>
-        <Header />
         <div className={styles.form}>
           {
             !logging
@@ -75,8 +73,8 @@ const InputForm = withTranslation(['headings'])(({
 }) => (
   <FormBlock>
     <Heading>
-      {t('login.heading')}
-      {t('login.subheading')}
+      {t('headings:login.heading')}
+      {t('headings:login.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Dropdown options={appStore.wallets} subOptions={appStore.balances} field={form.$('wallet')} onSelect={appStore.selectWallet}>
@@ -101,8 +99,8 @@ const InputForm = withTranslation(['headings'])(({
 const LoadingBlock = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
-      {t('headings.logging.heading')}
-      {t('headings.logging.subheading')}
+      {t('headings:logging.heading')}
+      {t('headings:logging.subheading')}
     </Heading>
     <Loader />
   </FormBlock>

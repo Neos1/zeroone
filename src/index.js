@@ -7,10 +7,12 @@ import Alert from './components/Alert';
 import './i18n';
 
 import './assets/styles/style.scss';
+import Header from './components/Header';
 
 const { stores } = rootStore;
 render(
   <Provider appStore={stores.appStore} userStore={stores.userStore}>
+    <Header />
     <SimpleRouter />
     <Alert visible={stores.appStore.alertVisible}>
       {stores.appStore.alertText}

@@ -1,9 +1,10 @@
 @import '../../assets/styles/partials/variables';
 
 .header {
-  position: relative;
+  position: absolute;
   top: 30px;
   left: 50%;
+  z-index: 2;
   display: flex;
   flex-flow: row nowrap;
   align-items:center;

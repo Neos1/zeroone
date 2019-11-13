@@ -7,7 +7,6 @@ import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
 import Container from '../Container';
-import Header from '../Header';
 import Heading from '../Heading';
 import Input from '../Input';
 
@@ -80,7 +79,6 @@ class InputSeed extends Component {
     if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
     return (
       <Container>
-        <Header />
         <div className={styles.form}>
           <FormBlock>
             <Heading>

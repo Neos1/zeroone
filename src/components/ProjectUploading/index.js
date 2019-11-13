@@ -8,7 +8,6 @@ import { NavLink } from 'react-router-dom';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Header from '../Header';
 
 import styles from '../Login/Login.scss';
 import ProgressBlock from './ProgressBlock';
@@ -63,7 +62,6 @@ class ProjectUploading extends Component {
     const { step, loading } = this.state;
     return (
       <Container>
-        <Header />
         <div className={`${styles.form} ${loading ? styles['form--ultrawide'] : ''}`}>
           {
             loading ? <Progress step={step} /> : <AlertBlock />

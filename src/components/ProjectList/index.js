@@ -6,7 +6,6 @@ import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Header from '../Header';
 import { AddIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
@@ -32,7 +31,6 @@ class ProjectList extends Component {
     ));
     return (
       <Container>
-        <Header />
         <div className={`${styles.form} ${styles['form--wide']}`}>
           <FormBlock className="form__block--wide">
             <Heading>
