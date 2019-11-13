@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import propTypes from 'prop-types';
+import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 import { IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -18,13 +19,14 @@ class CreateNewProject extends Component {
   }
 
   render() {
+    const { t } = this.props;
     return (
       <Container>
         <div className={`${styles.form} ${styles['form--wide']}`}>
           <FormBlock className="form__block--wide">
             <Heading>
-              {'Создание нового проекта'}
-              {'Выберите подходящий вам вариант'}
+              {t('headings:newProject.heading')}
+              {t('headings:newProject.subheading')}
             </Heading>
             <div className={styles.create}>
               <NavLink to="/createWithTokens">
@@ -56,8 +58,8 @@ class CreateNewProject extends Component {
 }
 
 CreateNewProject.propTypes = {
-
+  t: propTypes.func.isRequired,
 };
 
 
-export default CreateNewProject;
+export default withTranslation()(CreateNewProject);

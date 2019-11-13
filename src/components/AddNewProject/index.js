@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 import { IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -9,13 +10,13 @@ import { CreateToken, ChainIcon, BackIcon } from '../Icons';
 import styles from '../Login/Login.scss';
 
 
-const AddNewProject = () => (
+const AddNewProject = withTranslation()(({ t }) => (
   <Container>
     <div className={`${styles.form}`}>
       <FormBlock className="form__block">
         <Heading>
-          {'Добавление проекта'}
-          {'Cоздайте новый или подключите уже существующий'}
+          {t('headings:addingProject.heading')}
+          {t('headings:addingProject.subheading')}
         </Heading>
         <div className={styles['add-project']}>
           <NavLink to="/newProject">
@@ -40,6 +41,6 @@ const AddNewProject = () => (
       </NavLink>
     </div>
   </Container>
-);
+));
 
 export default AddNewProject;

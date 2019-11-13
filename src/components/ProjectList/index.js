@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { withTranslation } from 'react-i18next';
 import { Button, IconButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
@@ -25,7 +26,7 @@ class ProjectList extends Component {
   }
 
   render() {
-    const { appStore: { projectList } } = this.props;
+    const { appStore: { projectList }, t } = this.props;
     const projects = projectList.map((project, index) => (
       <Button key={`${index + 1}`} className="btn--big btn--white">{project.name}</Button>
     ));
@@ -34,8 +35,8 @@ class ProjectList extends Component {
         <div className={`${styles.form} ${styles['form--wide']}`}>
           <FormBlock className="form__block--wide">
             <Heading>
-              {'Выбор проекта'}
-              {'Выберите проект или создайте новый'}
+              {t('headings:projects.heading')}
+              {t('headings:projects.subheading')}
             </Heading>
             <div className={styles.projects}>
               {' '}
@@ -56,6 +57,7 @@ class ProjectList extends Component {
 
 ProjectList.propTypes = {
   appStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 
-export default ProjectList;
+export default withTranslation()(ProjectList);
