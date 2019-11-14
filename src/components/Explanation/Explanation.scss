@@ -9,7 +9,11 @@
     padding-left: 10px;
     border-left: 1px solid $border;
     p {
-      margin-bottom: 5px;
+      margin-bottom: 15px;
+      line-height: 17px;
+      &>span{
+        display: block;
+      }
     }
   }
 }

@@ -34,7 +34,11 @@ class PasswordForm extends Component {
       <FormBlock>
         <Heading>
           {t('headings:passwordCreation.heading')}
-          {t('headings:passwordCreation.subheading')}
+          <span>
+            {t('headings:passwordCreation.subheading.0')}
+            <br />
+            {t('headings:passwordCreation.subheading.1')}
+          </span>
         </Heading>
         <form form={form} onSubmit={form.onSubmit}>
           <Input type="password" field={form.$('password')} onInput={this.handleInput}>

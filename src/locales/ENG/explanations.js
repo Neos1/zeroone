@@ -11,9 +11,9 @@ const explanations = {
   token: {
     left:
       {
-        wallet: 'The contract will be uploaded to the network by a wallet:',
+        wallet: ['The contract will be uploaded to the network', ' by a wallet:'],
         balance: 'Balance: ',
-        tokens: 'Tokens will be credited to this wallet Тhey can be distributed later',
+        tokens: ['Tokens will be credited to this wallet', ' Тhey can be distributed later'],
       },
     right: {
       symbol: 'A token symbol is its abbreviated name. For example: ETH, BTC, etc.',

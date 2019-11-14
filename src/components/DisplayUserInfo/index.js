@@ -16,7 +16,11 @@ const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, use
       <FormBlock>
         <Heading>
           {t('headings:walletRestoring.heading')}
-          {t('headings:walletRestoring.subheading')}
+          <span>
+            {t('headings:walletRestoring.subheading.0')}
+            <br />
+            {t('headings:walletRestoring.subheading.1')}
+          </span>
         </Heading>
         <form>
           <div className="form__token">

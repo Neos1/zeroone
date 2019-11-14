@@ -26,6 +26,17 @@ import styles from '../Login/Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class CreateNewProjectWithoutTokens extends Component {
+  form = new CreateTokenForm({
+    hooks: {
+      onSuccess: (form) => new Promise((resolve, reject) => {
+        this.createToken(form).then(resolve()).catch(reject());
+      }),
+      onError: () => {
+        this.showValidationError();
+      },
+    },
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +46,7 @@ class CreateNewProjectWithoutTokens extends Component {
       disabled: false,
     };
   }
+
 
   returnToContractConnecting = () => {
     this.setState({
@@ -47,7 +59,6 @@ class CreateNewProjectWithoutTokens extends Component {
     this.setState({
       position: 'creation',
     });
-
     const {
       name, symbol, count, password,
     } = form.values();
@@ -73,6 +84,7 @@ class CreateNewProjectWithoutTokens extends Component {
                   }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
                 }, 5000);
               });
+              Promise.resolve();
             } else {
               this.setState({
                 position: 'token',
@@ -88,7 +100,13 @@ class CreateNewProjectWithoutTokens extends Component {
           step: 1,
         });
         appStore.displayAlert(t('errors:wrongPassword'), 3000);
+        Promise.reject();
       });
+  }
+
+  showValidationError = () => {
+    const { appStore, t } = this.props;
+    appStore.displayAlert(t('errors:validationError'), 3000);
   }
 
   gotoProjectInfo = () => {
@@ -137,19 +155,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const { appStore, t } = this.props;
     const { position, step, disabled } = this.state;
     if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
-    const { createToken, gotoUploading } = this;
-    const CreateToken = new CreateTokenForm({
-      hooks: {
-        onSuccess(form) {
-          return new Promise(() => {
-            createToken(form);
-          });
-        },
-        onError() {
-          appStore.displayAlert(t('errors:validationError'), 3000);
-        },
-      },
-    });
+    const { gotoUploading } = this;
     const CreateProject = new CreateProjectForm({
       hooks: {
         onSuccess(form) {
@@ -166,7 +172,7 @@ class CreateNewProjectWithoutTokens extends Component {
       <Container>
         <div className={styles.form}>
           <StepIndicator step={step} count={2} />
-          {position === 'token' ? <CreateTokenData form={CreateToken} /> : ''}
+          {position === 'token' ? <CreateTokenData form={this.form} /> : ''}
           {position === 'creation' ? <LoadingBlock /> : ''}
           {position === 'tokenCreated' ? <TokenCreationAlert onSubmit={this.gotoProjectInfo} /> : ''}
           {position === 'projectInfo' ? <InputProjectData form={CreateProject} disabled={disabled} onClick={this.returnToContractConnecting} /> : ''}
@@ -188,17 +194,25 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
       <div className={`${styles.form__explanation} ${styles['form__explanation--left']}`}>
         <Explanation>
           <p>
-            {t('explanations:token.left.wallet')}
-            <p>{address}</p>
+            {t('explanations:token.left.wallet.0')}
+            <br />
+            {t('explanations:token.left.wallet.1')}
+            <span><strong>{address}</strong></span>
           </p>
           <p>
             {t('explanations:token.left.balance')}
-            <p>
-              {(balances[address.replace('0x', '')] / 1.0e18).toFixed(5)}
-              {' ETH'}
-            </p>
+            <span>
+              <strong>
+                {(balances[address.replace('0x', '')] / 1.0e18).toFixed(5)}
+                {' ETH'}
+              </strong>
+            </span>
           </p>
-          <p>{t('explanations:token.left.tokens')}</p>
+          <p>
+            {t('explanations:token.left.tokens.0')}
+            <br />
+            {t('explanations:token.left.tokens.1')}
+          </p>
         </Explanation>
       </div>
       <Input field={form.$('name')}>
@@ -216,7 +230,7 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit" disabled={form.loading}>{t('buttons:continue')}</Button>
+        <Button className="btn--default btn--black btn--310" type="submit" disabled={form.loading}>{t('buttons:create')}</Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -258,7 +272,7 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
     </Heading>
     <form>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}>
+        <Button className="btn--default btn--black btn--240" type="button" onClick={() => { onSubmit(); }}>
           {t('buttons:continue')}
         </Button>
       </div>
@@ -272,7 +286,12 @@ const InputProjectData = withTranslation()(({
   <FormBlock>
     <Heading>
       {t('headings:projectCreating.heading')}
-      {t('headings:projectCreating.subheading')}
+      <span>
+        {t('headings:projectCreating.subheading.0')}
+        <br />
+        {t('headings:projectCreating.subheading.1')}
+      </span>
+
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>
@@ -282,7 +301,7 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={disabled} type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black btn--310" disabled={disabled} type="submit"> Продолжить </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>

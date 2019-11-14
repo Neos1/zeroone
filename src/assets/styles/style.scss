@@ -41,7 +41,7 @@ svg {
     top: 50%;
     left: 100%;
     width: 96px;
-    border-top: 2px dashed rgba($color: $primary, $alpha: .5);
+    border: 1px dashed rgba($color: $primary, $alpha: .5);
     transform: translateY(-50%);
     opacity: 0;
     transition: .3s ease-in;
@@ -75,7 +75,6 @@ svg {
     transition: .2s;
     stroke: rgba($color: $primary, $alpha: .5);
   }
-  
   & > img {
     position: absolute;
     top: 50%;
@@ -99,6 +98,7 @@ svg {
       margin: 5px 0 0 -35%;
     }
   }
+
   &.success{
     .progress-block__icon {
       &>svg {
@@ -119,7 +119,10 @@ svg {
       border-top: 2px solid rgba($color: $primary, $alpha: 1);
       opacity: 1;
     }
-
+    &>p{
+      color: $primary;
+      opacity: 1;
+    }
   }
   &.active{
     & > img {
@@ -147,6 +150,10 @@ svg {
       animation-fill-mode: forwards;
       animation-play-state: running;
       transform-origin: center center;
+    }
+    &>p{
+      color: $primary;
+      opacity: 1;
     }
   }
 }

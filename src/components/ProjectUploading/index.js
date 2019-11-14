@@ -131,14 +131,18 @@ const AlertBlock = withTranslation()(({ t }) => (
   <FormBlock>
     <Heading>
       {t('headings:projectCreated.heading')}
-      {t('headings:projectCreated.subheading')}
+      <span>
+        {t('headings:projectCreated.subheading.0')}
+        <br />
+        {t('headings:projectCreated.subheading.1')}
+      </span>
     </Heading>
-    <IconButton className="btn--default btn--black" type="submit">
+    <IconButton className="btn--default btn--black btn--240" type="submit">
       {<Login />}
-      {'К подключенному проекту'}
+      {t('buttons:toCreatedProject')}
     </IconButton>
     <NavLink to="/projects">
-      <Button className="btn--text btn--link btn--noborder" type="submit">{t('buttons:otherProject')}</Button>
+      <Button className="btn--text btn--link" type="submit">{t('buttons:otherProject')}</Button>
     </NavLink>
   </FormBlock>
 ));

@@ -60,7 +60,7 @@ class AddExistingProject extends Component {
           connectProject(form);
         },
         onError() {
-          appStore.displayAlert(t('errors:wrongAddress'), 3000);
+          appStore.displayAlert(t('errors:validationError'), 3000);
         },
       },
     });
@@ -91,7 +91,7 @@ const InputBlock = withTranslation()(({ t, form }) => (
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit">
+        <Button className="btn--default btn--black btn--310" type="submit">
           {t('buttons:continue')}
         </Button>
       </div>
@@ -133,7 +133,7 @@ const MessageBlock = withTranslation()(({ t }) => (
       {t('headings:projectConnected.heading')}
       {t('headings:projectConnected.subheading')}
     </Heading>
-    <IconButton className="btn--default btn--black" type="submit">
+    <IconButton className="btn--default btn--black btn--240" type="submit">
       {<Login />}
       {t('buttons:toConnectedProject')}
     </IconButton>

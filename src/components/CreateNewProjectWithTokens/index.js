@@ -147,7 +147,7 @@ const InputTokenAddress = withTranslation()(({ t, form }) => (
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={form.loading} type="submit">
+        <Button className="btn--default btn--black btn--310" disabled={form.loading} type="submit">
           {t('buttons:continue')}
         </Button>
       </div>
@@ -175,7 +175,11 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
   <FormBlock>
     <Heading>
       {t('headings:checkingTokensConfirm.heading')}
-      {t('headings:checkingTokensConfirm.subheading')}
+      <span>
+        {t('headings:checkingTokensConfirm.subheading.0')}
+        <br />
+        {t('headings:checkingTokensConfirm.subheading.1')}
+      </span>
     </Heading>
     <form>
       <div className="form__token">
@@ -190,7 +194,7 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
         </div>
       </div>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="button" onClick={() => { onSubmit(); }}>
+        <Button className="btn--default btn--black btn--310" type="button" onClick={() => { onSubmit(); }}>
           {t('buttons:continue')}
         </Button>
       </div>
@@ -204,7 +208,11 @@ const InputProjectData = withTranslation()(({
   <FormBlock>
     <Heading>
       {t('headings:projectCreating.heading')}
-      {t('headings:projectCreating.subheading')}
+      <span>
+        {t('headings:projectCreating.subheading.0')}
+        <br />
+        {t('headings:projectCreating.subheading.1')}
+      </span>
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>
@@ -214,7 +222,7 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={disabled} type="submit">
+        <Button className="btn--default btn--black btn--310" disabled={disabled} type="submit">
           {t('buttons:continue')}
         </Button>
       </div>

@@ -13,7 +13,7 @@ class СreateProjectForm extends ExtendedForm {
         type: 'text',
         label: 'Project name',
         placeholder: i18n.t('fields:projectTitle'),
-        rules: 'required|string',
+        rules: 'required|string|between:3,20',
       }, {
         name: 'password',
         type: 'password',

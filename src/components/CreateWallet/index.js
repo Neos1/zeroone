@@ -92,7 +92,11 @@ const CreationLoader = withTranslation(['headings'])(({ t }) => (
   <FormBlock>
     <Heading>
       {t('headings:passwordCreation.heading')}
-      {t('headings:passwordCreation.subheading')}
+      <span>
+        {t('headings:passwordCreation.subheading.0')}
+        <br />
+        {t('headings:passwordCreation.subheading.1')}
+      </span>
     </Heading>
     <Loader />
   </FormBlock>

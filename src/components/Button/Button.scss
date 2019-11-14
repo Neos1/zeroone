@@ -176,6 +176,18 @@
       }
     }
   }
+  &--310{
+    max-width: 310px;
+  }
+  &--240{
+    max-width: 240px;
+  }
+  &--project {
+    padding: 30px 10px;
+    .btn__text{
+      font-weight: 700;
+    }
+  }
   &.icon--top{
     svg {
       width: 100%;

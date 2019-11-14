@@ -16,7 +16,11 @@ const AddNewProject = withTranslation()(({ t }) => (
       <FormBlock className="form__block">
         <Heading>
           {t('headings:addingProject.heading')}
-          {t('headings:addingProject.subheading')}
+          <span>
+            {t('headings:addingProject.subheading.0')}
+            <br />
+            {t('headings:addingProject.subheading.1')}
+          </span>
         </Heading>
         <div className={styles['add-project']}>
           <NavLink to="/newProject">

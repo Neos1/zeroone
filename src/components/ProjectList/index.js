@@ -28,7 +28,7 @@ class ProjectList extends Component {
   render() {
     const { appStore: { projectList }, t } = this.props;
     const projects = projectList.map((project, index) => (
-      <Button key={`${index + 1}`} className="btn--big btn--white">{project.name}</Button>
+      <Button key={`${index + 1}`} className="btn--big btn--white btn--project">{project.name.replace(/([!@#$%^&*()_+\-=])+/g, ' ')}</Button>
     ));
     return (
       <Container>
