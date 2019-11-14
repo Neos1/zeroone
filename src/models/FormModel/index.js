@@ -31,7 +31,6 @@ class ExtendedForm extends Form {
       onSuccess: (form) => {
         const promise = $this.fireHook('onSuccessHook', form);
         promise
-          .catch(() => {})
           .finally(() => {
             $this.setLoading(false);
           });
