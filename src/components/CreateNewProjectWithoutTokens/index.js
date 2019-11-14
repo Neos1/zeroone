@@ -32,6 +32,7 @@ class CreateNewProjectWithoutTokens extends Component {
       position: 'token',
       step: 1,
       tokenAddr: '',
+      disabled: false,
     };
   }
 
@@ -103,7 +104,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const { name, password } = form.values();
     appStore.name = name;
     appStore.password = password;
-
+    this.setState({ disabled: true });
     userStore.readWallet(password)
       .then(() => {
         userStore.checkBalance(userStore.address)
@@ -116,6 +117,7 @@ class CreateNewProjectWithoutTokens extends Component {
               this.setState({
                 position: 'projectInfo',
                 step: 2,
+                disabled: false,
               });
               appStore.displayAlert(t('errors:lowBalance'), 3000);
             }
@@ -125,6 +127,7 @@ class CreateNewProjectWithoutTokens extends Component {
         this.setState({
           position: 'projectInfo',
           step: 2,
+          disabled: false,
         });
         appStore.displayAlert(t('errors:tryAgain'), 3000);
       });
@@ -132,13 +135,15 @@ class CreateNewProjectWithoutTokens extends Component {
 
   render() {
     const { appStore, t } = this.props;
-    const { position, step } = this.state;
+    const { position, step, disabled } = this.state;
     if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     const { createToken, gotoUploading } = this;
     const CreateToken = new CreateTokenForm({
       hooks: {
         onSuccess(form) {
-          createToken(form);
+          return new Promise(() => {
+            createToken(form);
+          });
         },
         onError() {
           appStore.displayAlert(t('errors:validationError'), 3000);
@@ -148,7 +153,9 @@ class CreateNewProjectWithoutTokens extends Component {
     const CreateProject = new CreateProjectForm({
       hooks: {
         onSuccess(form) {
-          gotoUploading(form);
+          return new Promise(() => {
+            gotoUploading(form);
+          });
         },
         onError() {
           appStore.displayAlert(t('errors:validationError'), 3000);
@@ -162,7 +169,7 @@ class CreateNewProjectWithoutTokens extends Component {
           {position === 'token' ? <CreateTokenData form={CreateToken} /> : ''}
           {position === 'creation' ? <LoadingBlock /> : ''}
           {position === 'tokenCreated' ? <TokenCreationAlert onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData form={CreateProject} onClick={this.returnToContractConnecting} /> : ''}
+          {position === 'projectInfo' ? <InputProjectData form={CreateProject} disabled={disabled} onClick={this.returnToContractConnecting} /> : ''}
         </div>
       </Container>
     );
@@ -259,7 +266,9 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
   </FormBlock>
 ));
 
-const InputProjectData = withTranslation()(({ form, onClick, t }) => (
+const InputProjectData = withTranslation()(({
+  form, disabled, onClick, t,
+}) => (
   <FormBlock>
     <Heading>
       {t('headings:projectCreating.heading')}
@@ -273,7 +282,7 @@ const InputProjectData = withTranslation()(({ form, onClick, t }) => (
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={form.loading} type="submit"> Продолжить </Button>
+        <Button className="btn--default btn--black" disabled={disabled} type="submit"> Продолжить </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>

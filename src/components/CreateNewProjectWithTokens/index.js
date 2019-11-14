@@ -30,6 +30,7 @@ class CreateNewProjectWithTokens extends Component {
     this.state = {
       position: 'token',
       step: 1,
+      disabled: false,
     };
   }
 
@@ -65,6 +66,7 @@ class CreateNewProjectWithTokens extends Component {
   gotoUploading = (form) => {
     const { appStore, userStore, t } = this.props;
     const { name, password } = form.values();
+    this.setState({ disabled: true });
     appStore.name = name;
     appStore.password = password;
     userStore.readWallet(password)
@@ -79,6 +81,7 @@ class CreateNewProjectWithTokens extends Component {
               this.setState({
                 position: 'projectInfo',
                 step: 2,
+                disabled: false,
               });
               appStore.displayAlert(t('errors:lowBalance'), 3000);
             }
@@ -88,13 +91,14 @@ class CreateNewProjectWithTokens extends Component {
         this.setState({
           position: 'projectInfo',
           step: 2,
+          disabled: false,
         });
         appStore.displayAlert(t('errors:tryAgain'), 3000);
       });
   }
 
   render() {
-    const { position, step } = this.state;
+    const { position, step, disabled } = this.state;
     if (position === 'uploading') return <Redirect to="/uploadWithExistingTokens" />;
     const { gotoUploading, checkToken } = this;
     const connectToken = new ConnectTokenForm({
@@ -110,7 +114,9 @@ class CreateNewProjectWithTokens extends Component {
     const createProject = new CreateProjectForm({
       hooks: {
         onSuccess(form) {
-          gotoUploading(form);
+          return new Promise(() => {
+            gotoUploading(form);
+          });
         },
         onError() {
         },
@@ -123,7 +129,7 @@ class CreateNewProjectWithTokens extends Component {
           {position === 'token' ? <InputTokenAddress form={connectToken} onSubmit={this.checkToken} /> : ''}
           {position === 'check' ? <LoadingBlock /> : ''}
           {position === 'tokenChecked' ? <ContractConfirmation onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData form={createProject} onClick={this.returnToTokenAddress} /> : ''}
+          {position === 'projectInfo' ? <InputProjectData form={createProject} disabled={disabled} onClick={this.returnToTokenAddress} /> : ''}
         </div>
       </Container>
     );
@@ -192,7 +198,9 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
   </FormBlock>
 ))));
 
-const InputProjectData = withTranslation()(({ t, form, onClick }) => (
+const InputProjectData = withTranslation()(({
+  t, form, onClick, disabled,
+}) => (
   <FormBlock>
     <Heading>
       {t('headings:projectCreating.heading')}
@@ -206,7 +214,7 @@ const InputProjectData = withTranslation()(({ t, form, onClick }) => (
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" disabled={form.loading} type="submit">
+        <Button className="btn--default btn--black" disabled={disabled} type="submit">
           {t('buttons:continue')}
         </Button>
       </div>
