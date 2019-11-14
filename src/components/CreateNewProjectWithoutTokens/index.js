@@ -37,8 +37,7 @@ class CreateNewProjectWithoutTokens extends Component {
 
   returnToContractConnecting = () => {
     this.setState({
-      position: 'token',
-      step: 1,
+      position: 'tokenCreated',
     });
   }
 
