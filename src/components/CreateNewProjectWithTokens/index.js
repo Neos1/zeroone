@@ -182,16 +182,9 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
       </span>
     </Heading>
     <form>
-      <div className="form__token">
-        <div className="form__token-half">
-          <p className="form__token-label">{t('other:tokenSymbol')}</p>
-          <p className="form__token-value">{ERC.symbol}</p>
-        </div>
-        <div className="form__token-divider" />
-        <div className="form__token-half">
-          <p className="form__token-label">{t('other:count')}</p>
-          <p className="form__token-value">{ERC.totalSupply}</p>
-        </div>
+      <div className={styles.form__wallet}>
+        <p className={styles['form__wallet-label']}>{t('other:count')}</p>
+        <p className={styles['form__wallet-text']}>{`${ERC.totalSupply} ${ERC.symbol}`}</p>
       </div>
       <div className={styles.form__submit}>
         <Button className="btn--default btn--black btn--310" type="button" onClick={() => { onSubmit(); }}>
