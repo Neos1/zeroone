@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { observable, action } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
+import i18n from 'i18next';
 /**
  * Describes store with user data
  */
@@ -98,7 +99,7 @@ class UserStore {
       }
     }).catch(() => {
       this.logging = false;
-      appStore.displayAlert('Неверный пароль', 3000);
+      appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
     });
   }
 

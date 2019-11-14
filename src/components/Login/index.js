@@ -40,7 +40,9 @@ class Login extends Component {
     const loginForm = new LoginForm({
       hooks: {
         onSuccess(form) {
-          userStore.login(form.values().password);
+          return new Promise(() => {
+            userStore.login(form.values().password);
+          });
         },
         onError() {
           appStore.displayAlert(t('errors:emptyFields'), 3000);

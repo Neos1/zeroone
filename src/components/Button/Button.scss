@@ -12,9 +12,10 @@
   &__text {
     vertical-align: middle;
   }
-  &__content {
-   
-  }
+  &[disabled='true']{
+    cursor: default;
+    opacity: .5;
+  } 
   svg {
     margin-right: 10px;
     path,

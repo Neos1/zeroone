@@ -25,7 +25,7 @@ class CreateTokenForm extends ExtendedForm {
         type: 'text',
         label: 'Количество токенов',
         placeholder: i18n.t('fields:quantity'),
-        rules: 'required|numeric',
+        rules: 'required|numeric|min:1|max:2147483647 ',
       }, {
         name: 'password',
         type: 'password',
