@@ -30,8 +30,10 @@ const createWallet = ({ id, payload: { mnemonic, password = '', action } }) => {
 
 const readWallet = ({ id, payload: { input, password } }) => {
   try {
+    const wallet = ejsWallet.fromV3(input, password);
     const data = {
-      privateKey: ejsWallet.fromV3(input, password).getPrivateKey(),
+      privateKey: wallet.getPrivateKey(),
+      wallet: input,
     };
     return { id, payload: data };
   } catch (e) {

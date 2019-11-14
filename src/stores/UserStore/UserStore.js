@@ -81,9 +81,10 @@ class UserStore {
   @action login(password) {
     const { appStore } = this.rootStore;
     this.logging = true;
-    this.readWallet(password).then((buffer) => {
-      if (!(buffer instanceof Error)) {
-        this.privateKey = buffer;
+    this.readWallet(password).then((data) => {
+      if (!(data.privateKey instanceof Error)) {
+        this.privateKey = data.privateKey;
+        this.setEncryptedWallet(data.wallet);
         this.authorized = true;
       }
     }).catch(() => {
@@ -97,7 +98,7 @@ class UserStore {
     return new Promise((resolve, reject) => {
       this.rootStore.walletService.readWallet(wallet, password).then((data) => {
         if (data.privateKey !== null) {
-          resolve(data.privateKey);
+          resolve(data);
         } else {
           reject();
         }

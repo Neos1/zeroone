@@ -107,6 +107,17 @@
       font-size: 14px;
     }
   }
+  &__wallet {
+    font-size: 12px;
+    &-label{
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    &-text {
+      color: $border
+    }
+  }
 }
 .seed {
   display: flex;
