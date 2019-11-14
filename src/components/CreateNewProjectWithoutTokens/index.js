@@ -22,6 +22,7 @@ import CreateTokenForm from '../../stores/FormsStore/CreateToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
 import styles from '../Login/Login.scss';
 
+@withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class CreateNewProjectWithoutTokens extends Component {
@@ -42,7 +43,7 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   createToken = (form) => {
-    const { appStore, userStore } = this.props;
+    const { appStore, userStore, t } = this.props;
     this.setState({
       position: 'creation',
     });
@@ -54,21 +55,31 @@ class CreateNewProjectWithoutTokens extends Component {
     userStore.readWallet(password)
       .then((buffer) => {
         if (!(buffer instanceof Error)) {
-          appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
-          // eslint-disable-next-line no-unused-vars
-            const interval = setInterval(() => {
-            // eslint-disable-next-line consistent-return
-              appStore.checkReceipt(hash).then((receipt) => {
-                if (receipt) {
-                  this.setState({
-                    tokenAddr: receipt.contractAddress,
-                    position: 'tokenCreated',
-                  });
-                  appStore.deployArgs = [receipt.contractAddress];
-                  clearInterval(interval);
-                }
-              }).catch(() => { appStore.displayAlert('Нет соединения с хостом, проверьте подключение к сети', 3000); });
-            }, 5000);
+          userStore.checkBalance(userStore.address).then((balance) => {
+            if (balance > 0.5) {
+              appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
+                // eslint-disable-next-line no-unused-vars
+                const interval = setInterval(() => {
+                  // eslint-disable-next-line consistent-return
+                  appStore.checkReceipt(hash).then((receipt) => {
+                    if (receipt) {
+                      this.setState({
+                        tokenAddr: receipt.contractAddress,
+                        position: 'tokenCreated',
+                      });
+                      appStore.deployArgs = [receipt.contractAddress];
+                      clearInterval(interval);
+                    }
+                  }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
+                }, 5000);
+              });
+            } else {
+              this.setState({
+                position: 'token',
+                step: 1,
+              });
+              appStore.displayAlert(t('errors:lowBalance'), 3000);
+            }
           });
         }
       }).catch(() => {
@@ -76,7 +87,7 @@ class CreateNewProjectWithoutTokens extends Component {
           position: 'token',
           step: 1,
         });
-        appStore.displayAlert('Неверный пароль, попробуйте еще раз', 3000);
+        appStore.displayAlert(t('errors:wrongPassword'), 3000);
       });
   }
 
@@ -89,28 +100,39 @@ class CreateNewProjectWithoutTokens extends Component {
 
 
   gotoUploading = (form) => {
-    const { userStore, appStore } = this.props;
+    const { userStore, appStore, t } = this.props;
     const { name, password } = form.values();
     appStore.name = name;
     appStore.password = password;
 
     userStore.readWallet(password)
       .then(() => {
-        this.setState({
-          position: 'uploading',
-        });
+        userStore.checkBalance(userStore.address)
+          .then((balance) => {
+            if (balance > 0.05) {
+              this.setState({
+                position: 'uploading',
+              });
+            } else {
+              this.setState({
+                position: 'projectInfo',
+                step: 2,
+              });
+              appStore.displayAlert(t('errors:lowBalance'), 3000);
+            }
+          });
       })
       .catch(() => {
         this.setState({
           position: 'projectInfo',
           step: 2,
         });
-        appStore.displayAlert('Ошибка, попробуйте еще раз', 3000);
+        appStore.displayAlert(t('errors:tryAgain'), 3000);
       });
   }
 
   render() {
-    const { appStore } = this.props;
+    const { appStore, t } = this.props;
     const { position, step } = this.state;
     if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     const { createToken, gotoUploading } = this;
@@ -120,7 +142,7 @@ class CreateNewProjectWithoutTokens extends Component {
           createToken(form);
         },
         onError() {
-          appStore.displayAlert('Проверьте правильность заполнения полей', 3000);
+          appStore.displayAlert(t('errors:validationError'), 3000);
         },
       },
     });
@@ -130,7 +152,7 @@ class CreateNewProjectWithoutTokens extends Component {
           gotoUploading(form);
         },
         onError() {
-          appStore.displayAlert('Проверьте правильность заполнения полей', 3000);
+          appStore.displayAlert(t('errors:validationError'), 3000);
         },
       },
     });
@@ -295,6 +317,7 @@ const StepIndicator = withTranslation()(({ t, step, count }) => (
 CreateNewProjectWithoutTokens.propTypes = {
   appStore: propTypes.object.isRequired,
   userStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 CreateTokenData.propTypes = {
   form: propTypes.object.isRequired,

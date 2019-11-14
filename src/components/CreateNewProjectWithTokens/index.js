@@ -21,6 +21,7 @@ import CreateProjectForm from '../../stores/FormsStore/CreateProject';
 import styles from '../Login/Login.scss';
 import Input from '../Input';
 
+@withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class CreateNewProjectWithTokens extends Component {
@@ -62,13 +63,34 @@ class CreateNewProjectWithTokens extends Component {
   }
 
   gotoUploading = (form) => {
-    const { appStore } = this.props;
+    const { appStore, userStore, t } = this.props;
     const { name, password } = form.values();
     appStore.name = name;
     appStore.password = password;
-    this.setState({
-      position: 'uploading',
-    });
+    userStore.readWallet(password)
+      .then(() => {
+        userStore.checkBalance(userStore.address)
+          .then((balance) => {
+            if (balance > 0.05) {
+              this.setState({
+                position: 'uploading',
+              });
+            } else {
+              this.setState({
+                position: 'projectInfo',
+                step: 2,
+              });
+              appStore.displayAlert(t('errors:lowBalance'), 3000);
+            }
+          });
+      })
+      .catch(() => {
+        this.setState({
+          position: 'projectInfo',
+          step: 2,
+        });
+        appStore.displayAlert(t('errors:tryAgain'), 3000);
+      });
   }
 
   render() {
@@ -133,7 +155,7 @@ const InputTokenAddress = withTranslation()(({ t, form }) => (
   </FormBlock>
 ));
 
-const LoadingBlock = withTranslation(({ t }) => (
+const LoadingBlock = withTranslation()(({ t }) => (
   <FormBlock>
     <Heading>
       {t('headings:checkingTokens.heading')}
@@ -229,6 +251,8 @@ const StepIndicator = withTranslation()(({ t, step, count }) => (
 
 CreateNewProjectWithTokens.propTypes = {
   appStore: propTypes.object.isRequired,
+  userStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 InputTokenAddress.propTypes = {
   form: propTypes.object.isRequired,

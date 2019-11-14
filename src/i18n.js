@@ -10,6 +10,8 @@ import fieldsEn from './locales/ENG/fields';
 import fieldsRu from './locales/RUS/fields';
 import otherEn from './locales/ENG/other';
 import otherRu from './locales/RUS/other';
+import errorsEn from './locales/ENG/errors';
+import errorsRu from './locales/RUS/errors';
 
 
 const resources = {
@@ -19,6 +21,7 @@ const resources = {
     buttons: buttonsEn,
     fields: fieldsEn,
     other: otherEn,
+    errors: errorsEn,
   },
   RUS: {
     headings: headingsRu,
@@ -26,6 +29,7 @@ const resources = {
     buttons: buttonsRu,
     fields: fieldsRu,
     other: otherRu,
+    errors: errorsRu,
   },
 };
 

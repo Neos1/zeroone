@@ -205,6 +205,12 @@
           }
         }
       }
+      &>.btn__content{
+        display: inline-block;
+        &>*{
+          display: unset;
+        }
+      }
     }
   }
 } 

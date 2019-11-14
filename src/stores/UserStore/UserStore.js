@@ -43,6 +43,15 @@ class UserStore {
     this.rootStore.walletService.readWallet(wallet, password);
   }
 
+  @action checkBalance(address) {
+    const { Web3Service: { web3 } } = this.rootStore;
+    return new Promise((resolve, reject) => {
+      web3.eth.getBalance(address).then((balance) => {
+        resolve((balance / 1.0e18).toFixed(5));
+      }).catch(() => { reject(); });
+    });
+  }
+
   @action createWallet(password) {
     return new Promise((resolve, reject) => {
       this.rootStore.walletService.createWallet(password).then((data) => {
@@ -84,7 +93,8 @@ class UserStore {
     this.readWallet(password).then((data) => {
       if (!(data.privateKey instanceof Error)) {
         this.privateKey = data.privateKey;
-        this.setEncryptedWallet(data.wallet);
+        console.log(data);
+        this.setEncryptedWallet(JSON.parse(data.wallet));
         this.authorized = true;
       }
     }).catch(() => {

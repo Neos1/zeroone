@@ -18,6 +18,7 @@ import LoginForm from '../../stores/FormsStore/LoginForm';
 
 import styles from './Login.scss';
 
+@withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class Login extends Component {
@@ -34,7 +35,7 @@ class Login extends Component {
 
   render() {
     // eslint-disable-next-line no-unused-vars
-    const { appStore, userStore } = this.props;
+    const { appStore, userStore, t } = this.props;
     const { logging } = userStore;
     const loginForm = new LoginForm({
       hooks: {
@@ -42,7 +43,7 @@ class Login extends Component {
           userStore.login(form.values().password);
         },
         onError() {
-          appStore.displayAlert('Заполните все поля', 3000);
+          appStore.displayAlert(t('errors:emptyFields'), 3000);
         },
       },
     });
@@ -109,6 +110,7 @@ const LoadingBlock = withTranslation()(({ t }) => (
 Login.propTypes = {
   appStore: propTypes.object.isRequired,
   userStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 InputForm.propTypes = {
   appStore: propTypes.object.isRequired,

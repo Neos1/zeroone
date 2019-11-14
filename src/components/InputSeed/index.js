@@ -43,7 +43,9 @@ class InputSeed extends Component {
   }
 
   submitForm = (form) => {
-    const { userStore, appStore, recover } = this.props;
+    const {
+      userStore, appStore, recover, t,
+    } = this.props;
     const values = Object.values(form.values());
     userStore.mnemonicRepeat = values;
     const mnemonic = values.join(' ');
@@ -64,13 +66,13 @@ class InputSeed extends Component {
         }
       }
     } else {
-      appStore.displayAlert('Проверьте правильность заполнения полей', 2000);
+      appStore.displayAlert(t('errors:validationError'), 2000);
     }
   }
 
   showError = () => {
-    const { appStore } = this.props;
-    appStore.displayAlert('Заполните все поля', 2000);
+    const { appStore, t } = this.props;
+    appStore.displayAlert(t('errors:emptyFields'), 2000);
   }
 
   render() {

@@ -19,6 +19,7 @@ import {
   Address, TokenName, Login, BackIcon,
 } from '../Icons';
 
+@withTranslation()
 @inject('appStore')
 @observer
 class AddExistingProject extends Component {
@@ -30,7 +31,7 @@ class AddExistingProject extends Component {
   }
 
   connectProject = (form) => {
-    const { appStore } = this.props;
+    const { appStore, t } = this.props;
     const { name, address } = form.values();
     this.setState({
       step: 'loading',
@@ -41,7 +42,7 @@ class AddExistingProject extends Component {
         appStore.addProjectToList({ name, address });
       })
       .catch(() => {
-        appStore.displayAlert('Произошла ошибка, попробуйте еще раз', 3000);
+        appStore.displayAlert(t('errors:tryAgain'), 3000);
         this.state = {
           step: 'default',
         };
@@ -49,7 +50,7 @@ class AddExistingProject extends Component {
   }
 
   render() {
-    const { appStore } = this.props;
+    const { appStore, t } = this.props;
     const { step } = this.state;
     const { connectProject } = this;
 
@@ -59,7 +60,7 @@ class AddExistingProject extends Component {
           connectProject(form);
         },
         onError() {
-          appStore.displayAlert('Произошла ошибка, проверьте корректность адреса', 3000);
+          appStore.displayAlert(t('errors:wrongAddress'), 3000);
         },
       },
     });
@@ -143,6 +144,7 @@ const MessageBlock = withTranslation()(({ t }) => (
 ));
 AddExistingProject.propTypes = {
   appStore: propTypes.object.isRequired,
+  t: propTypes.func.isRequired,
 };
 InputBlock.propTypes = {
   form: propTypes.object.isRequired,
