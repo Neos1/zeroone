@@ -7,5 +7,11 @@ const other = {
   txHash: 'Получение хэша',
   txReceipt: 'Получение чека',
   questionsUploading: 'Загрузка вопросов',
+  walletAddress: 'Кошелек',
+  balance: 'Баланс',
+  tokenSymbol: 'Символ токена',
+  count: 'Количество',
+  withTokens: 'Если есть токены ERC20',
+  withoutTokens: 'Если токенов ERC20 нет',
 };
 export default other;

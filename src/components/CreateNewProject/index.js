@@ -30,14 +30,14 @@ class CreateNewProject extends Component {
             </Heading>
             <div className={styles.create}>
               <NavLink to="/createWithTokens">
-                <strong className={styles.create__label}>Если есть токены ERC20</strong>
+                <strong className={styles.create__label}>{t('other:withTokens')}</strong>
                 <IconButton className="btn--big btn--white icon--top">
                   <Ethereum />
                   {t('buttons:withTokens')}
                 </IconButton>
               </NavLink>
               <NavLink to="/createWithoutTokens">
-                <strong className={styles.create__label}>Если токенов ERC20 нет</strong>
+                <strong className={styles.create__label}>{t('other:withoutTokens')}</strong>
                 <IconButton className="btn--big btn--white icon--top">
                   <CreateToken />
                   {t('buttons:withoutTokens')}

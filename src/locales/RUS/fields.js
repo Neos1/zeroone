@@ -1,7 +1,7 @@
 const placeholders = {
   wallet: 'Выберите кошелек',
   password: 'Пароль',
-  enterPassword: 'Ввелите пароль',
+  enterPassword: 'Введите пароль',
   repeatPassword: 'Повторите пароль',
   tokenTitle: 'Название токена',
   symbol: 'Символ',

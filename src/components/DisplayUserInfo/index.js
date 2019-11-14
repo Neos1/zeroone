@@ -21,12 +21,12 @@ const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, use
         <form>
           <div className="form__token">
             <div className="form__token-half">
-              <p className="form__token-label">Символ токена</p>
+              <p className="form__token-label">{t('other:walletAddress')}</p>
               <p className="form__token-value">{`${address.substr(0, 8)}...${address.substr(35, 41)}`}</p>
             </div>
             <div className="form__token-divider" />
             <div className="form__token-half">
-              <p className="form__token-label">Баланс</p>
+              <p className="form__token-label">{t('other:balance')}</p>
               <p className="form__token-value">{balance}</p>
             </div>
           </div>

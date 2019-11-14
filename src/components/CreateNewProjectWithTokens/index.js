@@ -174,12 +174,12 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
     <form>
       <div className="form__token">
         <div className="form__token-half">
-          <p className="form__token-label">Символ токена</p>
+          <p className="form__token-label">{t('other:tokenSymbol')}</p>
           <p className="form__token-value">{ERC.symbol}</p>
         </div>
         <div className="form__token-divider" />
         <div className="form__token-half">
-          <p className="form__token-label">Баланс</p>
+          <p className="form__token-label">{t('other:count')}</p>
           <p className="form__token-value">{ERC.totalSupply}</p>
         </div>
       </div>
