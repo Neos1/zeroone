@@ -42,7 +42,7 @@ class ProjectList extends Component {
               {' '}
               {projects}
               <NavLink to="/createProject">
-                <IconButton className="btn--big btn--white btn--dashed">
+                <IconButton className="btn--big btn--white btn--dashed btn--add-project">
                   <AddIcon />
                   {t('buttons:addProject')}
                 </IconButton>

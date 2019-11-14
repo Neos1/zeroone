@@ -223,18 +223,15 @@ class ContractService {
         return new Promise((resolve, reject) => {
           Web3Service.formTxData(address, rawTx, maxGasPrice)
             .then((formedTx) => {
-              console.log(formedTx);
               userStore.singTransaction(formedTx, password)
                 .then((signedTx) => {
                   Web3Service.sendSignedTransaction(`0x${signedTx}`)
                     .then((txHash) => {
-                      console.log(txHash);
                       const interval = setInterval(() => {
                         web3.eth.getTransactionReceipt(txHash).then((receipt) => {
                           // eslint-disable-next-line valid-typeof
                           if (receipt) {
                             clearInterval(interval);
-                            console.log(receipt);
                             resolve();
                           }
                         });

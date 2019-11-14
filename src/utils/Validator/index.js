@@ -39,7 +39,7 @@ const plugins = {
       );
       validator.useLang(languages[language]);
       validator.setMessages('en', {
-        required: 'The :attribute field is required.',
+        required: 'The field is required.',
         same: 'Fields must be same',
         password: 'Field value not valid',
         address: 'Enter valid address',

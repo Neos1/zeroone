@@ -93,7 +93,6 @@ class UserStore {
     this.readWallet(password).then((data) => {
       if (!(data.privateKey instanceof Error)) {
         this.privateKey = data.privateKey;
-        console.log(data);
         this.setEncryptedWallet(JSON.parse(data.wallet));
         this.authorized = true;
       }
@@ -139,10 +138,10 @@ class UserStore {
   @action singTransaction(data, password) {
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line consistent-return
-      this.readWallet(password).then((buffer) => {
-        if (buffer instanceof Error) return false;
+      this.readWallet(password).then((info) => {
+        if (info instanceof Error) return false;
         const privateKey = Buffer.from(
-          buffer,
+          info.privateKey,
           'hex',
         );
         const tx = new Tx(data, { chain: 'ropsten' });

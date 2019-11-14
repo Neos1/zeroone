@@ -138,7 +138,7 @@ const MessageBlock = withTranslation()(({ t }) => (
       {t('buttons:toConnectedProject')}
     </IconButton>
     <NavLink to="/projects">
-      <Button className="btn--text btn--link btn--noborder" type="submit">{t('buttons:otherProjects')}</Button>
+      <Button className="btn--text btn--link btn--noborder" type="submit">{t('buttons:otherProject')}</Button>
     </NavLink>
   </FormBlock>
 ));

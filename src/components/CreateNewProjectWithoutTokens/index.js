@@ -53,8 +53,8 @@ class CreateNewProjectWithoutTokens extends Component {
     } = form.values();
     const deployArgs = [name, symbol, Number(count)];
     userStore.readWallet(password)
-      .then((buffer) => {
-        if (!(buffer instanceof Error)) {
+      .then((data) => {
+        if (!(data instanceof Error)) {
           userStore.checkBalance(userStore.address).then((balance) => {
             if (balance > 0.5) {
               appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
@@ -210,7 +210,7 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit" disabled={form.loading}> Продолжить </Button>
+        <Button className="btn--default btn--black" type="submit" disabled={form.loading}>{t('buttons:continue')}</Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>

@@ -13,16 +13,7 @@
     vertical-align: middle;
   }
   &__content {
-    display:  table;
-    line-height: 15px;
-    text-align:  center;
-    &>* {
-      display: table-cell;
-    }
-    &>.btn__text {
-      max-width: 65px;
-      text-align: left;
-    }
+   
   }
   svg {
     margin-right: 10px;
@@ -128,11 +119,26 @@
     color: $grey;
     border-style: dashed;
     border-radius: 0;
+    
     &:hover {
       color: $primary;
     }
     &:active {
       color: $white;
+    }
+  }
+  &--add-project{
+    .btn__content{
+      display:  table;
+      line-height: 15px;
+      text-align:  center;
+      &>* {
+        display: table-cell;
+      }
+      &>.btn__text {
+        max-width: 65px;
+        text-align: left;
+      }
     }
   }
   &--noborder {
