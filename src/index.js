@@ -15,6 +15,7 @@ render(
   <Provider
     appStore={stores.appStore}
     userStore={stores.userStore}
+    dialogStore={stores.dialogStore}
   >
     <Header />
     <SimpleRouter />
