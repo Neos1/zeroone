@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 
 export const AddIcon = () => (
   <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -132,12 +132,36 @@ export const IconInfo = () => (
     <path d="M12 8.95276H12.01" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
-export const CloseIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0.247314" y="9.22632" width="12.9376" height="1.11751" transform="rotate(-45 0.247314 9.22632)" fill="#E1E4E8" />
-    <rect x="1.26392" y="0.078083" width="12.9376" height="1.11751" transform="rotate(45 1.26392 0.078083)" fill="#E1E4E8" />
+
+export const CloseIcon = ({
+  width,
+  height,
+  fill,
+}) => (
+  <svg
+    width={`${width}px`}
+    height={`${height}px`}
+    viewBox="0 0 11 11"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect x="0.247314" y="9.22632" width="12.9376" height="1.11751" transform="rotate(-45 0.247314 9.22632)" fill={fill} />
+    <rect x="1.26392" y="0.078083" width="12.9376" height="1.11751" transform="rotate(45 1.26392 0.078083)" fill={fill} />
   </svg>
 );
+
+CloseIcon.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  fill: PropTypes.string,
+};
+
+CloseIcon.defaultProps = {
+  width: 11,
+  height: 11,
+  fill: '#E1E4E8',
+};
+
 export const ChainIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M5.35645 7.60401C5.88078 8.30569 6.68371 8.74481 7.55685 8.80741C8.43 8.87 9.28725 8.5499 9.90612 7.93018L11.7163 6.11814C12.8597 4.93313 12.8434 3.0495 11.6796 1.88456C10.5158 0.719616 8.63408 0.703248 7.45026 1.84777L6.41241 2.88063" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
@@ -322,3 +346,47 @@ export const QuestionUploadingIcon = () => (
     <path d="M3.1167 41.1257C3.0446 41.1257 2.96961 41.1132 2.89751 41.0876C2.55559 40.9667 2.3771 40.5915 2.49855 40.2502C2.96064 38.9421 4.20398 38.0635 5.59153 38.0635C6.9794 38.0635 8.22306 38.9421 8.68515 40.2509C8.8066 40.5928 8.62683 40.9674 8.28555 41.0876C7.94299 41.2103 7.56902 41.0299 7.44885 40.688C7.17038 39.9038 6.42502 39.376 5.59153 39.376C4.75868 39.376 4.01332 39.9038 3.73485 40.6886C3.63967 40.9578 3.38716 41.1257 3.1167 41.1257Z" fill="black" />
   </svg>
 );
+
+export const VerifyIcon = ({
+  width,
+  height,
+  color,
+  strokeWidth,
+}) => (
+  <svg
+    width={`${width}px`}
+    height={`${height}px`}
+    viewBox="0 0 32 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M16.0003 29.3337C23.3641 29.3337 29.3337 23.3641 29.3337 16.0003C29.3337 8.63653 23.3641 2.66699 16.0003 2.66699C8.63653 2.66699 2.66699 8.63653 2.66699 16.0003C2.66699 23.3641 8.63653 29.3337 16.0003 29.3337Z"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M22 12L15.125 19L12 15.8182"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+VerifyIcon.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  strokeWidth: PropTypes.number,
+  color: PropTypes.string,
+};
+
+VerifyIcon.defaultProps = {
+  width: 32,
+  height: 32,
+  strokeWidth: 2,
+  color: '#000',
+};
