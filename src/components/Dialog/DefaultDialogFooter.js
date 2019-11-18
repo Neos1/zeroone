@@ -21,7 +21,7 @@ class DefaultDialogFooter extends React.Component {
         `}
       >
         <Button
-          className="btn--default btn--black"
+          className={`btn--default btn--black ${styles.footer__button}`}
           onClick={hide}
         >
           {t('buttons:continue')}
