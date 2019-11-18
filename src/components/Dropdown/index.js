@@ -103,7 +103,8 @@ Dropdown.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   subOptions: propTypes.object,
   onSelect: propTypes.func.isRequired,
-  field: propTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  field: propTypes.object.isRequired,
 };
 Dropdown.defaultProps = {
   children: '',

@@ -118,7 +118,8 @@ InputForm.propTypes = {
   appStore: propTypes.shape({
     wallets: propTypes.arrayOf(propTypes.object).isRequired,
   }).isRequired,
-  form: propTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  form: propTypes.object.isRequired,
 };
 
 
