@@ -1,6 +1,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import propTypes from 'prop-types';
+
 import styles from './Button.scss';
 
 export const Button = ({
@@ -25,6 +26,7 @@ Button.propTypes = {
   disabled: propTypes.bool,
   type: propTypes.string,
 };
+
 Button.defaultProps = {
   type: 'button',
   disabled: false,
@@ -56,6 +58,7 @@ IconButton.propTypes = {
   disabled: propTypes.bool,
   type: propTypes.string,
 };
+
 IconButton.defaultProps = {
   type: 'button',
   disabled: false,

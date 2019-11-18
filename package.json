@@ -39,6 +39,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-i18next": "^11.1.0",
+    "react-portal": "^4.2.0",
     "react-router-dom": "^5.1.2",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",

@@ -10,6 +10,30 @@
 }
 body {
   background-color: #FAFBFC;
+
+  &::after {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 16;
+    width: 100%;
+    height: 100%;
+    overflow: none;
+    background: rgba(250, 250, 250, 0.5);
+    opacity: 0;
+    backdrop-filter: blur(10px);
+    transition: opacity 0.4s 0.1s;
+    content: '';
+    pointer-events: none;
+  }
+
+  &.dialog-overlay {
+    overflow: hidden;
+
+    &::after {
+      opacity: 1;
+    }
+  }
 }
 a {
   color: inherit;

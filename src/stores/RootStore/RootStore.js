@@ -4,6 +4,7 @@ import { observable, action, computed } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
+import DialogStore from '../DialogStore';
 import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
@@ -32,6 +33,7 @@ class RootStore {
     this.userStore = new UserStore(this);
     this.walletService = new WalletService();
     this.contractService = new ContractService(this);
+    this.dialogStore = new DialogStore();
   }
 
   /**
@@ -44,8 +46,8 @@ class RootStore {
 
 
   @computed get stores() {
-    const { appStore, userStore } = this;
-    return { appStore, userStore };
+    const { appStore, userStore, dialogStore } = this;
+    return { appStore, userStore, dialogStore };
   }
 }
 const rootStore = window.rootStore =  new RootStore();
