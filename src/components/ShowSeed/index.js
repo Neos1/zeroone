@@ -88,8 +88,9 @@ const SeedWord = ({ word, id, visible }) => (
 );
 
 ShowSeed.propTypes = {
-  userStore: propTypes.object.isRequired,
-  appStore: propTypes.object.isRequired,
+  userStore: propTypes.shape({
+    mnemonic: propTypes.arrayOf(propTypes.string).isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 SeedWord.propTypes = {

@@ -56,7 +56,10 @@ class ProjectList extends Component {
 }
 
 ProjectList.propTypes = {
-  appStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    readProjectList: propTypes.func.isRequired,
+    projectList: propTypes.arrayOf(propTypes.object).isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 

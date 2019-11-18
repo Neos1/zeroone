@@ -40,7 +40,7 @@ class Input extends Component {
 Input.propTypes = {
   children: propTypes.element.isRequired,
   className: propTypes.string,
-  field: propTypes.object.isRequired,
+  field: propTypes.func.isRequired,
   onInput: propTypes.func,
 };
 Input.defaultProps = {

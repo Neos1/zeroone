@@ -143,10 +143,14 @@ const MessageBlock = withTranslation()(({ t }) => (
   </FormBlock>
 ));
 AddExistingProject.propTypes = {
-  appStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    checkProject: propTypes.func.isRequired,
+    addProjectToList: propTypes.func.isRequired,
+    displayAlert: propTypes.func.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 InputBlock.propTypes = {
-  form: propTypes.object.isRequired,
+  form: propTypes.func.isRequired,
 };
 export default AddExistingProject;

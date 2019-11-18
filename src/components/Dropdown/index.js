@@ -100,9 +100,10 @@ class Dropdown extends Component {
 Dropdown.propTypes = {
   children: propTypes.element,
   options: propTypes.arrayOf(propTypes.object).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
   subOptions: propTypes.object,
   onSelect: propTypes.func.isRequired,
-  field: propTypes.object.isRequired,
+  field: propTypes.func.isRequired,
 };
 Dropdown.defaultProps = {
   children: '',

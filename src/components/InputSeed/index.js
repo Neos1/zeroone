@@ -104,8 +104,18 @@ class InputSeed extends Component {
 
 
 InputSeed.propTypes = {
-  userStore: propTypes.object.isRequired,
-  appStore: propTypes.object.isRequired,
+  userStore: propTypes.shape({
+    mnemonicRepeat: propTypes.arrayOf(propTypes.string).isRequired,
+    isSeedValid: propTypes.func.isRequired,
+    recoverWallet: propTypes.func.isRequired,
+    setEncryptedWallet: propTypes.func.isRequired,
+    getEthBalance: propTypes.func.isRequired,
+    saveWalletToFile: propTypes.func.isRequired,
+    mnemonic: propTypes.arrayOf(propTypes.string).isRequired,
+  }).isRequired,
+  appStore: propTypes.shape({
+    displayAlert: propTypes.func.isRequired,
+  }).isRequired,
   recover: propTypes.bool.isRequired,
   t: propTypes.func.isRequired,
 };

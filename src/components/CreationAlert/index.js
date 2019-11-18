@@ -18,7 +18,9 @@ const WalletAddress = withTranslation()(inject('userStore')(observer(({ t, userS
   </div>
 ))));
 WalletAddress.propTypes = {
-  userStore: propTypes.object.isRequired,
+  userStore: propTypes.shape({
+    address: propTypes.string.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 

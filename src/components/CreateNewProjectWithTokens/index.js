@@ -259,18 +259,28 @@ const StepIndicator = withTranslation()(({ t, step, count }) => (
 ));
 
 CreateNewProjectWithTokens.propTypes = {
-  appStore: propTypes.object.isRequired,
-  userStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    checkErc: propTypes.func.isRequired,
+    deployArgs: propTypes.arrayOf(propTypes.any).isRequired,
+    name: propTypes.string.isRequired,
+    password: propTypes.string.isRequired,
+    displayAlert: propTypes.func.isRequired,
+  }).isRequired,
+  userStore: propTypes.shape({
+    readWallet: propTypes.func.isRequired,
+    checkBalance: propTypes.func.isRequired,
+    address: propTypes.string.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 InputTokenAddress.propTypes = {
-  form: propTypes.object.isRequired,
+  form: propTypes.func.isRequired,
 };
 ContractConfirmation.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
 InputProjectData.propTypes = {
-  form: propTypes.object.isRequired,
+  form: propTypes.func.isRequired,
   onClick: propTypes.func.isRequired,
 };
 StepIndicator.propTypes = {

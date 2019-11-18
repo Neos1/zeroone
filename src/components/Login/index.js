@@ -103,13 +103,22 @@ const LoadingBlock = withTranslation()(({ t }) => (
 ));
 
 Login.propTypes = {
-  appStore: propTypes.object.isRequired,
-  userStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    displayAlert: propTypes.func.isRequired,
+    readWalletList: propTypes.func.isRequired,
+  }).isRequired,
+  userStore: propTypes.shape({
+    logging: propTypes.bool.isRequired,
+    login: propTypes.func.isRequired,
+    authorized: propTypes.bool.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 InputForm.propTypes = {
-  appStore: propTypes.object.isRequired,
-  form: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    wallets: propTypes.arrayOf(propTypes.object).isRequired,
+  }).isRequired,
+  form: propTypes.func.isRequired,
 };
 
 

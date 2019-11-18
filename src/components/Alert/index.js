@@ -19,7 +19,10 @@ const Alert = inject('appStore')(observer(({ appStore }) => (
 )));
 
 Alert.propTypes = {
-  appStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    alertVisible: propTypes.bool.isRequired,
+    alertText: propTypes.string.isRequired,
+  }).isRequired,
   children: propTypes.string.isRequired,
 };
 

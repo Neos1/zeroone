@@ -149,12 +149,24 @@ const AlertBlock = withTranslation()(({ t }) => (
 
 // //ProjectUploading.propTypes = {};
 ProjectUploading.propTypes = {
-  appStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    deployContract: propTypes.func.isRequired,
+    checkReceipt: propTypes.func.isRequired,
+    deployArgs: propTypes.array.isRequired,
+    name: propTypes.string.isRequired,
+    password: propTypes.string.isRequired,
+    addProjectToList: propTypes.func.isRequired,
+    deployQuestions: propTypes.func.isRequired,
+    displayAlert: propTypes.func.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 Progress.propTypes = {
   step: propTypes.number.isRequired,
-  appStore: propTypes.object.isRequired,
+  appStore: propTypes.shape({
+    uploadedQuestion: propTypes.number.isRequired,
+    countOfQuestions: propTypes.number.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 

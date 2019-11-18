@@ -15,7 +15,9 @@ class RequiredAuthorization extends React.Component {
 
 RequiredAuthorization.propTypes = {
   children: propTypes.node.isRequired,
-  userStore: propTypes.oneOfType([propTypes.object]).isRequired,
+  userStore: propTypes.shape({
+    authorized: propTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default RequiredAuthorization;

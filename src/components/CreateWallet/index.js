@@ -103,7 +103,11 @@ const CreationLoader = withTranslation(['headings'])(({ t }) => (
 ));
 
 CreateWallet.propTypes = {
-  userStore: propTypes.object.isRequired,
+  userStore: propTypes.shape({
+    recoverWallet: propTypes.func.isRequired,
+    saveWalletToFile: propTypes.func.isRequired,
+    createWallet: propTypes.func.isRequired,
+  }).isRequired,
   recover: propTypes.bool.isRequired,
 };
 
