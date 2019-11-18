@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 const HeaderNav = () => (
   <nav className="header__nav">
-    <NavLink className="header__link" to="/votings">Голосования</NavLink>
+    <NavLink className="header__link active" to="/votings">Голосования</NavLink>
     /
     <NavLink className="header__link" to="/questions">Вопросы</NavLink>
     /
