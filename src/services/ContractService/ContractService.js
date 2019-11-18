@@ -166,8 +166,8 @@ class ContractService {
    * @param {string} from address of caller
    * @param params parameters for method
    */
-  async callMethod(method, from, ...params) {
-    const data = await this.contract.methods[method](...params).call({ from });
+  async callMethod(method, ...params) {
+    const data = await this.contract.methods[method](...params).call();
     return data;
   }
 
@@ -264,7 +264,7 @@ class ContractService {
   }
 
   getQuestion(id) {
-    return this._contract.methods.question(id).call();
+    return this.callMethod('question', id);
   }
 
   /**
@@ -272,9 +272,8 @@ class ContractService {
    * @param {number} id id of voting
    * @param {string} from address who calls method
    */
-  async fetchVoting(id, from) {
-    const data = await this.contract.methods.getVoting(id).call({ from });
-    return data;
+  async fetchVoting(id) {
+    return this.callMethod('getVoting', id);
   }
 
   /**
@@ -282,9 +281,8 @@ class ContractService {
    * @param {number} id id of voting
    * @param {string} from address, who calls
    */
-  async fetchVotingStats(id, from) {
-    const data = await this.contract.methods.getVotingStats(id).call({ from });
-    return data;
+  async fetchVotingStats(id) {
+    return this.callMethod('getVotingStats', id);
   }
 
   /**
@@ -293,14 +291,14 @@ class ContractService {
    * @param {string} from address, who starts
    * @param params parameters of voting
    */
-  async startVoting(id, from, params) {
+  async sendVotingStart(id, from, params) {
     return (this, id, from, params);
   }
 
   /**
    * Finishes the voting
    */
-  async finishVoting() {
+  async sendVotingFinish() {
     return this;
   }
 }

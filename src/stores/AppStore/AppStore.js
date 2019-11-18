@@ -40,7 +40,7 @@ class AppStore {
    * Getting list of url's for sending this to wallet service
    * @function
    */
-  @action readWalletList = () => {
+  @action readWalletList() {
     const { Web3Service: { web3: { eth } } } = this.rootStore;
     this.walletList = {};
 
@@ -59,7 +59,7 @@ class AppStore {
    * selecting encrypted wallet and pushing this to userStore
    * @param {string} address address of wallet
    */
-  @action selectWallet = (address) => {
+  @action selectWallet(address) {
     const { userStore } = this.rootStore;
     const key = address.replace('0x', '');
     userStore.setEncryptedWallet(this.walletList[key]);
@@ -69,7 +69,7 @@ class AppStore {
    * Reading list of projects for displaing them in project list
    * @function
    */
-  @action readProjectList = () => {
+  @action readProjectList() {
     const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json')));
     this.projectList = config.projects;
   }
@@ -78,7 +78,7 @@ class AppStore {
    * Adding encrypted Wallet to userStore
    * @param {string} encryptedWallet encrypted keystore v3
    */
-  @action setUserWallet = (encryptedWallet) => {
+  @action setUserWallet(encryptedWallet) {
     this.userStore.setEncryptedWallet(encryptedWallet);
   }
 
