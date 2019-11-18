@@ -21,8 +21,6 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle":"off",
-    "import/no-cycle": "off",
-    "react/forbid-prop-types": "off",
-    "linebreak-style": "off"
+    "react/forbid-prop-types": "off"
   }
 }

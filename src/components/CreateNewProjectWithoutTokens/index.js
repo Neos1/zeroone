@@ -63,45 +63,48 @@ class CreateNewProjectWithoutTokens extends Component {
       name, symbol, count, password,
     } = form.values();
     const deployArgs = [name, symbol, Number(count)];
-    userStore.readWallet(password)
-      .then((data) => {
-        if (!(data instanceof Error)) {
-          userStore.checkBalance(userStore.address).then((balance) => {
-            if (balance > 0.5) {
-              appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
+    return new Promise((resolve, reject) => {
+      userStore.readWallet(password)
+        .then((data) => {
+          if (!(data instanceof Error)) {
+            userStore.checkBalance(userStore.address).then((balance) => {
+              if (balance > 0.5) {
+                appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
                 // eslint-disable-next-line no-unused-vars
-                const interval = setInterval(() => {
+                  const interval = setInterval(() => {
                   // eslint-disable-next-line consistent-return
-                  appStore.checkReceipt(hash).then((receipt) => {
-                    if (receipt) {
-                      this.setState({
-                        tokenAddr: receipt.contractAddress,
-                        position: 'tokenCreated',
-                      });
-                      appStore.deployArgs = [receipt.contractAddress];
-                      clearInterval(interval);
-                    }
-                  }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
-                }, 5000);
-              });
-              Promise.resolve();
-            } else {
-              this.setState({
-                position: 'token',
-                step: 1,
-              });
-              appStore.displayAlert(t('errors:lowBalance'), 3000);
-            }
+                    appStore.checkReceipt(hash).then((receipt) => {
+                      if (receipt) {
+                        this.setState({
+                          tokenAddr: receipt.contractAddress,
+                          position: 'tokenCreated',
+                        });
+                        appStore.deployArgs = [receipt.contractAddress];
+                        clearInterval(interval);
+                      }
+                    }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
+                  }, 5000);
+                });
+                resolve();
+              } else {
+                this.setState({
+                  position: 'token',
+                  step: 1,
+                });
+                appStore.displayAlert(t('errors:lowBalance'), 3000);
+                reject();
+              }
+            });
+          }
+        }).catch(() => {
+          this.setState({
+            position: 'token',
+            step: 1,
           });
-        }
-      }).catch(() => {
-        this.setState({
-          position: 'token',
-          step: 1,
+          appStore.displayAlert(t('errors:wrongPassword'), 3000);
+          reject();
         });
-        appStore.displayAlert(t('errors:wrongPassword'), 3000);
-        Promise.reject();
-      });
+    });
   }
 
   showValidationError = () => {

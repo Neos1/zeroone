@@ -30,7 +30,11 @@ class SeedInput extends Component {
       <form form={seedForm} onSubmit={seedForm.onSubmit}>
         <div className={styles.seed}>
           {seed.map((word, index) => (
-            <Input type="text" field={seedForm.$(`word_${index + 1}`)} placeholder="">
+            <Input
+              type="text"
+              field={seedForm.$(`word_${index + 1}`)}
+              key={`wordInput-${index + 1}`}
+            >
               <span>{index + 1}</span>
             </Input>
           ))}

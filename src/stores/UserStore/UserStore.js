@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
 import i18n from 'i18next';
 /**
@@ -171,8 +171,8 @@ class UserStore {
     this.balance = await web3.eth.getBalance(this.address);
   }
 
-  set mnemonic(mnemonic) {
-    this._mnemonic = mnemonic.split('');
+  @computed get mnemonic() {
+    return this._mnemonic;
   }
 }
 

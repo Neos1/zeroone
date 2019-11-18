@@ -138,6 +138,7 @@ class ContractService {
     return this.contract.methods[method](params).encodeABI();
   }
 
+
   async checkTokens(address) {
     const { rootStore: { Web3Service, userStore } } = this;
     const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ERC20.abi')));

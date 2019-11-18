@@ -48,8 +48,8 @@ class ShowSeed extends Component {
               {t('headings:showSeed.subheading')}
             </Heading>
             <div className={styles.seed}>
-              {userStore._mnemonic.map((word, id) => (
-                <SeedWord {...{ word, id, visible }} />
+              {userStore.mnemonic.map((word, id) => (
+                <SeedWord key={`word-${id + 1}`} {...{ word, id, visible }} />
               ))}
             </div>
             <div className={styles.form__submit}>

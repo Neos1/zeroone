@@ -39,7 +39,7 @@ class Dropdown extends Component {
   }
 
 
-  selectOption = (selected) => {
+  handleSelect = (selected) => {
     const { onSelect, field } = this.props;
     this.setState({
       selectedLabel: selected,
@@ -64,13 +64,13 @@ class Dropdown extends Component {
     } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
 
-    const getOptions = options.map((option, index) => (
+    const getOptions = options.map((option) => (
       <DropdownOption
-        key={`${index + 1}`}
+        key={`dropdown-${option.label}`}
         label={option.label}
         value={option.label}
         subOption={subOptions[option.label.replace('0x', '')]}
-        select={this.selectOption}
+        select={this.handleSelect}
       />
     ));
     // eslint-disable-next-line no-console

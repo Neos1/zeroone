@@ -1,16 +1,26 @@
-/* eslint-disable no-console */
 let requestId = 0;
 
+/**  Wrapper class for Workers */
 class WorkerWrapper {
     worker;
 
     stack = {};
+    /**
+     * @constructor
+     * @param {function} worker instance of worker, which will be used
+     */
 
     constructor(worker) {
       this.worker = worker;
       this._listen();
     }
 
+    /**
+     * sends Data in worker
+     * @function
+     * @param {object} data data for worker
+     * @return {Promise} promise, which resolves with worker message
+     */
     send(data) {
       const { worker, stack } = this;
       requestId += 1;

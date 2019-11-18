@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable no-empty */
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -9,19 +5,17 @@ import { NavLink, Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Heading from '../Heading';
-import Input from '../Input';
-
-import styles from '../Login/Login.scss';
 import FormBlock from '../FormBlock';
-import { Button, IconButton } from '../Button';
+import { IconButton } from '../Button';
 import { BackIcon } from '../Icons';
 import Loader from '../Loader';
 import SeedInput from './SeedForm';
 
+import styles from '../Login/Login.scss';
+
 @withTranslation()
 @inject('appStore', 'userStore')
 @observer
-
 class InputSeed extends Component {
   constructor(props) {
     super(props);
@@ -76,7 +70,6 @@ class InputSeed extends Component {
 
   render() {
     const { userStore, recover, t } = this.props;
-    const { _mnemonic: seed } = userStore;
     const { loading, redirect } = this.state;
     if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
     return (
@@ -87,7 +80,15 @@ class InputSeed extends Component {
               {t('headings:seedCheck.heading')}
               {loading ? t('headings:seedCheck.subheading.0') : t('headings:seedCheck.subheading.1')}
             </Heading>
-            {loading ? <Loader /> : <SeedInput submit={this.submitForm} seed={seed} error={this.showError} />}
+            {loading
+              ? <Loader />
+              : (
+                <SeedInput
+                  submit={this.submitForm}
+                  seed={userStore.mnemonic}
+                  error={this.showError}
+                />
+              )}
           </FormBlock>
           <NavLink to={`${recover ? '/' : '/showSeed'}`}>
             <IconButton className="btn--link btn--noborder btn--back">

@@ -14,7 +14,7 @@ class WalletService {
    * Decrypts wallet
    * @param {string} url path to wallet
    * @param {string} password password for decrypting
-   * @returns {object} Wallet instance
+   * @returns {Promise}
    */
   readWallet(input, password) {
     const data = {
@@ -28,7 +28,6 @@ class WalletService {
   /**
    * Write encrypted wallet to file
    * @param {string} encryptedWallet
-   * @return {bool} write status: 1 - success, 2 - error
    */
   writeWalletToFile(encryptedWallet) {
     let date = new Date();
@@ -41,7 +40,7 @@ class WalletService {
   /**
    * Creates new wallet
    * @param {string} password - combination of symbols which will be allow decode wallet
-   * @returns {object} encryptedWallet,seed
+   * @returns {Promise}
    */
   createWallet(password, seed = '') {
     const mnemonic = seed === '' ? bip39.generateMnemonic() : seed;
@@ -56,7 +55,7 @@ class WalletService {
   /**
    * Recover wallet from 12-word recover phrase
    * @param {string} mnemonic - 12 word recover phrase
-   * @returns {object} wallet object
+   * @returns {Promise}
    */
   recoverWallet(mnemonic) {
     return new Promise((resolve, reject) => {

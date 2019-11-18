@@ -15,19 +15,12 @@ import { Button } from '../Button';
 import Loader from '../Loader';
 import LoginForm from '../../stores/FormsStore/LoginForm';
 
-
 import styles from './Login.scss';
 
 @withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
   componentDidMount() {
     const { appStore } = this.props;
     appStore.readWalletList();
