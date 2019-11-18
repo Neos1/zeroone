@@ -13,6 +13,6 @@ Explanation.defaultProps = {
 };
 
 Explanation.propTypes = {
-  children: propTypes.any,
+  children: propTypes.node,
 };
 export default Explanation;
