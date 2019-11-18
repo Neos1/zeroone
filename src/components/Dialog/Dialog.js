@@ -126,14 +126,7 @@ Dialog.propTypes = {
     'lg',
   ]),
   name: PropTypes.string.isRequired,
-  topIcon: PropTypes.node,
   header: PropTypes.string.isRequired,
-  footer: PropTypes.element,
-  className: PropTypes.string,
-  history: PropTypes.bool,
-  onOpen: PropTypes.func,
-  onClose: PropTypes.func,
-  onCancel: PropTypes.func,
   dialogStore: PropTypes.shape({
     add: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
@@ -142,6 +135,13 @@ Dialog.propTypes = {
     dialog: PropTypes.string.isRequired,
     hide: PropTypes.func.isRequired,
   }).isRequired,
+  topIcon: PropTypes.node,
+  footer: PropTypes.element,
+  className: PropTypes.string,
+  history: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func,
+  onCancel: PropTypes.func,
   children: PropTypes.node,
 };
 
