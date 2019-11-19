@@ -14,6 +14,7 @@ class Dialog extends React.Component {
   static propTypes = {
     size: PropTypes.oneOf([
       'sm',
+      'md',
       'lg',
     ]),
     name: PropTypes.string.isRequired,
@@ -148,9 +149,15 @@ class Dialog extends React.Component {
                 }
                 <div className={styles.dialog__title}>{header}</div>
               </div>
-              <div className={`${styles.dialog__body} ${footer ? styles['dialog__body--with-footer'] : ''}`}>
-                {props.children}
-              </div>
+              {
+                props.children
+                  ? (
+                    <div className={`${styles.dialog__body} ${footer ? styles['dialog__body--with-footer'] : ''}`}>
+                      {props.children}
+                    </div>
+                  )
+                  : null
+              }
               {footer}
             </div>
           </div>
