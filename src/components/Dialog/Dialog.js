@@ -1,3 +1,4 @@
+/* eslint-disable react/static-property-placement */
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
@@ -10,6 +11,46 @@ import styles from './Dialog.scss';
 @inject('dialogStore')
 @observer
 class Dialog extends React.Component {
+  static propTypes = {
+    size: PropTypes.oneOf([
+      'sm',
+      'lg',
+    ]),
+    name: PropTypes.string.isRequired,
+    header: PropTypes.string.isRequired,
+    dialogStore: PropTypes.shape({
+      add: PropTypes.func.isRequired,
+      remove: PropTypes.func.isRequired,
+      closing: PropTypes.bool.isRequired,
+      open: PropTypes.bool.isRequired,
+      dialog: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
+      ]),
+      hide: PropTypes.func.isRequired,
+    }).isRequired,
+    topIcon: PropTypes.node,
+    footer: PropTypes.element,
+    className: PropTypes.string,
+    history: PropTypes.bool,
+    onOpen: PropTypes.func,
+    onClose: PropTypes.func,
+    onCancel: PropTypes.func,
+    children: PropTypes.node,
+  };
+
+  static defaultProps = {
+    size: 'sm',
+    className: '',
+    topIcon: null,
+    footer: (<DefaultDialogFooter />),
+    history: true,
+    onOpen: null,
+    onClose: null,
+    onCancel: null,
+    children: null,
+  };
+
   componentDidMount() {
     const {
       name,
@@ -118,43 +159,5 @@ class Dialog extends React.Component {
     );
   }
 }
-
-
-Dialog.propTypes = {
-  size: PropTypes.oneOf([
-    'sm',
-    'lg',
-  ]),
-  name: PropTypes.string.isRequired,
-  header: PropTypes.string.isRequired,
-  dialogStore: PropTypes.shape({
-    add: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired,
-    closing: PropTypes.bool.isRequired,
-    open: PropTypes.bool.isRequired,
-    dialog: PropTypes.string.isRequired,
-    hide: PropTypes.func.isRequired,
-  }).isRequired,
-  topIcon: PropTypes.node,
-  footer: PropTypes.element,
-  className: PropTypes.string,
-  history: PropTypes.bool,
-  onOpen: PropTypes.func,
-  onClose: PropTypes.func,
-  onCancel: PropTypes.func,
-  children: PropTypes.node,
-};
-
-Dialog.defaultProps = {
-  size: 'sm',
-  className: '',
-  topIcon: null,
-  footer: (<DefaultDialogFooter />),
-  history: true,
-  onOpen: null,
-  onClose: null,
-  onCancel: null,
-  children: null,
-};
 
 export default Dialog;

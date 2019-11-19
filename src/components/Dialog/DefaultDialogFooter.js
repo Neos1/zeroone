@@ -1,3 +1,4 @@
+/* eslint-disable react/static-property-placement */
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { PropTypes } from 'prop-types';
@@ -9,6 +10,17 @@ import styles from './Dialog.scss';
 @withTranslation('buttons')
 @inject('dialogStore')
 class DefaultDialogFooter extends React.Component {
+  static propTypes = {
+    t: PropTypes.func,
+    dialogStore: PropTypes.shape({
+      hide: PropTypes.func.isRequired,
+    }).isRequired,
+  };
+
+  static defaultProps = {
+    t: (k) => (k),
+  };
+
   render() {
     const { props } = this;
     const { dialogStore, t } = props;
@@ -31,15 +43,15 @@ class DefaultDialogFooter extends React.Component {
   }
 }
 
-DefaultDialogFooter.propTypes = {
-  t: PropTypes.func,
-  dialogStore: PropTypes.shape({
-    hide: PropTypes.func.isRequired,
-  }).isRequired,
-};
+// DefaultDialogFooter.propTypes = {
+//   t: PropTypes.func,
+//   dialogStore: PropTypes.shape({
+//     hide: PropTypes.func.isRequired,
+//   }).isRequired,
+// };
 
-DefaultDialogFooter.defaultProps = {
-  t: (k) => (k),
-};
+// DefaultDialogFooter.defaultProps = {
+//   t: (k) => (k),
+// };
 
 export default DefaultDialogFooter;

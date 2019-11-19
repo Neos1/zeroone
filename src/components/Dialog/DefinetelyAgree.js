@@ -1,3 +1,4 @@
+/* eslint-disable react/static-property-placement */
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { inject } from 'mobx-react';
@@ -6,8 +7,15 @@ import Dialog from './Dialog';
 import { VerifyIcon } from '../Icons';
 // import FinPassForm from '../../stores/FormsStore/FinPassForm';
 
+// TODO Finalize after form universal create
 @inject('dialogStore')
+@withTranslation()
 class DefinetelyAgree extends React.Component {
+  static propTypes = {
+    t: PropTypes.func.isRequired,
+    dialogStore: PropTypes.shape({}).isRequired,
+  };
+
   // finPassForm = new FinPassForm({
   //   onSuccess(form) {
   //     return form;
@@ -23,7 +31,7 @@ class DefinetelyAgree extends React.Component {
     return (
       <Dialog
         name="definetely-agree"
-        header={t('dialog:definetelyAgree')}
+        header={t('dialogs:definetelyAgree')}
         topIcon={(<VerifyIcon />)}
       >
         definetely agree content
@@ -32,9 +40,4 @@ class DefinetelyAgree extends React.Component {
   }
 }
 
-DefinetelyAgree.propTypes = {
-  t: PropTypes.func.isRequired,
-  dialogStore: PropTypes.shape({}).isRequired,
-};
-
-export default withTranslation()(DefinetelyAgree);
+export default DefinetelyAgree;

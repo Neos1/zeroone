@@ -1,6 +1,4 @@
-/* eslint-disable no-multi-assign */
-/* eslint-disable no-multi-spaces */
-import { observable, action, computed } from 'mobx';
+import { action, computed } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
@@ -11,22 +9,6 @@ import ContractService from '../../services/ContractService';
 import { fs, path, ROOT_DIR } from '../../constants';
 
 class RootStore {
-  // stores
-  @observable projectStore;
-
-  @observable appStore;
-
-  @observable userStore;
-
-  @observable dialogStore;
-
-  // services
-  @observable walletService;
-
-  @observable contractService;
-
-  @observable Web3Service;
-
   constructor() {
     const configRaw = fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8');
     const config = JSON.parse(configRaw);
@@ -46,11 +28,13 @@ class RootStore {
     this.projectStore = new ProjectStore(address);
   }
 
-
   @computed get stores() {
     const { appStore, userStore, dialogStore } = this;
     return { appStore, userStore, dialogStore };
   }
 }
-const rootStore = window.rootStore =  new RootStore();
+
+const rootStore = new RootStore();
+window.rootStore = rootStore;
+
 export default rootStore;

@@ -14,6 +14,12 @@
     position: relative;
     z-index: 1;
     min-height: 325px;
+
+    &.agreed-message {
+      .dialog__header {
+        padding-top: 92px;
+      }
+    }
   }
 }
 
@@ -42,6 +48,11 @@
 
     &-icon {
       margin-bottom: 18px;
+
+      svg {
+        width: auto;
+        height: auto;
+      }
     }
   }
 
@@ -64,6 +75,11 @@
 
     &--default {
       padding-top: 55px;
+    }
+
+    &--agreed-message {
+      padding-top: 53px;
+      padding-bottom: 58px;
     }
   }
 
