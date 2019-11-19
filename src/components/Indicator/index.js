@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import styles from './Indicator.scss';
 
 const Indicator = ({ checked }) => (
-  <span className={`${styles.indicator} ${checked ? 'indicator--checked' : ''}`} />
+  <span className={`${styles.indicator} ${checked ? styles['indicator--checked'] : ''}`} />
 );
 
 Indicator.propTypes = {

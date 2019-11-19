@@ -4,8 +4,8 @@ import styles from './Heading.scss';
 
 const Heading = ({ children }) => (
   <div className={styles.heading}>
-    <h2 className="heading--main">{children[0]}</h2>
-    {children[1] ? <p className="heading--sub">{children[1]}</p> : ''}
+    <h2 className={styles['heading--main']}>{children[0]}</h2>
+    {children[1] ? <p className={styles['heading--sub']}>{children[1]}</p> : ''}
   </div>
 );
 Heading.propTypes = {

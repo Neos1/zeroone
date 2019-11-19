@@ -37,11 +37,30 @@ class CreateNewProjectWithoutTokens extends Component {
     },
   });
 
+  createProject = new CreateProjectForm({
+    hooks: {
+      onSuccess: (form) => new Promise(() => {
+        this.gotoUploading(form);
+      }),
+      onError: () => {
+        this.showError();
+      },
+    },
+  });
+
+  steps = {
+    token: 1,
+    creation: 2,
+    tokenCreated: 3,
+    projectInfo: 4,
+  }
+
+
   constructor(props) {
     super(props);
     this.state = {
-      position: 'token',
       step: 1,
+      currentStep: this.steps.token,
       tokenAddr: '',
       disabled: false,
     };
@@ -49,15 +68,17 @@ class CreateNewProjectWithoutTokens extends Component {
 
 
   returnToContractConnecting = () => {
+    const { steps } = this;
     this.setState({
-      position: 'tokenCreated',
+      currentStep: steps.tokenCreated,
     });
   }
 
   createToken = (form) => {
+    const { steps } = this;
     const { appStore, userStore, t } = this.props;
     this.setState({
-      position: 'creation',
+      currentStep: steps.creation,
     });
     const {
       name, symbol, count, password,
@@ -77,7 +98,7 @@ class CreateNewProjectWithoutTokens extends Component {
                       if (receipt) {
                         this.setState({
                           tokenAddr: receipt.contractAddress,
-                          position: 'tokenCreated',
+                          currentStep: steps.tokenCreated,
                         });
                         appStore.deployArgs = [receipt.contractAddress];
                         clearInterval(interval);
@@ -88,7 +109,7 @@ class CreateNewProjectWithoutTokens extends Component {
                 resolve();
               } else {
                 this.setState({
-                  position: 'token',
+                  currentStep: steps.token,
                   step: 1,
                 });
                 appStore.displayAlert(t('errors:lowBalance'), 3000);
@@ -98,7 +119,7 @@ class CreateNewProjectWithoutTokens extends Component {
           }
         }).catch(() => {
           this.setState({
-            position: 'token',
+            currentStep: steps.token,
             step: 1,
           });
           appStore.displayAlert(t('errors:wrongPassword'), 3000);
@@ -113,14 +134,16 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   gotoProjectInfo = () => {
+    const { steps } = this;
     this.setState({
-      position: 'projectInfo',
+      currentStep: steps.projectInfo,
       step: 2,
     });
   }
 
 
   gotoUploading = (form) => {
+    const { steps } = this;
     const { userStore, appStore, t } = this.props;
     const { name, password } = form.values();
     appStore.name = name;
@@ -132,11 +155,11 @@ class CreateNewProjectWithoutTokens extends Component {
           .then((balance) => {
             if (balance > 0.05) {
               this.setState({
-                position: 'uploading',
+                currentStep: steps.uploading,
               });
             } else {
               this.setState({
-                position: 'projectInfo',
+                currentStep: steps.projectInfo,
                 step: 2,
                 disabled: false,
               });
@@ -146,7 +169,7 @@ class CreateNewProjectWithoutTokens extends Component {
       })
       .catch(() => {
         this.setState({
-          position: 'projectInfo',
+          currentStep: steps.projectInfo,
           step: 2,
           disabled: false,
         });
@@ -154,31 +177,42 @@ class CreateNewProjectWithoutTokens extends Component {
       });
   }
 
-  render() {
+  showError() {
     const { appStore, t } = this.props;
-    const { position, step, disabled } = this.state;
-    if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
-    const { gotoUploading } = this;
-    const CreateProject = new CreateProjectForm({
-      hooks: {
-        onSuccess(form) {
-          return new Promise(() => {
-            gotoUploading(form);
-          });
-        },
-        onError() {
-          appStore.displayAlert(t('errors:validationError'), 3000);
-        },
-      },
-    });
+    appStore.displayAlert(t('errors:validationError'), 3000);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  renderSwitch(step) {
+    const { disabled } = this.state;
+    switch (step) {
+      case 1:
+        return <CreateTokenData form={this.form} />;
+      case 2:
+        return <LoadingBlock />;
+      case 3:
+        return <TokenCreationAlert onSubmit={this.gotoProjectInfo} />;
+      case 4:
+        return (
+          <InputProjectData
+            form={this.createProject}
+            disabled={disabled}
+            onClick={this.returnToContractConnecting}
+          />
+        );
+      default:
+        return '';
+    }
+  }
+
+  render() {
+    const { currentStep, step } = this.state;
+    if (currentStep === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     return (
       <Container>
         <div className={styles.form}>
           <StepIndicator step={step} count={2} />
-          {position === 'token' ? <CreateTokenData form={this.form} /> : ''}
-          {position === 'creation' ? <LoadingBlock /> : ''}
-          {position === 'tokenCreated' ? <TokenCreationAlert onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData form={CreateProject} disabled={disabled} onClick={this.returnToContractConnecting} /> : ''}
+          {this.renderSwitch(currentStep)}
         </div>
       </Container>
     );
@@ -322,7 +356,7 @@ const InputProjectData = withTranslation()(({
 ));
 
 const StepIndicator = withTranslation()(({ t, step, count }) => (
-  <div className="step-indicator">
+  <div className={styles['step-indicator']}>
     <p>
       {t('other:step')}
       <span>

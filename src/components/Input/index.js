@@ -24,14 +24,19 @@ class Input extends Component {
       children, field, className,
     } = this.props;
     return (
-      <div className={`${styles.field} ${field.error ? 'field--error' : ''} ${className}`}>
+      <div className={`${styles.field} ${field.error ? styles['field--error'] : ''} ${className}`}>
         {children}
-        <input className="field__input" {...field.bind()} value={field.value} onChange={this.handleOnChange} />
-        <span className="field__label">{field.placeholder}</span>
-        <p className="field__error-text">
+        <input
+          className={styles.field__input}
+          {...field.bind()}
+          value={field.value}
+          onChange={this.handleOnChange}
+        />
+        <span className={styles.field__label}>{field.placeholder}</span>
+        <p className={styles['field__error-text']}>
           {field.error}
         </p>
-        <div className="field__line" />
+        <div className={styles.field__line} />
       </div>
     );
   }

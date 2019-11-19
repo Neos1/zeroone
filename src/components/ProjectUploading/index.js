@@ -21,30 +21,39 @@ import { Button, IconButton } from '../Button';
 @inject('userStore', 'appStore')
 @observer
 class ProjectUploading extends Component {
+  steps = {
+    compiling: 0,
+    sending: 1,
+    hash: 2,
+    receipt: 3,
+    questions: 4,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
+      step: this.steps.compiling,
       address: '',
       loading: true,
     };
   }
 
   componentDidMount() {
+    const { steps } = this;
     const { appStore, appStore: { deployArgs, name, password }, t } = this.props;
     this.setState({
-      step: 1,
+      step: steps.sending,
     });
     appStore.deployContract('project', deployArgs, password)
       .then((txHash) => {
         this.setState({
-          step: 3,
+          step: steps.receipt,
         });
         const interval = setInterval(() => {
           appStore.checkReceipt(txHash).then((receipt) => {
             if (receipt) {
               this.setState({
-                step: 4,
+                step: steps.questions,
                 address: receipt.contractAddress,
               });
               appStore.addProjectToList({ name, address: receipt.contractAddress });

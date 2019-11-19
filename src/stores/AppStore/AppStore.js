@@ -59,7 +59,7 @@ class AppStore {
    * selecting encrypted wallet and pushing this to userStore
    * @param {string} address address of wallet
    */
-  @action selectWallet(address) {
+  @action selectWallet = (address) => {
     const { userStore } = this.rootStore;
     const key = address.replace('0x', '');
     userStore.setEncryptedWallet(this.walletList[key]);

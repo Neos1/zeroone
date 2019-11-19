@@ -23,7 +23,7 @@ class CreateNewProject extends Component {
     return (
       <Container>
         <div className={`${styles.form} ${styles['form--wide']}`}>
-          <FormBlock className="form__block--wide">
+          <FormBlock className={styles['form__block--wide']}>
             <Heading>
               {t('headings:newProject.heading')}
               {t('headings:newProject.subheading')}

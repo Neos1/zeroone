@@ -57,14 +57,14 @@ class LangSwitcher extends Component {
   render() {
     const { opened, value } = this.state;
     return (
-      <div className={`${styles.lang} ${opened ? 'lang--opened' : ''}`} ref={this.setWrapperRef}>
-        <span className="lang--selected" data-value={value} onClick={this.toggleOptions}>
+      <div className={`${styles.lang} ${opened ? styles['lang--opened'] : ''}`} ref={this.setWrapperRef}>
+        <span className={styles['lang--selected']} data-value={value} onClick={this.toggleOptions}>
           {' '}
           {value}
         </span>
-        <div className="lang__options">
-          <span className="lang__option" data-value="RUS" onClick={this.selectOption}> Русский (RUS)</span>
-          <span className="lang__option" data-value="ENG" onClick={this.selectOption}> English (ENG)</span>
+        <div className={styles.lang__options}>
+          <span className={styles.lang__option} data-value="RUS" onClick={this.selectOption}> Русский (RUS)</span>
+          <span className={styles.lang__option} data-value="ENG" onClick={this.selectOption}> English (ENG)</span>
         </div>
       </div>
     );

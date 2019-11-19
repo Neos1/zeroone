@@ -7,12 +7,12 @@ import { IconInfo, CloseIcon } from '../Icons';
 import styles from './Alert.scss';
 
 const Alert = inject('appStore')(observer(({ appStore }) => (
-  <div className={`${styles.alert} ${appStore.alertVisible ? 'alert--visible' : ''}`}>
+  <div className={`${styles.alert} ${appStore.alertVisible ? styles['alert--visible'] : ''}`}>
     <IconInfo />
-    <span className="alert__text">
+    <span className={styles.alert__text}>
       {appStore.alertText}
     </span>
-    <span className="alert__close" onClick={() => { appStore.closeAlert(); }}>
+    <span className={styles.alert__close} onClick={() => { appStore.closeAlert(); }}>
       <CloseIcon />
     </span>
   </div>
@@ -22,6 +22,7 @@ Alert.propTypes = {
   appStore: propTypes.shape({
     alertVisible: propTypes.bool.isRequired,
     alertText: propTypes.string.isRequired,
+    closeAlert: propTypes.func.isRequired,
   }).isRequired,
   children: propTypes.string.isRequired,
 };

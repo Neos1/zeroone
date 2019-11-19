@@ -11,74 +11,112 @@ import Container from '../Container';
 import Loader from '../Loader';
 import Explanation from '../Explanation';
 import ConnectProjectForm from '../../stores/FormsStore/ConnectProject';
-
-
-import styles from '../Login/Login.scss';
 import Input from '../Input';
 import {
   Address, TokenName, Login, BackIcon,
 } from '../Icons';
 
+
+import styles from '../Login/Login.scss';
+
 @withTranslation()
 @inject('appStore')
 @observer
+
 class AddExistingProject extends Component {
+  connectForm = new ConnectProjectForm({
+    hooks: {
+      onSuccess: (form) => {
+        this.connectProject(form);
+      },
+      onError: () => {
+        this.showError();
+      },
+    },
+  });
+
+  steps = {
+    default: '0',
+    loading: '1',
+    success: '2',
+  }
+
+  // eslint-disable-next-line react/static-property-placement
+  static propTypes = {
+    appStore: propTypes.shape({
+      checkProject: propTypes.func.isRequired,
+      addProjectToList: propTypes.func.isRequired,
+      displayAlert: propTypes.func.isRequired,
+    }).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      step: 'default',
+      currentStep: this.steps.default,
     };
   }
 
   connectProject = (form) => {
+    const { steps } = this;
     const { appStore, t } = this.props;
     const { name, address } = form.values();
     this.setState({
-      step: 'loading',
+      currentStep: steps.loading,
     });
-    appStore.checkProject(address)
-      .then(() => {
-        this.setState({ step: 'success' });
-        appStore.addProjectToList({ name, address });
-      })
-      .catch(() => {
-        appStore.displayAlert(t('errors:tryAgain'), 3000);
-        this.state = {
-          step: 'default',
-        };
-      });
+    return new Promise((resolve, reject) => {
+      appStore.checkProject(address)
+        .then(() => {
+          this.setState({ currentStep: steps.success });
+          appStore.addProjectToList({ name, address });
+          resolve();
+        })
+        .catch(() => {
+          appStore.displayAlert(t('errors:tryAgain'), 3000);
+          this.state = {
+            currentStep: steps.default,
+          };
+          reject();
+        });
+    });
+  }
+
+  showError = () => {
+    const { appStore, t } = this.props;
+    appStore.displayAlert(t('errors:validationError'), 3000);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  renderSwitch(step) {
+    switch (step) {
+      case '0':
+        return <InputBlock form={this.connectForm} />;
+      case '1':
+        return <LoadingBlock />;
+      case '2':
+        return <MessageBlock />;
+      default:
+        return '';
+    }
   }
 
   render() {
-    const { appStore, t } = this.props;
-    const { step } = this.state;
-    const { connectProject } = this;
-
-    const connectForm = new ConnectProjectForm({
-      hooks: {
-        onSuccess(form) {
-          connectProject(form);
-        },
-        onError() {
-          appStore.displayAlert(t('errors:validationError'), 3000);
-        },
-      },
-    });
+    const { currentStep } = this.state;
 
     return (
       <Container>
         <div className={`${styles.form}`}>
-          {step === 'default' ? <InputBlock form={connectForm} /> : ''}
-          {step === 'loading' ? <LoadingBlock /> : ''}
-          {step === 'success' ? <MessageBlock /> : ''}
+          {this.renderSwitch(currentStep)}
         </div>
       </Container>
 
     );
   }
 }
+
 const InputBlock = withTranslation()(({ t, form }) => (
-  <FormBlock className="form__block">
+  <FormBlock className={styles.form__block}>
     <Heading>
       {t('headings:сonnectProject.heading')}
       {t('headings:сonnectProject.subheading')}
@@ -142,15 +180,9 @@ const MessageBlock = withTranslation()(({ t }) => (
     </NavLink>
   </FormBlock>
 ));
-AddExistingProject.propTypes = {
-  appStore: propTypes.shape({
-    checkProject: propTypes.func.isRequired,
-    addProjectToList: propTypes.func.isRequired,
-    displayAlert: propTypes.func.isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
+
 InputBlock.propTypes = {
   form: propTypes.func.isRequired,
 };
+
 export default AddExistingProject;

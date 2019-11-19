@@ -25,31 +25,61 @@ import Input from '../Input';
 @inject('userStore', 'appStore')
 @observer
 class CreateNewProjectWithTokens extends Component {
+  connectToken = new ConnectTokenForm({
+    hooks: {
+      onSuccess: (form) => {
+        this.checkToken(form);
+      },
+      onError: () => {
+      },
+    },
+  });
+
+  createProject = new CreateProjectForm({
+    hooks: {
+      onSuccess: (form) => new Promise(() => {
+        this.gotoUploading(form);
+      }),
+      onError: () => {
+      },
+    },
+  });
+
+  steps = {
+    token: 0,
+    check: 1,
+    tokenChecked: 2,
+    projectInfo: 3,
+    uploading: 4,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      position: 'token',
+      currentStep: this.steps.token,
       step: 1,
       disabled: false,
     };
   }
 
   returnToTokenAddress=() => {
+    const { steps } = this;
     this.setState({
-      position: 'token',
+      currentStep: steps.token,
       step: 1,
     });
   }
 
   checkToken = (form) => {
+    const { steps } = this;
     const { address } = form.values();
     const { appStore } = this.props;
     this.setState({
-      position: 'check',
+      currentStep: steps.check,
     });
     appStore.checkErc(address).then(() => {
       this.setState({
-        position: 'tokenChecked',
+        currentStep: steps.tokenChecked,
         step: 2,
       });
       appStore.deployArgs = [address];
@@ -57,13 +87,15 @@ class CreateNewProjectWithTokens extends Component {
   }
 
   gotoProjectInfo = () => {
+    const { steps } = this;
     this.setState({
-      position: 'projectInfo',
+      currentStep: steps.projectInfo,
       step: 3,
     });
   }
 
   gotoUploading = (form) => {
+    const { steps } = this;
     const { appStore, userStore, t } = this.props;
     const { name, password } = form.values();
     this.setState({ disabled: true });
@@ -75,11 +107,11 @@ class CreateNewProjectWithTokens extends Component {
           .then((balance) => {
             if (balance > 0.05) {
               this.setState({
-                position: 'uploading',
+                currentStep: steps.uploading,
               });
             } else {
               this.setState({
-                position: 'projectInfo',
+                currentStep: steps.projectInfo,
                 step: 2,
                 disabled: false,
               });
@@ -89,7 +121,7 @@ class CreateNewProjectWithTokens extends Component {
       })
       .catch(() => {
         this.setState({
-          position: 'projectInfo',
+          currentStep: steps.projectInfo,
           step: 2,
           disabled: false,
         });
@@ -97,39 +129,36 @@ class CreateNewProjectWithTokens extends Component {
       });
   }
 
-  render() {
-    const { position, step, disabled } = this.state;
-    if (position === 'uploading') return <Redirect to="/uploadWithExistingTokens" />;
-    const { gotoUploading, checkToken } = this;
-    const connectToken = new ConnectTokenForm({
-      hooks: {
-        onSuccess(form) {
-          checkToken(form);
-        },
-        onError() {
-        },
-      },
-    });
+  renderSwitch(step) {
+    const { disabled } = this.state;
+    switch (step) {
+      case 0:
+        return <InputTokenAddress form={this.connectToken} onSubmit={this.checkToken} />;
+      case 1:
+        return <LoadingBlock />;
+      case 2:
+        return <ContractConfirmation onSubmit={this.gotoProjectInfo} />;
+      case 3:
+        return (
+          <InputProjectData
+            form={this.createProject}
+            disabled={disabled}
+            onClick={this.returnToTokenAddress}
+          />
+        );
+      default:
+        return '';
+    }
+  }
 
-    const createProject = new CreateProjectForm({
-      hooks: {
-        onSuccess(form) {
-          return new Promise(() => {
-            gotoUploading(form);
-          });
-        },
-        onError() {
-        },
-      },
-    });
+  render() {
+    const { currentStep, step } = this.state;
+    if (currentStep === 4) return <Redirect to="/uploadWithExistingTokens" />;
     return (
       <Container>
         <div className={styles.form}>
           <StepIndicator step={step} count={3} />
-          {position === 'token' ? <InputTokenAddress form={connectToken} onSubmit={this.checkToken} /> : ''}
-          {position === 'check' ? <LoadingBlock /> : ''}
-          {position === 'tokenChecked' ? <ContractConfirmation onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData form={createProject} disabled={disabled} onClick={this.returnToTokenAddress} /> : ''}
+          {this.renderSwitch(currentStep)}
         </div>
       </Container>
     );
@@ -235,7 +264,7 @@ const InputProjectData = withTranslation()(({
 ));
 
 const StepIndicator = withTranslation()(({ t, step, count }) => (
-  <div className="step-indicator">
+  <div className={styles['step-indicator']}>
     <p>
       {t('other:step')}
       <span>

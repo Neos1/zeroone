@@ -79,17 +79,17 @@ class Dropdown extends Component {
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
         <input type="hidden" value={field.value} />
-        <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
-          {children ? <span className="dropdown__icon">{children}</span> : ''}
-          <span className="dropdown__selected" data-value={selectedValue}>
+        <button type="button" className={styles.dropdown__head} onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
+          {children ? <span className={styles.dropdown__icon}>{children}</span> : ''}
+          <span className={styles.dropdown__selected} data-value={selectedValue}>
             {selectedLabel || field.placeholder }
-            <span className="dropdown__arrow">
+            <span className={styles.dropdown__arrow}>
               <DropdownArrow />
             </span>
           </span>
-          <div className="dropdown__head-line" />
+          <div className={styles['dropdown__head-line']} />
         </button>
-        <div className="dropdown__options">
+        <div className={styles.dropdown__options}>
           {getOptions}
         </div>
       </div>

@@ -10,6 +10,8 @@ import './assets/styles/style.scss';
 import Header from './components/Header';
 
 const { stores } = rootStore;
+// eslint-disable-next-line no-console
+console.log(stores);
 render(
   <Provider appStore={stores.appStore} userStore={stores.userStore}>
     <Header />
