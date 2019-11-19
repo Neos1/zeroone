@@ -13,8 +13,10 @@
       width: 45%;
     }
     &-filters {
-      display: inline-block;
-      width:25%;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      width: 25%;
       .dropdown {
         width: 100%;
       }
