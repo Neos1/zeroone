@@ -4,9 +4,7 @@ import {
   action,
 } from 'mobx';
 import DialogItem from './DialogItemModel';
-import withEventEmitter from '../../utils/with-event-emitter';
 
-@withEventEmitter
 class DialogStore {
     @observable open = false;
 
@@ -59,7 +57,7 @@ class DialogStore {
       this.dialog = dialog.name;
       dialog.open();
       this.addToHistory(dialog);
-      this.emit(`${dialog.name}:open`);
+      // this.emit(`${dialog.name}:open`);
       return Promise.resolve();
     }
 
@@ -87,7 +85,7 @@ class DialogStore {
             this.show(next)
               .then(resolve);
           }
-          this.emit(`${dialog.name}:hidden`);
+          // this.emit(`${dialog.name}:hidden`);
           return resolve();
         }, 400);
       });

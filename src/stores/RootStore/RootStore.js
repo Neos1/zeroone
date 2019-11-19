@@ -16,14 +16,16 @@ class RootStore {
 
   @observable appStore;
 
-  @observable userStore ;
+  @observable userStore;
+
+  @observable dialogStore;
 
   // services
-  @observable walletService ;
+  @observable walletService;
 
-  @observable contractService ;
+  @observable contractService;
 
-  @observable Web3Service ;
+  @observable Web3Service;
 
   constructor() {
     const configRaw = fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8');
