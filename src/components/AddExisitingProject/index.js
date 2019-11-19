@@ -182,7 +182,10 @@ const MessageBlock = withTranslation()(({ t }) => (
 ));
 
 InputBlock.propTypes = {
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    onSubmit: propTypes.func.isRequired,
+    $: propTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default AddExistingProject;

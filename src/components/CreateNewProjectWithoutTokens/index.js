@@ -395,13 +395,20 @@ CreateNewProjectWithoutTokens.propTypes = {
   t: propTypes.func.isRequired,
 };
 CreateTokenData.propTypes = {
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    onSubmit: propTypes.func.isRequired,
+    $: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+  }).isRequired,
 };
 TokenCreationAlert.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
 InputProjectData.propTypes = {
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    $: propTypes.func.isRequired,
+    onSubmit: propTypes.func.isRequired,
+  }).isRequired,
   onClick: propTypes.func.isRequired,
 };
 StepIndicator.propTypes = {

@@ -94,7 +94,10 @@ class PasswordForm extends Component {
 
 PasswordForm.propTypes = {
   state: propTypes.bool.isRequired,
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    $: propTypes.func.isRequired,
+    onSubmit: propTypes.func.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 export default PasswordForm;

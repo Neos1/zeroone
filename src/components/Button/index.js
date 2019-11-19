@@ -12,7 +12,7 @@ export const Button = ({
     className={`${styles.btn} ${className}`}
     onClick={onClick}
   >
-    <span className="btn__text">
+    <span className={styles.btn__text}>
       {children}
     </span>
   </button>
@@ -40,9 +40,9 @@ export const IconButton = ({
     className={`${styles.btn} ${className}`}
     onClick={onClick}
   >
-    <p className="btn__content">
+    <p className={styles.btn__content}>
       {children[0]}
-      <span className="btn__text">
+      <span className={styles.btn__text}>
         {children[1]}
       </span>
     </p>
