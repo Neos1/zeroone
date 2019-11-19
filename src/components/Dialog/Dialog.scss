@@ -4,7 +4,7 @@
   display: inline-block;
   min-width: 290px;
   max-width: 570px;
-  margin: 50px auto;
+  margin: 0;
   background: #fff;
   border: 1px solid #E1E4E8;
   opacity: 0;
@@ -75,6 +75,7 @@
     pointer-events: auto;
 
     .content {
+      top: 50%;
       animation-name: anim-open;
       animation-duration: 0.7s;
       animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
@@ -174,42 +175,36 @@
 
 @keyframes anim-open {
   0% {
-    -webkit-transform: translate3d(0, -400px, 0);
-    transform: translate3d(0, -400px, 0);
+    transform: translate(0, -800px);
     opacity: 0;
   }
 
   100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+    transform: translate(0, -50%);
     opacity: 1;
   }
 }
 
 @keyframes anim-close {
   0% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+    transform: translate(0, -50%);
     opacity: 1;
   }
 
   100% {
-    -webkit-transform: translate3d(0, 100px, 0);
-    transform: translate3d(0, 100px, 0);
+    transform: translate(0, 100px);
     opacity: 0;
   }
 }
 
 @keyframes anim-elem {
   0% {
-    -webkit-transform: translate3d(0, -100px, 0);
-    transform: translate3d(0, -100px, 0);
+    transform: translate(0, -100px);
     opacity: 0;
   }
 
   100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+    transform: translate(0, -50%);
     opacity: 1;
   }
 }
