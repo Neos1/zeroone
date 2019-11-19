@@ -15,7 +15,8 @@
     z-index: 1;
     min-height: 325px;
 
-    &.agreed-message {
+    &.agreed-message,
+    &.reject-message {
       .dialog__header {
         padding-top: 92px;
       }
@@ -77,7 +78,8 @@
       padding-top: 55px;
     }
 
-    &--agreed-message {
+    &--agreed-message,
+    &--reject-message {
       padding-top: 53px;
       padding-bottom: 58px;
     }
