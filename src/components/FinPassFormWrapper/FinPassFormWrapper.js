@@ -23,7 +23,7 @@ class FinPassFormWrapper extends React.Component {
     const { t, form } = props;
     return (
       <div
-        className={styles.form__wrapper}
+        className={styles['form-fin-pass']}
       >
         <form
           onSubmit={form.onSubmit}

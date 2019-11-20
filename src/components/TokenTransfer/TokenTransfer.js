@@ -41,7 +41,10 @@ class TokenTransfer extends React.Component {
     const { props } = this;
     const { t, wallet } = props;
     return (
-      <form onSubmit={form.onSubmit}>
+      <form
+        onSubmit={form.onSubmit}
+        className={styles['form-token-transfer']}
+      >
         <div className={styles.input__wrapper}>
           <Input field={form.$('address')}>
             <Address />

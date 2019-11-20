@@ -1,26 +1,28 @@
-.input__wrapper {
-  margin-bottom: 32px;
-
-  .field {
-    width: 100%;
-    max-width: 309px;
+.form-token-transfer {
+  .input__wrapper {
+    margin-bottom: 32px;
+  
+    .field {
+      width: 100%;
+      max-width: 309px;
+    }
   }
-}
-
-.button__wrapper {
-  margin-top: 48px;
-  margin-bottom: 16px;
-
-  .btn {
-    width: 100%;
-    max-width: 298px;
+  
+  .button__wrapper {
+    margin-top: 48px;
+    margin-bottom: 16px;
+  
+    .btn {
+      width: 100%;
+      max-width: 298px;
+    }
   }
-}
-
-.wallet__wrapper {
-  margin-top: 16px;
-  margin-bottom: 24px;
-  color: #808080;
-  font-size: 14px;
-  line-height: 16px;
+  
+  .wallet__wrapper {
+    margin-top: 16px;
+    margin-bottom: 24px;
+    color: #808080;
+    font-size: 14px;
+    line-height: 16px;
+  }  
 }
