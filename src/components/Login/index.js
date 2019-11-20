@@ -11,7 +11,7 @@ import Heading from '../Heading';
 import Dropdown from '../Dropdown';
 import { CreditCard, Password } from '../Icons';
 import Input from '../Input';
-import { Button } from '../Button';
+import { BlackWidestButton, BorderedLinkButton } from '../Button';
 import Loader from '../Loader';
 import LoginForm from '../../stores/FormsStore/LoginForm';
 
@@ -80,12 +80,14 @@ const InputForm = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit">{t('buttons:continue')}</Button>
+        <BlackWidestButton type="submit">
+          {t('buttons:continue')}
+        </BlackWidestButton>
         <NavLink to="/create">
-          <Button className="btn--link">{t('buttons:newWallet')}</Button>
+          <BorderedLinkButton className="btn--link">{t('buttons:newWallet')}</BorderedLinkButton>
         </NavLink>
         <NavLink to="/restore">
-          <Button className="btn--link" disabled={form.loading}>{t('buttons:forgotPassword')}</Button>
+          <BorderedLinkButton className="btn--link" disabled={form.loading}>{t('buttons:forgotPassword')}</BorderedLinkButton>
         </NavLink>
       </div>
     </form>

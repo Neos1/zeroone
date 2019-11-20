@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { IconButton } from '../Button';
+import { IconWhiteButton, BackButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -24,24 +24,24 @@ const AddNewProject = withTranslation()(({ t }) => (
         </Heading>
         <div className={styles['add-project']}>
           <NavLink to="/newProject">
-            <IconButton className="btn--white">
+            <IconWhiteButton>
               <CreateToken />
               {t('buttons:create')}
-            </IconButton>
+            </IconWhiteButton>
           </NavLink>
           <NavLink to="/addExisting">
-            <IconButton className="btn--white">
+            <IconWhiteButton>
               <ChainIcon />
               {t('buttons:connect')}
-            </IconButton>
+            </IconWhiteButton>
           </NavLink>
         </div>
       </FormBlock>
       <NavLink to="/projects">
-        <IconButton className="btn--link btn--noborder btn--back">
+        <BackButton>
           <BackIcon />
           {t('buttons:back')}
-        </IconButton>
+        </BackButton>
       </NavLink>
     </div>
   </Container>

@@ -188,9 +188,15 @@
       font-weight: 700;
     }
   }
-  &.icon--top{
-    svg {
-      width: 100%;
-    }
+  &--back {
+    position: absolute;
+    bottom: -62px;
+    left: 50%;
+    transform: translateX(-50%);
+  } 
+}
+.icon--top{
+  svg {
+    width: 100%;
   }
 }

@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import SeedForm from '../../stores/FormsStore/SeedForm';
 import styles from '../Login/Login.scss';
 import Input from '../Input';
-import { Button } from '../Button';
+import { BlackWidestButton } from '../Button';
 
 
 class SeedInput extends Component {
@@ -40,7 +40,9 @@ class SeedInput extends Component {
           ))}
         </div>
         <div className={styles.form__submit}>
-          <Button className="btn--default btn--black" disabled={seedForm.loading} type="submit"> Продолжить </Button>
+          <BlackWidestButton disabled={seedForm.loading} type="submit">
+            Продолжить
+          </BlackWidestButton>
         </div>
       </form>
     );

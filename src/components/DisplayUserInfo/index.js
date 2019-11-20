@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
-import { Button } from '../Button';
+import { BlackWidestButton } from '../Button';
 import styles from '../Login/Login.scss';
 
 
@@ -35,7 +35,9 @@ const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, use
           </div>
           <div className={styles.form__submit}>
             <NavLink to="/recoverPassword">
-              <Button className="btn--default btn--black" type="button">{t('buttons:continue')}</Button>
+              <BlackWidestButton type="button">
+                {t('buttons:continue')}
+              </BlackWidestButton>
             </NavLink>
           </div>
         </form>

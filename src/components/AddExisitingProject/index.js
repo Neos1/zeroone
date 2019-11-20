@@ -4,7 +4,9 @@ import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
-import { Button, IconButton } from '../Button';
+import {
+  BlackWidestButton, IconBlackButton, LinkButton, BackButton,
+} from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -129,9 +131,9 @@ const InputBlock = withTranslation()(({ t, form }) => (
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black btn--310" type="submit">
+        <BlackWidestButton>
           {t('buttons:continue')}
-        </Button>
+        </BlackWidestButton>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -147,10 +149,10 @@ const InputBlock = withTranslation()(({ t, form }) => (
       </div>
     </form>
     <NavLink to="/createProject">
-      <IconButton className="btn--text btn--link btn--noborder btn--back" type="submit">
+      <BackButton type="submit">
         <BackIcon />
         {t('buttons:back')}
-      </IconButton>
+      </BackButton>
     </NavLink>
   </FormBlock>
 ));
@@ -171,12 +173,14 @@ const MessageBlock = withTranslation()(({ t }) => (
       {t('headings:projectConnected.heading')}
       {t('headings:projectConnected.subheading')}
     </Heading>
-    <IconButton className="btn--default btn--black btn--240" type="submit">
+    <IconBlackButton type="submit">
       {<Login />}
       {t('buttons:toConnectedProject')}
-    </IconButton>
+    </IconBlackButton>
     <NavLink to="/projects">
-      <Button className="btn--text btn--link btn--noborder" type="submit">{t('buttons:otherProject')}</Button>
+      <LinkButton type="submit">
+        {t('buttons:otherProject')}
+      </LinkButton>
     </NavLink>
   </FormBlock>
 ));

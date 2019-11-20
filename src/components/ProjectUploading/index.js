@@ -15,7 +15,9 @@ import ProgressBlock from './ProgressBlock';
 import {
   CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon, Login,
 } from '../Icons';
-import { Button, IconButton } from '../Button';
+import {
+  IconBlackButton, LinkButton,
+} from '../Button';
 
 @withTranslation()
 @inject('userStore', 'appStore')
@@ -146,12 +148,14 @@ const AlertBlock = withTranslation()(({ t }) => (
         {t('headings:projectCreated.subheading.1')}
       </span>
     </Heading>
-    <IconButton className="btn--default btn--black btn--240" type="submit">
+    <IconBlackButton type="submit">
       {<Login />}
       {t('buttons:toCreatedProject')}
-    </IconButton>
+    </IconBlackButton>
     <NavLink to="/projects">
-      <Button className="btn--text btn--link" type="submit">{t('buttons:otherProject')}</Button>
+      <LinkButton type="submit">
+        {t('buttons:otherProject')}
+      </LinkButton>
     </NavLink>
   </FormBlock>
 ));

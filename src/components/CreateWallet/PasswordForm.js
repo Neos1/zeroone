@@ -6,7 +6,7 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import { Password, BackIcon } from '../Icons';
 import Input from '../Input';
-import { Button, IconButton } from '../Button';
+import { IconButton, BlackWidestButton } from '../Button';
 import Explanation from '../Explanation';
 import Indicator from '../Indicator';
 import styles from '../Login/Login.scss';
@@ -48,7 +48,9 @@ class PasswordForm extends Component {
             <Password />
           </Input>
           <div className={styles.form__submit}>
-            <Button type="submit" disabled={form.loading} className="btn--default btn--black">{t('buttons:continue')}</Button>
+            <BlackWidestButton type="submit" disabled={form.loading}>
+              {t('buttons:continue')}
+            </BlackWidestButton>
           </div>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>
@@ -97,6 +99,7 @@ PasswordForm.propTypes = {
   form: propTypes.shape({
     $: propTypes.func.isRequired,
     onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
 };

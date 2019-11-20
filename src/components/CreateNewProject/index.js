@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
-import { IconButton } from '../Button';
+import { IconTopWhiteButton, BackButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -31,25 +31,25 @@ class CreateNewProject extends Component {
             <div className={styles.create}>
               <NavLink to="/createWithTokens">
                 <strong className={styles.create__label}>{t('other:withTokens')}</strong>
-                <IconButton className="btn--big btn--white icon--top">
+                <IconTopWhiteButton>
                   <Ethereum />
                   {t('buttons:withTokens')}
-                </IconButton>
+                </IconTopWhiteButton>
               </NavLink>
               <NavLink to="/createWithoutTokens">
                 <strong className={styles.create__label}>{t('other:withoutTokens')}</strong>
-                <IconButton className="btn--big btn--white icon--top">
+                <IconTopWhiteButton>
                   <CreateToken />
                   {t('buttons:withoutTokens')}
-                </IconButton>
+                </IconTopWhiteButton>
               </NavLink>
             </div>
           </FormBlock>
           <NavLink to="/createProject">
-            <IconButton className="btn--link btn--noborder btn--back">
+            <BackButton>
               <BackIcon />
               {t('buttons:back')}
-            </IconButton>
+            </BackButton>
           </NavLink>
         </div>
       </Container>

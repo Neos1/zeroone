@@ -9,7 +9,7 @@ import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Explanation from '../Explanation';
-import { IconButton, Button } from '../Button';
+import { IconButton, BlackWidestButton, SeedToggleButton } from '../Button';
 import { BackIcon, EyeIcon, CrossedEyeIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
@@ -54,7 +54,9 @@ class ShowSeed extends Component {
             </div>
             <div className={styles.form__submit}>
               <NavLink to="/checkSeed">
-                <Button className="btn--default btn--black">{t('buttons:continue')}</Button>
+                <BlackWidestButton>
+                  {t('buttons:continue')}
+                </BlackWidestButton>
               </NavLink>
             </div>
           </FormBlock>
@@ -69,10 +71,10 @@ class ShowSeed extends Component {
               <p>{t('explanations:seed.0')}</p>
               <p>{t('explanations:seed.1')}</p>
             </Explanation>
-            <IconButton onClick={this.toggleWords} className="btn--white btn--show-seed">
+            <SeedToggleButton onClick={this.toggleWords}>
               {!visible ? <EyeIcon /> : <CrossedEyeIcon />}
               {!visible ? t('buttons:showSeed') : t('buttons:hideSeed')}
-            </IconButton>
+            </SeedToggleButton>
           </div>
         </div>
       </Container>
