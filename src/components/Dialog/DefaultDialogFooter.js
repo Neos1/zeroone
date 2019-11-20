@@ -46,15 +46,4 @@ class DefaultDialogFooter extends React.Component {
   }
 }
 
-// DefaultDialogFooter.propTypes = {
-//   t: PropTypes.func,
-//   dialogStore: PropTypes.shape({
-//     hide: PropTypes.func.isRequired,
-//   }).isRequired,
-// };
-
-// DefaultDialogFooter.defaultProps = {
-//   t: (k) => (k),
-// };
-
 export default DefaultDialogFooter;
