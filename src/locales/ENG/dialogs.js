@@ -1,5 +1,6 @@
 const dialog = {
   definetelyAgree: 'Do you definitely agree?',
+  definetelyReject: 'Do you definitely reject?',
   agreedMessage: 'You agreed',
   rejectMessage: 'You voted against',
   transferInProgress: 'Token transfer in progress',
