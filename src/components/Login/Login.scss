@@ -124,6 +124,7 @@
     }
   }
 }
+
 .seed {
   display: flex;
   flex-flow: row wrap;
@@ -174,6 +175,7 @@
     }
   }
 }
+
 .projects {
   display: grid;
   grid-row-gap: 10px;
@@ -187,6 +189,7 @@
     margin: 0;
   }
 }
+
 .create, .add-project {
   display: flex;
   flex-flow: row wrap;
@@ -245,6 +248,7 @@
     font-size: 14px;
   }
 }
+
 .progress {
   display: flex;
   flex-flow: row nowrap;

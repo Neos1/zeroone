@@ -11,6 +11,7 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
 import Loader from '../Loader';
+import Input from '../Input';
 import Indicator from '../Indicator';
 import Explanation from '../Explanation';
 import {
@@ -19,9 +20,7 @@ import {
 import ConnectTokenForm from '../../stores/FormsStore/ConnectToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
 
-
 import styles from '../Login/Login.scss';
-import Input from '../Input';
 
 @withTranslation()
 @inject('userStore', 'appStore')

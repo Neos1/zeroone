@@ -6,8 +6,8 @@ import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import { BlackWidestButton } from '../Button';
-import styles from '../Login/Login.scss';
 
+import styles from '../Login/Login.scss';
 
 const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, userStore: { balance, address } }) => (
   <Container>

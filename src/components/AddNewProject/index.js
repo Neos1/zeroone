@@ -9,7 +9,6 @@ import { CreateToken, ChainIcon, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
-
 const AddNewProject = withTranslation()(({ t }) => (
   <Container>
     <div className={`${styles.form}`}>

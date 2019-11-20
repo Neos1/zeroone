@@ -1,5 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
+
 import styles from './Indicator.scss';
 
 const Indicator = ({ checked }) => (

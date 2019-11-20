@@ -9,8 +9,6 @@ import { withTranslation } from 'react-i18next';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-
-import styles from '../Login/Login.scss';
 import ProgressBlock from './ProgressBlock';
 import {
   CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon, Login,
@@ -18,6 +16,8 @@ import {
 import {
   IconBlackButton, LinkButton,
 } from '../Button';
+
+import styles from '../Login/Login.scss';
 
 @withTranslation()
 @inject('userStore', 'appStore')

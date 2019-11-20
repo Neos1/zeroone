@@ -18,7 +18,6 @@ import {
   Address, TokenName, Login, BackIcon,
 } from '../Icons';
 
-
 import styles from '../Login/Login.scss';
 
 @withTranslation()

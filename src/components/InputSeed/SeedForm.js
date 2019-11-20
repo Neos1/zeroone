@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-
 import SeedForm from '../../stores/FormsStore/SeedForm';
-import styles from '../Login/Login.scss';
 import Input from '../Input';
 import { BlackWidestButton } from '../Button';
 
+import styles from '../Login/Login.scss';
 
 class SeedInput extends Component {
   constructor(props) {

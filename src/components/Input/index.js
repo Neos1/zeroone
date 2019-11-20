@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer } from 'mobx-react';
+
 import styles from './Input.scss';
 
 @observer

@@ -10,11 +10,10 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Loader from '../Loader';
 import styles from '../Login/Login.scss';
+import passwordValidation from '../../utils/PasswordValidation';
 
 import PasswordForm from './PasswordForm';
-import passwordValidation from '../../utils/PasswordValidation';
 import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
-
 
 @inject('userStore', 'appStore')
 @observer
