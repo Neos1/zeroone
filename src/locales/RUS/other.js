@@ -13,5 +13,6 @@ const other = {
   count: 'Количество',
   withTokens: 'Если есть токены ERC20',
   withoutTokens: 'Если токенов ERC20 нет',
+  yourBalance: 'Ваш баланс',
 };
 export default other;

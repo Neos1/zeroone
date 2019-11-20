@@ -34,6 +34,21 @@
         line-height: 16px;
       }
     }
+
+    &.transfer-success {
+      .dialog__subtext {
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      .dialog__value {
+        margin-top: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+      }
+    }
   }
 }
 

@@ -4,6 +4,7 @@ const dialog = {
   rejectMessage: 'Вы проголосовали против',
   transferInProgress: 'Переводим токены',
   someTimeText: 'Это займет некоторое время',
+  tokenTransferSuccess: 'Токены успешно переведены!',
 };
 
 export default dialog;
