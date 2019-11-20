@@ -6,7 +6,6 @@ import { VerifyIcon } from '../Icons';
 import DefaultDialogFooter from './DefaultDialogFooter';
 import DefinetelyAgree from './DefinetelyAgree';
 
-
 storiesOf('Dialog', module)
   .addDecorator((story) => (
     <Provider

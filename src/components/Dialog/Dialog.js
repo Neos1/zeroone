@@ -37,6 +37,7 @@ class Dialog extends React.Component {
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
     onCancel: PropTypes.func,
+    closeable: PropTypes.bool,
     children: PropTypes.node,
   };
 
@@ -50,6 +51,7 @@ class Dialog extends React.Component {
     onClose: null,
     onCancel: null,
     children: null,
+    closeable: true,
   };
 
   componentDidMount() {
@@ -76,9 +78,9 @@ class Dialog extends React.Component {
 
   handleClickOutside = (e) => {
     e.stopPropagation();
-    const { props: { name, dialogStore }, cancel } = this;
+    const { props: { name, dialogStore, closeable }, cancel } = this;
     if (dialogStore.closing) return;
-    if (!dialogStore.open || (dialogStore.dialog !== name)) return;
+    if (closeable === false || !dialogStore.open || (dialogStore.dialog !== name)) return;
     if (this.wrapperRef && !this.wrapperRef.contains(e.target)) {
       dialogStore.hide();
       cancel();
@@ -110,6 +112,7 @@ class Dialog extends React.Component {
       footer,
       className,
       topIcon,
+      closeable,
     } = this.props;
     const store = props.dialogStore;
     const dialogSize = `dialog--${size}`;
@@ -126,21 +129,27 @@ class Dialog extends React.Component {
         >
           <div className={`${styles.content}`} ref={this.setWrapperRef}>
             <div className={`${styles.content__inner} ${className}`}>
-              <div className={styles.close__container}>
-                <div className={styles.close__inner}>
-                  <button
-                    className={styles.close}
-                    onClick={this.hideDialog}
-                    type="button"
-                  >
-                    <CloseIcon
-                      width={16}
-                      height={16}
-                      fill="currentColor"
-                    />
-                  </button>
-                </div>
-              </div>
+              {
+                closeable !== false
+                  ? (
+                    <div className={styles.close__container}>
+                      <div className={styles.close__inner}>
+                        <button
+                          className={styles.close}
+                          onClick={this.hideDialog}
+                          type="button"
+                        >
+                          <CloseIcon
+                            width={16}
+                            height={16}
+                            fill="currentColor"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  )
+                  : null
+              }
               <div className={`${styles.dialog__header}`}>
                 {
                   topIcon

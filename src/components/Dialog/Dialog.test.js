@@ -112,6 +112,50 @@ describe('Dialog', () => {
     });
   });
 
+  describe('closeable=false', () => {
+    let wrapper;
+    let outerNode;
+    let mockDialogHide;
+
+    beforeEach(() => {
+      outerNode = document.createElement('div');
+      document.body.appendChild(outerNode);
+      mockDialogHide = jest.fn();
+      wrapper = mount(
+        <Provider
+          dialogStore={{
+            add: () => {},
+            remove: () => {},
+            dialog: 'test',
+            open: true,
+            closing: false,
+            hide: mockDialogHide,
+          }}
+          appStore={{}}
+        >
+          <Dialog
+            name="test"
+            header="header"
+            closeable={false}
+          />
+        </Provider>,
+        { attachTo: outerNode },
+      );
+    });
+
+    it('should render correct with needed class', () => {
+      expect(wrapper.find('.close__container').length).toEqual(0);
+    });
+
+    it('should not call mockDialogHide on outside click', () => {
+      outerNode.dispatchEvent(new Event('mousedown', {
+        bubbles: true,
+        stopPropagation: () => {},
+      }));
+      expect(mockDialogHide).not.toHaveBeenCalled();
+    });
+  });
+
   describe('footer=null', () => {
     let wrapper;
 

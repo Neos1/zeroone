@@ -21,6 +21,19 @@
         padding-top: 92px;
       }
     }
+
+    &.transfer-progress {
+      .dialog__header {
+        padding-top: 67px;
+        padding-bottom: 0;
+      }
+
+      .dialog__subtext {
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 14px;
+        line-height: 16px;
+      }
+    }
   }
 }
 
@@ -66,6 +79,13 @@
     position: relative;
     z-index: 2;
     padding: 10px 40px;
+  }
+
+  &__loader {
+    width: 100%;
+    padding-top: 92px;
+    padding-bottom: 110px;
+    text-align: center;
   }
 
   &__footer {
