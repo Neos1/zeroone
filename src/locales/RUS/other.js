@@ -16,5 +16,6 @@ const other = {
   yourBalance: 'Ваш баланс',
   notEnoughTokens: 'Возможно не хватает токенов',
   enterPassForConfirm: 'Введите пароль, чтобы подтвердить свое решеине',
+  connectOuterGroupToProject: 'Подключить внешнюю группу участников к проекту "{{project}}"',
 };
 export default other;

@@ -1,0 +1,39 @@
+.members {
+  &__top {
+    width: 100%;
+    margin-top: 100px;
+    margin-bottom: 15px;
+
+    &-button {
+      width: 100%;
+      padding: 26px 96px 26px 100px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      outline: none;
+      cursor: pointer;
+
+      &-icon,
+      &-text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        margin-right: 16px;
+
+        svg {
+          width: auto;
+          height: auto;
+        }
+      }
+
+      &-text {
+        color: #000;
+        font-weight: 300;
+        font-size: 18px;
+        font-family: "Grotesk";
+        line-height: 21px;
+      }
+    }
+  }
+}

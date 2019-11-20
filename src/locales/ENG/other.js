@@ -16,5 +16,6 @@ const other = {
   yourBalance: 'Your balance',
   notEnoughTokens: 'Perhaps there are not enough tokens',
   enterPassForConfirm: 'Enter your password to confirm your decision.',
+  connectOuterGroupToProject: 'Connect an external group of participants to the "{{project}}" project',
 };
 export default other;
