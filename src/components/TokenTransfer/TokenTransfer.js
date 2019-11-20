@@ -43,7 +43,7 @@ class TokenTransfer extends React.Component {
     return (
       <form onSubmit={form.onSubmit}>
         <div className={styles.input__wrapper}>
-          <Input field={form.$('wallet')}>
+          <Input field={form.$('address')}>
             <Address />
           </Input>
         </div>

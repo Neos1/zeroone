@@ -9,24 +9,24 @@ class TransferTokenForm extends ExtendedForm {
     return {
       fields: [
         {
-          name: 'wallet',
+          name: 'address',
           type: 'text',
-          label: 'Wallet',
-          placeholder: i18n.t('fields:wallet'),
+          label: 'Address',
+          placeholder: i18n.t('fields:address'),
           rules: 'required|string',
         },
         {
           name: 'count',
           type: 'text',
           label: 'Count tokens',
-          placeholder: i18n.t('fields:quantity'),
+          placeholder: i18n.t('fields:countTokens'),
           rules: 'required|numeric|min:1|max:2147483647 ',
         },
         {
           name: 'password',
           type: 'password',
           label: 'Password',
-          placeholder: i18n.t('fields:enterPassword'),
+          placeholder: i18n.t('fields:password'),
           rules: 'required|password',
         },
       ],
