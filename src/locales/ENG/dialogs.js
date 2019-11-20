@@ -5,6 +5,7 @@ const dialog = {
   transferInProgress: 'Token transfer in progress',
   someTimeText: 'It will take some time',
   tokenTransferSuccess: 'Tokens successfully transferred!',
+  tokenTransfer: 'Transfer token',
 };
 
 export default dialog;

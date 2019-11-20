@@ -49,6 +49,28 @@
         line-height: 16px;
       }
     }
+
+    &.token-transfer {
+      .dialog__header {
+        padding-top: 82px;
+        padding-bottom: 62px;
+      }
+
+      .dialog__footer-button {
+        width: 100%;
+        padding: 13px 15px 18px;
+        color: #c8c9ca;
+        font-weight: 300;
+        font-family: "Grotesk";
+        letter-spacing: 0.02em;
+        text-decoration: underline;
+        background-color: #fff;
+        border: unset;
+        border-top: 1px solid #E1E4E8;
+        outline: none;
+        cursor: pointer;
+      }
+    }
   }
 }
 

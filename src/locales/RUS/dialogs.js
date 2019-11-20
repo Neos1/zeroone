@@ -5,6 +5,7 @@ const dialog = {
   transferInProgress: 'Переводим токены',
   someTimeText: 'Это займет некоторое время',
   tokenTransferSuccess: 'Токены успешно переведены!',
+  tokenTransfer: 'Перевести токены',
 };
 
 export default dialog;

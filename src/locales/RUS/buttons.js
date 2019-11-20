@@ -17,5 +17,7 @@ const buttons = {
   withTokens: 'Подключить контракт и создать проект',
   withoutTokens: 'Создать новые токены и проект',
   toWallets: 'К выбору кошелька',
+  transfer: 'Перевести',
+  designateGroupAdministrator: 'назначить администратором группы',
 };
 export default buttons;
