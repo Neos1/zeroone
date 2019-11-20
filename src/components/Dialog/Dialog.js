@@ -8,6 +8,9 @@ import DefaultDialogFooter from './DefaultDialogFooter';
 
 import styles from './Dialog.scss';
 
+/**
+ * Dialog component
+ */
 @inject('dialogStore')
 @observer
 class Dialog extends React.Component {

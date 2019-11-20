@@ -7,6 +7,9 @@ import { EMPTY_DATA_STRING } from '../../constants';
 
 import styles from './Dialog.scss';
 
+/**
+ * Dialog with message about success token transfer
+ */
 @withTranslation(['dialogs', 'other'])
 class TokenTransferSuccess extends React.Component {
   static propTypes = {

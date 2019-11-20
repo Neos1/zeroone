@@ -7,6 +7,9 @@ import Loader from '../Loader';
 
 import styles from './Dialog.scss';
 
+/**
+ * Dialog with token transfer in progress
+ */
 @withTranslation('dialogs')
 class TransferTokenInProgress extends React.Component {
   static propTypes = {

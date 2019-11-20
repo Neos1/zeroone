@@ -7,6 +7,9 @@ import { Button } from '../Button';
 
 import styles from './Dialog.scss';
 
+/**
+ * Default component for dialog footer
+ */
 @withTranslation('buttons')
 @inject('dialogStore')
 class DefaultDialogFooter extends React.Component {
