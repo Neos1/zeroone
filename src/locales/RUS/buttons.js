@@ -19,5 +19,6 @@ const buttons = {
   toWallets: 'К выбору кошелька',
   transfer: 'Перевести',
   designateGroupAdministrator: 'назначить администратором группы',
+  vote: 'Голосовать',
 };
 export default buttons;

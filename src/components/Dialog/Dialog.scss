@@ -15,6 +15,13 @@
     z-index: 1;
     min-height: 325px;
 
+    .dialog__subtext {
+      margin: 0 auto;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 14px;
+      line-height: 16px;
+    }
+
     &.agreed-message,
     &.reject-message {
       .dialog__header {
@@ -28,23 +35,11 @@
           padding-top: 67px;
           padding-bottom: 0;
         }
-
-        &__subtext {
-          color: rgba(0, 0, 0, 0.7);
-          font-size: 14px;
-          line-height: 16px;
-        }
       }
     }
 
     &.transfer-success {
       .dialog {
-        &__subtext {
-          color: rgba(0, 0, 0, 0.7);
-          font-size: 14px;
-          line-height: 16px;
-        }
-
         &__value {
           margin-top: 8px;
           font-weight: 700;
@@ -84,12 +79,6 @@
           padding-top: 67px;
           padding-bottom: 24px;
         }
-        
-        &__subtext {
-          color: rgba(0, 0, 0, 0.7);
-          font-size: 14px;
-          line-height: 16px;
-        }
 
         &__footer {
           padding-top: 63px;
@@ -98,6 +87,18 @@
 
       .footer__button {
         min-width: 232px;
+      }
+    }
+
+    &.definetely-agree {
+      .dialog {
+        &__header {
+          padding-bottom: 0;
+        }
+
+        &__subtext {
+          max-width: 247px;
+        }
       }
     }
   }

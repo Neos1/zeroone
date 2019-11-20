@@ -19,5 +19,6 @@ const buttons = {
   toWallets: 'To wallets',
   transfer: 'Transfer',
   designateGroupAdministrator: 'designate group administrator',
+  vote: 'Vote',
 };
 export default buttons;

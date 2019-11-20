@@ -15,5 +15,6 @@ const other = {
   withoutTokens: "If you don't have ERC20 tokens",
   yourBalance: 'Your balance',
   notEnoughTokens: 'Perhaps there are not enough tokens',
+  enterPassForConfirm: 'Enter your password to confirm your decision.',
 };
 export default other;
