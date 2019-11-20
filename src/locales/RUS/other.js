@@ -14,5 +14,6 @@ const other = {
   withTokens: 'Если есть токены ERC20',
   withoutTokens: 'Если токенов ERC20 нет',
   yourBalance: 'Ваш баланс',
+  notEnoughTokens: 'Возможно не хватает токенов',
 };
 export default other;

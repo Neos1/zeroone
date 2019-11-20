@@ -6,6 +6,7 @@ const dialog = {
   someTimeText: 'It will take some time',
   tokenTransferSuccess: 'Tokens successfully transferred!',
   tokenTransfer: 'Transfer token',
+  tokenTransferError: 'Transfer error',
 };
 
 export default dialog;

@@ -6,6 +6,7 @@ const dialog = {
   someTimeText: 'Это займет некоторое время',
   tokenTransferSuccess: 'Токены успешно переведены!',
   tokenTransfer: 'Перевести токены',
+  tokenTransferError: 'Ошибка перевода',
 };
 
 export default dialog;

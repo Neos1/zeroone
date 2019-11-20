@@ -23,52 +23,81 @@
     }
 
     &.transfer-progress {
-      .dialog__header {
-        padding-top: 67px;
-        padding-bottom: 0;
-      }
+      .dialog {
+        &__header {
+          padding-top: 67px;
+          padding-bottom: 0;
+        }
 
-      .dialog__subtext {
-        color: rgba(0, 0, 0, 0.7);
-        font-size: 14px;
-        line-height: 16px;
+        &__subtext {
+          color: rgba(0, 0, 0, 0.7);
+          font-size: 14px;
+          line-height: 16px;
+        }
       }
     }
 
     &.transfer-success {
-      .dialog__subtext {
-        color: rgba(0, 0, 0, 0.7);
-        font-size: 14px;
-        line-height: 16px;
-      }
+      .dialog {
+        &__subtext {
+          color: rgba(0, 0, 0, 0.7);
+          font-size: 14px;
+          line-height: 16px;
+        }
 
-      .dialog__value {
-        margin-top: 8px;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 16px;
+        &__value {
+          margin-top: 8px;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 16px;
+        }
       }
     }
 
     &.token-transfer {
-      .dialog__header {
-        padding-top: 82px;
-        padding-bottom: 62px;
+      .dialog {
+        &__header {
+          padding-top: 82px;
+          padding-bottom: 62px;
+        }
+
+        &__footer-button {
+          width: 100%;
+          padding: 13px 15px 18px;
+          color: #c8c9ca;
+          font-weight: 300;
+          font-family: "Grotesk";
+          letter-spacing: 0.02em;
+          text-decoration: underline;
+          background-color: #fff;
+          border: unset;
+          border-top: 1px solid #E1E4E8;
+          outline: none;
+          cursor: pointer;
+        }
+      }
+    }
+
+    &.transfer-error {
+      .dialog {
+        &__header {
+          padding-top: 67px;
+          padding-bottom: 24px;
+        }
+        
+        &__subtext {
+          color: rgba(0, 0, 0, 0.7);
+          font-size: 14px;
+          line-height: 16px;
+        }
+
+        &__footer {
+          padding-top: 63px;
+        }
       }
 
-      .dialog__footer-button {
-        width: 100%;
-        padding: 13px 15px 18px;
-        color: #c8c9ca;
-        font-weight: 300;
-        font-family: "Grotesk";
-        letter-spacing: 0.02em;
-        text-decoration: underline;
-        background-color: #fff;
-        border: unset;
-        border-top: 1px solid #E1E4E8;
-        outline: none;
-        cursor: pointer;
+      .footer__button {
+        min-width: 232px;
       }
     }
   }
