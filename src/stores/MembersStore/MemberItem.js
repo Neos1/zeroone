@@ -1,5 +1,4 @@
 import { observable } from 'mobx';
-import EMPTY_DATA_STRING from '../../constants';
 
 class MemberItem {
   /**
@@ -30,7 +29,7 @@ class MemberItem {
   }
 
   /** Wallet address member */
-  @observable wallet = EMPTY_DATA_STRING;
+  @observable wallet = '';
 
   /** Weight member in vote */
   // TODO fix calculating weight on correct
@@ -40,7 +39,7 @@ class MemberItem {
   @observable balance = 0;
 
   /** Custom token name */
-  @observable customTokenName = EMPTY_DATA_STRING;
+  @observable customTokenName = '';
 }
 
 export default MemberItem;

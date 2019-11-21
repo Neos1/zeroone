@@ -32,8 +32,18 @@ class RootStore {
   }
 
   @computed get stores() {
-    const { appStore, userStore, dialogStore } = this;
-    return { appStore, userStore, dialogStore };
+    const {
+      appStore,
+      userStore,
+      dialogStore,
+      membersStore,
+    } = this;
+    return {
+      appStore,
+      userStore,
+      dialogStore,
+      membersStore,
+    };
   }
 }
 

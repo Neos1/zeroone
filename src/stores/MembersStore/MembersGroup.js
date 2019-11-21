@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import EMPTY_DATA_STRING from '../../constants';
 import MemberItem from './MemberItem';
 
 class MembersGroup {
@@ -43,19 +42,19 @@ class MembersGroup {
   }
 
   /** Name group (Example: Admins) */
-  @observable name = EMPTY_DATA_STRING;
+  @observable name = '';
 
   /** Description for group */
-  @observable description = EMPTY_DATA_STRING;
+  @observable description = '';
 
   /** Wallet for group */
   @observable wallet = null;
 
   /** Custom token name */
-  @observable customTokenName = EMPTY_DATA_STRING;
+  @observable customTokenName = '';
 
   /** Basic token name */
-  @observable tokenName = EMPTY_DATA_STRING;
+  @observable tokenName = '';
 
   /** Balance group */
   // TODO fix on correct realization
