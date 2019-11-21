@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import MemberItem from './MemberItem';
 
 class MembersGroup {
@@ -28,6 +28,7 @@ class MembersGroup {
       || !description
       || !customTokenName
       || !tokenName
+      || !wallet
       || Array.isArray(list) === false
     ) throw new Error('Incorrect data provided!');
     this.name = name;
@@ -59,6 +60,11 @@ class MembersGroup {
   /** Balance group */
   // TODO fix on correct realization
   @observable balance = 0;
+
+  @computed
+  get fullBalance() {
+    return `${this.balance} ${this.customTokenName}`;
+  }
 
   /** Members list */
   @observable list = [];

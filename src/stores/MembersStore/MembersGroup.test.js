@@ -6,6 +6,7 @@ describe('MembersGroup', () => {
     description: 'short description for group',
     customTokenName: 'TKN',
     tokenName: 'ERC20',
+    wallet: '0xB210af05Bf82eF6C6BA034B22D18c89B5D23Cc90',
     list: [
       {
         wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
@@ -59,6 +60,12 @@ describe('MembersGroup', () => {
   it('should cause error without list', () => {
     expect(
       () => (new MembersGroup({ ...defaultProps, list: null })),
+    ).toThrow(new Error('Incorrect data provided!'));
+  });
+
+  it('should cause error without wallet', () => {
+    expect(
+      () => (new MembersGroup({ ...defaultProps, wallet: null })),
     ).toThrow(new Error('Incorrect data provided!'));
   });
 });

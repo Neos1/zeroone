@@ -36,4 +36,93 @@
       }
     }
   }
+
+  &__group {
+    margin-bottom: 8px;
+
+    &-button {
+      width: 100%;
+      padding: 8px 0;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      outline: none;
+      cursor: pointer;
+    }
+
+    &-id {
+      margin-bottom: 4px;
+      color: rgba(0, 0, 0, 0.2);
+      font-weight: 300;
+      font-size: 11px;
+      font-family: "Grotesk";
+      line-height: 13px;
+    }
+
+    &-main,
+    &-extra,
+    &-divider {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &-main {
+      width: 75%;
+    }
+
+    &-id,
+    &-main,
+    &-wallet {
+      padding-left: 29px;
+    }
+
+    &-extra {
+      position: relative;
+      width: calc(25% - 1px);
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    &-divider {
+      width: 1px;
+      height: 100%;
+      max-height: 112px;
+      margin-top: -6px;
+      margin-bottom: -6px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &-name {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &-description {
+      min-height: 65px;
+      margin-bottom: 8px;
+      padding-right: 15px;
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 300;
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-wallet,
+    &-token {
+      color: rgba(200, 201, 202, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-balance {
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 1);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
 }
