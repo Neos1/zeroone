@@ -16,6 +16,7 @@ render(
     appStore={stores.appStore}
     userStore={stores.userStore}
     dialogStore={stores.dialogStore}
+    membersStore={stores.membersStore}
   >
     <Header />
     <SimpleRouter />
