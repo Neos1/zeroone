@@ -5,9 +5,9 @@ import { Collapse } from 'react-collapse';
 import { withTranslation } from 'react-i18next';
 import MemberItem from '../../stores/MembersStore/MemberItem';
 import { Pudding } from '../Icons';
+import MembersGroupTable from './MembersGroupTable';
 
 import styles from './Members.scss';
-import MembersGroupTable from './MembersGroupTable';
 
 /**
  * Group members component
@@ -28,7 +28,7 @@ class MembersGroupComponent extends React.Component {
     /** token group */
     token: PropTypes.string.isRequired,
     /** member list */
-    list: PropTypes.arrayOf(MemberItem).isRequired,
+    list: PropTypes.arrayOf(PropTypes.instanceOf(MemberItem)).isRequired,
     /** text when list is empty */
     textForEmptyState: PropTypes.string.isRequired,
     /** translate method */
