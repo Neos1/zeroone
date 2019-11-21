@@ -40,6 +40,8 @@ describe('MembersGroupComponent', () => {
       expect(instance.state.isOpen).toEqual(false);
       instance.toggleOpen();
       expect(instance.state.isOpen).toEqual(true);
+      instance.toggleOpen();
+      expect(instance.state.isOpen).toEqual(false);
     });
   });
 });

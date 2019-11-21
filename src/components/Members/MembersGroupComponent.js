@@ -31,6 +31,9 @@ class MembersGroupComponent extends React.Component {
     };
   }
 
+  /**
+   * Method for change isOpen state
+   */
   toggleOpen = () => {
     this.setState((prevState) => ({
       isOpen: !prevState.isOpen,
