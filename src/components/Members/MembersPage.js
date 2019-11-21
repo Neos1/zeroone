@@ -20,7 +20,7 @@ class MembersPage extends React.Component {
   static propTypes = {
     membersStore: PropTypes.shape({
       addToGroups: PropTypes.func.isRequired,
-      list: MobxPropTypes.observableArrayOf(MembersGroup),
+      list: MobxPropTypes.observableArrayOf(PropTypes.instanceOf(MembersGroup)),
     }).isRequired,
   }
 

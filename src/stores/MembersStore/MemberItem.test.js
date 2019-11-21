@@ -21,6 +21,10 @@ describe('MemberItem', () => {
       expect(memberItem.balance).toEqual(120);
       expect(memberItem.customTokenName).toEqual('TKN');
     });
+
+    it('fullBalance should be correct', () => {
+      expect(memberItem.fullBalance).toEqual('120 TKN');
+    });
   });
 
   it('should cause error without wallet', () => {
