@@ -12,6 +12,7 @@ class MembersGroup {
    * @param {number} param0.balance balance for group
    * @param {string} param0.customTokenName custom token name
    * @param {string} param0.tokenName token name
+   * @param {string} param0.textForEmptyState text for state when list is empty
    * @param {Array} param0.list members list
    */
   constructor({
@@ -22,6 +23,7 @@ class MembersGroup {
     customTokenName,
     tokenName,
     list,
+    textForEmptyState,
   }) {
     if (
       !name
@@ -37,29 +39,35 @@ class MembersGroup {
     this.balance = balance;
     this.customTokenName = customTokenName;
     this.tokenName = tokenName;
+    if (textForEmptyState && textForEmptyState.length) {
+      this.textForEmptyState = textForEmptyState;
+    }
     list.forEach((member) => {
       this.addToList(member);
     });
   }
 
   /** Name group (Example: Admins) */
-  @observable name = '';
+  name = '';
 
   /** Description for group */
-  @observable description = '';
+  description = '';
 
   /** Wallet for group */
-  @observable wallet = null;
+  wallet = null;
 
   /** Custom token name */
-  @observable customTokenName = '';
+  customTokenName = '';
 
   /** Basic token name */
-  @observable tokenName = '';
+  tokenName = '';
 
   /** Balance group */
   // TODO fix on correct realization
-  @observable balance = 0;
+  balance = 0;
+
+  /** Text for state when list is empty */
+  textForEmptyState = 'other:noData';
 
   @computed
   get fullBalance() {

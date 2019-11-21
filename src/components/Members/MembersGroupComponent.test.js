@@ -10,6 +10,7 @@ describe('MembersGroupComponent', () => {
     description: 'description text',
     wallet: '0xA234FA767ASD7F67HH34HF7DF7S',
     token: 'ERC 20',
+    list: [],
   };
 
   describe('With correct data', () => {

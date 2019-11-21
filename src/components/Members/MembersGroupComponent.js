@@ -2,12 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
+import { withTranslation } from 'react-i18next';
+import MemberItem from '../../stores/MembersStore/MemberItem';
+import { Pudding } from '../Icons';
 
 import styles from './Members.scss';
 
 /**
  * Group members component
  */
+@withTranslation()
 class MembersGroupComponent extends React.Component {
   static propTypes = {
     /** id group */
@@ -22,6 +26,12 @@ class MembersGroupComponent extends React.Component {
     wallet: PropTypes.string.isRequired,
     /** token group */
     token: PropTypes.string.isRequired,
+    /** member list */
+    list: PropTypes.arrayOf(MemberItem).isRequired,
+    /** text when list is empty */
+    textForEmptyState: PropTypes.string.isRequired,
+    /** translate method */
+    t: PropTypes.func.isRequired,
   }
 
   constructor() {
@@ -48,6 +58,9 @@ class MembersGroupComponent extends React.Component {
       description,
       wallet,
       token,
+      list,
+      textForEmptyState,
+      t,
     } = this.props;
     const { isOpen } = this.state;
     return (
@@ -78,7 +91,22 @@ class MembersGroupComponent extends React.Component {
           <div className={styles['members__group-wallet']}>{wallet}</div>
         </button>
         <Collapse isOpened={isOpen}>
-          <div>Random content</div>
+          {
+            list && list.length
+              ? (
+                <div>with data state</div>
+              )
+              : (
+                <div className={styles['members__group-no-data']}>
+                  <div className={styles['members__group-no-data-icon']}>
+                    <Pudding />
+                  </div>
+                  <div className={styles['members__group-no-data-text']}>
+                    {t(textForEmptyState)}
+                  </div>
+                </div>
+              )
+          }
         </Collapse>
       </div>
     );

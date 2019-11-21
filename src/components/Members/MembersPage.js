@@ -34,6 +34,7 @@ class MembersPage extends React.Component {
       balance: '11,510156',
       customTokenName: 'TKN',
       tokenName: 'ERC20',
+      textForEmptyState: 'other:noDataAdmins',
       list: [],
     });
     membersStore.addToGroups({
@@ -81,6 +82,9 @@ class MembersPage extends React.Component {
                 description={group.description}
                 wallet={group.wallet}
                 token={group.tokenName}
+                list={group.list}
+                text={group.list}
+                textForEmptyState={group.textForEmptyState}
               />
             ))
           }

@@ -11,6 +11,7 @@ describe('MembersStore', () => {
           description: 'short description for group',
           customTokenName: 'TKN',
           tokenName: 'ERC20',
+          wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
           list: [
             {
               wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',

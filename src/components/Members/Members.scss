@@ -124,5 +124,30 @@
       font-size: 14px;
       line-height: 16px;
     }
+
+    &-no-data {
+      width: 100%;
+      padding: 18px 32px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-top: unset;
+
+      &-icon,
+      &-text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        margin-right: 10px;
+      }
+
+      &-text {
+        color: #4d4d4d;
+        font-size: 11px;
+        line-height: 13px;
+        white-space: pre-line;
+      }
+    }
   }
 }

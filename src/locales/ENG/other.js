@@ -17,5 +17,7 @@ const other = {
   notEnoughTokens: 'Perhaps there are not enough tokens',
   enterPassForConfirm: 'Enter your password to confirm your decision.',
   connectOuterGroupToProject: 'Connect an external group of participants to the "{{project}}" project',
+  noData: 'No data',
+  noDataAdmins: 'Unfortunately, no one can see the administrators. \nSuch is the secret design and limitation of the technologies used.',
 };
 export default other;
