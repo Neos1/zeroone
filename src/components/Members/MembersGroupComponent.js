@@ -7,6 +7,7 @@ import MemberItem from '../../stores/MembersStore/MemberItem';
 import { Pudding } from '../Icons';
 
 import styles from './Members.scss';
+import MembersGroupTable from './MembersGroupTable';
 
 /**
  * Group members component
@@ -94,7 +95,12 @@ class MembersGroupComponent extends React.Component {
           {
             list && list.length
               ? (
-                <div>with data state</div>
+                <div className={styles['members__group-data']}>
+                  <MembersGroupTable
+                    list={list}
+                    onRowClick={() => { console.log('row click'); }}
+                  />
+                </div>
               )
               : (
                 <div className={styles['members__group-no-data']}>

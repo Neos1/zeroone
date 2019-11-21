@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { computed } from 'mobx';
 
 class MemberItem {
   /**
@@ -9,12 +9,14 @@ class MemberItem {
    * @param {number} param0.weight weight
    * @param {number} param0.balance balance
    * @param {string} param0.customTokenName custom token name
+   * @param {boolean} param0.isAdmin wallet is admin
    */
   constructor({
     wallet,
     weight,
     balance,
     customTokenName,
+    isAdmin,
   }) {
     if (
       !wallet
@@ -26,20 +28,30 @@ class MemberItem {
     this.weight = weight;
     this.balance = balance;
     this.customTokenName = customTokenName;
+    if (typeof isAdmin === 'boolean') this.isAdmin = isAdmin;
   }
 
   /** Wallet address member */
-  @observable wallet = '';
+  wallet = '';
 
   /** Weight member in vote */
   // TODO fix calculating weight on correct
-  @observable weight = 0;
+  weight = 0;
 
   /** Balance member */
-  @observable balance = 0;
+  balance = 0;
 
   /** Custom token name */
-  @observable customTokenName = '';
+  customTokenName = '';
+
+  /** Wallet is admin */
+  isAdmin = false;
+
+  @computed
+  /** Method for getting full balance text */
+  get fullBalance() {
+    return `${this.balance} ${this.customTokenName}`;
+  }
 }
 
 export default MemberItem;

@@ -8,7 +8,7 @@ import MembersTop from './MembersTop';
 import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import MembersGroupComponent from './MembersGroupComponent';
 
-// import styles from './nameClass.css';
+import styles from './Members.scss';
 
 /**
  * Component for page with members
@@ -50,6 +50,7 @@ class MembersPage extends React.Component {
           weight: 25,
           balance: '0,000004',
           customTokenName: 'TKN',
+          isAdmin: true,
         },
         {
           wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
@@ -71,7 +72,7 @@ class MembersPage extends React.Component {
             console.log('click');
           }}
         />
-        <div>
+        <div className={styles.members__page}>
           {
             groups.map((group, index) => (
               <MembersGroupComponent

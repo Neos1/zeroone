@@ -19,5 +19,6 @@ const other = {
   connectOuterGroupToProject: 'Подключить внешнюю группу участников к проекту "{{project}}"',
   noData: 'Нет данных',
   noDataAdmins: 'К сожалению никто не может увидеть администраторов. \nТаков тайный замысел и ограничение, используемых технологий.',
+  weightVote: 'Вес голоса',
 };
 export default other;
