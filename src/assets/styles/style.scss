@@ -24,35 +24,6 @@ svg {
 }
 
 
-@keyframes stroke-spacing {
-  0% {
-    stroke-dasharray: 0 200;
-  }
-  45% {
-    stroke-dashoffset: 0;
-    stroke-dasharray: 200 200;
-  }
-  90% {
-    stroke-dashoffset: -200;
-    stroke-dasharray: 200 200;
-  }
-  100% {
-    stroke-dashoffset: -200;
-    stroke-dasharray: 200 200;
-  }
-}
-
-@keyframes stroke-color {
-  0%  { stroke: $primary; }
-  24% { stroke: $primary; }
-  25% { stroke: $primary; }
-  49% { stroke: $primary; }
-  50% { stroke: $primary; }
-  74% { stroke: $primary; }
-  75% { stroke: $primary; }
-  99% { stroke: $primary; }
-}
-
 ::-webkit-scrollbar-thumb {
   border: 1px solid $border;
 }

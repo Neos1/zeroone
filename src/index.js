@@ -4,21 +4,18 @@ import { Provider } from 'mobx-react';
 import SimpleRouter from './components/Router/SimpleRouter';
 import rootStore from './stores/RootStore';
 import Alert from './components/Alert';
+import Header from './components/Header';
 import './i18n';
 
 import './assets/styles/style.scss';
-import Header from './components/Header';
 
-const { stores } = rootStore;
-// eslint-disable-next-line no-console
-console.log(stores);
+const { userStore, appStore, alertStore } = rootStore;
+
 render(
-  <Provider appStore={stores.appStore} userStore={stores.userStore}>
+  <Provider appStore={appStore} userStore={userStore} alertStore={alertStore}>
     <Header />
     <SimpleRouter />
-    <Alert visible={stores.appStore.alertVisible}>
-      {stores.appStore.alertText}
-    </Alert>
+    <Alert />
   </Provider>,
   document.getElementById('root'),
 );

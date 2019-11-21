@@ -9,11 +9,11 @@ import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Loader from '../Loader';
-import styles from '../Login/Login.scss';
 import passwordValidation from '../../utils/PasswordValidation';
-
 import PasswordForm from './PasswordForm';
 import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
+
+import styles from '../Login/Login.scss';
 
 @inject('userStore', 'appStore')
 @observer
@@ -32,8 +32,8 @@ class CreateWallet extends Component {
     this.setState({ loading: true });
     if (recover) {
       userStore.recoverWallet(values.password).then(() => {
-        this.setState({ redirect: true });
         userStore.saveWalletToFile();
+        this.setState({ redirect: true });
       }).catch(() => {
         this.setState({ loading: false });
       });
@@ -46,7 +46,6 @@ class CreateWallet extends Component {
     }
   }
 
-
   render() {
     const { recover } = this.props;
     const { redirect, loading } = this.state;
@@ -57,7 +56,6 @@ class CreateWallet extends Component {
           createWallet(form);
         },
         onError() {
-
         },
       },
     });
@@ -78,14 +76,11 @@ class CreateWallet extends Component {
               />
             )
             : <CreationLoader />}
-
-
         </div>
       </Container>
     );
   }
 }
-
 
 const CreationLoader = withTranslation(['headings'])(({ t }) => (
   <FormBlock>

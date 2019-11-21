@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
@@ -8,12 +7,6 @@ import styles from './Input.scss';
 
 @observer
 class Input extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
   handleOnChange = (e) => {
     const { field, onInput } = this.props;
     field.onChange(e);
@@ -46,8 +39,13 @@ class Input extends Component {
 Input.propTypes = {
   children: propTypes.element.isRequired,
   className: propTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-  field: propTypes.object.isRequired,
+  field: propTypes.shape({
+    error: propTypes.string.isRequired,
+    value: propTypes.string.isRequired,
+    placeholder: propTypes.string.isRequired,
+    bind: propTypes.func.isRequired,
+    onChange: propTypes.func.isRequired,
+  }).isRequired,
   onInput: propTypes.func,
 };
 Input.defaultProps = {

@@ -11,7 +11,7 @@ import styles from '../Login/Login.scss';
 
 const AddNewProject = withTranslation()(({ t }) => (
   <Container>
-    <div className={`${styles.form}`}>
+    <div className={styles.form}>
       <FormBlock className={styles.form__block}>
         <Heading>
           {t('headings:addingProject.heading')}

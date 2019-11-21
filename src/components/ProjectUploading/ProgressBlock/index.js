@@ -11,10 +11,10 @@ const ProgressBlock = ({
     ${state > index ? 'success' : ''}`}
   >
     <svg width="80" height="80" viewBox="0 0 80 80">
-      <polyline className={`${styles['line-cornered']} ${styles['stroke-still']}`} points="0,0 80,0 80,80" strokeWidth="10" fill="none" />
-      <polyline className={`${styles['line-cornered']} ${styles['stroke-still']}`} points="0,0 0,80 80,80" strokeWidth="10" fill="none" />
-      <polyline className={`${styles['line-cornered']} ${styles['stroke-animation']}`} points="0,40 0,0 80,0 80,40" strokeWidth="10" fill="none" />
-      <polyline className={`${styles['line-cornered']} ${styles['stroke-animation']}`} points="0,40 0,80 80,80 80,40" strokeWidth="10" fill="none" />
+      <polyline className={styles['stroke-still']} points="0,0 80,0 80,80" strokeWidth="10" fill="none" />
+      <polyline className={styles['stroke-still']} points="0,0 0,80 80,80" strokeWidth="10" fill="none" />
+      <polyline className={styles['stroke-animation']} points="0,40 0,0 80,0 80,40" strokeWidth="10" fill="none" />
+      <polyline className={styles['stroke-animation']} points="0,40 0,80 80,80 80,40" strokeWidth="10" fill="none" />
     </svg>
     <div className={styles['progress-block__icon']}>
       {children[0] ? children[0] : children}
@@ -34,7 +34,9 @@ ProgressBlock.propTypes = {
   state: propTypes.number.isRequired,
   noline: propTypes.bool,
 };
+
 ProgressBlock.defaultProps = {
   noline: false,
 };
+
 export default ProgressBlock;

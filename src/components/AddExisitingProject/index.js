@@ -23,7 +23,6 @@ import styles from '../Login/Login.scss';
 @withTranslation()
 @inject('appStore')
 @observer
-
 class AddExistingProject extends Component {
   connectForm = new ConnectProjectForm({
     hooks: {
@@ -37,9 +36,9 @@ class AddExistingProject extends Component {
   });
 
   steps = {
-    default: '0',
-    loading: '1',
-    success: '2',
+    default: 0,
+    loading: 1,
+    success: 2,
   }
 
   // eslint-disable-next-line react/static-property-placement
@@ -90,12 +89,13 @@ class AddExistingProject extends Component {
 
   // eslint-disable-next-line class-methods-use-this
   renderSwitch(step) {
+    const { steps } = this;
     switch (step) {
-      case '0':
+      case steps.default:
         return <InputBlock form={this.connectForm} />;
-      case '1':
+      case steps.loading:
         return <LoadingBlock />;
-      case '2':
+      case steps.success:
         return <MessageBlock />;
       default:
         return '';

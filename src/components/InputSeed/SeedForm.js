@@ -1,26 +1,25 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import SeedForm from '../../stores/FormsStore/SeedForm';
 import Input from '../Input';
 import { BlackWidestButton } from '../Button';
 
 import styles from '../Login/Login.scss';
 
+@withTranslation()
 class SeedInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   render() {
-    const { seed, submit, error } = this.props;
+    const {
+      seed, submit, showError, t,
+    } = this.props;
     const seedForm = new SeedForm({
       hooks: {
         onSuccess(form) {
           submit(form);
         },
         onError() {
-          error();
+          showError();
         },
       },
     });
@@ -40,7 +39,7 @@ class SeedInput extends Component {
         </div>
         <div className={styles.form__submit}>
           <BlackWidestButton disabled={seedForm.loading} type="submit">
-            Продолжить
+            {t('buttons:continue')}
           </BlackWidestButton>
         </div>
       </form>
@@ -50,8 +49,9 @@ class SeedInput extends Component {
 
 SeedInput.propTypes = {
   submit: propTypes.func.isRequired,
-  error: propTypes.func.isRequired,
+  showError: propTypes.func.isRequired,
   seed: propTypes.arrayOf(propTypes.string).isRequired,
+  t: propTypes.func.isRequired,
 };
 
 export default SeedInput;

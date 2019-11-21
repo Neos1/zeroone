@@ -58,8 +58,7 @@ class CreateNewProjectWithTokens extends Component {
     super(props);
     this.state = {
       currentStep: this.steps.token,
-      step: 1,
-      disabled: false,
+      indicatorStep: 1,
     };
   }
 
@@ -67,7 +66,7 @@ class CreateNewProjectWithTokens extends Component {
     const { steps } = this;
     this.setState({
       currentStep: steps.token,
-      step: 1,
+      indicatorStep: 1,
     });
   }
 
@@ -81,9 +80,9 @@ class CreateNewProjectWithTokens extends Component {
     appStore.checkErc(address).then(() => {
       this.setState({
         currentStep: steps.tokenChecked,
-        step: 2,
+        indicatorStep: 2,
       });
-      appStore.deployArgs = [address];
+      appStore.setDeployArgs([address]);
     });
   }
 
@@ -91,7 +90,7 @@ class CreateNewProjectWithTokens extends Component {
     const { steps } = this;
     this.setState({
       currentStep: steps.projectInfo,
-      step: 3,
+      indicatorStep: 3,
     });
   }
 
@@ -99,9 +98,8 @@ class CreateNewProjectWithTokens extends Component {
     const { steps } = this;
     const { appStore, userStore, t } = this.props;
     const { name, password } = form.values();
-    this.setState({ disabled: true });
-    appStore.name = name;
-    appStore.password = password;
+    appStore.setProjectName(name);
+    userStore.setPassword(password);
     userStore.readWallet(password)
       .then(() => {
         userStore.checkBalance(userStore.address)
@@ -113,8 +111,7 @@ class CreateNewProjectWithTokens extends Component {
             } else {
               this.setState({
                 currentStep: steps.projectInfo,
-                step: 2,
-                disabled: false,
+                indicatorStep: 2,
               });
               appStore.displayAlert(t('errors:lowBalance'), 3000);
             }
@@ -123,27 +120,25 @@ class CreateNewProjectWithTokens extends Component {
       .catch(() => {
         this.setState({
           currentStep: steps.projectInfo,
-          step: 2,
-          disabled: false,
+          indicatorStep: 2,
         });
         appStore.displayAlert(t('errors:tryAgain'), 3000);
       });
   }
 
   renderSwitch(step) {
-    const { disabled } = this.state;
+    const { steps } = this;
     switch (step) {
-      case 0:
+      case steps.token:
         return <InputTokenAddress form={this.connectToken} onSubmit={this.checkToken} />;
-      case 1:
+      case steps.check:
         return <LoadingBlock />;
-      case 2:
+      case steps.tokenChecked:
         return <ContractConfirmation onSubmit={this.gotoProjectInfo} />;
-      case 3:
+      case steps.projectInfo:
         return (
           <InputProjectData
             form={this.createProject}
-            disabled={disabled}
             onClick={this.returnToTokenAddress}
           />
         );
@@ -153,12 +148,13 @@ class CreateNewProjectWithTokens extends Component {
   }
 
   render() {
-    const { currentStep, step } = this.state;
-    if (currentStep === 4) return <Redirect to="/uploadWithExistingTokens" />;
+    const { steps } = this;
+    const { currentStep, indicatorStep } = this.state;
+    if (currentStep === steps.uploading) return <Redirect to="/uploadWithExistingTokens" />;
     return (
       <Container>
         <div className={styles.form}>
-          <StepIndicator step={step} count={3} />
+          <StepIndicator step={indicatorStep} count={3} />
           {this.renderSwitch(currentStep)}
         </div>
       </Container>
@@ -211,7 +207,7 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
         {t('headings:checkingTokensConfirm.subheading.1')}
       </span>
     </Heading>
-    <form>
+    <div>
       <div className={styles.form__wallet}>
         <p className={styles['form__wallet-label']}>{t('other:count')}</p>
         <p className={styles['form__wallet-text']}>{`${ERC.totalSupply} ${ERC.symbol}`}</p>
@@ -221,12 +217,12 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
           {t('buttons:continue')}
         </BlackWidestButton>
       </div>
-    </form>
+    </div>
   </FormBlock>
 ))));
 
 const InputProjectData = withTranslation()(({
-  t, form, onClick, disabled,
+  t, form, onClick,
 }) => (
   <FormBlock>
     <Heading>
@@ -245,7 +241,7 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <BlackWidestButton disabled={disabled} type="submit">
+        <BlackWidestButton disabled={form.loading} type="submit">
           {t('buttons:continue')}
         </BlackWidestButton>
       </div>
@@ -256,7 +252,7 @@ const InputProjectData = withTranslation()(({
           </p>
         </Explanation>
       </div>
-      <BackButton onClick={() => { onClick(); }}>
+      <BackButton onClick={onClick}>
         <BackIcon />
         {t('buttons:back')}
       </BackButton>
@@ -269,15 +265,11 @@ const StepIndicator = withTranslation()(({ t, step, count }) => (
     <p>
       {t('other:step')}
       <span>
-        {' '}
-        {step}
-        {' '}
+        {` ${step} `}
       </span>
       {t('other:from')}
       <span>
-        {' '}
-        {count}
-        {' '}
+        {` ${count} `}
       </span>
     </p>
     <p>
@@ -295,11 +287,14 @@ CreateNewProjectWithTokens.propTypes = {
     name: propTypes.string.isRequired,
     password: propTypes.string.isRequired,
     displayAlert: propTypes.func.isRequired,
+    setDeployArgs: propTypes.func.isRequired,
+    setProjectName: propTypes.func.isRequired,
   }).isRequired,
   userStore: propTypes.shape({
     readWallet: propTypes.func.isRequired,
     checkBalance: propTypes.func.isRequired,
     address: propTypes.string.isRequired,
+    setPassword: propTypes.func.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
 };

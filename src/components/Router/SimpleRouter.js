@@ -2,7 +2,6 @@ import React from 'react';
 import {
   MemoryRouter, Route, Switch,
 } from 'react-router-dom';
-
 import Login from '../Login';
 import CreateWallet from '../CreateWallet';
 import InputSeed from '../InputSeed';

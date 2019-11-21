@@ -29,8 +29,16 @@ const CreationAlert = withTranslation()(({ t, success = false, recover = false }
     <div className={styles.form}>
       <FormBlock>
         <Heading>
-          {success ? t('headings:walletCreated.heading') : recover ? t('headings:walletRestored.heading') : ''}
-          {success ? t('headings:walletCreated.subheading') : recover ? t('headings:walletRestored.subheading') : ''}
+          {success
+            ? t('headings:walletCreated.heading')
+            : recover
+              ? t('headings:walletRestored.heading')
+              : ''}
+          {success
+            ? t('headings:walletCreated.subheading')
+            : recover
+              ? t('headings:walletRestored.subheading')
+              : ''}
         </Heading>
         <WalletAddress />
         <NavLink to="/">

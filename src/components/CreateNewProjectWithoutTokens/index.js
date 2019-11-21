@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unused-state */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -17,9 +15,9 @@ import Input from '../Input';
 import {
   BackIcon, Password, TokenSymbol, TokenCount, TokenName,
 } from '../Icons';
-
 import CreateTokenForm from '../../stores/FormsStore/CreateToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
+
 import styles from '../Login/Login.scss';
 
 @withTranslation()
@@ -28,9 +26,9 @@ import styles from '../Login/Login.scss';
 class CreateNewProjectWithoutTokens extends Component {
   form = new CreateTokenForm({
     hooks: {
-      onSuccess: (form) => new Promise((resolve, reject) => {
-        this.createToken(form).then(resolve()).catch(reject());
-      }),
+      onSuccess: (form) => {
+        this.createToken(form);
+      },
       onError: () => {
         this.showValidationError();
       },
@@ -39,11 +37,11 @@ class CreateNewProjectWithoutTokens extends Component {
 
   createProject = new CreateProjectForm({
     hooks: {
-      onSuccess: (form) => new Promise(() => {
+      onSuccess: (form) => {
         this.gotoUploading(form);
-      }),
+      },
       onError: () => {
-        this.showError();
+        this.showValidationError();
       },
     },
   });
@@ -59,10 +57,8 @@ class CreateNewProjectWithoutTokens extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 1,
+      indicatorStep: 1,
       currentStep: this.steps.token,
-      tokenAddr: '',
-      disabled: false,
     };
   }
 
@@ -91,16 +87,13 @@ class CreateNewProjectWithoutTokens extends Component {
             userStore.checkBalance(userStore.address).then((balance) => {
               if (balance > 0.5) {
                 appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
-                // eslint-disable-next-line no-unused-vars
                   const interval = setInterval(() => {
-                  // eslint-disable-next-line consistent-return
                     appStore.checkReceipt(hash).then((receipt) => {
                       if (receipt) {
                         this.setState({
-                          tokenAddr: receipt.contractAddress,
                           currentStep: steps.tokenCreated,
                         });
-                        appStore.deployArgs = [receipt.contractAddress];
+                        appStore.setDeployArgs([receipt.contractAddress]);
                         clearInterval(interval);
                       }
                     }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
@@ -110,7 +103,7 @@ class CreateNewProjectWithoutTokens extends Component {
               } else {
                 this.setState({
                   currentStep: steps.token,
-                  step: 1,
+                  indicatorStep: 1,
                 });
                 appStore.displayAlert(t('errors:lowBalance'), 3000);
                 reject();
@@ -120,7 +113,7 @@ class CreateNewProjectWithoutTokens extends Component {
         }).catch(() => {
           this.setState({
             currentStep: steps.token,
-            step: 1,
+            indicatorStep: 1,
           });
           appStore.displayAlert(t('errors:wrongPassword'), 3000);
           reject();
@@ -137,7 +130,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const { steps } = this;
     this.setState({
       currentStep: steps.projectInfo,
-      step: 2,
+      indicatorStep: 2,
     });
   }
 
@@ -146,9 +139,8 @@ class CreateNewProjectWithoutTokens extends Component {
     const { steps } = this;
     const { userStore, appStore, t } = this.props;
     const { name, password } = form.values();
-    appStore.name = name;
-    appStore.password = password;
-    this.setState({ disabled: true });
+    appStore.setProjectName(name);
+    userStore.setPassword(password);
     userStore.readWallet(password)
       .then(() => {
         userStore.checkBalance(userStore.address)
@@ -160,8 +152,7 @@ class CreateNewProjectWithoutTokens extends Component {
             } else {
               this.setState({
                 currentStep: steps.projectInfo,
-                step: 2,
-                disabled: false,
+                indicatorStep: 2,
               });
               appStore.displayAlert(t('errors:lowBalance'), 3000);
             }
@@ -170,33 +161,26 @@ class CreateNewProjectWithoutTokens extends Component {
       .catch(() => {
         this.setState({
           currentStep: steps.projectInfo,
-          step: 2,
-          disabled: false,
+          indicatorStep: 2,
         });
         appStore.displayAlert(t('errors:tryAgain'), 3000);
       });
   }
 
-  showError() {
-    const { appStore, t } = this.props;
-    appStore.displayAlert(t('errors:validationError'), 3000);
-  }
 
-  // eslint-disable-next-line class-methods-use-this
   renderSwitch(step) {
-    const { disabled } = this.state;
+    const { steps } = this;
     switch (step) {
-      case 1:
+      case steps.token:
         return <CreateTokenData form={this.form} />;
-      case 2:
+      case steps.creation:
         return <LoadingBlock />;
-      case 3:
+      case steps.tokenCreated:
         return <TokenCreationAlert onSubmit={this.gotoProjectInfo} />;
-      case 4:
+      case steps.projectInfo:
         return (
           <InputProjectData
             form={this.createProject}
-            disabled={disabled}
             onClick={this.returnToContractConnecting}
           />
         );
@@ -206,12 +190,12 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   render() {
-    const { currentStep, step } = this.state;
+    const { currentStep, indicatorStep } = this.state;
     if (currentStep === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     return (
       <Container>
         <div className={styles.form}>
-          <StepIndicator step={step} count={2} />
+          <StepIndicator step={indicatorStep} count={2} />
           {this.renderSwitch(currentStep)}
         </div>
       </Container>
@@ -240,7 +224,7 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
             {t('explanations:token.left.balance')}
             <span>
               <strong>
-                {(balances[address.replace('0x', '')] / 1.0e18).toFixed(5)}
+                {Number(balances[address.replace('0x', '')]).toFixed(5)}
                 {' ETH'}
               </strong>
             </span>
@@ -311,7 +295,7 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
     </Heading>
     <form>
       <div className={styles.form__submit}>
-        <BlackWideButton type="button" onClick={() => { onSubmit(); }}>
+        <BlackWideButton type="button" onClick={onSubmit}>
           {t('buttons:continue')}
         </BlackWideButton>
       </div>
@@ -320,7 +304,7 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
 ));
 
 const InputProjectData = withTranslation()(({
-  form, disabled, onClick, t,
+  form, onClick, t,
 }) => (
   <FormBlock>
     <Heading>
@@ -340,7 +324,7 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <BlackWidestButton disabled={disabled} type="submit">
+        <BlackWidestButton disabled={form.loading} type="submit">
           {t('buttons:continue')}
         </BlackWidestButton>
       </div>
@@ -351,7 +335,7 @@ const InputProjectData = withTranslation()(({
           </p>
         </Explanation>
       </div>
-      <BackButton onClick={() => { onClick(); }}>
+      <BackButton onClick={onClick}>
         <BackIcon />
         {t('buttons:back')}
       </BackButton>
@@ -364,15 +348,11 @@ const StepIndicator = withTranslation()(({ t, step, count }) => (
     <p>
       {t('other:step')}
       <span>
-        {' '}
-        { step }
-        {' '}
+        {` ${step} `}
       </span>
       {t('other:from')}
       <span>
-        {' '}
-        { count }
-        {' '}
+        {` ${count} `}
       </span>
     </p>
     <p>
@@ -388,13 +368,15 @@ CreateNewProjectWithoutTokens.propTypes = {
     checkReceipt: propTypes.func.isRequired,
     deployArgs: propTypes.arrayOf(propTypes.any).isRequired,
     displayAlert: propTypes.func.isRequired,
-    name: propTypes.string.isRequired,
+    setProjectName: propTypes.func.isRequired,
     password: propTypes.string.isRequired,
+    setDeployArgs: propTypes.func.isRequired,
   }).isRequired,
   userStore: propTypes.shape({
     readWallet: propTypes.func.isRequired,
     checkBalance: propTypes.func.isRequired,
     address: propTypes.string.isRequired,
+    setPassword: propTypes.func.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
 };
@@ -412,6 +394,7 @@ InputProjectData.propTypes = {
   form: propTypes.shape({
     $: propTypes.func.isRequired,
     onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
   }).isRequired,
   onClick: propTypes.func.isRequired,
 };

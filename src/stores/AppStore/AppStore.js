@@ -19,8 +19,6 @@ class AppStore {
 
   @observable name = '';
 
-  @observable password='';
-
   @observable alertVisible = false;
 
   @observable alertText = '';
@@ -41,7 +39,7 @@ class AppStore {
    * @function
    */
   @action readWalletList() {
-    const { Web3Service: { web3: { eth } } } = this.rootStore;
+    const { Web3Service: { web3: { eth, utils } } } = this.rootStore;
     this.walletList = {};
 
     const files = fs.readdirSync(PATH_TO_WALLETS);
@@ -49,7 +47,7 @@ class AppStore {
       const wallet = JSON.parse(fs.readFileSync(path.join(PATH_TO_WALLETS, file), 'utf8'));
       const walletObject = {};
       eth.getBalance(wallet.address)
-        .then((balance) => { this.balances[wallet.address] = balance; });
+        .then((balance) => { this.balances[wallet.address] = utils.fromWei(balance); });
       walletObject[wallet.address] = wallet;
       this.walletList = Object.assign(this.walletList, walletObject);
     });
@@ -151,23 +149,21 @@ class AppStore {
   }
 
   @action displayAlert(text, timeOut) {
-    this.alertVisible = true;
-    this.alertText = text;
-    if (typeof this.alertTimeout === 'number') {
-      clearTimeout(this.alertTimeout);
-    }
-    this.alertTimeout = setTimeout(() => {
-      this.alertVisible = false;
-    }, timeOut);
-  }
-
-  @action closeAlert() {
-    this.alertVisible = false;
+    const { alertStore } = this.rootStore;
+    alertStore.showAlert(text, timeOut);
   }
 
   @computed get wallets() {
     const wallets = Object.keys(this.walletList);
     return wallets.map((wallet) => ({ label: `0x${wallet}`, value: `0x${wallet}` }));
+  }
+
+  @action setProjectName(value) {
+    this.name = value;
+  }
+
+  @action setDeployArgs(value) {
+    this.deployArgs = value;
   }
 }
 

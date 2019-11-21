@@ -9,7 +9,7 @@ import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Explanation from '../Explanation';
-import { IconButton, BlackWidestButton, SeedToggleButton } from '../Button';
+import { BlackWidestButton, SeedToggleButton, BackButton } from '../Button';
 import { BackIcon, EyeIcon, CrossedEyeIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
@@ -61,10 +61,10 @@ class ShowSeed extends Component {
             </div>
           </FormBlock>
           <NavLink to="/">
-            <IconButton className="btn--link btn--noborder btn--back">
+            <BackButton>
               <BackIcon />
               {t('buttons:back')}
-            </IconButton>
+            </BackButton>
           </NavLink>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>

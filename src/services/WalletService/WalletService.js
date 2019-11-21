@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
 import WorkerWrapper from './entities/WorkerWrapper';
 import WalletWorker from '../../workers/wallet.worker';
@@ -6,9 +5,10 @@ import { fs, path, PATH_TO_WALLETS } from '../../constants';
 
 
 const bip39 = require('bip39');
-/** Service for working with wallets */
 
 const worker = new WorkerWrapper(new WalletWorker());
+
+/** Service for working with wallets */
 class WalletService {
   /**
    * Decrypts wallet
@@ -58,25 +58,13 @@ class WalletService {
    * @returns {Promise}
    */
   recoverWallet(mnemonic) {
-    return new Promise((resolve, reject) => {
-      if (bip39.validateMnemonic) {
-        const data = {
-          action: 'recover',
-          mnemonic,
-        };
-        resolve(worker.send(data));
-      } else reject();
-    });
-  }
-
-  /**
-   * Checking wallet for creating txDaat
-   * @param {string} wallet encryptedWallet
-   * @param {string} password password
-   * @return {bool} is password correct
-   */
-  validateMnemonic(mnemonic) {
-    return bip39.validateMnemonic(mnemonic);
+    if (bip39.validateMnemonic) {
+      const data = {
+        action: 'recover',
+        mnemonic,
+      };
+      return Promise.resolve(worker.send(data));
+    } return Promise.reject();
   }
 }
 export default WalletService;

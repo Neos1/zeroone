@@ -16,7 +16,7 @@ const DropdownOption = ({
     {subOption !== ''
       ? (
         <span className={styles.dropdown__suboption}>
-          {(Number(subOption) / 1.0e18).toFixed(5)}
+          {Number(subOption).toFixed(5)}
           {' ETH'}
         </span>
       )

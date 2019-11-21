@@ -305,6 +305,10 @@
         margin: 5px 0 0 -35%;
       }
     }
+    .stroke-animation {
+      opacity: 0;
+    }
+
     &.success{
       .progress-block__icon {
         &>svg {
@@ -322,7 +326,7 @@
       }
       .progress-line{
         width: 96px;
-        border-top: 2px solid rgba($color: $primary, $alpha: 1);
+        border: 1px solid rgba($color: $primary, $alpha: 1);
         opacity: 1;
       }
       &>p {
@@ -333,6 +337,9 @@
   
     &.active{
       & > img {
+        opacity: 1;
+      }
+      .stroke-animation {
         opacity: 1;
       }
       .progress-block__icon {
@@ -394,4 +401,34 @@
   font-size: 12px;
   text-align: center;
   transform: translate(-50%, 30%);
+}
+
+
+@keyframes stroke-spacing {
+  0% {
+    stroke-dasharray: 0 200;
+  }
+  45% {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 200 200;
+  }
+  90% {
+    stroke-dashoffset: -200;
+    stroke-dasharray: 200 200;
+  }
+  100% {
+    stroke-dashoffset: -200;
+    stroke-dasharray: 200 200;
+  }
+}
+
+@keyframes stroke-color {
+  0%  { stroke: $primary; }
+  24% { stroke: $primary; }
+  25% { stroke: $primary; }
+  49% { stroke: $primary; }
+  50% { stroke: $primary; }
+  74% { stroke: $primary; }
+  75% { stroke: $primary; }
+  99% { stroke: $primary; }
 }

@@ -25,8 +25,14 @@ class UserStore {
 
   @observable balance = 0;
 
+  @observable password = '';
+
   constructor(rootStore) {
     this.rootStore = rootStore;
+  }
+
+  @action setPassword(value) {
+    this.password = value;
   }
 
   @action setEncryptedWallet(wallet) {
@@ -169,6 +175,10 @@ class UserStore {
   @action async getEthBalance() {
     const { Web3Service: { web3 } } = this.rootStore;
     this.balance = await web3.eth.getBalance(this.address);
+  }
+
+  @action setMnemonicRepeat(value) {
+    this._mnemonicRepeat = value;
   }
 
   @computed get mnemonic() {

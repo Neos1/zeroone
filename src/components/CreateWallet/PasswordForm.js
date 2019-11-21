@@ -9,8 +9,9 @@ import Input from '../Input';
 import { IconButton, BlackWidestButton } from '../Button';
 import Explanation from '../Explanation';
 import Indicator from '../Indicator';
-import styles from '../Login/Login.scss';
 import passwordValidation from '../../utils/PasswordValidation';
+
+import styles from '../Login/Login.scss';
 
 @withTranslation()
 class PasswordForm extends Component {

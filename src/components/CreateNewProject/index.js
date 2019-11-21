@@ -11,13 +11,9 @@ import { Ethereum, CreateToken, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
+@withTranslation()
 @observer
 class CreateNewProject extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   render() {
     const { t } = this.props;
     return (
@@ -62,4 +58,4 @@ CreateNewProject.propTypes = {
 };
 
 
-export default withTranslation()(CreateNewProject);
+export default CreateNewProject;

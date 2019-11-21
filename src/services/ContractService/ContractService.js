@@ -9,6 +9,7 @@ import { BN } from 'ethereumjs-util';
 import {
   fs, PATH_TO_CONTRACTS, path, SOL_IMPORT_REGEXP, SOL_PATH_REGEXP, SOL_VERSION_REGEXP, ROOT_DIR,
 } from '../../constants';
+import Question from './entities/Question';
 
 /**
  * Class for forming transactions
@@ -17,14 +18,22 @@ class ContractService {
   constructor(rootStore) {
     this._contract = {};
     this.rootStore = rootStore;
+    this.sysQuestions = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './sysQuestions.json'), 'utf8'));
+    this.ercAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ERC20.abi')));
   }
 
+  /**
+   * sets instance of contract to this._contract
+   * @param {object} instance instance of contract created by Web3Service
+   */
+  // eslint-disable-next-line consistent-return
   setContract(instance) {
+    if (!(instance instanceof Object)) return new Error('this is not contract');
     this._contract = instance;
   }
 
   /**
-   * compiling contracts and returning type of compiled contract, bytecode & abi
+   * compiles contracts and returning type of compiled contract, bytecode & abi
    * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
    * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
    */
@@ -49,7 +58,7 @@ class ContractService {
             const { bytecode, metadata } = contractData;
             const { output: { abi } } = JSON.parse(metadata);
             resolve({ type, bytecode, abi });
-          } else reject();
+          } else reject(new Error('Something went wrong on contract compiling'));
         });
       });
     });
@@ -94,14 +103,14 @@ class ContractService {
   /**
    * Sendind transaction with contract to blockchain
    * @param {object} params parameters for deploying
-   * @param {string} params.type ERC20 if deploying ERC20 token, Project - if project contract
    * @param {array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
    * @param {string} params.bytecode bytecode of contract
    * @param {JSON} params.abi JSON interface of contract
+   * @param {string} params.password password of user wallet
    * @returns {Promise} Promise of web3.sendSignedTransaction which resolves on txHash
    */
   deployContract({
-    type, deployArgs, bytecode, abi, password,
+    deployArgs, bytecode, abi, password,
   }) {
     const { rootStore: { Web3Service, userStore } } = this;
     const { address } = userStore;
@@ -118,8 +127,8 @@ class ContractService {
       gasPrice: maxGasPrice,
     };
 
-    return new Promise((resolve, reject) => {
-      Web3Service.formTxData(address, tx, maxGasPrice).then((formedTx) => {
+    return new Promise((resolve) => {
+      Web3Service.createTxData(address, tx, maxGasPrice).then((formedTx) => {
         userStore.singTransaction(formedTx, password).then((signedTx) => {
           Web3Service.sendSignedTransaction(`0x${signedTx}`).then((txHash) => {
             resolve(txHash);
@@ -130,28 +139,27 @@ class ContractService {
   }
 
   /**
-   * Creates transaction
-   * @param {string} method
-   * @param {array} params
+   * checks erc20 tokens contract on totalSupply and symbol
+   * @param {string} address address of erc20 contract
+   * @return {object} {totalSypply, symbol}
    */
-  createTxData(method, params) {
-    return this.contract.methods[method](params).encodeABI();
-  }
-
-
   async checkTokens(address) {
-    const { rootStore: { Web3Service, userStore } } = this;
-    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ERC20.abi')));
-    const contract = Web3Service.createContractInstance(abi);
+    const { rootStore: { Web3Service }, ercAbi } = this;
+    const contract = Web3Service.createContractInstance(ercAbi);
     contract.options.address = address;
     const totalSupply = await contract.methods.totalSupply().call();
     const symbol = await contract.methods.symbol().call();
     return { totalSupply, symbol };
   }
 
+  /**
+   * checks is the address of contract
+   * @param {string} address address of contract
+   * @return {Promise} Promise with function which resolves, if address is contract
+   */
   // eslint-disable-next-line class-methods-use-this
   checkProject(address) {
-    const { rootStore: { Web3Service, userStore } } = this;
+    const { rootStore: { Web3Service } } = this;
     return new Promise((resolve, reject) => {
       Web3Service.web3.eth.getCode(address).then((bytecode) => {
         if (bytecode === '0x') reject();
@@ -181,37 +189,37 @@ class ContractService {
     return data;
   }
 
-  getSystemQuestions() {
-    this.sysQuestions = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './sysQuestions.json'), 'utf8'));
-  }
-
+  /**
+   * checks count of uploaded to contract questions and total count of system questions
+   * @function
+   * @returns {object} {countOfUploaded, totalCount}
+   */
   async checkQuestions() {
-    this.getSystemQuestions();
     const countOfUploaded = await this._contract.methods.getCount().call();
     const totalCount = Object.keys(this.sysQuestions).length;
     return ({ countOfUploaded, totalCount });
   }
 
+  /**
+   * send question to created contract
+   * @param {number} idx id of question;
+   * @return {Promise} Promise, which resolves on transaction hash
+   */
   async sendQuestion(idx) {
     const {
       Web3Service, Web3Service: { web3 }, userStore, appStore: { password },
     } = this.rootStore;
     const sysQuestion = this.sysQuestions[idx];
-
     // eslint-disable-next-line consistent-return
     await this.getQuestion(idx).then((result) => {
       if (result.caption === '') {
         const { address } = userStore;
-        const {
-          id, group, name, caption, time, method, formula, parameters,
-        } = sysQuestion;
-
-        const preparedFormula = this.convertFormula(formula);
-        const params = parameters.map((param) => web3.utils.utf8ToHex(param));
+        const question = new Question(sysQuestion);
         const contractAddr = this._contract.options.address;
+        const params = question.getUploadingParams(contractAddr);
 
-        // eslint-disable-next-line max-len
-        const dataTx = this._contract.methods.saveNewQuestion([id, group, time], 0, name, caption, contractAddr, method, preparedFormula, params).encodeABI();
+        const dataTx = this._contract.methods.saveNewQuestion(...params).encodeABI();
+
         const maxGasPrice = 30000000000;
         const rawTx = {
           to: contractAddr,
@@ -221,47 +229,25 @@ class ContractService {
         };
 
 
-        return new Promise((resolve, reject) => {
-          Web3Service.formTxData(address, rawTx, maxGasPrice)
-            .then((formedTx) => {
-              userStore.singTransaction(formedTx, password)
-                .then((signedTx) => {
-                  Web3Service.sendSignedTransaction(`0x${signedTx}`)
-                    .then((txHash) => {
-                      const interval = setInterval(() => {
-                        web3.eth.getTransactionReceipt(txHash).then((receipt) => {
-                          // eslint-disable-next-line valid-typeof
-                          if (receipt) {
-                            clearInterval(interval);
-                            resolve();
-                          }
-                        });
-                      }, 5000);
-                    });
+        return new Promise(() => {
+          Web3Service.createTxData(address, rawTx, maxGasPrice)
+            .then((formedTx) => userStore.singTransaction(formedTx, password))
+            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            .then((txHash) => {
+              const interval = setInterval(() => {
+                web3.eth.getTransactionReceipt(txHash).then((receipt) => {
+                  if (receipt) {
+                    clearInterval(interval);
+                    Promise.resolve();
+                  }
                 });
+              }, 5000);
             });
         });
       }
     });
   }
 
-  convertFormula(formula) {
-    const FORMULA_REGEXP = new RegExp(/(group)|((?:[a-zA-Z0-9]{1,}))|((quorum|positive))|(>=|<=)|([0-9%]{1,})|(quorum|all)/g);
-    const matched = formula.match(FORMULA_REGEXP);
-
-    const convertedFormula = [];
-
-    matched[0] === 'group' ? convertedFormula.push(0) : convertedFormula.push(1);
-    matched[1] === 'Owners' ? convertedFormula.push(1) : convertedFormula.push(2);
-    matched[3] === 'quorum' ? convertedFormula.push(0) : convertedFormula.push(1);
-    matched[4] === '<=' ? convertedFormula.push(0) : convertedFormula.push(1);
-    convertedFormula.push(Number(matched[5]));
-
-    if (matched.length === 9) {
-      matched[8] === 'quorum' ? convertedFormula.push(0) : convertedFormula.push(1);
-    }
-    return convertedFormula;
-  }
 
   getQuestion(id) {
     return this.callMethod('question', id);

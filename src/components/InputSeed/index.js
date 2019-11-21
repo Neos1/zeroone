@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Heading from '../Heading';
 import FormBlock from '../FormBlock';
-import { IconButton } from '../Button';
+import { BackButton } from '../Button';
 import { BackIcon } from '../Icons';
 import Loader from '../Loader';
 import SeedInput from './SeedForm';
@@ -41,7 +41,7 @@ class InputSeed extends Component {
       userStore, appStore, recover, t,
     } = this.props;
     const values = Object.values(form.values());
-    userStore.mnemonicRepeat = values;
+    userStore.setMemonicRepeat(values);
     const mnemonic = values.join(' ');
     if (userStore.isSeedValid(mnemonic)) {
       this.toggleLoading();
@@ -86,15 +86,15 @@ class InputSeed extends Component {
                 <SeedInput
                   submit={this.submitForm}
                   seed={userStore.mnemonic}
-                  error={this.showError}
+                  showError={this.showError}
                 />
               )}
           </FormBlock>
           <NavLink to={`${recover ? '/' : '/showSeed'}`}>
-            <IconButton className="btn--link btn--noborder btn--back">
+            <BackButton>
               <BackIcon />
               {t('buttons:back')}
-            </IconButton>
+            </BackButton>
           </NavLink>
         </div>
       </Container>
@@ -105,7 +105,7 @@ class InputSeed extends Component {
 
 InputSeed.propTypes = {
   userStore: propTypes.shape({
-    mnemonicRepeat: propTypes.arrayOf(propTypes.string).isRequired,
+    setMemonicRepeat: propTypes.func.isRequired,
     isSeedValid: propTypes.func.isRequired,
     recoverWallet: propTypes.func.isRequired,
     setEncryptedWallet: propTypes.func.isRequired,
@@ -119,6 +119,5 @@ InputSeed.propTypes = {
   recover: propTypes.bool.isRequired,
   t: propTypes.func.isRequired,
 };
-
 
 export default InputSeed;

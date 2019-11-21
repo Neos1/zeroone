@@ -1,30 +1,27 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { IconInfo, CloseIcon } from '../Icons';
 import styles from './Alert.scss';
 
-const Alert = inject('appStore')(observer(({ appStore }) => (
-  <div className={`${styles.alert} ${appStore.alertVisible ? styles['alert--visible'] : ''}`}>
+const Alert = inject('alertStore')(observer(({ alertStore }) => (
+  <div className={`${styles.alert} ${alertStore.visible ? styles['alert--visible'] : ''}`}>
     <IconInfo />
     <span className={styles.alert__text}>
-      {appStore.alertText}
+      {alertStore.text}
     </span>
-    <span className={styles.alert__close} onClick={() => { appStore.closeAlert(); }}>
+    <button type="button" className={styles.alert__close} onClick={() => alertStore.closeAlert()}>
       <CloseIcon />
-    </span>
+    </button>
   </div>
 )));
 
 Alert.propTypes = {
-  appStore: propTypes.shape({
-    alertVisible: propTypes.bool.isRequired,
-    alertText: propTypes.string.isRequired,
+  alertStore: propTypes.shape({
+    text: propTypes.string.isRequired,
+    visible: propTypes.bool.isRequired,
     closeAlert: propTypes.func.isRequired,
-  }).isRequired,
-  children: propTypes.string.isRequired,
+  }),
 };
 
 export default Alert;

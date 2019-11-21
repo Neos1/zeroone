@@ -27,7 +27,6 @@ class Login extends Component {
   }
 
   render() {
-    // eslint-disable-next-line no-unused-vars
     const { appStore, userStore, t } = this.props;
     const { logging } = userStore;
     const loginForm = new LoginForm({
@@ -116,6 +115,7 @@ Login.propTypes = {
   }).isRequired,
   t: propTypes.func.isRequired,
 };
+
 InputForm.propTypes = {
   appStore: propTypes.shape({
     wallets: propTypes.arrayOf(propTypes.object).isRequired,
@@ -126,6 +126,5 @@ InputForm.propTypes = {
     loading: propTypes.bool.isRequired,
   }).isRequired,
 };
-
 
 export default withTranslation()(Login);

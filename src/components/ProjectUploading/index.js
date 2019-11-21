@@ -36,13 +36,15 @@ class ProjectUploading extends Component {
     this.state = {
       step: this.steps.compiling,
       address: '',
-      loading: true,
+      uploading: true,
     };
   }
 
   componentDidMount() {
     const { steps } = this;
-    const { appStore, appStore: { deployArgs, name, password }, t } = this.props;
+    const {
+      appStore, appStore: { deployArgs, name }, userStore: { password }, t,
+    } = this.props;
     this.setState({
       step: steps.sending,
     });
@@ -62,7 +64,7 @@ class ProjectUploading extends Component {
               clearInterval(interval);
               appStore.deployQuestions(receipt.contractAddress).then(() => {
                 this.setState({
-                  loading: false,
+                  uploading: false,
                 });
               });
             }
@@ -72,12 +74,12 @@ class ProjectUploading extends Component {
   }
 
   render() {
-    const { step, loading } = this.state;
+    const { step, uploading } = this.state;
     return (
       <Container>
-        <div className={`${styles.form} ${loading ? styles['form--ultrawide'] : ''}`}>
+        <div className={`${styles.form} ${uploading ? styles['form--ultrawide'] : ''}`}>
           {
-            loading ? <Progress step={step} /> : <AlertBlock />
+            uploading ? <Progress step={step} /> : <AlertBlock />
           }
         </div>
       </Container>
@@ -160,7 +162,6 @@ const AlertBlock = withTranslation()(({ t }) => (
   </FormBlock>
 ));
 
-// //ProjectUploading.propTypes = {};
 ProjectUploading.propTypes = {
   appStore: propTypes.shape({
     deployContract: propTypes.func.isRequired,
@@ -171,6 +172,9 @@ ProjectUploading.propTypes = {
     addProjectToList: propTypes.func.isRequired,
     deployQuestions: propTypes.func.isRequired,
     displayAlert: propTypes.func.isRequired,
+  }).isRequired,
+  userStore: propTypes.shape({
+    password: propTypes.string.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
 };
