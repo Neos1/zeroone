@@ -12,7 +12,7 @@ import Heading from '../Heading';
 import Container from '../Container';
 import Loader from '../Loader';
 import Input from '../Input';
-import Indicator from '../Indicator';
+import StepIndicator from '../StepIndicator/StepIndicator';
 import Explanation from '../Explanation';
 import {
   BackIcon, Address, TokenName, Password,
@@ -154,7 +154,7 @@ class CreateNewProjectWithTokens extends Component {
     return (
       <Container>
         <div className={styles.form}>
-          <StepIndicator step={indicatorStep} count={3} />
+          <StepIndicator currentStep={indicatorStep} stepCount={3} />
           {this.renderSwitch(currentStep)}
         </div>
       </Container>
@@ -260,25 +260,6 @@ const InputProjectData = withTranslation()(({
   </FormBlock>
 ));
 
-const StepIndicator = withTranslation()(({ t, step, count }) => (
-  <div className={styles['step-indicator']}>
-    <p>
-      {t('other:step')}
-      <span>
-        {` ${step} `}
-      </span>
-      {t('other:from')}
-      <span>
-        {` ${count} `}
-      </span>
-    </p>
-    <p>
-      <Indicator checked={step >= 1} />
-      <Indicator checked={step >= 2} />
-      <Indicator checked={step >= 3} />
-    </p>
-  </div>
-));
 
 CreateNewProjectWithTokens.propTypes = {
   appStore: propTypes.shape({
@@ -314,10 +295,6 @@ InputProjectData.propTypes = {
     onSubmit: propTypes.func.isRequired,
   }).isRequired,
   onClick: propTypes.func.isRequired,
-};
-StepIndicator.propTypes = {
-  step: propTypes.number.isRequired,
-  count: propTypes.number.isRequired,
 };
 
 export default CreateNewProjectWithTokens;

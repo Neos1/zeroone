@@ -7,9 +7,8 @@ import { BlackWidestButton, BackButton, BlackWideButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-
+import StepIndicator from '../StepIndicator/StepIndicator';
 import Loader from '../Loader';
-import Indicator from '../Indicator';
 import Explanation from '../Explanation';
 import Input from '../Input';
 import {
@@ -190,7 +189,7 @@ class CreateNewProjectWithoutTokens extends Component {
     return (
       <Container>
         <div className={styles.form}>
-          <StepIndicator step={indicatorStep} count={2} />
+          <StepIndicator currentStep={indicatorStep} stepCount={2} />
           {this.renderSwitch(currentStep)}
         </div>
       </Container>
@@ -338,24 +337,6 @@ const InputProjectData = withTranslation()(({
   </FormBlock>
 ));
 
-const StepIndicator = withTranslation()(({ t, step, count }) => (
-  <div className={styles['step-indicator']}>
-    <p>
-      {t('other:step')}
-      <span>
-        {` ${step} `}
-      </span>
-      {t('other:from')}
-      <span>
-        {` ${count} `}
-      </span>
-    </p>
-    <p>
-      <Indicator checked={step >= 1} />
-      <Indicator checked={step >= 2} />
-    </p>
-  </div>
-));
 
 CreateNewProjectWithoutTokens.propTypes = {
   appStore: propTypes.shape({
@@ -392,10 +373,6 @@ InputProjectData.propTypes = {
     loading: propTypes.bool.isRequired,
   }).isRequired,
   onClick: propTypes.func.isRequired,
-};
-StepIndicator.propTypes = {
-  step: propTypes.number.isRequired,
-  count: propTypes.number.isRequired,
 };
 
 export default CreateNewProjectWithoutTokens;
