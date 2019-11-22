@@ -144,8 +144,8 @@ class AppStore {
   }
 
   @action checkReceipt(hash) {
-    const { Web3Service: { web3 } } = this.rootStore;
-    return web3.eth.getTransactionReceipt(hash);
+    const { Web3Service } = this.rootStore;
+    return Web3Service.subscribeTxReceipt(hash);
   }
 
   @action displayAlert(text, timeOut) {

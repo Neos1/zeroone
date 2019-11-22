@@ -32,16 +32,18 @@ class web3Service {
         return this.getGasPrice()
           .then((gasPrice) => {
             transaction.gasPrice = new BN(gasPrice).lte(new BN(maxGasPrice))
-              ? gasPrice
+              ? maxGasPrice
               : maxGasPrice;
-            return Promise.resolve(gas);
+            return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);
       })
       // eslint-disable-next-line no-unused-vars
-      .then((gasPrice) => (
-        { ...transaction, gasPrice }
-      ))
+      .then((gasPrice) => {
+        // eslint-disable-next-line no-console
+        console.log(gasPrice);
+        return { ...transaction, gasPrice };
+      })
       .catch((err) => Promise.reject(err));
   }
 
@@ -65,6 +67,25 @@ class web3Service {
         .on('error', (error) => {
           reject(error);
         });
+    });
+  }
+
+  /**
+   * checking transaction receipt by hash every 5 seconds
+   * @param {string} txHash hash of transaction
+   * @return {Promise} Promise which resolves on successful receipt fetching
+   */
+  subscribeTxReceipt(txHash) {
+    const { web3 } = this;
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        web3.eth.getTransactionReceipt(txHash).then((receipt) => {
+          if (receipt) {
+            clearInterval(interval);
+            resolve(receipt);
+          }
+        });
+      }, 5000);
     });
   }
 }

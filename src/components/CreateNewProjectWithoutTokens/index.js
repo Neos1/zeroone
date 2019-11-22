@@ -86,20 +86,15 @@ class CreateNewProjectWithoutTokens extends Component {
           if (!(data instanceof Error)) {
             userStore.checkBalance(userStore.address).then((balance) => {
               if (balance > 0.5) {
-                appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
-                  const interval = setInterval(() => {
-                    appStore.checkReceipt(hash).then((receipt) => {
-                      if (receipt) {
-                        this.setState({
-                          currentStep: steps.tokenCreated,
-                        });
-                        appStore.setDeployArgs([receipt.contractAddress]);
-                        clearInterval(interval);
-                      }
-                    }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
-                  }, 5000);
-                });
-                resolve();
+                appStore.deployContract('ERC20', deployArgs, password)
+                  .then((txHash) => appStore.checkReceipt(txHash))
+                  .then((receipt) => {
+                    this.setState({
+                      currentStep: steps.tokenCreated,
+                    });
+                    appStore.setDeployArgs([receipt.contractAddress]);
+                    resolve();
+                  });
               } else {
                 this.setState({
                   currentStep: steps.token,

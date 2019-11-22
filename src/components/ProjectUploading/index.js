@@ -48,29 +48,28 @@ class ProjectUploading extends Component {
     this.setState({
       step: steps.sending,
     });
+
     appStore.deployContract('project', deployArgs, password)
       .then((txHash) => {
         this.setState({
           step: steps.receipt,
         });
-        const interval = setInterval(() => {
-          appStore.checkReceipt(txHash).then((receipt) => {
-            if (receipt) {
-              this.setState({
-                step: steps.questions,
-                address: receipt.contractAddress,
-              });
-              appStore.addProjectToList({ name, address: receipt.contractAddress });
-              clearInterval(interval);
-              appStore.deployQuestions(receipt.contractAddress).then(() => {
-                this.setState({
-                  uploading: false,
-                });
-              });
-            }
-          }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
-        }, 2000);
-      });
+        return appStore.checkReceipt(txHash);
+      })
+      .then((receipt) => {
+        if (receipt) {
+          this.setState({
+            step: steps.questions,
+            address: receipt.contractAddress,
+          });
+          appStore.addProjectToList({ name, address: receipt.contractAddress });
+          appStore.deployQuestions(receipt.contractAddress).then(() => {
+            this.setState({
+              uploading: false,
+            });
+          });
+        }
+      }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
   }
 
   render() {
