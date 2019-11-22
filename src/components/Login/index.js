@@ -12,7 +12,7 @@ import Dropdown from '../Dropdown';
 import { CreditCard, Password } from '../Icons';
 import Input from '../Input';
 import { BlackWidestButton, BorderedLinkButton } from '../Button';
-import Loader from '../Loader';
+import LoadingBlock from '../LoadingBlock';
 import LoginForm from '../../stores/FormsStore/LoginForm';
 
 import styles from './Login.scss';
@@ -55,7 +55,14 @@ class Login extends Component {
                   onChange={this.getPassword}
                 />
               )
-              : <LoadingBlock />
+              : (
+                <LoadingBlock>
+                  <Heading>
+                    {t('headings:logging.heading')}
+                    {t('headings:logging.subheading')}
+                  </Heading>
+                </LoadingBlock>
+              )
           }
         </div>
       </Container>
@@ -93,15 +100,6 @@ const InputForm = withTranslation()(({
   </FormBlock>
 ));
 
-const LoadingBlock = withTranslation()(({ t }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:logging.heading')}
-      {t('headings:logging.subheading')}
-    </Heading>
-    <Loader />
-  </FormBlock>
-));
 
 Login.propTypes = {
   appStore: propTypes.shape({

@@ -10,9 +10,9 @@ import {
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Loader from '../Loader';
+import LoadingBlock from '../LoadingBlock';
 import Input from '../Input';
-import StepIndicator from '../StepIndicator/StepIndicator';
+import StepIndicator from '../StepIndicator';
 import Explanation from '../Explanation';
 import {
   BackIcon, Address, TokenName, Password,
@@ -127,12 +127,20 @@ class CreateNewProjectWithTokens extends Component {
   }
 
   renderSwitch(step) {
+    const { t } = this.props;
     const { steps } = this;
     switch (step) {
       case steps.token:
         return <InputTokenAddress form={this.connectToken} onSubmit={this.checkToken} />;
       case steps.check:
-        return <LoadingBlock />;
+        return (
+          <LoadingBlock>
+            <Heading>
+              {t('headings:checkingTokens.heading')}
+              {t('headings:checkingTokens.subheading')}
+            </Heading>
+          </LoadingBlock>
+        );
       case steps.tokenChecked:
         return <ContractConfirmation onSubmit={this.gotoProjectInfo} />;
       case steps.projectInfo:
@@ -184,16 +192,6 @@ const InputTokenAddress = withTranslation()(({ t, form }) => (
         </BackButton>
       </NavLink>
     </form>
-  </FormBlock>
-));
-
-const LoadingBlock = withTranslation()(({ t }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:checkingTokens.heading')}
-      {t('headings:checkingTokens.subheading')}
-    </Heading>
-    <Loader />
   </FormBlock>
 ));
 

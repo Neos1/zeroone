@@ -7,8 +7,8 @@ import { BlackWidestButton, BackButton, BlackWideButton } from '../Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import StepIndicator from '../StepIndicator/StepIndicator';
-import Loader from '../Loader';
+import StepIndicator from '../StepIndicator';
+import LoadingBlock from '../LoadingBlock';
 import Explanation from '../Explanation';
 import Input from '../Input';
 import {
@@ -83,26 +83,27 @@ class CreateNewProjectWithoutTokens extends Component {
       userStore.readWallet(password)
         .then((data) => {
           if (!(data instanceof Error)) {
-            userStore.checkBalance(userStore.address).then((balance) => {
-              if (balance > 0.5) {
-                appStore.deployContract('ERC20', deployArgs, password)
-                  .then((txHash) => appStore.checkReceipt(txHash))
-                  .then((receipt) => {
-                    this.setState({
-                      currentStep: steps.tokenCreated,
+            userStore.checkBalance(userStore.address)
+              .then((balance) => {
+                if (balance > 0.5) {
+                  appStore.deployContract('ERC20', deployArgs, password)
+                    .then((txHash) => appStore.checkReceipt(txHash))
+                    .then((receipt) => {
+                      this.setState({
+                        currentStep: steps.tokenCreated,
+                      });
+                      appStore.setDeployArgs([receipt.contractAddress]);
+                      resolve();
                     });
-                    appStore.setDeployArgs([receipt.contractAddress]);
-                    resolve();
+                } else {
+                  this.setState({
+                    currentStep: steps.token,
+                    indicatorStep: 1,
                   });
-              } else {
-                this.setState({
-                  currentStep: steps.token,
-                  indicatorStep: 1,
-                });
-                appStore.displayAlert(t('errors:lowBalance'), 3000);
-                reject();
-              }
-            });
+                  appStore.displayAlert(t('errors:lowBalance'), 3000);
+                  reject();
+                }
+              });
           }
         }).catch(() => {
           this.setState({
@@ -163,12 +164,20 @@ class CreateNewProjectWithoutTokens extends Component {
 
 
   renderSwitch(step) {
+    const { t } = this.props;
     const { steps } = this;
     switch (step) {
       case steps.token:
         return <CreateTokenData form={this.form} />;
       case steps.creation:
-        return <LoadingBlock />;
+        return (
+          <LoadingBlock>
+            <Heading>
+              {t('headings:tokensCreating.heading')}
+              {t('headings:tokensCreating.subheading')}
+            </Heading>
+          </LoadingBlock>
+        );
       case steps.tokenCreated:
         return <TokenCreationAlert onSubmit={this.gotoProjectInfo} />;
       case steps.projectInfo:
@@ -270,16 +279,6 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
     </form>
   </FormBlock>
 ))));
-
-const LoadingBlock = withTranslation()(({ t }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:tokensCreating.heading')}
-      {t('headings:tokensCreating.subheading')}
-    </Heading>
-    <Loader />
-  </FormBlock>
-));
 
 const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
   <FormBlock>

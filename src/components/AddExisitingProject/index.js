@@ -10,13 +10,13 @@ import {
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-import Loader from '../Loader';
 import Explanation from '../Explanation';
 import ConnectProjectForm from '../../stores/FormsStore/ConnectProject';
 import Input from '../Input';
 import {
   Address, TokenName, Login, BackIcon,
 } from '../Icons';
+import LoadingBlock from '../LoadingBlock';
 
 import styles from '../Login/Login.scss';
 
@@ -90,11 +90,19 @@ class AddExistingProject extends Component {
   // eslint-disable-next-line class-methods-use-this
   renderSwitch(step) {
     const { steps } = this;
+    const { t } = this.props;
     switch (step) {
       case steps.default:
         return <InputBlock form={this.connectForm} />;
       case steps.loading:
-        return <LoadingBlock />;
+        return (
+          <LoadingBlock>
+            <Heading>
+              {t('headings:projectChecking.heading')}
+              {t('headings:projectChecking.subheading')}
+            </Heading>
+          </LoadingBlock>
+        );
       case steps.success:
         return <MessageBlock />;
       default:
@@ -153,16 +161,6 @@ const InputBlock = withTranslation()(({ t, form }) => (
         {t('buttons:back')}
       </BackButton>
     </NavLink>
-  </FormBlock>
-));
-
-const LoadingBlock = withTranslation()(({ t }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:projectChecking.heading')}
-      {t('headings:projectChecking.subheading')}
-    </Heading>
-    <Loader />
   </FormBlock>
 ));
 

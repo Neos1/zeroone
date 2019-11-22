@@ -19,15 +19,11 @@ class AppStore {
 
   @observable name = '';
 
-  @observable alertVisible = false;
-
-  @observable alertText = '';
-
-  @observable alertTimeout = '';
-
   @observable uploadedQuestion = 0;
 
   @observable countOfQuestions = 0;
+
+  @observable userInProject = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -156,6 +152,10 @@ class AppStore {
   @computed get wallets() {
     const wallets = Object.keys(this.walletList);
     return wallets.map((wallet) => ({ label: `0x${wallet}`, value: `0x${wallet}` }));
+  }
+
+  @computed get inProject() {
+    return this.userInProject;
   }
 
   @action setProjectName(value) {

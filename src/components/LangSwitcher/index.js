@@ -10,8 +10,9 @@ class LangSwitcher extends Component {
     super(props);
     this.state = {
       opened: false,
-      value: 'RUS',
     };
+
+
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
@@ -37,7 +38,6 @@ class LangSwitcher extends Component {
 
   selectOption=(e) => {
     const value = e.target.getAttribute('data-value');
-    this.setState({ value });
     this.toggleOptions();
     i18n.changeLanguage(value);
   }
@@ -55,11 +55,12 @@ class LangSwitcher extends Component {
   }
 
   render() {
-    const { opened, value } = this.state;
+    const { opened } = this.state;
+    const { language } = i18n;
     return (
       <div className={`${styles.lang} ${opened ? styles['lang--opened'] : ''}`} ref={this.setWrapperRef}>
         <span className={styles['lang--selected']} onClick={this.toggleOptions}>
-          {value}
+          {language}
         </span>
         <div className={styles.lang__options}>
           <span className={styles.lang__option} data-value="RUS" onClick={this.selectOption}> Русский (RUS)</span>
