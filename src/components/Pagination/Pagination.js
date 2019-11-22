@@ -29,6 +29,11 @@ class Pagination extends React.Component {
     };
   }
 
+  /**
+   * Handle input change
+   *
+   * @param {event} event event called on input
+   */
   handleChange = (event) => {
     const {
       lastPage,
@@ -42,10 +47,21 @@ class Pagination extends React.Component {
     event.target.select();
   }
 
+  /**
+   * Handle click on button chained to input
+   *
+   * @param {number} page page from input
+   */
   handleButtonClick = (page) => {
     this.onPageChange(page);
   }
 
+  /**
+   * Method called onChange event in
+   * ReactJsPagination component
+   *
+   * @param {number} page page from input
+   */
   onPageChange = (page) => {
     const {
       handlePageChange,
@@ -54,6 +70,11 @@ class Pagination extends React.Component {
     this.setState({ value: page });
   }
 
+  /**
+   * Handle focus on input element
+   *
+   * @param {event} event event called on input
+   */
   handleFocus = (event) => {
     event.target.select();
   }
