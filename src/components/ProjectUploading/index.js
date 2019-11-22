@@ -86,58 +86,42 @@ class ProjectUploading extends Component {
   }
 }
 
-const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, step }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:uploadingProject.heading')}
-      {t('headings:uploadingProject.subheading')}
-    </Heading>
-    <div className={styles.progress}>
-      <ProgressBlock
-        text={t('other:compiling')}
-        index={0}
-        state={step}
-      >
-        <CompilingIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:sending')}
-        index={1}
-        state={step}
-      >
-        <SendingIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:txHash')}
-        index={2}
-        state={step}
-      >
-        <TxHashIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:txReceipt')}
-        index={3}
-        state={step}
-      >
-        <TxRecieptIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:questionsUploading')}
-        index={4}
-        state={step}
-        noline
-      >
-        <QuestionUploadingIcon />
-        <span>
-          {appStore.uploadedQuestion}
-          {'/'}
-          {appStore.countOfQuestions}
-        </span>
-      </ProgressBlock>
-    </div>
+const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, step }) => {
+  const steps = [
+    [t('other:compiling'), <CompilingIcon />],
+    [t('other:sending'), <SendingIcon />],
+    [t('other:txHash'), <TxHashIcon />],
+    [t('other:txReceipt'), <TxRecieptIcon />],
+    [t('other:questionsUploading'), [
+      <QuestionUploadingIcon />,
+      <span>
+        {appStore.uploadedQuestion}
+        {'/'}
+        {appStore.countOfQuestions}
+      </span>],
+    ]];
 
-  </FormBlock>
-))));
+
+  return (
+    <FormBlock>
+      <Heading>
+        {t('headings:uploadingProject.heading')}
+        {t('headings:uploadingProject.subheading')}
+      </Heading>
+      <div className={styles.progress}>
+        {steps.map((item, index) => (
+          <ProgressBlock
+            text={item[0]}
+            index={index}
+            state={step}
+          >
+            {item[1]}
+          </ProgressBlock>
+        ))}
+      </div>
+    </FormBlock>
+  );
+})));
 
 const AlertBlock = withTranslation()(({ t }) => (
   <FormBlock>
