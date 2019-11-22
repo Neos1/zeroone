@@ -19,6 +19,7 @@ class Dialog extends React.Component {
       'sm',
       'md',
       'lg',
+      'xlg',
     ]),
     name: PropTypes.string.isRequired,
     header: PropTypes.string,

@@ -10,6 +10,8 @@ const placeholders = {
   contractAddress: 'Введите адрес контракта',
   address: 'Адрес кошелька',
   countTokens: 'Количество токенов',
+  durationInBlocks: 'Продолжительность тиража в блоках',
+  date: 'Дата',
 };
 
 export default placeholders;

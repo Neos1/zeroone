@@ -109,6 +109,14 @@
         }
       }
     }
+
+    &.new-vote {
+      .dialog {
+        &__body {
+          padding: 50px 110px;
+        }
+      }
+    }
   }
 }
 
@@ -228,6 +236,13 @@
     .content {
       width: 754px;
       min-width: 754px;
+    }
+  }
+
+  &--xlg {
+    .content {
+      width: 845px;
+      min-width: 845px;
     }
   }
 }
