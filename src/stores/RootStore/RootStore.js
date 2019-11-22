@@ -6,6 +6,7 @@ import DialogStore from '../DialogStore';
 import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
+import { MembersStore } from '../MembersStore';
 import { fs, path, ROOT_DIR } from '../../constants';
 
 class RootStore {
@@ -18,6 +19,7 @@ class RootStore {
     this.walletService = new WalletService();
     this.contractService = new ContractService(this);
     this.dialogStore = new DialogStore();
+    this.membersStore = new MembersStore([]);
   }
 
   /**
@@ -30,8 +32,18 @@ class RootStore {
   }
 
   @computed get stores() {
-    const { appStore, userStore, dialogStore } = this;
-    return { appStore, userStore, dialogStore };
+    const {
+      appStore,
+      userStore,
+      dialogStore,
+      membersStore,
+    } = this;
+    return {
+      appStore,
+      userStore,
+      dialogStore,
+      membersStore,
+    };
   }
 }
 

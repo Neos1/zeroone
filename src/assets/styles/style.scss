@@ -182,6 +182,9 @@ svg {
   }
 }
 
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
 
 @keyframes stroke-spacing {
   0% {
