@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
+import { withTranslation } from 'react-i18next';
+import propTypes from 'prop-types';
 import i18n from '../../i18n';
-
 import styles from './LangSwitcher.scss';
 
+@withTranslation()
 class LangSwitcher extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +58,7 @@ class LangSwitcher extends Component {
 
   render() {
     const { opened } = this.state;
+    const { t } = this.props;
     const { language } = i18n;
     return (
       <div className={`${styles.lang} ${opened ? styles['lang--opened'] : ''}`} ref={this.setWrapperRef}>
@@ -63,12 +66,17 @@ class LangSwitcher extends Component {
           {language}
         </span>
         <div className={styles.lang__options}>
-          <span className={styles.lang__option} data-value="RUS" onClick={this.selectOption}> Русский (RUS)</span>
-          <span className={styles.lang__option} data-value="ENG" onClick={this.selectOption}> English (ENG)</span>
+          {
+          i18n.languages.map((item) => <span className={styles.lang__option} data-value={item} onClick={this.selectOption}>{`${t(`other:${item}`)}(${item})`}</span>)
+          }
         </div>
       </div>
     );
   }
 }
+
+LangSwitcher.propTypes = {
+  t: propTypes.func.isRequired,
+};
 
 export default LangSwitcher;
