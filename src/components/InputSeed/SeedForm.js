@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import SeedForm from '../../stores/FormsStore/SeedForm';
 import Input from '../Input';
 import { BlackWidestButton } from '../Button';
 
@@ -11,26 +10,16 @@ import styles from '../Login/Login.scss';
 class SeedInput extends Component {
   render() {
     const {
-      seed, submit, showError, t,
+      seed, form, t,
     } = this.props;
-    const seedForm = new SeedForm({
-      hooks: {
-        onSuccess(form) {
-          submit(form);
-        },
-        onError() {
-          showError();
-        },
-      },
-    });
 
     return (
-      <form form={seedForm} onSubmit={seedForm.onSubmit}>
+      <form form={form} onSubmit={form.onSubmit}>
         <div className={styles.seed}>
           {seed.map((word, index) => (
             <Input
               type="text"
-              field={seedForm.$(`word_${index + 1}`)}
+              field={form.$(`word_${index + 1}`)}
               key={`wordInput-${index + 1}`}
             >
               <span>{index + 1}</span>
@@ -38,7 +27,7 @@ class SeedInput extends Component {
           ))}
         </div>
         <div className={styles.form__submit}>
-          <BlackWidestButton disabled={seedForm.loading} type="submit">
+          <BlackWidestButton disabled={form.loading} type="submit">
             {t('buttons:continue')}
           </BlackWidestButton>
         </div>
@@ -48,8 +37,11 @@ class SeedInput extends Component {
 }
 
 SeedInput.propTypes = {
-  submit: propTypes.func.isRequired,
-  showError: propTypes.func.isRequired,
+  form: propTypes.shape({
+    onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+    $: propTypes.func.isRequired,
+  }).isRequired,
   seed: propTypes.arrayOf(propTypes.string).isRequired,
   t: propTypes.func.isRequired,
 };

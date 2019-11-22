@@ -66,5 +66,14 @@ class WalletService {
       return Promise.resolve(worker.send(data));
     } return Promise.reject();
   }
+
+  /**
+   * validates mnemonic
+   * @param {string} mnemonic mnemonic
+   * @returns {boolean} is mnemonic valid
+   */
+  validateMnemonic(mnemonic) {
+    return bip39.validateMnemonic(mnemonic);
+  }
 }
 export default WalletService;
