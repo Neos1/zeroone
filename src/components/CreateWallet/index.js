@@ -18,47 +18,50 @@ import styles from '../Login/Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class CreateWallet extends Component {
+  createForm = new CreateWalletForm({
+    hooks: {
+      onSuccess: (form) => {
+        this.createWallet(form);
+      },
+      onError: () => {
+      },
+    },
+  });
+
   constructor(props) {
     super(props);
     this.state = {
       redirect: false,
-      loading: false,
     };
   }
 
   createWallet = (form) => {
     const { userStore, recover } = this.props;
     const values = form.values();
-    this.setState({ loading: true });
-    if (recover) {
-      userStore.recoverWallet(values.password).then(() => {
-        userStore.saveWalletToFile();
-        this.setState({ redirect: true });
-      }).catch(() => {
-        this.setState({ loading: false });
-      });
-    } else {
-      userStore.createWallet(values.password).then(() => {
-        this.setState({ redirect: true });
-      }).catch(() => {
-        this.setState({ loading: false });
-      });
-    }
+    return new Promise((resolve, reject) => {
+      if (recover) {
+        userStore.recoverWallet(values.password).then(() => {
+          userStore.saveWalletToFile();
+          resolve();
+          this.setState({ redirect: true });
+        }).catch(() => {
+          reject();
+        });
+      } else {
+        userStore.createWallet(values.password).then(() => {
+          resolve();
+          this.setState({ redirect: true });
+        }).catch(() => {
+          reject();
+        });
+      }
+    });
   }
 
   render() {
     const { recover } = this.props;
-    const { redirect, loading } = this.state;
-    const { createWallet } = this;
-    const createForm = new CreateWalletForm({
-      hooks: {
-        onSuccess(form) {
-          createWallet(form);
-        },
-        onError() {
-        },
-      },
-    });
+    const { redirect } = this.state;
+    const { createForm } = this;
 
     if (redirect) {
       return recover ? <Redirect to="/recoverSuccess" /> : <Redirect to="/showSeed" />;
@@ -66,11 +69,10 @@ class CreateWallet extends Component {
     return (
       <Container>
         <div className={styles.form}>
-          {!loading
+          {!createForm.loading
             ? (
               <PasswordForm
                 form={createForm}
-                submit={this.createWallet}
                 state={recover}
                 onInput={passwordValidation}
               />
