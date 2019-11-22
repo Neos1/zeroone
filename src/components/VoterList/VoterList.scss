@@ -1,8 +1,10 @@
+@import '../../assets/styles/includes/mixin';
+
 .voter-list {
   width: 100%;
 
   &__top {
-    padding: 12px 0 12px 56px;
+    padding: 12px 0 12px 30px;
     background-color: #fff;
     border-bottom: 1px solid #e1e4e8;
   }
@@ -23,6 +25,7 @@
     letter-spacing: 0.01em;
     vertical-align: middle;
     border: unset;
+    outline: unset;
     cursor: pointer;
 
     &--selected {
@@ -44,5 +47,95 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 28px;
+    text-align: left;
+  }
+
+  &__content {
+    height: 350px;
+    padding-top: 10px;
+    overflow-y: auto;
+    background-color: #fff;
+
+    @include scrollbar;
+  }
+
+  &__table {
+    width: 100%;
+    background-color: #fff;
+    border-collapse: collapse;
+    
+    &-th {
+      padding: 8px;
+      color: #808080;
+      font-size: 11px;
+      line-height: 13px;
+      text-align: left;
+
+      &--weight {
+        text-align: center;
+      }
+    }
+
+    &-td {
+      padding: 10px;
+
+      &--is {
+        min-width: 20px;
+        padding: 0;
+        text-align: center;
+      }
+
+      &--img {
+        width: 24px;
+        padding: 0;
+      }
+
+      &--wallet {
+        padding: 10px 8px;
+        color: #000;
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      &--weight {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+      }
+    }
+
+    &-tr {
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.5s;
+
+      &:hover {
+        background: #e1e4e8;
+      }
+    }
+  }
+
+  &__no-data {
+    width: 100%;
+    padding: 18px 32px;
+    background: #fff;
+
+    &-icon,
+    &-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &-icon {
+      margin-right: 10px;
+    }
+
+    &-text {
+      color: #4d4d4d;
+      font-size: 11px;
+      line-height: 13px;
+      white-space: pre-line;
+    }
   }
 }

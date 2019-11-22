@@ -22,5 +22,8 @@ const other = {
   weightVote: 'Weight vote',
   page: 'Page',
   goTo: 'Go to',
+  voterList: 'Voter list',
+  agree: 'Agree',
+  against: 'Against',
 };
 export default other;

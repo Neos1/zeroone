@@ -21,7 +21,7 @@ class Dialog extends React.Component {
       'lg',
     ]),
     name: PropTypes.string.isRequired,
-    header: PropTypes.string.isRequired,
+    header: PropTypes.string,
     dialogStore: PropTypes.shape({
       add: PropTypes.func.isRequired,
       remove: PropTypes.func.isRequired,
@@ -48,6 +48,7 @@ class Dialog extends React.Component {
     size: 'sm',
     className: '',
     topIcon: null,
+    header: null,
     footer: (<DefaultDialogFooter />),
     history: true,
     onOpen: null,
@@ -153,14 +154,20 @@ class Dialog extends React.Component {
                   )
                   : null
               }
-              <div className={`${styles.dialog__header}`}>
-                {
-                  topIcon
-                    ? (<div className={styles['dialog__header-icon']}>{topIcon}</div>)
-                    : null
-                }
-                <div className={styles.dialog__title}>{header}</div>
-              </div>
+              {
+                header && header.length
+                  ? (
+                    <div className={`${styles.dialog__header}`}>
+                      {
+                        topIcon
+                          ? (<div className={styles['dialog__header-icon']}>{topIcon}</div>)
+                          : null
+                      }
+                      <div className={styles.dialog__title}>{header}</div>
+                    </div>
+                  )
+                  : null
+              }
               {
                 props.children
                   ? (

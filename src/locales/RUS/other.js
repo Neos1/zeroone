@@ -22,5 +22,8 @@ const other = {
   weightVote: 'Вес голоса',
   page: 'Страница',
   goTo: 'Перейти',
+  voterList: 'Список проголосавших ',
+  agree: 'Согласны',
+  against: 'Против',
 };
 export default other;
