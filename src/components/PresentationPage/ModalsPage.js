@@ -13,6 +13,8 @@ import {
   AgreedMessage,
   RejectMessage,
 } from '../Dialog';
+import StartNewVoteDialog from '../Dialog/StartNewVoteDialog';
+import VoterListDialog from '../Dialog/VoterListDialog';
 import { Button } from '../Button';
 
 const colStyle = {
@@ -44,6 +46,14 @@ class ModalsPage extends React.Component {
     return (
       <PresentationWrapper>
         <div style={{ marginTop: '40px' }}>
+          <div style={colStyle}>
+            <Button
+              className="btn--default btn--black"
+              onClick={() => { this.openDialog('new-vote'); }}
+            >
+              Начать голосование
+            </Button>
+          </div>
           <div style={colStyle}>
             <Button
               className="btn--default btn--black"
@@ -113,7 +123,17 @@ class ModalsPage extends React.Component {
               Вы против
             </Button>
           </div>
+          <div style={colStyle}>
+            <Button
+              className="btn--default btn--black"
+              onClick={() => { this.openDialog('voter-list'); }}
+            >
+              Список голосования
+            </Button>
+          </div>
         </div>
+        <VoterListDialog />
+        <StartNewVoteDialog />
         <TokenTransferDialog />
         <TransferTokenInProgress />
         <TokenTransferSuccess value="0.135125 TKN" />
