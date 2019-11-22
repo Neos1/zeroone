@@ -41,6 +41,7 @@
     "react-i18next": "^11.1.0",
     "react-portal": "^4.2.0",
     "react-router-dom": "^5.1.2",
+    "react-tabs": "^3.0.0",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
     "validatorjs": "^3.17.1",

@@ -1,0 +1,48 @@
+.voter-list {
+  width: 100%;
+
+  &__top {
+    padding: 12px 0 12px 56px;
+    background-color: #fff;
+    border-bottom: 1px solid #e1e4e8;
+  }
+
+  &__tab-list,
+  &__title {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+  }
+
+  &__tab {
+    display: inline-block;
+    padding: 15px;
+    color: #000;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0.01em;
+    vertical-align: middle;
+    border: unset;
+    cursor: pointer;
+
+    &--selected {
+      font-weight: 700;
+      background-image: url('../../assets/images/activeTab.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+    }
+
+    &-list {
+      padding-right: 45px;
+      padding-left: 15px;
+      text-align: right;
+    }
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
