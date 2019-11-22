@@ -47,11 +47,6 @@ class web3Service {
       .catch((err) => Promise.reject(err));
   }
 
-  getGasPrice() {
-    const { web3: { eth: { getGasPrice } } } = this;
-    return getGasPrice();
-  }
-
   /**
    * Sending transaction to contract
    * @param {string} txData Raw transaction (without 0x)
