@@ -1,0 +1,94 @@
+.new-vote {
+  width: 100%;
+
+  &__top {
+    display: inline-block;
+    width: 100%;
+    margin: 0 -15px;
+
+    .dropdown {
+      width: 100%;
+    }
+  }
+
+  &__title,
+  &__dropdown {
+    display: inline-block;
+    width: 50%;
+    padding: 0 15px;
+    vertical-align: top;
+  }
+
+  &__title {
+    color: #000;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 42px;
+    text-align: left;
+  }
+
+  &__description {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 11px;
+    line-height: 13px;
+    text-align: left;
+  }
+
+  &__content {
+    min-height: 324px;
+    padding: 10px 0;
+
+    &--empty {
+      height: 100%;
+      max-height: 324px;
+      text-align: center;
+
+      &::after {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        content: '';
+      }
+
+      &-text {
+        display: inline-block;
+        max-width: 261px;
+        color: rgba(0, 0, 0, 0.7);
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 21px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  &__form {
+    padding-top: 45px;
+    padding-bottom: 15px;
+
+    &-row {
+      display: inline-block;
+      width: 100%;
+      margin: 0 -15px;
+      text-align: left;
+    }
+
+    &-col {
+      display: inline-block;
+      width: 50%;
+      padding: 0 15px;
+    }
+
+    .field {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+    }
+  }
+}

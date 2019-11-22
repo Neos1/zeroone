@@ -22,5 +22,10 @@ const other = {
   weightVote: 'Вес голоса',
   page: 'Страница',
   goTo: 'Перейти',
+  voterList: 'Список проголосавших ',
+  agree: 'Согласны',
+  against: 'Против',
+  startANewVote: 'Начать новое голосование',
+  newVoteEmptyStateText: 'Как только вы выберите вопрос здесь появится вся информация по нему',
 };
 export default other;

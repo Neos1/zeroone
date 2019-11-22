@@ -22,5 +22,10 @@ const other = {
   weightVote: 'Weight vote',
   page: 'Page',
   goTo: 'Go to',
+  voterList: 'Voter list',
+  agree: 'Agree',
+  against: 'Against',
+  startANewVote: 'Start a new vote',
+  newVoteEmptyStateText: 'As soon as you select a question, all information on it will appear here.',
 };
 export default other;
