@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { BlackWidestButton, BackButton, BlackWideButton } from '../Button';
+import Button from '../Button/Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -254,9 +254,14 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <BlackWidestButton type="submit" disabled={form.loading}>
+        <Button
+          theme="black"
+          size="310"
+          type="submit"
+          disabled={form.loading}
+        >
           {t('buttons:create')}
-        </BlackWidestButton>
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -271,10 +276,9 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
         </Explanation>
       </div>
       <NavLink to="/newProject">
-        <BackButton className="btn--link btn--noborder btn--back">
-          <BackIcon />
+        <Button theme="back" icon={<BackIcon />}>
           {t('buttons:back')}
-        </BackButton>
+        </Button>
       </NavLink>
     </form>
   </FormBlock>
@@ -288,9 +292,14 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
     </Heading>
     <form>
       <div className={styles.form__submit}>
-        <BlackWideButton type="button" onClick={onSubmit}>
+        <Button
+          theme="black"
+          size="240"
+          type="button"
+          onClick={onSubmit}
+        >
           {t('buttons:continue')}
-        </BlackWideButton>
+        </Button>
       </div>
     </form>
   </FormBlock>
@@ -317,9 +326,9 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <BlackWidestButton disabled={form.loading} type="submit">
+        <Button theme="black" size="310" disabled={form.loading} type="submit">
           {t('buttons:continue')}
-        </BlackWidestButton>
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -328,10 +337,13 @@ const InputProjectData = withTranslation()(({
           </p>
         </Explanation>
       </div>
-      <BackButton onClick={onClick}>
-        <BackIcon />
+      <Button
+        theme="back"
+        icon={<BackIcon />}
+        onClick={onClick}
+      >
         {t('buttons:back')}
-      </BackButton>
+      </Button>
     </form>
   </FormBlock>
 ));

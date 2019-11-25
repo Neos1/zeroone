@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import Input from '../Input';
-import { BlackWidestButton } from '../Button';
+import Button from '../Button/Button';
 
 import styles from '../Login/Login.scss';
 
@@ -27,9 +27,9 @@ class SeedInput extends Component {
           ))}
         </div>
         <div className={styles.form__submit}>
-          <BlackWidestButton disabled={form.loading} type="submit">
+          <Button theme="black" size="310" disabled={form.loading} type="submit">
             {t('buttons:continue')}
-          </BlackWidestButton>
+          </Button>
         </div>
       </form>
     );

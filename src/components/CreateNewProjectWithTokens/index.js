@@ -4,9 +4,7 @@ import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import {
-  BlackWidestButton, BackButton,
-} from '../Button';
+import Button from '../Button/Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -181,15 +179,14 @@ const InputTokenAddress = withTranslation()(({ t, form }) => (
         <Address />
       </Input>
       <div className={styles.form__submit}>
-        <BlackWidestButton disabled={form.loading} type="submit">
+        <Button theme="black" size="310" disabled={form.loading} type="submit">
           {t('buttons:continue')}
-        </BlackWidestButton>
+        </Button>
       </div>
       <NavLink to="/newProject">
-        <BackButton>
-          <BackIcon />
+        <Button theme="back" icon={<BackIcon />}>
           {t('buttons:back')}
-        </BackButton>
+        </Button>
       </NavLink>
     </form>
   </FormBlock>
@@ -211,9 +208,9 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
         <p className={styles['form__wallet-text']}>{`${ERC.totalSupply} ${ERC.symbol}`}</p>
       </div>
       <div className={styles.form__submit}>
-        <BlackWidestButton type="button" onClick={() => { onSubmit(); }}>
+        <Button theme="black" size="310" type="button" onClick={() => { onSubmit(); }}>
           {t('buttons:continue')}
-        </BlackWidestButton>
+        </Button>
       </div>
     </div>
   </FormBlock>
@@ -239,9 +236,9 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <BlackWidestButton disabled={form.loading} type="submit">
+        <Button theme="black" size="310" disabled={form.loading} type="submit">
           {t('buttons:continue')}
-        </BlackWidestButton>
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -250,10 +247,9 @@ const InputProjectData = withTranslation()(({
           </p>
         </Explanation>
       </div>
-      <BackButton onClick={onClick}>
-        <BackIcon />
+      <Button theme="back" icon={<BackIcon />} onClick={onClick}>
         {t('buttons:back')}
-      </BackButton>
+      </Button>
     </form>
   </FormBlock>
 ));

@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Heading from '../Heading';
 import FormBlock from '../FormBlock';
-import { BackButton } from '../Button';
+import Button from '../Button/Button';
 import { BackIcon } from '../Icons';
 import Loader from '../Loader';
 import SeedForm from '../../stores/FormsStore/SeedForm';
@@ -99,10 +99,10 @@ class InputSeed extends Component {
               )}
           </FormBlock>
           <NavLink to={`${recover ? '/' : '/showSeed'}`}>
-            <BackButton>
+            <Button theme="back">
               <BackIcon />
               {t('buttons:back')}
-            </BackButton>
+            </Button>
           </NavLink>
         </div>
       </Container>

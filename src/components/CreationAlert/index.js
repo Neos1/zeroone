@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import Container from '../Container';
 import FormBlock from '../FormBlock';
-import { BlackWidestButton } from '../Button';
+import Button from '../Button/Button';
 import Heading from '../Heading';
 
 import styles from '../Login/Login.scss';
@@ -42,9 +42,9 @@ const CreationAlert = withTranslation()(({ t, success = false, recover = false }
         </Heading>
         <WalletAddress />
         <NavLink to="/">
-          <BlackWidestButton>
+          <Button theme="black" size="310" type="button">
             {t('buttons:toWallets')}
-          </BlackWidestButton>
+          </Button>
         </NavLink>
       </FormBlock>
     </div>

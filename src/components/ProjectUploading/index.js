@@ -13,9 +13,7 @@ import ProgressBlock from './ProgressBlock';
 import {
   CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon, Login,
 } from '../Icons';
-import {
-  IconBlackButton, LinkButton,
-} from '../Button';
+import Button from '../Button';
 
 import styles from '../Login/Login.scss';
 
@@ -133,14 +131,13 @@ const AlertBlock = withTranslation()(({ t }) => (
         {t('headings:projectCreated.subheading.1')}
       </span>
     </Heading>
-    <IconBlackButton type="submit">
-      {<Login />}
+    <Button theme="black" width="310" icon={<Login />} type="submit">
       {t('buttons:toCreatedProject')}
-    </IconBlackButton>
+    </Button>
     <NavLink to="/projects">
-      <LinkButton type="submit">
+      <Button theme="link" type="submit">
         {t('buttons:otherProject')}
-      </LinkButton>
+      </Button>
     </NavLink>
   </FormBlock>
 ));

@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
-import { ProjectButton, AddProjectButton } from '../Button';
+import Button from '../Button/Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -28,11 +28,12 @@ class ProjectList extends Component {
   render() {
     const { appStore: { projectList }, t } = this.props;
     const projects = projectList.map((project, index) => (
-      <ProjectButton
+      <Button
+        theme="project"
         key={`Button-${index + 1}`}
       >
         {project.name.replace(/([!@#$%^&*()_+\-=])+/g, ' ')}
-      </ProjectButton>
+      </Button>
     ));
     return (
       <Container>
@@ -46,10 +47,9 @@ class ProjectList extends Component {
               {' '}
               {projects}
               <NavLink to="/createProject">
-                <AddProjectButton>
-                  <AddIcon />
+                <Button theme="addproject" icon={<AddIcon />}>
                   {t('buttons:addProject')}
-                </AddProjectButton>
+                </Button>
               </NavLink>
             </div>
           </FormBlock>

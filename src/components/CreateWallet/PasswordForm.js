@@ -6,7 +6,7 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import { Password, BackIcon } from '../Icons';
 import Input from '../Input';
-import { IconButton, BlackWidestButton } from '../Button';
+import Button from '../Button/Button';
 import Explanation from '../Explanation';
 import Indicator from '../Indicator';
 import passwordValidation from '../../utils/PasswordValidation';
@@ -49,9 +49,14 @@ class PasswordForm extends Component {
             <Password />
           </Input>
           <div className={styles.form__submit}>
-            <BlackWidestButton type="submit" disabled={form.loading}>
+            <Button
+              theme="black"
+              size="310"
+              type="submit"
+              disabled={form.loading}
+            >
               {t('buttons:continue')}
-            </BlackWidestButton>
+            </Button>
           </div>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>
@@ -84,10 +89,12 @@ class PasswordForm extends Component {
           </div>
         </form>
         <NavLink to={`${state ? '/restore' : '/'}`}>
-          <IconButton className="btn--link btn--noborder btn--back">
-            <BackIcon />
+          <Button
+            theme="back"
+            icon={<BackIcon />}
+          >
             {t('buttons:back')}
-          </IconButton>
+          </Button>
         </NavLink>
       </FormBlock>
 
