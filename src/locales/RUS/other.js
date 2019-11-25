@@ -27,5 +27,7 @@ const other = {
   against: 'Против',
   startANewVote: 'Начать новое голосование',
   newVoteEmptyStateText: 'Как только вы выберите вопрос здесь появится вся информация по нему',
+  selectQuestionGroup: 'Выберите группу вопросов, чтобы приступить к созданию нового вопроса',
+  createANewQuestion: 'Создать вопрос',
 };
 export default other;
