@@ -52,7 +52,7 @@ class AppStore {
    * selecting encrypted wallet and pushing this to userStore
    * @param {string} address address of wallet
    */
-  @action selectWallet = (address) => {
+  selectWallet = (address) => {
     const { userStore } = this.rootStore;
     const key = address.replace('0x', '');
     userStore.setEncryptedWallet(this.walletList[key]);
@@ -77,13 +77,12 @@ class AppStore {
 
   @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
-    return new Promise((resolve) => {
-      contractService.compileContract(type).then(({ bytecode, abi }) => {
-        resolve(contractService.deployContract({
+    return contractService.compileContract(type)
+      .then(({ bytecode, abi }) => {
+        (contractService.deployContract({
           type, deployArgs, bytecode, abi, password,
         }));
       });
-    });
   }
 
   @action checkErc(address) {
@@ -100,15 +99,14 @@ class AppStore {
     });
   }
 
+
   @action checkProject(address) {
     const { contractService } = this.rootStore;
-    return new Promise((resolve, reject) => {
-      contractService.checkProject(address)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch(() => { reject(); });
-    });
+    return contractService.checkProject(address)
+      .then((data) => {
+        Promise.resolve(data);
+      })
+      .catch(() => { Promise.reject(); });
   }
 
   @action async deployQuestions(address) {
@@ -128,7 +126,7 @@ class AppStore {
       await contractService.sendQuestion(idx);
       this.uploadedQuestion += 1;
     }
-    Promise.resolve();
+    return Promise.resolve();
   }
 
   // eslint-disable-next-line class-methods-use-this

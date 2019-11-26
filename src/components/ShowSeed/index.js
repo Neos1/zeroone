@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
@@ -14,6 +13,7 @@ import { BackIcon, EyeIcon, CrossedEyeIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
+@withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class ShowSeed extends Component {
@@ -31,6 +31,7 @@ class ShowSeed extends Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   redirectToInput() {
     return <Redirect to="/checkSeed" />;
   }
@@ -103,4 +104,4 @@ SeedWord.propTypes = {
   visible: propTypes.bool.isRequired,
 };
 
-export default withTranslation()(ShowSeed);
+export default ShowSeed;

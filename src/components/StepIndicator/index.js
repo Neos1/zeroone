@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import Indicator from '../Indicator';

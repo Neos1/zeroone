@@ -25,23 +25,15 @@ import styles from '../Login/Login.scss';
 class CreateNewProjectWithoutTokens extends Component {
   form = new CreateTokenForm({
     hooks: {
-      onSuccess: (form) => {
-        this.createToken(form);
-      },
-      onError: () => {
-        this.showValidationError();
-      },
+      onSuccess: (form) => this.createToken(form),
+      onError: () => this.showValidationError(),
     },
   });
 
   createProject = new CreateProjectForm({
     hooks: {
-      onSuccess: (form) => {
-        this.gotoUploading(form);
-      },
-      onError: () => {
-        this.showValidationError();
-      },
+      onSuccess: (form) => this.gotoUploading(form),
+      onError: () => this.showValidationError(),
     },
   });
 
@@ -69,7 +61,7 @@ class CreateNewProjectWithoutTokens extends Component {
 
   createToken = (form) => {
     const { steps } = this;
-    const { appStore, userStore, t } = this.props;
+    const { userStore, t } = this.props;
     this.setState({
       currentStep: steps.creation,
     });
@@ -77,41 +69,18 @@ class CreateNewProjectWithoutTokens extends Component {
       name, symbol, count, password,
     } = form.values();
     const deployArgs = [name, symbol, Number(count)];
-    return new Promise((resolve, reject) => {
-      userStore.readWallet(password)
-        .then((data) => {
-          if (!(data instanceof Error)) {
-            userStore.checkBalance(userStore.address)
-              .then((balance) => {
-                if (balance > 0.5) {
-                  appStore.deployContract('ERC20', deployArgs, password)
-                    .then((txHash) => appStore.checkReceipt(txHash))
-                    .then((receipt) => {
-                      this.setState({
-                        currentStep: steps.tokenCreated,
-                      });
-                      appStore.setDeployArgs([receipt.contractAddress]);
-                      resolve();
-                    });
-                } else {
-                  this.setState({
-                    currentStep: steps.token,
-                    indicatorStep: 1,
-                  });
-                  appStore.displayAlert(t('errors:lowBalance'), 3000);
-                  reject();
-                }
-              });
-          }
-        }).catch(() => {
-          this.setState({
-            currentStep: steps.token,
-            indicatorStep: 1,
-          });
-          appStore.displayAlert(t('errors:wrongPassword'), 3000);
-          reject();
-        });
-    });
+
+    return userStore.readWallet(password)
+      .then(() => userStore.checkBalance(userStore.address))
+      // eslint-disable-next-line consistent-return
+      .then((balance) => {
+        if (balance > 0.05) {
+          this.deployTokenContract(deployArgs, password);
+        } else {
+          return this.returnToTokenCreating(t('errors:lowBalance'));
+        }
+      })
+      .catch(() => this.returnToTokenCreating(t('errors:tryAgain')));
   }
 
   showValidationError = () => {
@@ -133,30 +102,58 @@ class CreateNewProjectWithoutTokens extends Component {
     const { name, password } = form.values();
     appStore.setProjectName(name);
     userStore.setPassword(password);
-    userStore.readWallet(password)
-      .then(() => {
-        userStore.checkBalance(userStore.address)
-          .then((balance) => {
-            if (balance > 0.05) {
-              this.setState({
-                currentStep: steps.uploading,
-              });
-            } else {
-              this.setState({
-                currentStep: steps.projectInfo,
-                indicatorStep: 2,
-              });
-              appStore.displayAlert(t('errors:lowBalance'), 3000);
-            }
+
+    return userStore.readWallet(password)
+      .then(() => userStore.checkBalance(userStore.address))
+      .then((balance) => {
+        if (balance > 0.05) {
+          this.setState({
+            currentStep: steps.uploading,
           });
+        } else {
+          this.returnToProjectInfo(t('errors:lowBalance'));
+        }
       })
       .catch(() => {
-        this.setState({
-          currentStep: steps.projectInfo,
-          indicatorStep: 2,
-        });
-        appStore.displayAlert(t('errors:tryAgain'), 3000);
+        this.returnToProjectInfo(t('errors:tryAgain'));
       });
+  }
+
+
+  deployTokenContract(deployArgs, password) {
+    const { steps } = this;
+    const { appStore } = this.props;
+    appStore.deployContract('ERC20', deployArgs, password)
+      .then((txHash) => appStore.checkReceipt(txHash))
+      .then((receipt) => {
+        this.setState({
+          currentStep: steps.tokenCreated,
+        });
+        appStore.setDeployArgs([receipt.contractAddress]);
+      });
+    return Promise.resolve();
+  }
+
+  returnToTokenCreating(errorText) {
+    const { steps } = this;
+    const { appStore } = this.props;
+    this.setState({
+      currentStep: steps.token,
+      indicatorStep: 1,
+    });
+    appStore.displayAlert(errorText);
+    // return Promise.reject();
+  }
+
+  returnToProjectInfo(errorText) {
+    const { steps } = this;
+    const { appStore } = this.props;
+
+    this.setState({
+      currentStep: steps.projectInfo,
+      indicatorStep: 2,
+    });
+    appStore.displayAlert(errorText);
   }
 
   renderSwitch(step) {
@@ -202,7 +199,7 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 }
 
-const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation()(({
+const CreateTokenData = withTranslation()(inject('userStore', 'appStore')(observer((({
   t, userStore: { address }, appStore: { balances }, form,
 }) => (
   <FormBlock>
@@ -278,7 +275,7 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
       </NavLink>
     </form>
   </FormBlock>
-))));
+)))));
 
 const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
   <FormBlock>

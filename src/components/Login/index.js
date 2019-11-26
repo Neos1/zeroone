@@ -1,5 +1,3 @@
-/* eslint-disable no-alert */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -21,32 +19,39 @@ import styles from './Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class Login extends Component {
+  loginForm = new LoginForm({
+    hooks: {
+      onSuccess: (form) => this.login(form),
+      onError: () => {
+        this.showError();
+      },
+    },
+  });
+
   componentDidMount() {
     const { appStore } = this.props;
     appStore.readWalletList();
   }
 
+  login(form) {
+    const { userStore } = this.props;
+    return userStore.login(form.values().password);
+  }
+
+  showError() {
+    const { appStore, t } = this.props;
+    appStore.displayAlert(t('errors:emptyFields'), 3000);
+  }
+
   render() {
     const { appStore, userStore, t } = this.props;
-    const { logging } = userStore;
-    const loginForm = new LoginForm({
-      hooks: {
-        onSuccess(form) {
-          return new Promise(() => {
-            userStore.login(form.values().password);
-          });
-        },
-        onError() {
-          appStore.displayAlert(t('errors:emptyFields'), 3000);
-        },
-      },
-    });
+    const { loginForm } = this;
     if (userStore.authorized) return <Redirect to="/projects" />;
     return (
       <Container>
         <div className={styles.form}>
           {
-            !logging
+            !loginForm.loading
               ? (
                 <InputForm
                   appStore={appStore}
@@ -128,4 +133,4 @@ InputForm.propTypes = {
   }).isRequired,
 };
 
-export default withTranslation()(Login);
+export default Login;

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { extendObservable, action } from 'mobx';
 import { Form } from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
@@ -33,6 +32,8 @@ class ExtendedForm extends Form {
         promise
           .finally(() => {
             $this.setLoading(false);
+            // eslint-disable-next-line no-console
+            console.log($this.loading);
           });
       },
       onError: (form) => {

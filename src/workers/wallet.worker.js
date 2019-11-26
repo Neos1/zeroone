@@ -1,4 +1,3 @@
-
 const ejsWallet = require('ethereumjs-wallet');
 const hdKey = require('ethereumjs-wallet/hdkey');
 const bip39 = require('bip39');
@@ -14,6 +13,7 @@ const createWallet = ({ id, payload: { mnemonic, password = '', action } }) => {
 
     const privateKey = wallet.getPrivateKeyString();
     const v3wallet = wallet.toV3(password);
+    const walletName = wallet.getV3Filename(new Date());
 
     const payload = {
       action,
@@ -21,6 +21,7 @@ const createWallet = ({ id, payload: { mnemonic, password = '', action } }) => {
       wallet,
       v3wallet,
       mnemonic,
+      walletName,
     };
     return { id, payload };
   } catch (e) {

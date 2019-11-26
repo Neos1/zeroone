@@ -97,7 +97,6 @@ class PasswordForm extends Component {
           </Button>
         </NavLink>
       </FormBlock>
-
     );
   }
 }

@@ -21,7 +21,7 @@ const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, use
             {t('headings:walletRestoring.subheading.1')}
           </span>
         </Heading>
-        <form>
+        <div>
           <div className={styles.form__token}>
             <div className={styles['form__token-half']}>
               <p className={styles['form__token-label']}>{t('other:walletAddress')}</p>
@@ -40,7 +40,7 @@ const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, use
               </Button>
             </NavLink>
           </div>
-        </form>
+        </div>
       </FormBlock>
     </div>
   </Container>

@@ -1,4 +1,3 @@
-
 const { app, BrowserWindow } = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');

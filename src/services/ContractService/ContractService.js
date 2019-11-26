@@ -1,9 +1,6 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-loop-func */
 /* eslint-disable no-useless-escape */
+/* eslint-disable no-loop-func */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
 import {
@@ -45,9 +42,7 @@ class ContractService {
         const contractName = type === 'ERC20'
           ? ':ERC20'
           : ':Voter';
-        console.info(`Компилятор ${version} загружается, подождите...`);
         window.BrowserSolc.loadVersion(version, (compiler) => {
-          console.info(`Компилятор ${version} загружен, компиляция...`);
           const compiledContract = compiler.compile(contract);
           const contractData = compiledContract.contracts[contractName];
           if (contractData.interface !== '') {

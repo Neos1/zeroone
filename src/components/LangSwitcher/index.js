@@ -66,7 +66,16 @@ class LangSwitcher extends Component {
         </span>
         <div className={styles.lang__options}>
           {
-          i18n.languages.map((item) => <span className={styles.lang__option} data-value={item} onClick={this.selectOption}>{`${t(`other:${item}`)}(${item})`}</span>)
+          i18n.languages.map((item) => (
+            <button
+              type="button"
+              className={styles.lang__option}
+              data-value={item}
+              onClick={this.selectOption}
+            >
+              {`${t(`other:${item}`)} (${item})`}
+            </button>
+          ))
           }
         </div>
       </div>

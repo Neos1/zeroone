@@ -9,7 +9,6 @@ const DropdownOption = ({
   <button
     type="button"
     className={styles.dropdown__option}
-    data-value={value}
     onClick={() => { select(value); }}
   >
     {label}
@@ -21,7 +20,6 @@ const DropdownOption = ({
         </span>
       )
       : ''}
-
   </button>
 );
 

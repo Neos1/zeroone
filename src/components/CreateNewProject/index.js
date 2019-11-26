@@ -27,13 +27,13 @@ class CreateNewProject extends Component {
             <div className={styles.create}>
               <NavLink to="/createWithTokens">
                 <strong className={styles.create__label}>{t('other:withTokens')}</strong>
-                <Button theme="white" icon={<Ethereum />} iconTop>
+                <Button theme="white" icon={<Ethereum />} iconPosition="top">
                   {t('buttons:withTokens')}
                 </Button>
               </NavLink>
               <NavLink to="/createWithoutTokens">
                 <strong className={styles.create__label}>{t('other:withoutTokens')}</strong>
-                <Button theme="white" icon={<CreateToken />} iconTop>
+                <Button theme="white" icon={<CreateToken />} iconPosition="top">
                   {t('buttons:withoutTokens')}
                 </Button>
               </NavLink>

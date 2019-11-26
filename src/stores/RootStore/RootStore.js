@@ -1,5 +1,3 @@
-/* eslint-disable no-multi-assign */
-/* eslint-disable no-multi-spaces */
 import { observable, action } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
@@ -22,11 +20,11 @@ class RootStore {
   @observable alertStore;
 
   // services
-  walletService ;
+  walletService;
 
-  contractService ;
+  contractService;
 
-  Web3Service ;
+  Web3Service;
 
   eventEmitterService;
 
@@ -50,5 +48,6 @@ class RootStore {
     this.projectStore = new ProjectStore(address);
   }
 }
-const rootStore = window.rootStore =  new RootStore();
+// eslint-disable-next-line no-multi-assign
+const rootStore = window.rootStore = new RootStore();
 export default rootStore;

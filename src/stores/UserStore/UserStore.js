@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
 import { observable, action, computed } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
 import i18n from 'i18next';
@@ -9,11 +7,11 @@ import i18n from 'i18next';
 class UserStore {
   @observable authorized = false;
 
-  @observable logging = false;
-
   @observable redirectToProjects = false;
 
   @observable encryptedWallet = '';
+
+  @observable walletName = '';
 
   @observable privateKey = '';
 
@@ -40,34 +38,31 @@ class UserStore {
     this.address = `0x${wallet.address}`;
   }
 
-  /**
-   * checking password by wallet service
-   * @param password password for decoding
-   * @return {bool} is password correct
-   */
-  @action checkPassword(password) {
-    const wallet = JSON.stringify(this.encryptedWallet);
-    this.rootStore.walletService.readWallet(wallet, password);
-  }
-
   @action checkBalance(address) {
     const { Web3Service: { web3 } } = this.rootStore;
     return new Promise((resolve, reject) => {
       web3.eth.getBalance(address).then((balance) => {
-        resolve((balance / 1.0e18).toFixed(5));
+        resolve(Number(web3.utils.fromWei(balance)).toFixed(5));
       }).catch(() => { reject(); });
     });
   }
 
+  /**
+   * create wallet by given password
+   * @param {string} password password which will be used for wallet decrypting
+   * @return {Promise} resolves on success with {v3wallet, mnemonic, privateKey, walletName}
+   */
   @action createWallet(password) {
     return new Promise((resolve, reject) => {
       this.rootStore.walletService.createWallet(password).then((data) => {
         if (data.v3wallet) {
-          const { v3wallet, mnemonic, privateKey } = data;
+          const {
+            v3wallet, mnemonic, privateKey, walletName,
+          } = data;
           this.setEncryptedWallet(v3wallet);
+          this.setWalletName(walletName);
           this._mnemonic = mnemonic.split(' ');
           this.privateKey = privateKey;
-          // eslint-disable-next-line no-console
           resolve(true);
         } else {
           reject(new Error('Error on creating wallet'));
@@ -76,16 +71,23 @@ class UserStore {
     });
   }
 
+  /**
+   * recovering wallet by mnemonic
+   * @param {string} password
+   * @returns {Promise} resolves with {v3wallet, privateKey}
+   */
   @action recoverWallet(password) {
     const seed = this._mnemonic.join(' ');
     return new Promise((resolve, reject) => {
       this.rootStore.walletService.createWallet(password, seed).then((data) => {
         if (data.v3wallet) {
-          const { v3wallet, mnemonic, privateKey } = data;
+          const {
+            v3wallet, mnemonic, privateKey, walletName,
+          } = data;
           this.setEncryptedWallet(v3wallet);
+          this.setWalletName(walletName);
           this._mnemonic = mnemonic.split(' ');
           this.privateKey = privateKey;
-          // eslint-disable-next-line no-console
           resolve(data);
         } else {
           reject(new Error('Error on creating wallet'));
@@ -94,20 +96,29 @@ class UserStore {
     });
   }
 
+  /**
+   * method for authorize wallet for working with projects
+   * @param {string} password password for wallet
+   * @returns {Promise} resolve on success authorization
+   */
   @action login(password) {
     const { appStore } = this.rootStore;
-    this.logging = true;
-    this.readWallet(password).then((data) => {
-      if (!(data.privateKey instanceof Error)) {
-        this.privateKey = data.privateKey;
-        this.setEncryptedWallet(JSON.parse(data.wallet));
-        this.authorized = true;
-      }
+    return this.readWallet(password).then((data) => {
+      this.privateKey = data.privateKey;
+      this.setEncryptedWallet(JSON.parse(data.wallet));
+      this.authorized = true;
+      Promise.resolve();
     }).catch(() => {
-      this.logging = false;
       appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
+      Promise.reject();
     });
   }
+
+  /**
+   * read wallet for any operations with it
+   * @param {string} password password for wallet
+   * @returns {Promise} resolves with object {v3wallet, privateKey}
+   */
 
   @action readWallet(password) {
     const wallet = JSON.stringify(this.encryptedWallet);
@@ -124,12 +135,20 @@ class UserStore {
     });
   }
 
+  /**
+   * saves wallet to file by generated name
+   */
   @action saveWalletToFile() {
     const { walletService, appStore } = this.rootStore;
-    walletService.writeWalletToFile(this.encryptedWallet);
+    walletService.writeWalletToFile(this.encryptedWallet, this.walletName);
     appStore.readWalletList();
   }
 
+  /**
+   * checks is seed valid with walletService
+   * @param {string} mnemonic mnemonic
+   * @returns {bool} is valid
+   */
   @action isSeedValid(mnemonic) {
     const { walletService } = this.rootStore;
     return walletService.validateMnemonic(mnemonic);
@@ -143,7 +162,7 @@ class UserStore {
    * @return Signed TX data
    */
   @action singTransaction(data, password) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // eslint-disable-next-line consistent-return
       this.readWallet(password).then((info) => {
         if (info instanceof Error) return false;
@@ -179,6 +198,10 @@ class UserStore {
 
   @action setMnemonicRepeat(value) {
     this._mnemonicRepeat = value;
+  }
+
+  @action setWalletName(name) {
+    this.walletName = name;
   }
 
   @computed get mnemonic() {

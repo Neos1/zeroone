@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';

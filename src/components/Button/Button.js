@@ -3,14 +3,8 @@ import propTypes from 'prop-types';
 
 import styles from './Button.scss';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Button extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
   render() {
     const {
       children,
@@ -19,7 +13,7 @@ class Button extends Component {
       type,
       disabled,
       icon,
-      iconTop,
+      iconPosition,
       onClick,
     } = this.props;
     return (
@@ -33,7 +27,7 @@ class Button extends Component {
         onClick={onClick}
       >
         <p className={styles.btn__content}>
-          <span className={`${styles.btn__icon} ${iconTop ? styles['btn__icon--block'] : ''}`}>
+          <span className={`${styles.btn__icon} ${iconPosition === 'top' ? styles['btn__icon--block'] : ''}`}>
             {icon}
           </span>
           <span className={styles.btn__text}>
@@ -48,7 +42,7 @@ class Button extends Component {
 Button.propTypes = {
   children: propTypes.string.isRequired,
   icon: propTypes.node,
-  iconTop: propTypes.bool,
+  iconPosition: propTypes.bool,
   type: propTypes.string,
   disabled: propTypes.bool.isRequired,
   onClick: propTypes.func.isRequired,
@@ -61,7 +55,7 @@ Button.defaultProps = {
   theme: 'black',
   size: 'default',
   icon: null,
-  iconTop: false,
+  iconPosition: false,
 };
 
 export default Button;

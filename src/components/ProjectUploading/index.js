@@ -1,6 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-console */
-/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -33,7 +30,6 @@ class ProjectUploading extends Component {
     super(props);
     this.state = {
       step: this.steps.compiling,
-      address: '',
       uploading: true,
     };
   }
@@ -58,7 +54,6 @@ class ProjectUploading extends Component {
         if (receipt) {
           this.setState({
             step: steps.questions,
-            address: receipt.contractAddress,
           });
           appStore.addProjectToList({ name, address: receipt.contractAddress });
           appStore.deployQuestions(receipt.contractAddress).then(() => {
