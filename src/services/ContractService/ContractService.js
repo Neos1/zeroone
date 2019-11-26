@@ -67,6 +67,7 @@ class ContractService {
   /**
    * reading all imports in main contract file and importing all files in one output file
    * @param {string} type type of project - ERC20 for ERC-20 tokens, Project for project contract
+   * @returns {string} combined contracts
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
@@ -97,7 +98,6 @@ class ContractService {
     }
     mainContract = mainContract.replace(SOL_VERSION_REGEXP, compiler);
     mainContract = mainContract.replace(new RegExp(/(calldata)/g), '');
-    fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${dir}output.sol`), mainContract, 'utf8');
     return mainContract;
   }
 
