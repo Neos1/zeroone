@@ -22,7 +22,6 @@ import TokenName from './entities/TokenNameIcon';
 import TxHashIcon from './entities/TxHashIcon';
 import TxRecieptIcon from './entities/TxRecieptIcon';
 
-
 export {
   AddIcon,
   Address,

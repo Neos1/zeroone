@@ -13,7 +13,6 @@ import otherRu from './locales/RUS/other';
 import errorsEn from './locales/ENG/errors';
 import errorsRu from './locales/RUS/errors';
 
-
 const resources = {
   ENG: {
     headings: headingsEn,

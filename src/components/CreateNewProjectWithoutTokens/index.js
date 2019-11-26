@@ -52,7 +52,6 @@ class CreateNewProjectWithoutTokens extends Component {
     projectInfo: 4,
   }
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -60,7 +59,6 @@ class CreateNewProjectWithoutTokens extends Component {
       currentStep: this.steps.token,
     };
   }
-
 
   returnToContractConnecting = () => {
     const { steps } = this;
@@ -129,7 +127,6 @@ class CreateNewProjectWithoutTokens extends Component {
     });
   }
 
-
   gotoUploading = (form) => {
     const { steps } = this;
     const { userStore, appStore, t } = this.props;
@@ -161,7 +158,6 @@ class CreateNewProjectWithoutTokens extends Component {
         appStore.displayAlert(t('errors:tryAgain'), 3000);
       });
   }
-
 
   renderSwitch(step) {
     const { t } = this.props;
@@ -347,7 +343,6 @@ const InputProjectData = withTranslation()(({
     </form>
   </FormBlock>
 ));
-
 
 CreateNewProjectWithoutTokens.propTypes = {
   appStore: propTypes.shape({

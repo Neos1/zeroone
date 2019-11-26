@@ -16,7 +16,6 @@ import ProjectUploading from '../ProjectUploading';
 import CreationAlert from '../CreationAlert';
 import DisplayUserInfo from '../DisplayUserInfo';
 
-
 const SimpleRouter = () => (
   <MemoryRouter>
     <Switch>

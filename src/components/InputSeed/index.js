@@ -12,7 +12,6 @@ import Loader from '../Loader';
 import SeedForm from '../../stores/FormsStore/SeedForm';
 import SeedInput from './SeedForm';
 
-
 import styles from '../Login/Login.scss';
 
 @withTranslation()
@@ -38,7 +37,6 @@ class InputSeed extends Component {
   setRedirect = () => {
     this.setState({ redirect: true });
   }
-
 
   submitForm = (form) => {
     const {
@@ -109,7 +107,6 @@ class InputSeed extends Component {
     );
   }
 }
-
 
 InputSeed.propTypes = {
   userStore: propTypes.shape({

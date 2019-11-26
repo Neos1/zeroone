@@ -21,7 +21,6 @@ const rules = {
   },
 };
 
-
 const plugins = {
   dvr: {
     package: validatorjs,

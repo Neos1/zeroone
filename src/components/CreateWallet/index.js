@@ -107,5 +107,4 @@ CreateWallet.propTypes = {
   recover: propTypes.bool.isRequired,
 };
 
-
 export default withTranslation()(CreateWallet);

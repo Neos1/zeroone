@@ -47,6 +47,10 @@ class web3Service {
       .catch((err) => Promise.reject(err));
   }
 
+  /**
+   * getting gas price
+   * @returns {number} gasPrice from network
+   */
   getGasPrice() {
     const { web3: { eth: { getGasPrice } } } = this;
     return getGasPrice();

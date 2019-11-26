@@ -3,7 +3,6 @@ import WorkerWrapper from './entities/WorkerWrapper';
 import WalletWorker from '../../workers/wallet.worker';
 import { fs, path, PATH_TO_WALLETS } from '../../constants';
 
-
 const bip39 = require('bip39');
 
 const worker = new WorkerWrapper(new WalletWorker());

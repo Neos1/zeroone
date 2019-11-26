@@ -26,5 +26,4 @@ const StepIndicator = withTranslation()(({ t, currentStep, stepCount }) => {
   );
 });
 
-
 export default StepIndicator;

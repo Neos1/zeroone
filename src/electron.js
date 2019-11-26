@@ -3,7 +3,6 @@ const { app, BrowserWindow } = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
 
-
 const path = require('path');
 
 let mainWindow;
@@ -30,7 +29,6 @@ function createWindow() {
     mainWindow.webContents.toggleDevTools();
   });
 }
-
 
 app.on('ready', createWindow);
 

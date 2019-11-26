@@ -99,7 +99,6 @@ const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, s
       </span>],
     ]];
 
-
   return (
     <FormBlock>
       <Heading>

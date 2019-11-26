@@ -24,7 +24,6 @@ class ShowSeed extends Component {
     };
   }
 
-
   toggleWords = () => {
     const { visible } = this.state;
     this.setState({

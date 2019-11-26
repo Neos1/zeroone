@@ -28,7 +28,6 @@ class Dropdown extends Component {
     this.wrapperRef = node;
   }
 
-
   toggleOptions = () => {
     const { opened } = this.state;
     this.setState({ opened: !opened });
@@ -37,7 +36,6 @@ class Dropdown extends Component {
   closeOptions = () => {
     this.setState({ opened: false });
   }
-
 
   handleSelect = (selected) => {
     const { onSelect, field } = this.props;
@@ -50,13 +48,11 @@ class Dropdown extends Component {
     this.toggleOptions();
   }
 
-
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.closeOptions();
     }
   }
-
 
   render() {
     const {
@@ -74,7 +70,6 @@ class Dropdown extends Component {
       />
     ));
     // eslint-disable-next-line no-console
-
 
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>

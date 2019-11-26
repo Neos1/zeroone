@@ -36,7 +36,6 @@ Button.defaultProps = {
   onClick: () => false,
 };
 
-
 export const BlackButton = ({
   children, type, disabled, onClick,
 }) => (
@@ -61,7 +60,6 @@ BlackButton.defaultProps = {
   disabled: false,
   onClick: () => false,
 };
-
 
 export const BlackWideButton = ({
   children, type, disabled, onClick,
@@ -139,7 +137,6 @@ WhiteButton.defaultProps = {
   disabled: false,
   onClick: () => false,
 };
-
 
 export const LinkButton = ({
   children, type, disabled, onClick,

@@ -45,7 +45,6 @@ const readWallet = ({ id, payload: { input, password } }) => {
   }
 };
 
-
 onmessage = (e) => {
   const { payload } = e.data;
   const { action } = payload;

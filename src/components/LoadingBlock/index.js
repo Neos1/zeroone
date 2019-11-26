@@ -3,7 +3,6 @@ import propTypes from 'prop-types';
 import FormBlock from '../FormBlock';
 import Loader from '../Loader';
 
-
 const LoadingBlock = ({ children }) => (
   <FormBlock>
     {children}

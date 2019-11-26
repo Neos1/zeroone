@@ -54,5 +54,4 @@ CreateNewProject.propTypes = {
   t: propTypes.func.isRequired,
 };
 
-
 export default CreateNewProject;

@@ -226,7 +226,6 @@ class ContractService {
           value: '0x0',
         };
 
-
         return new Promise(() => {
           Web3Service.createTxData(address, rawTx, maxGasPrice)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
@@ -238,7 +237,6 @@ class ContractService {
       }
     });
   }
-
 
   getQuestion(id) {
     return this.callMethod('question', id);

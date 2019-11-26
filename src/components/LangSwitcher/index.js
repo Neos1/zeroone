@@ -14,7 +14,6 @@ class LangSwitcher extends Component {
       opened: false,
     };
 
-
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }

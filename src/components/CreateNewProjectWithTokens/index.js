@@ -254,7 +254,6 @@ const InputProjectData = withTranslation()(({
   </FormBlock>
 ));
 
-
 CreateNewProjectWithTokens.propTypes = {
   appStore: propTypes.shape({
     checkErc: propTypes.func.isRequired,

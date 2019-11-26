@@ -3,7 +3,6 @@ import {
   fs, path, PATH_TO_WALLETS, ROOT_DIR, PATH_TO_CONTRACTS,
 } from '../../constants';
 
-
 class AppStore {
   @observable walletList = {};
 

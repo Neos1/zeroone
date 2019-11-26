@@ -110,14 +110,12 @@ class AddExistingProject extends Component {
 
   render() {
     const { currentStep } = this.state;
-
     return (
       <Container>
         <div className={`${styles.form}`}>
           {this.renderSwitch(currentStep)}
         </div>
       </Container>
-
     );
   }
 }

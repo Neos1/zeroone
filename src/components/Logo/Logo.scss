@@ -6,7 +6,6 @@
   color: $primary;
   text-decoration: none;
   border: 3px solid $primary;
-
   &__dark {
     display: table-cell;
     min-width: 49px;
@@ -22,7 +21,6 @@
       font-family: "Roboto Mono";
     }
   }
-
   &__light {
     display: table-cell;
     min-width: 79px;

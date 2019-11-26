@@ -104,7 +104,6 @@ const InputForm = withTranslation()(({
   </FormBlock>
 ));
 
-
 Login.propTypes = {
   appStore: propTypes.shape({
     displayAlert: propTypes.func.isRequired,
