@@ -13,7 +13,7 @@ import ProgressBlock from './ProgressBlock';
 import {
   CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon, Login,
 } from '../Icons';
-import Button from '../Button';
+import Button from '../Button/Button';
 
 import styles from '../Login/Login.scss';
 
