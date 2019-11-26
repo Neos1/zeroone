@@ -41,10 +41,6 @@ class ContractService {
     return new Promise((resolve, reject) => {
       window.BrowserSolc.getVersions((sources, releases) => {
         const version = releases['0.4.24'];
-        const questions = fs.readFileSync(path.join(PATH_TO_CONTRACTS, './sysQuestions.json'), 'utf8');
-        /* const contract = type === 'ERC20'
-        ? fs.readFileSync(path.join(PATH_TO_CONTRACTS, './output.sol'), 'utf8')
-        : fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter/output.sol'), 'utf8'); */
         const contract = this.combineContract(type);
         const contractName = type === 'ERC20'
           ? ':ERC20'
