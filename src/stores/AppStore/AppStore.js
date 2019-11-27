@@ -68,13 +68,10 @@ class AppStore {
   }
 
   /**
-   * Adding encrypted Wallet to userStore
-   * @param {string} encryptedWallet encrypted keystore v3
+   * compile contract by given type and arguments
+   * @param {string} type type of contract - ERC20 for erc tokens, project - for project contract
+   * @returns {Promise} Function which compiles contract and deploy contract to network on success
    */
-  @action setUserWallet(encryptedWallet) {
-    this.userStore.setEncryptedWallet(encryptedWallet);
-  }
-
   @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
     return contractService.compileContract(type)
@@ -85,6 +82,11 @@ class AppStore {
       });
   }
 
+  /**
+   * checks given address on ERC20 tokens
+   * @param {string} address address of ERC20 contract
+   * @returns {Promise} resolves on success checking and set information about ERC token
+   */
   @action checkErc(address) {
     const { contractService } = this.rootStore;
     return new Promise((resolve, reject) => {
@@ -99,7 +101,10 @@ class AppStore {
     });
   }
 
-
+  /**
+   * checks if given address is contract in network
+   * @param {string} address address, which will be ckecked on contract instance
+   */
   @action checkProject(address) {
     const { contractService } = this.rootStore;
     return contractService.checkProject(address)
@@ -109,6 +114,11 @@ class AppStore {
       .catch(() => { Promise.reject(); });
   }
 
+  /**
+   * Upload questions to created project
+   * @param {string} address address of smart contract, where will be uploaded questions
+   * @return Promise.resolve()
+   */
   @action async deployQuestions(address) {
     const { Web3Service, contractService } = this.rootStore;
     const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi'), 'utf8'));
@@ -118,9 +128,7 @@ class AppStore {
     const { countOfUploaded, totalCount } = await contractService.checkQuestions();
     this.countOfQuestions = Number(totalCount);
     this.uploadedQuestion = Number(countOfUploaded);
-    // eslint-disable-next-line no-console
     let idx = Number(countOfUploaded) === 0 ? 1 : Number(countOfUploaded);
-    // eslint-disable-next-line no-async-promise-executor
     for (idx; idx <= totalCount; idx += 1) {
       // eslint-disable-next-line no-await-in-loop
       await contractService.sendQuestion(idx);
@@ -129,6 +137,10 @@ class AppStore {
     return Promise.resolve();
   }
 
+  /**
+   * add project to config and update config saved in file
+   * @param {object} data data about project {name, address}
+   */
   // eslint-disable-next-line class-methods-use-this
   @action addProjectToList(data) {
     const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8'));
@@ -136,15 +148,26 @@ class AppStore {
     fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'));
   }
 
+  /**
+   * Check transaction receipt
+   * @param {string} hash Transaction hash
+   * @return {Promise} Promise with interval, which resolves on succesfull receipt recieving
+   */
   @action checkReceipt(hash) {
     const { Web3Service } = this.rootStore;
     return Web3Service.subscribeTxReceipt(hash);
   }
 
+  /**
+   *
+   * @param {string} text error text
+   * @param {number} [timeOut=3000]  timeout when alert disappear
+   */
   @action displayAlert(text, timeOut) {
     const { alertStore } = this.rootStore;
     alertStore.showAlert(text, timeOut);
   }
+
 
   @computed get wallets() {
     const wallets = Object.keys(this.walletList);

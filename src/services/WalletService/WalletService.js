@@ -54,7 +54,7 @@ class WalletService {
    * @returns {Promise}
    */
   recoverWallet(mnemonic) {
-    if (bip39.validateMnemonic) {
+    if (this.validateMnemonic(mnemonic)) {
       const data = {
         action: 'recover',
         mnemonic,

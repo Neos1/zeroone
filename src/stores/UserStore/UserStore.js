@@ -33,11 +33,20 @@ class UserStore {
     this.password = value;
   }
 
+  /**
+   * saves v3 keystore and wallet address to store
+   * @param {object} wallet JSON Keystore V3
+   */
   @action setEncryptedWallet(wallet) {
     this.encryptedWallet = wallet;
     this.address = `0x${wallet.address}`;
   }
 
+  /**
+   * checking Ethereum balance for given address
+   * @param {string} address wallet adddress
+   * @returns {Promise} resolves with balance rounded to 5 decimal places
+   */
   @action checkBalance(address) {
     const { Web3Service: { web3 } } = this.rootStore;
     return new Promise((resolve, reject) => {
@@ -46,6 +55,7 @@ class UserStore {
       }).catch(() => { reject(); });
     });
   }
+
 
   /**
    * create wallet by given password
@@ -61,7 +71,7 @@ class UserStore {
           } = data;
           this.setEncryptedWallet(v3wallet);
           this.setWalletName(walletName);
-          this._mnemonic = mnemonic.split(' ');
+          this.setMnemonic(mnemonic);
           this.privateKey = privateKey;
           resolve(true);
         } else {
@@ -76,17 +86,17 @@ class UserStore {
    * @param {string} password
    * @returns {Promise} resolves with {v3wallet, privateKey}
    */
-  @action recoverWallet(password) {
-    const seed = this._mnemonic.join(' ');
+  @action recoverWallet() {
+    const seed = this._mnemonicRepeat.join(' ');
     return new Promise((resolve, reject) => {
-      this.rootStore.walletService.createWallet(password, seed).then((data) => {
+      this.rootStore.walletService.createWallet(undefined, seed).then((data) => {
         if (data.v3wallet) {
           const {
             v3wallet, mnemonic, privateKey, walletName,
           } = data;
           this.setEncryptedWallet(v3wallet);
           this.setWalletName(walletName);
-          this._mnemonic = mnemonic.split(' ');
+          this.setMnemonic(mnemonic);
           this.privateKey = privateKey;
           resolve(data);
         } else {
@@ -103,15 +113,16 @@ class UserStore {
    */
   @action login(password) {
     const { appStore } = this.rootStore;
-    return this.readWallet(password).then((data) => {
-      this.privateKey = data.privateKey;
-      this.setEncryptedWallet(JSON.parse(data.wallet));
-      this.authorized = true;
-      Promise.resolve();
-    }).catch(() => {
-      appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
-      Promise.reject();
-    });
+    return this.readWallet(password)
+      .then((data) => {
+        this.privateKey = data.privateKey;
+        this.setEncryptedWallet(JSON.parse(data.wallet));
+        this.authorized = true;
+        Promise.resolve();
+      }).catch(() => {
+        appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
+        Promise.reject();
+      });
   }
 
   /**
@@ -194,6 +205,10 @@ class UserStore {
   @action async getEthBalance() {
     const { Web3Service: { web3 } } = this.rootStore;
     this.balance = await web3.eth.getBalance(this.address);
+  }
+
+  @action setMnemonic(value) {
+    this._mnemonic = value.split(' ');
   }
 
   @action setMnemonicRepeat(value) {

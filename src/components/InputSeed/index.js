@@ -48,7 +48,7 @@ class InputSeed extends Component {
     return new Promise((resolve, reject) => {
       if (userStore.isSeedValid(mnemonic)) {
         if (recover) {
-          userStore.recoverWallet(mnemonic)
+          userStore.recoverWallet()
             .then((data) => {
               userStore.setEncryptedWallet(data.v3wallet);
               userStore.getEthBalance();

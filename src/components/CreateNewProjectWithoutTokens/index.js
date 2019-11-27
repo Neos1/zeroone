@@ -73,13 +73,9 @@ class CreateNewProjectWithoutTokens extends Component {
     return userStore.readWallet(password)
       .then(() => userStore.checkBalance(userStore.address))
       // eslint-disable-next-line consistent-return
-      .then((balance) => {
-        if (balance > 0.05) {
-          this.deployTokenContract(deployArgs, password);
-        } else {
-          return this.returnToTokenCreating(t('errors:lowBalance'));
-        }
-      })
+      .then((balance) => (this.isEnoughBalance(balance)
+        ? this.deployTokenContract(deployArgs, password)
+        : this.returnToTokenCreating(t('errors:lowBalance'))))
       .catch(() => this.returnToTokenCreating(t('errors:tryAgain')));
   }
 
@@ -105,20 +101,18 @@ class CreateNewProjectWithoutTokens extends Component {
 
     return userStore.readWallet(password)
       .then(() => userStore.checkBalance(userStore.address))
-      .then((balance) => {
-        if (balance > 0.05) {
-          this.setState({
-            currentStep: steps.uploading,
-          });
-        } else {
-          this.returnToProjectInfo(t('errors:lowBalance'));
-        }
-      })
+      .then((balance) => (this.isEnoughBalance(balance)
+        ? this.setState({ currentStep: steps.uploading })
+        : this.returnToProjectInfo(t('errors:lowBalance'))))
       .catch(() => {
         this.returnToProjectInfo(t('errors:tryAgain'));
       });
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  isEnoughBalance(balance) {
+    return balance > 0.05;
+  }
 
   deployTokenContract(deployArgs, password) {
     const { steps } = this;
@@ -142,7 +136,7 @@ class CreateNewProjectWithoutTokens extends Component {
       indicatorStep: 1,
     });
     appStore.displayAlert(errorText);
-    // return Promise.reject();
+    return Promise.resolve();
   }
 
   returnToProjectInfo(errorText) {
@@ -154,6 +148,7 @@ class CreateNewProjectWithoutTokens extends Component {
       indicatorStep: 2,
     });
     appStore.displayAlert(errorText);
+    return Promise.resolve();
   }
 
   renderSwitch(step) {
