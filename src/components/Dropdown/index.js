@@ -10,7 +10,6 @@ class Dropdown extends Component {
     this.state = {
       opened: false,
       selectedValue: '',
-      selectedLabel: '',
     };
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -40,7 +39,6 @@ class Dropdown extends Component {
   handleSelect = (selected) => {
     const { onSelect, field } = this.props;
     this.setState({
-      selectedLabel: selected,
       selectedValue: selected,
     });
     field.set(selected);
@@ -58,7 +56,7 @@ class Dropdown extends Component {
     const {
       children, options, field, subOptions,
     } = this.props;
-    const { opened, selectedLabel, selectedValue } = this.state;
+    const { opened, selectedValue } = this.state;
 
     const getOptions = options.map((option) => (
       <DropdownOption
@@ -77,7 +75,7 @@ class Dropdown extends Component {
         <button type="button" className={styles.dropdown__head} onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className={styles.dropdown__icon}>{children}</span> : ''}
           <span className={styles.dropdown__selected} data-value={selectedValue}>
-            {selectedLabel || field.placeholder }
+            {field.value || field.placeholder }
             <span className={styles.dropdown__arrow}>
               <DropdownArrow />
             </span>
