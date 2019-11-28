@@ -6,7 +6,7 @@ import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
 import EventEmitterService from '../../services/EventEmitterService';
-import { fs, path, ROOT_DIR } from '../../constants';
+import { fs, path, ROOT_DIR } from '../../constants/windowModules';
 
 class RootStore {
   // stores

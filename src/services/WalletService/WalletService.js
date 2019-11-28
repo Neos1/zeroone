@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import WorkerWrapper from './entities/WorkerWrapper';
 import WalletWorker from '../../workers/wallet.worker';
-import { fs, path, PATH_TO_WALLETS } from '../../constants';
+import { fs, path, PATH_TO_WALLETS } from '../../constants/windowModules';
 
 const bip39 = require('bip39');
 

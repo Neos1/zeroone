@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import {
   fs, path, PATH_TO_WALLETS, ROOT_DIR, PATH_TO_CONTRACTS,
-} from '../../constants';
+} from '../../constants/windowModules';
 import Alert from './entities/Alert';
 
 class AppStore {

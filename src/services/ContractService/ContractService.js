@@ -3,9 +3,10 @@
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
+import { SOL_IMPORT_REGEXP, SOL_PATH_REGEXP, SOL_VERSION_REGEXP } from '../../constants';
 import {
-  fs, PATH_TO_CONTRACTS, path, SOL_IMPORT_REGEXP, SOL_PATH_REGEXP, SOL_VERSION_REGEXP, ROOT_DIR,
-} from '../../constants';
+  fs, PATH_TO_CONTRACTS, path,
+} from '../../constants/windowModules';
 import Question from './entities/Question';
 
 /**

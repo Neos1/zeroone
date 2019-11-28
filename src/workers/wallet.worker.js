@@ -1,8 +1,8 @@
+import { walletHdPath } from '../constants';
+
 const ejsWallet = require('ethereumjs-wallet');
 const hdKey = require('ethereumjs-wallet/hdkey');
 const bip39 = require('bip39');
-
-const walletHdPath = "m/44'/60'/0'/0/0";
 
 const createWallet = ({ id, payload: { mnemonic, password = '', action } }) => {
   try {
