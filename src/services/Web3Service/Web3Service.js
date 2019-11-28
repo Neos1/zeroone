@@ -43,11 +43,7 @@ class Web3Service {
           .catch(Promise.reject);
       })
       // eslint-disable-next-line no-unused-vars
-      .then((gasPrice) => {
-        // eslint-disable-next-line no-console
-        console.log(gasPrice);
-        return { ...transaction, gasPrice };
-      })
+      .then((gasPrice) => (transaction))
       .catch((err) => Promise.reject(err));
   }
 

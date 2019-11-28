@@ -145,12 +145,15 @@ class ContractService {
       gasPrice: maxGasPrice,
     };
 
-    return new Promise((resolve) => {
-      Web3Service.createTxData(address, tx, maxGasPrice)
-        .then((formedTx) => userStore.singTransaction(formedTx, password))
-        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash));
-    });
+
+    return Web3Service.createTxData(address, tx, maxGasPrice)
+      .then((formedTx) => userStore.singTransaction(formedTx, password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => {
+        // eslint-disable-next-line no-console
+        console.log('wwpw');
+        Promise.resolve(txHash);
+      });
   }
 
   /**

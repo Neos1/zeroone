@@ -174,6 +174,8 @@ class UserStore {
    * @return Signed TX data
    */
   @action singTransaction(data, password) {
+    // eslint-disable-next-line no-console
+    console.log('start');
     return new Promise((resolve) => {
       // eslint-disable-next-line consistent-return
       this.readWallet(password).then((info) => {
