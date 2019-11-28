@@ -19,8 +19,6 @@ class UserStore {
 
   @observable _mnemonicRepeat = Array(12);
 
-  @observable address = '';
-
   @observable balance = 0;
 
   @observable password = '';
@@ -29,6 +27,10 @@ class UserStore {
     this.rootStore = rootStore;
   }
 
+  /**
+   * saves password to store for decoding wallet and transaction signing
+   *@param {string} value password from form
+  */
   @action setPassword(value) {
     this.password = value;
   }
@@ -39,7 +41,6 @@ class UserStore {
    */
   @action setEncryptedWallet(wallet) {
     this.encryptedWallet = wallet;
-    this.address = `0x${wallet.address}`;
   }
 
   /**
@@ -217,6 +218,11 @@ class UserStore {
 
   @action setWalletName(name) {
     this.walletName = name;
+  }
+
+  @computed get address() {
+    const { encryptedWallet } = this;
+    return `0x${encryptedWallet.address}`;
   }
 
   @computed get mnemonic() {

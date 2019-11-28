@@ -20,7 +20,7 @@
     }
   }
   &__block {
-    padding: 60px 94px;
+    padding: 60px 44px;
     text-align: center;
     .heading {
       margin-bottom: 60px;
@@ -40,6 +40,9 @@
         width: 100%;
         margin: 42px auto 20px;
       }
+    }
+    form, .add-project {
+      padding: 0 50px;
     }
   }
   &__submit {

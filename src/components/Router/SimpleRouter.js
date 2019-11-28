@@ -15,9 +15,11 @@ import AddNewProject from '../AddNewProject';
 import ProjectUploading from '../ProjectUploading';
 import CreationAlert from '../CreationAlert';
 import DisplayUserInfo from '../DisplayUserInfo';
+import Header from '../Header';
 
 const SimpleRouter = () => (
   <MemoryRouter>
+    <Header />
     <Switch>
       <Route path="/" exact component={Login} />
       <Route path="/create" exact component={CreateWallet} />
