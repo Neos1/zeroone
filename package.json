@@ -138,6 +138,8 @@
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
       "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules"
     },
-    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ]
   }
 }
