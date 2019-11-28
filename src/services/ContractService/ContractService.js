@@ -45,6 +45,8 @@ class ContractService {
           : ':Voter';
         window.BrowserSolc.loadVersion(version, (compiler) => {
           const compiledContract = compiler.compile(contract);
+          // eslint-disable-next-line no-console
+          console.log(compiledContract);
           const contractData = compiledContract.contracts[contractName];
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
@@ -63,34 +65,57 @@ class ContractService {
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
-    let imports;
-    const files = {};
+    const importedFiles = {};
     const dir = type === 'ERC20' ? './' : './Voter/';
     const compiler = 'pragma solidity ^0.4.24;';
-    let mainContract = type === 'ERC20'
-      ? fs.readFileSync(path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`), 'utf8')
-      : fs.readFileSync(path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`), 'utf8');
 
-    while (mainContract.match(SOL_IMPORT_REGEXP)) {
-      imports = mainContract.match(SOL_PATH_REGEXP);
-      imports.forEach((name) => {
-        let file = name;
-        file = file.replace(new RegExp(/(\'|\")/g), '');
-        const absolutePath = path.join(PATH_TO_CONTRACTS, `${dir}${file}`);
+    const getImports = (file) => {
+      const files = file.match(SOL_PATH_REGEXP);
+      return files ? files.map((singleFile) => singleFile.replace(new RegExp(/(\'|\")/g), '')) : [];
+    };
 
-        if (!files[absolutePath]) {
-          let addSol = fs.readFileSync(absolutePath, 'utf8');
-          addSol = addSol.replace(addSol.match(SOL_VERSION_REGEXP), '');
-          mainContract = mainContract.replace(mainContract.match(SOL_IMPORT_REGEXP)[0], addSol);
-          files[absolutePath] = true;
+    const readFile = (src) => {
+      // eslint-disable-next-line no-console
+      console.log(`%c${src}`, 'color: green; font-size:14px;');
+      // read file by given src
+      let mainImport = fs.readFileSync(src, 'utf8');
+      // getting the list of files, which will be imported
+      const importList = getImports(mainImport);
+      // finding the folder, which contains file with given src
+      const currentFolder = src.replace(/(((\.\/|\.\.\/)).{1,})*([a-zA-z0-9])*(\.sol)/g, '');
+
+      importList.forEach((file) => {
+        // read file, which contains in list of imports
+        const pathToFile = path.join(currentFolder, file);
+        if (!importedFiles[pathToFile]) {
+          // if file not imported already reads the file and deleting compiler version
+          const includedFile = (readFile(pathToFile)).replace(SOL_VERSION_REGEXP, '');
+          if (mainImport.match(SOL_IMPORT_REGEXP)) {
+            // if main file contains import - replacing this import by content of imported file
+            mainImport = mainImport.replace(mainImport.match(SOL_IMPORT_REGEXP)[0], includedFile);
+          }
+          // marking that we succesfully import this file
+          importedFiles[pathToFile] = true;
         } else {
-          mainContract = mainContract.replace(mainContract.match(SOL_IMPORT_REGEXP)[0], '');
+          // if file already imported, just delete matched file import declaration
+          mainImport = mainImport.replace(mainImport.match(SOL_IMPORT_REGEXP)[0], '');
+          // eslint-disable-next-line no-console
+          console.log(`%c${src} %carlerady imported`, 'color: green; font-size:14px;', 'color: red; font-size:16px;');
         }
       });
-    }
-    mainContract = mainContract.replace(SOL_VERSION_REGEXP, compiler);
-    mainContract = mainContract.replace(new RegExp(/(calldata)/g), '');
-    return mainContract;
+
+      return mainImport;
+    };
+
+    const pathToMainFile = type === 'ERC20'
+      ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
+      : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
+
+    let output = readFile(pathToMainFile);
+
+    output = output.replace(SOL_VERSION_REGEXP, compiler);
+    output = output.replace(/(calldata)/g, '');
+    return output;
   }
 
   /**

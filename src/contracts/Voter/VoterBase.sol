@@ -9,7 +9,6 @@ import "../IERC20.sol";
 
 
 
-
 /**
  * @title VoterBase
  * @dev an base difinitions for voter
