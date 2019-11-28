@@ -20,6 +20,7 @@
   "plugins": ["react"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "no-underscore-dangle":"off"
+    "no-underscore-dangle":"off",
+    "linebreak-style": "off"
   }
 }

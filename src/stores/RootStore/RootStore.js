@@ -2,7 +2,6 @@ import { observable, action } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
-import AlertStore from '../AlertStore';
 import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
@@ -34,7 +33,6 @@ class RootStore {
     this.Web3Service = new Web3Service(config.host, this);
     this.appStore = new AppStore(this);
     this.userStore = new UserStore(this);
-    this.alertStore = new AlertStore();
     this.walletService = new WalletService();
     this.eventEmitterService = new EventEmitterService();
     this.contractService = new ContractService(this);

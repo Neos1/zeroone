@@ -4,7 +4,7 @@ import { BN } from 'ethereumjs-util';
 /**
  * Service for working with web3 (sending signed transactions, creating transactions)
  */
-class web3Service {
+class Web3Service {
   /**
    * @constructor
    * @param {string} provider - provider for this.web3
@@ -31,9 +31,13 @@ class web3Service {
         if (!maxGasPrice) return (Promise.resolve(gas));
         return this.getGasPrice()
           .then((gasPrice) => {
-            transaction.gasPrice = new BN(gasPrice).lte(new BN(maxGasPrice))
-              ? maxGasPrice
-              : maxGasPrice;
+            const minGasPrice = 10000000000;
+            const gp = new BN(gasPrice);
+            const minGp = new BN(minGasPrice);
+            const maxGp = new BN(maxGasPrice);
+            transaction.gasPrice = (gp.gte(minGp) && gp.lte(maxGp))
+              ? gasPrice
+              : minGasPrice;
             return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);
@@ -93,4 +97,4 @@ class web3Service {
     });
   }
 }
-export default web3Service;
+export default Web3Service;

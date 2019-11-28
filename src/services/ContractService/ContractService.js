@@ -9,7 +9,7 @@ import {
 import Question from './entities/Question';
 
 /**
- * Class for forming transactions
+ * Class for work with contracts
  */
 class ContractService {
   constructor(rootStore) {
@@ -168,15 +168,6 @@ class ContractService {
     return data;
   }
 
-  /**
-   * getting one question
-   * @param {number} id id of question
-   * @param {string} from address who calls method
-   */
-  async fetchQuestion(id, from) {
-    const data = await this.contract.methods.getQuestion(id).call({ from });
-    return data;
-  }
 
   /**
    * checks count of uploaded to contract questions and total count of system questions
@@ -196,13 +187,13 @@ class ContractService {
    */
   async sendQuestion(idx) {
     const {
-      Web3Service, Web3Service: { web3 }, userStore, appStore: { password },
+      Web3Service, userStore,
     } = this.rootStore;
     const sysQuestion = this.sysQuestions[idx];
     // eslint-disable-next-line consistent-return
-    await this.getQuestion(idx).then((result) => {
+    await this.fetchQuestion(idx).then((result) => {
       if (result.caption === '') {
-        const { address } = userStore;
+        const { address, password } = userStore;
         const question = new Question(sysQuestion);
         const contractAddr = this._contract.options.address;
         const params = question.getUploadingParams(contractAddr);
@@ -229,7 +220,12 @@ class ContractService {
     });
   }
 
-  getQuestion(id) {
+  /**
+   * Fetching one question from contract
+   * @param {number} id id of question
+   * @returns {Object} Question data from contract
+   */
+  fetchQuestion(id) {
     return this.callMethod('question', id);
   }
 

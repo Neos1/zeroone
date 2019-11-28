@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import {
   fs, path, PATH_TO_WALLETS, ROOT_DIR, PATH_TO_CONTRACTS,
 } from '../../constants';
+import Alert from './entities/Alert';
 
 class AppStore {
   @observable walletList = {};
@@ -17,6 +18,8 @@ class AppStore {
   @observable deployArgs = [];
 
   @observable name = '';
+
+  @observable alert = new Alert()
 
   @observable uploadedQuestion = 0;
 
@@ -164,8 +167,13 @@ class AppStore {
    * @param {number} [timeOut=3000]  timeout when alert disappear
    */
   @action displayAlert(text, timeOut) {
-    const { alertStore } = this.rootStore;
-    alertStore.showAlert(text, timeOut);
+    const { alert } = this;
+    alert.showAlert(text, timeOut);
+  }
+
+  @action closeAlert() {
+    const { alert } = this;
+    alert.closeAlert();
   }
 
 

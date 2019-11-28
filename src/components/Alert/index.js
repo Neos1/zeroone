@@ -4,13 +4,13 @@ import { observer, inject } from 'mobx-react';
 import { IconInfo, CloseIcon } from '../Icons';
 import styles from './Alert.scss';
 
-const Alert = inject('alertStore')(observer(({ alertStore }) => (
-  <div className={`${styles.alert} ${alertStore.visible ? styles['alert--visible'] : ''}`}>
+const Alert = inject('appStore')(observer(({ appStore, appStore: { alert } }) => (
+  <div className={`${styles.alert} ${alert.visible ? styles['alert--visible'] : ''}`}>
     <IconInfo />
     <span className={styles.alert__text}>
-      {alertStore.text}
+      {alert.text}
     </span>
-    <button type="button" className={styles.alert__close} onClick={() => alertStore.closeAlert()}>
+    <button type="button" className={styles.alert__close} onClick={() => appStore.closeAlert()}>
       <CloseIcon />
     </button>
   </div>

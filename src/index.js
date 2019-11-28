@@ -9,10 +9,10 @@ import './i18n';
 
 import './assets/styles/style.scss';
 
-const { userStore, appStore, alertStore } = rootStore;
+const { userStore, appStore } = rootStore;
 
 render(
-  <Provider appStore={appStore} userStore={userStore} alertStore={alertStore}>
+  <Provider appStore={appStore} userStore={userStore}>
     <Header />
     <SimpleRouter />
     <Alert />
