@@ -21,4 +21,5 @@ class ConnectProjectForm extends ExtendedForm {
     };
   }
 }
+
 export default ConnectProjectForm;

@@ -46,6 +46,7 @@ class RootStore {
     this.projectStore = new ProjectStore(address);
   }
 }
+
 // eslint-disable-next-line no-multi-assign
 const rootStore = window.rootStore = new RootStore();
 export default rootStore;

@@ -17,6 +17,7 @@ const WalletAddress = withTranslation()(inject('userStore')(observer(({ t, userS
     <p className={styles['form__wallet-text']}>{userStore.address}</p>
   </div>
 ))));
+
 WalletAddress.propTypes = {
   userStore: propTypes.shape({
     address: propTypes.string.isRequired,
@@ -50,8 +51,10 @@ const CreationAlert = withTranslation()(({ t, success = false, recover = false }
     </div>
   </Container>
 ));
+
 CreationAlert.propTypes = {
   success: propTypes.bool.isRequired,
   recover: propTypes.bool.isRequired,
 };
+
 export default CreationAlert;

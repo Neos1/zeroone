@@ -72,4 +72,5 @@ class WalletService {
     return bip39.validateMnemonic(mnemonic);
   }
 }
+
 export default WalletService;

@@ -1,7 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
-
 const path = require('path');
 
 let mainWindow;

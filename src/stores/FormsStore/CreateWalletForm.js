@@ -21,4 +21,5 @@ class CreateWalletForm extends ExtendedForm {
     };
   }
 }
+
 export default CreateWalletForm;

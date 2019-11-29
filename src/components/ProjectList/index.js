@@ -67,4 +67,4 @@ ProjectList.propTypes = {
   t: propTypes.func.isRequired,
 };
 
-export default withTranslation()(ProjectList);
+export default ProjectList;

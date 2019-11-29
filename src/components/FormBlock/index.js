@@ -8,10 +8,12 @@ const FormBlock = ({ children, className }) => (
     {children}
   </div>
 );
+
 FormBlock.propTypes = {
   children: propTypes.node.isRequired,
   className: propTypes.string,
 };
+
 FormBlock.defaultProps = {
   className: '',
 };

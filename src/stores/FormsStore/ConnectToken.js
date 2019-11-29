@@ -15,4 +15,5 @@ class ConnectTokenForm extends ExtendedForm {
     };
   }
 }
+
 export default ConnectTokenForm;

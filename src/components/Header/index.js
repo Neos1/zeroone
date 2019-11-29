@@ -18,4 +18,5 @@ const Header = inject('userStore', 'appStore')(observer(({ appStore: { inProject
     </div>
   </header>
 )));
+
 export default Header;

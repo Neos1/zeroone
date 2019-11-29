@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import styles from './Logo.scss';
 
 const Logo = () => (
-
-  // eslint-disable-next-line jsx-a11y/anchor-is-valid
   <Link to="/" className={styles.logo}>
     <span className={styles.logo__dark}>
       <span>01</span>

@@ -11,6 +11,7 @@ class Dropdown extends Component {
       opened: false,
       selectedValue: '',
     };
+
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
@@ -100,6 +101,7 @@ Dropdown.propTypes = {
     placeholder: propTypes.string.isRequired,
   }).isRequired,
 };
+
 Dropdown.defaultProps = {
   children: '',
   subOptions: {},

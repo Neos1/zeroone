@@ -30,14 +30,14 @@ class LangSwitcher extends Component {
     this.wrapperRef = node;
   }
 
-  toggleOptions=() => {
+  toggleOptions = () => {
     const { opened } = this.state;
     this.setState({
       opened: !opened,
     });
   }
 
-  selectOption=(e) => {
+  selectOption = (e) => {
     const value = e.target.getAttribute('data-value');
     this.toggleOptions();
     i18n.changeLanguage(value);

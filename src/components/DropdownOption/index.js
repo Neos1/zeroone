@@ -29,6 +29,7 @@ DropdownOption.propTypes = {
   select: propTypes.func.isRequired,
   subOption: propTypes.string.isRequired,
 };
+
 DropdownOption.defaultProps = {
 };
 

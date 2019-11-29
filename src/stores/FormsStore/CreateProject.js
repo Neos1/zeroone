@@ -21,4 +21,5 @@ class СreateProjectForm extends ExtendedForm {
     };
   }
 }
+
 export default СreateProjectForm;

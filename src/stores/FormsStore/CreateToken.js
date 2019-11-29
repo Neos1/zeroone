@@ -33,4 +33,5 @@ class CreateTokenForm extends ExtendedForm {
     };
   }
 }
+
 export default CreateTokenForm;

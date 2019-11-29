@@ -35,6 +35,11 @@ class Question {
     return convertedFormula;
   }
 
+  /**
+   * getting formed parameters for contract
+   * @param {string} contractAddr address of target contract
+   * @returns {array} formed data for encoding transaction
+   */
   getUploadingParams(contractAddr) {
     const {
       id, group, name, caption, time, method, parameters,

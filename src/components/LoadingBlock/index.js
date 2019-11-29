@@ -9,6 +9,7 @@ const LoadingBlock = ({ children }) => (
     <Loader />
   </FormBlock>
 );
+
 LoadingBlock.propTypes = {
   children: propTypes.node.isRequired,
 };
