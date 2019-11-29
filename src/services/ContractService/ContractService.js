@@ -180,7 +180,9 @@ class ContractService {
    * @param params parameters for method
    */
   async callMethod(method, ...params) {
-    const data = await this.contract.methods[method](...params).call();
+    // eslint-disable-next-line no-console
+    console.log(`this.contract.methods[${method}](${[...params]}).call();`);
+    const data = await this._contract.methods[method](...params).call();
     return data;
   }
 
@@ -239,7 +241,7 @@ class ContractService {
    * @returns {Object} Question data from contract
    */
   fetchQuestion(id) {
-    return this.callMethod('question', id);
+    return this.callMethod('question', [id]);
   }
 
   /**
@@ -248,7 +250,7 @@ class ContractService {
    * @param {string} from address who calls method
    */
   async fetchVoting(id) {
-    return this.callMethod('getVoting', id);
+    return this.callMethod('getVoting', [id]);
   }
 
   /**
@@ -257,7 +259,7 @@ class ContractService {
    * @param {string} from address, who calls
    */
   async fetchVotingStats(id) {
-    return this.callMethod('getVotingStats', id);
+    return this.callMethod('getVotingStats', [id]);
   }
 
   /**
