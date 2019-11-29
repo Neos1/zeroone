@@ -118,11 +118,7 @@ class CreateNewProjectWithoutTokens extends Component {
     const { steps } = this;
     const { appStore } = this.props;
     appStore.deployContract('ERC20', deployArgs, password)
-      .then((txHash) => {
-        // eslint-disable-next-line no-console
-        console.log(txHash);
-        return appStore.checkReceipt(txHash);
-      })
+      .then((txHash) => appStore.checkReceipt(txHash))
       .then((receipt) => {
         this.setState({
           currentStep: steps.tokenCreated,

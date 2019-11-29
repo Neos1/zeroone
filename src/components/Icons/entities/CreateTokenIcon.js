@@ -13,4 +13,5 @@ const CreateToken = () => (
     <path d="M13.6255 4.37454L14.6582 3.3418" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
 export default CreateToken;

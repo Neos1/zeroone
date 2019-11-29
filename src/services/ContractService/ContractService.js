@@ -45,8 +45,6 @@ class ContractService {
           : ':Voter';
         window.BrowserSolc.loadVersion(version, (compiler) => {
           const compiledContract = compiler.compile(contract);
-          // eslint-disable-next-line no-console
-          console.log(compiledContract);
           const contractData = compiledContract.contracts[contractName];
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
@@ -68,22 +66,17 @@ class ContractService {
     const importedFiles = {};
     const dir = type === 'ERC20' ? './' : './Voter/';
     const compiler = 'pragma solidity ^0.4.24;';
-
     const getImports = (file) => {
       const files = file.match(SOL_PATH_REGEXP);
       return files ? files.map((singleFile) => singleFile.replace(new RegExp(/(\'|\")/g), '')) : [];
     };
-
     const readFile = (src) => {
-      // eslint-disable-next-line no-console
-      console.log(`%c${src}`, 'color: green; font-size:14px;');
       // read file by given src
       let mainImport = fs.readFileSync(src, 'utf8');
       // getting the list of files, which will be imported
       const importList = getImports(mainImport);
       // finding the folder, which contains file with given src
       const currentFolder = src.replace(/(((\.\/|\.\.\/)).{1,})*([a-zA-z0-9])*(\.sol)/g, '');
-
       importList.forEach((file) => {
         // read file, which contains in list of imports
         const pathToFile = path.join(currentFolder, file);
@@ -99,11 +92,8 @@ class ContractService {
         } else {
           // if file already imported, just delete matched file import declaration
           mainImport = mainImport.replace(mainImport.match(SOL_IMPORT_REGEXP)[0], '');
-          // eslint-disable-next-line no-console
-          console.log(`%c${src} %carlerady imported`, 'color: green; font-size:14px;', 'color: red; font-size:16px;');
         }
       });
-
       return mainImport;
     };
 
@@ -112,9 +102,9 @@ class ContractService {
       : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
 
     let output = readFile(pathToMainFile);
-
     output = output.replace(SOL_VERSION_REGEXP, compiler);
     output = output.replace(/(calldata)/g, '');
+
     return output;
   }
 
@@ -145,13 +135,10 @@ class ContractService {
       gasPrice: maxGasPrice,
     };
 
-
     return Web3Service.createTxData(address, tx, maxGasPrice)
       .then((formedTx) => userStore.singTransaction(formedTx, password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => {
-        // eslint-disable-next-line no-console
-        console.log('wwpw');
         Promise.resolve(txHash);
       });
   }
@@ -197,7 +184,6 @@ class ContractService {
     return data;
   }
 
-
   /**
    * checks count of uploaded to contract questions and total count of system questions
    * @function
@@ -241,9 +227,7 @@ class ContractService {
           Web3Service.createTxData(address, rawTx, maxGasPrice)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => {
-              Web3Service.subscribeTxReceipt(txHash);
-            });
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
         });
       }
     });

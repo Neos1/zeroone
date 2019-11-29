@@ -67,7 +67,6 @@ class Dropdown extends Component {
         select={this.handleSelect}
       />
     ));
-    // eslint-disable-next-line no-console
 
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>

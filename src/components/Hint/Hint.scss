@@ -6,6 +6,7 @@
   width: 16px;
   height: 16px;
   cursor: default;
+
   &__icon {
     position: relative;
     display: inline-block;
@@ -41,6 +42,7 @@
       }
     }
   }
+  
   &__text {
     position: absolute;
     top:50%; 

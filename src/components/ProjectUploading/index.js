@@ -152,6 +152,7 @@ ProjectUploading.propTypes = {
   }).isRequired,
   t: propTypes.func.isRequired,
 };
+
 Progress.propTypes = {
   step: propTypes.number.isRequired,
   appStore: propTypes.shape({

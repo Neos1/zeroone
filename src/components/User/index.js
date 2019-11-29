@@ -13,4 +13,5 @@ const User = ({ children }) => (
 User.propTypes = {
   children: propTypes.string.isRequired,
 };
+
 export default User;

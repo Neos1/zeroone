@@ -48,6 +48,7 @@ Input.propTypes = {
   }).isRequired,
   onInput: propTypes.func,
 };
+
 Input.defaultProps = {
   className: '',
   onInput: () => null,

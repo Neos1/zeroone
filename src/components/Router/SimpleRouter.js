@@ -41,4 +41,5 @@ const SimpleRouter = () => (
     </Switch>
   </MemoryRouter>
 );
+
 export default SimpleRouter;

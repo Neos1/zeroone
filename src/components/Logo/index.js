@@ -14,4 +14,5 @@ const Logo = () => (
     </span>
   </Link>
 );
+
 export default Logo;

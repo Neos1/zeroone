@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import passwordValidation from './index';
 
-
 describe('test for password validation', () => {
   test('password T3sting!', () => {
     const validity = passwordValidation('T3sting!');

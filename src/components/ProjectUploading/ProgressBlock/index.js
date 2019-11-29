@@ -23,10 +23,10 @@ const ProgressBlock = ({
       <span>{text}</span>
       <span>{children[1] ? children[1] : ''}</span>
     </p>
-
     {!noline ? <div className={styles['progress-line']} /> : ''}
   </div>
 );
+
 ProgressBlock.propTypes = {
   children: propTypes.arrayOf(propTypes.node).isRequired,
   text: propTypes.string.isRequired,

@@ -98,6 +98,7 @@ ShowSeed.propTypes = {
   }).isRequired,
   t: propTypes.func.isRequired,
 };
+
 SeedWord.propTypes = {
   id: propTypes.number.isRequired,
   word: propTypes.string.isRequired,

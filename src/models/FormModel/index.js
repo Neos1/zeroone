@@ -32,8 +32,6 @@ class ExtendedForm extends Form {
         promise
           .finally(() => {
             $this.setLoading(false);
-            // eslint-disable-next-line no-console
-            console.log($this.loading);
           });
       },
       onError: (form) => {

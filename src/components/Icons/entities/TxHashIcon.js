@@ -35,4 +35,5 @@ const TxHashIcon = () => (
     </defs>
   </svg>
 );
+
 export default TxHashIcon;

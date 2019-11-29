@@ -9,11 +9,6 @@
   outline: none;
   cursor: pointer;
   transition: 0.2s linear;
-  &>* {
-    margin: 0;
-    padding: 0;
-  }
-
   svg,
   &__icon,
   &__text {
@@ -26,6 +21,7 @@
       transition: 0.2s;
     }
   }
+
   &__icon {
     svg {
       margin-right: 10px;
@@ -171,15 +167,13 @@
     display: block;
     width: 100%;
   }
+
   &--240 {
     width: 240px;
   }
+
   &--310 {
     width: 310px;
   }
 }
-.icon--top{
-  svg {
-    width: 100%;
-  }
-}
+

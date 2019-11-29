@@ -176,7 +176,6 @@ class AppStore {
     alert.closeAlert();
   }
 
-
   @computed get wallets() {
     const wallets = Object.keys(this.walletList);
     return wallets.map((wallet) => ({ label: `0x${wallet}`, value: `0x${wallet}` }));

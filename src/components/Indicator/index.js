@@ -10,4 +10,5 @@ const Indicator = ({ checked }) => (
 Indicator.propTypes = {
   checked: propTypes.bool.isRequired,
 };
+
 export default Indicator;

@@ -6,4 +6,5 @@ const TokenName = () => (
     <path d="M10.6666 14V3.33333C10.6666 2.97971 10.5262 2.64057 10.2761 2.39052C10.0261 2.14048 9.68694 2 9.33331 2H6.66665C6.31302 2 5.97389 2.14048 5.72384 2.39052C5.47379 2.64057 5.33331 2.97971 5.33331 3.33333V14" stroke="#4D4D4D" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
 export default TokenName;
