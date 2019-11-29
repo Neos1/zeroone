@@ -180,8 +180,6 @@ class ContractService {
    * @param params parameters for method
    */
   async callMethod(method, ...params) {
-    // eslint-disable-next-line no-console
-    console.log(`this.contract.methods[${method}](${[...params]}).call();`);
     const data = await this._contract.methods[method](...params).call();
     return data;
   }
