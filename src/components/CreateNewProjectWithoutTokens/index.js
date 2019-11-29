@@ -72,7 +72,6 @@ class CreateNewProjectWithoutTokens extends Component {
 
     return userStore.readWallet(password)
       .then(() => userStore.checkBalance(userStore.address))
-      // eslint-disable-next-line consistent-return
       .then((balance) => (this.isEnoughBalance(balance)
         ? this.deployTokenContract(deployArgs, password)
         : this.returnToTokenCreating(t('errors:lowBalance'))))

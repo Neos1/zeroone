@@ -84,7 +84,6 @@ class AddExistingProject extends Component {
     appStore.displayAlert(t('errors:validationError'), 3000);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   renderSwitch(step) {
     const { steps } = this;
     const { t } = this.props;

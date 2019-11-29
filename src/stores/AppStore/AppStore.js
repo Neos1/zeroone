@@ -77,11 +77,12 @@ class AppStore {
    */
   @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
-    return new Promise(() => {
+    return new Promise((resolve) => {
       contractService.compileContract(type)
         .then(({ bytecode, abi }) => contractService.deployContract({
           type, deployArgs, bytecode, abi, password,
-        }));
+        }))
+        .then((txhash) => resolve(txhash));
     });
   }
 

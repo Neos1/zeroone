@@ -135,12 +135,12 @@ class ContractService {
       gasPrice: maxGasPrice,
     };
 
-    return Web3Service.createTxData(address, tx, maxGasPrice)
-      .then((formedTx) => userStore.singTransaction(formedTx, password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => {
-        Promise.resolve(txHash);
-      });
+    return new Promise((resolve) => {
+      Web3Service.createTxData(address, tx, maxGasPrice)
+        .then((formedTx) => userStore.singTransaction(formedTx, password))
+        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+        .then((txHash) => resolve(txHash));
+    });
   }
 
   /**
@@ -223,11 +223,11 @@ class ContractService {
           value: '0x0',
         };
 
-        return new Promise(() => {
+        return new Promise((resolve) => {
           Web3Service.createTxData(address, rawTx, maxGasPrice)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+            .then((txHash) => resolve(txHash));
         });
       }
     });
