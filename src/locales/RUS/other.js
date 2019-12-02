@@ -22,8 +22,6 @@ const other = {
   weightVote: 'Вес голоса',
   page: 'Страница',
   goTo: 'Перейти',
-<<<<<<< HEAD
-=======
   voterList: 'Список проголосавших ',
   agree: 'Согласны',
   against: 'Против',
@@ -33,7 +31,6 @@ const other = {
   createANewQuestion: 'Создать вопрос',
   basicInfo: 'Основная информация',
   stepProgress: 'Шаг {{current}} из {{total}}',
->>>>>>> dd801025a0bdd4653ddfd0d56393dcadedffcc59
   RUS: 'Русский',
   ENG: 'English',
 };
