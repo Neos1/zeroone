@@ -19,7 +19,7 @@ class TokenTransferError extends React.Component {
     const { props: { t } } = this;
     return (
       <Dialog
-        name="transfer-error"
+        name="token-transfer-error"
         header={t('dialogs:tokenTransferError')}
         className="transfer-error"
         size="md"

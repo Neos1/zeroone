@@ -3,7 +3,7 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { PropTypes } from 'prop-types';
 import { inject } from 'mobx-react';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 import styles from './Dialog.scss';
 
@@ -37,7 +37,6 @@ class DefaultDialogFooter extends React.Component {
       >
         {/* TODO refactor after new button */}
         <Button
-          className={`btn--default btn--black ${styles.footer__button}`}
           onClick={hide}
         >
           {t('buttons:continue')}
