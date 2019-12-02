@@ -1,24 +1,19 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
-const path = require('path');
-
 // eslint-disable-next-line no-undef
 const fs = jest.genMockFromModule('fs');
 
-let mockFiles = Object.create(null);
+let mockFiles = {};
 
 function __setMockFiles(files) {
-  mockFiles = Object.create(null);
+  mockFiles = {};
 
-  for (const file in files) {
-    const dir = file;
+  const keys = Object.keys(files);
 
-    if (!mockFiles[dir]) {
-      mockFiles[dir] = '';
+  keys.forEach((filePath) => {
+    if (!mockFiles[filePath]) {
+      mockFiles[filePath] = '';
     }
-
-    mockFiles[dir] = files[file];
-  }
+    mockFiles[filePath] = files[filePath];
+  });
 }
 
 function readFileSync(src) {
