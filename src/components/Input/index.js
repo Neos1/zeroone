@@ -1,18 +1,12 @@
-/* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer } from 'mobx-react';
+
 import styles from './Input.scss';
 
 @observer
 class Input extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
   handleOnChange = (e) => {
     const { field, onInput } = this.props;
     field.onChange(e);
@@ -24,14 +18,19 @@ class Input extends Component {
       children, field, className,
     } = this.props;
     return (
-      <div className={`${styles.field} ${field.error ? 'field--error' : ''} ${className}`}>
+      <div className={`${styles.field} ${field.error ? styles['field--error'] : ''} ${className}`}>
         {children}
-        <input className="field__input" {...field.bind()} value={field.value} onChange={this.handleOnChange} />
-        <span className="field__label">{field.placeholder}</span>
-        <p className="field__error-text">
+        <input
+          className={styles.field__input}
+          {...field.bind()}
+          value={field.value}
+          onChange={this.handleOnChange}
+        />
+        <span className={styles.field__label}>{field.placeholder}</span>
+        <p className={styles['field__error-text']}>
           {field.error}
         </p>
-        <div className="field__line" />
+        <div className={styles.field__line} />
       </div>
     );
   }
@@ -40,10 +39,16 @@ class Input extends Component {
 Input.propTypes = {
   children: propTypes.element.isRequired,
   className: propTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-  field: propTypes.object.isRequired,
+  field: propTypes.shape({
+    error: propTypes.string.isRequired,
+    value: propTypes.string.isRequired,
+    placeholder: propTypes.string.isRequired,
+    bind: propTypes.func.isRequired,
+    onChange: propTypes.func.isRequired,
+  }).isRequired,
   onInput: propTypes.func,
 };
+
 Input.defaultProps = {
   className: '',
   onInput: () => null,

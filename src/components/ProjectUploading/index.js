@@ -1,6 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-console */
-/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -9,64 +6,72 @@ import { withTranslation } from 'react-i18next';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-
-import styles from '../Login/Login.scss';
 import ProgressBlock from './ProgressBlock';
 import {
   CompilingIcon, SendingIcon, TxHashIcon, TxRecieptIcon, QuestionUploadingIcon, Login,
 } from '../Icons';
-import { Button, IconButton } from '../Button';
+import Button from '../Button/Button';
+
+import styles from '../Login/Login.scss';
 
 @withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class ProjectUploading extends Component {
+  steps = {
+    compiling: 0,
+    sending: 1,
+    hash: 2,
+    receipt: 3,
+    questions: 4,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
-      address: '',
-      loading: true,
+      step: this.steps.compiling,
+      uploading: true,
     };
   }
 
   componentDidMount() {
-    const { appStore, appStore: { deployArgs, name, password }, t } = this.props;
+    const { steps } = this;
+    const {
+      appStore, appStore: { deployArgs, name }, userStore: { password }, t,
+    } = this.props;
     this.setState({
-      step: 1,
+      step: steps.sending,
     });
+
     appStore.deployContract('project', deployArgs, password)
       .then((txHash) => {
         this.setState({
-          step: 3,
+          step: steps.receipt,
         });
-        const interval = setInterval(() => {
-          appStore.checkReceipt(txHash).then((receipt) => {
-            if (receipt) {
-              this.setState({
-                step: 4,
-                address: receipt.contractAddress,
-              });
-              appStore.addProjectToList({ name, address: receipt.contractAddress });
-              clearInterval(interval);
-              appStore.deployQuestions(receipt.contractAddress).then(() => {
-                this.setState({
-                  loading: false,
-                });
-              });
-            }
-          }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
-        }, 2000);
-      });
+        return appStore.checkReceipt(txHash);
+      })
+      .then((receipt) => {
+        if (receipt) {
+          this.setState({
+            step: steps.questions,
+          });
+          appStore.addProjectToList({ name, address: receipt.contractAddress });
+          appStore.deployQuestions(receipt.contractAddress).then(() => {
+            this.setState({
+              uploading: false,
+            });
+          });
+        }
+      }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
   }
 
   render() {
-    const { step, loading } = this.state;
+    const { step, uploading } = this.state;
     return (
       <Container>
-        <div className={`${styles.form} ${loading ? styles['form--ultrawide'] : ''}`}>
+        <div className={`${styles.form} ${uploading ? styles['form--ultrawide'] : ''}`}>
           {
-            loading ? <Progress step={step} /> : <AlertBlock />
+            uploading ? <Progress step={step} /> : <AlertBlock />
           }
         </div>
       </Container>
@@ -74,58 +79,42 @@ class ProjectUploading extends Component {
   }
 }
 
-const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, step }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:uploadingProject.heading')}
-      {t('headings:uploadingProject.subheading')}
-    </Heading>
-    <div className={styles.progress}>
-      <ProgressBlock
-        text={t('other:compiling')}
-        index={0}
-        state={step}
-      >
-        <CompilingIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:sending')}
-        index={1}
-        state={step}
-      >
-        <SendingIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:txHash')}
-        index={2}
-        state={step}
-      >
-        <TxHashIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:txReceipt')}
-        index={3}
-        state={step}
-      >
-        <TxRecieptIcon />
-      </ProgressBlock>
-      <ProgressBlock
-        text={t('other:questionsUploading')}
-        index={4}
-        state={step}
-        noline
-      >
-        <QuestionUploadingIcon />
-        <span>
-          {appStore.uploadedQuestion}
-          {'/'}
-          {appStore.countOfQuestions}
-        </span>
-      </ProgressBlock>
-    </div>
+const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, step }) => {
+  const steps = [
+    [t('other:compiling'), <CompilingIcon />],
+    [t('other:sending'), <SendingIcon />],
+    [t('other:txHash'), <TxHashIcon />],
+    [t('other:txReceipt'), <TxRecieptIcon />],
+    [t('other:questionsUploading'), [
+      <QuestionUploadingIcon />,
+      <span>
+        {appStore.uploadedQuestion}
+        {'/'}
+        {appStore.countOfQuestions}
+      </span>],
+    ]];
 
-  </FormBlock>
-))));
+  return (
+    <FormBlock>
+      <Heading>
+        {t('headings:uploadingProject.heading')}
+        {t('headings:uploadingProject.subheading')}
+      </Heading>
+      <div className={styles.progress}>
+        {steps.map((item, index) => (
+          <ProgressBlock
+            text={item[0]}
+            index={index}
+            state={step}
+            noline={index === 4}
+          >
+            {item[1]}
+          </ProgressBlock>
+        ))}
+      </div>
+    </FormBlock>
+  );
+})));
 
 const AlertBlock = withTranslation()(({ t }) => (
   <FormBlock>
@@ -137,17 +126,17 @@ const AlertBlock = withTranslation()(({ t }) => (
         {t('headings:projectCreated.subheading.1')}
       </span>
     </Heading>
-    <IconButton className="btn--default btn--black btn--240" type="submit">
-      {<Login />}
+    <Button theme="black" width="310" icon={<Login />} type="submit">
       {t('buttons:toCreatedProject')}
-    </IconButton>
+    </Button>
     <NavLink to="/projects">
-      <Button className="btn--text btn--link" type="submit">{t('buttons:otherProject')}</Button>
+      <Button theme="link" type="submit">
+        {t('buttons:otherProject')}
+      </Button>
     </NavLink>
   </FormBlock>
 ));
 
-// //ProjectUploading.propTypes = {};
 ProjectUploading.propTypes = {
   appStore: propTypes.shape({
     deployContract: propTypes.func.isRequired,
@@ -159,8 +148,12 @@ ProjectUploading.propTypes = {
     deployQuestions: propTypes.func.isRequired,
     displayAlert: propTypes.func.isRequired,
   }).isRequired,
+  userStore: propTypes.shape({
+    password: propTypes.string.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
+
 Progress.propTypes = {
   step: propTypes.number.isRequired,
   appStore: propTypes.shape({

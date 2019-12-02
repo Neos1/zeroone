@@ -1,37 +1,5 @@
 @import '../../assets/styles/partials/variables';
 
-/*.logo {
-  position: relative;
-  display: inline-block;
-  border: 3px solid $primary;
-  span{
-    display: inline-block;
-    vertical-align: middle;
-    transition: 0.2s linear;
-  }
-  &__dark {
-    padding: 3.5px 5px;
-    color: $white;
-    font-size: 32px;
-    background-color: $primary;
-    font-family: "Roboto Mono";
-  }
-  &__light {
-    position: relative;
-    padding: 15px;
-    color: $primary;
-    font-weight: bold;
-    font-size: 12px;
-    background-color: $white;
-  }
-  &:hover {
-    .logo {
-      &__dark, &__light {
-        filter: invert(100%);
-      }
-    }
-  }
-}*/
 .logo{
   display: table;
   height: 53px;
@@ -70,6 +38,7 @@
       font-family: "Grotesk";
     }
   }
+  
   &:hover {
     .logo__dark,
     .logo__light {

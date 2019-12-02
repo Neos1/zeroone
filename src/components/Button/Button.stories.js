@@ -1,25 +1,80 @@
 import React from 'react';
-import { Button, IconButton } from './index';
-import { AddIcon, BackIcon } from '../Icons';
+import Button from './Button';
+import { BackIcon, AddIcon, EyeIcon } from '../Icons';
 
 
 export default { title: 'Button' };
 
-export const Black = () => <Button className="btn--default btn--black"> Отправить </Button>;
-export const White = () => <Button className="btn--big btn--white"> NEOS </Button>;
-export const Small = () => <Button className="btn--small btn--white"> NEOS </Button>;
-
-export const WhiteDashed = () => (
-  <IconButton className="btn--big btn--white btn--dashed">
-    <AddIcon />
-    Отправить
-  </IconButton>
+export const defaultButton = () => (
+  <Button>
+  hello
+  </Button>
 );
 
-export const linkButton = () => <Button className="btn--link"> Создать новый ключ </Button>;
-export const arrowButton = () => (
-  <IconButton className="btn--link btn--noborder">
-    <BackIcon />
-    Назад
-  </IconButton>
-)
+export const whiteButton = () => (
+  <Button theme="white">
+  hello
+  </Button>
+);
+
+export const iconButton = () => (
+  <Button
+    icon={<AddIcon />}
+  >
+  hello
+  </Button>
+);
+
+export const iconTopButton = () => (
+  <Button
+    theme="white"
+    icon={<AddIcon />}
+    iconTop
+  >
+  hello
+  </Button>
+);
+
+export const linkButton = () => (
+  <Button
+    theme="link"
+  >
+  hello
+  </Button>
+);
+
+export const BackButton = () => (
+  <Button
+    icon={<BackIcon />}
+    theme="back"
+    size="noborder"
+  >
+  hello
+  </Button>
+);
+
+export const addProjectButton = () => (
+  <Button
+    icon={<AddIcon />}
+    theme="addproject"
+  >
+  Добавить проект
+  </Button>
+);
+
+export const projectButton = () => (
+  <Button
+    theme="project"
+  >
+  hello
+  </Button>
+);
+
+export const showSeed = () => (
+  <Button
+    theme="showseed"
+    icon={<EyeIcon />}
+  >
+  hello
+  </Button>
+);
