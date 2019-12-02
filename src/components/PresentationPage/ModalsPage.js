@@ -15,7 +15,7 @@ import {
 } from '../Dialog';
 import StartNewVoteDialog from '../Dialog/StartNewVoteDialog';
 import VoterListDialog from '../Dialog/VoterListDialog';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 const colStyle = {
   marginBottom: '10px',
