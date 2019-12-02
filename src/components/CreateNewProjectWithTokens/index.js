@@ -25,21 +25,15 @@ import styles from '../Login/Login.scss';
 class CreateNewProjectWithTokens extends Component {
   connectToken = new ConnectTokenForm({
     hooks: {
-      onSuccess: (form) => {
-        this.checkToken(form);
-      },
-      onError: () => {
-      },
+      onSuccess: (form) => this.checkToken(form),
+      onError: () => {},
     },
   });
 
   createProject = new CreateProjectForm({
     hooks: {
-      onSuccess: (form) => new Promise(() => {
-        this.gotoUploading(form);
-      }),
-      onError: () => {
-      },
+      onSuccess: (form) => this.gotoUploading(form),
+      onError: () => {},
     },
   });
 
@@ -74,7 +68,7 @@ class CreateNewProjectWithTokens extends Component {
     this.setState({
       currentStep: steps.check,
     });
-    appStore.checkErc(address).then(() => {
+    return appStore.checkErc(address).then(() => {
       this.setState({
         currentStep: steps.tokenChecked,
         indicatorStep: 2,
@@ -97,7 +91,7 @@ class CreateNewProjectWithTokens extends Component {
     const { name, password } = form.values();
     appStore.setProjectName(name);
     userStore.setPassword(password);
-    userStore.readWallet(password)
+    return userStore.readWallet(password)
       .then(() => {
         userStore.checkBalance(userStore.address)
           .then((balance) => {

@@ -26,7 +26,8 @@ class ContractService {
    */
   // eslint-disable-next-line consistent-return
   setContract(instance) {
-    if (!(instance instanceof Object)) return new Error('this is not contract');
+    const { Web3Service: { web3 } } = this.rootStore;
+    if (!(instance instanceof web3.eth.Contract)) return new Error('this is not contract');
     this._contract = instance;
   }
 

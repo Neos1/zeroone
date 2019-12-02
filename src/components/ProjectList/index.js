@@ -44,7 +44,6 @@ class ProjectList extends Component {
               {t('headings:projects.subheading')}
             </Heading>
             <div className={styles.projects}>
-              {' '}
               {projects}
               <NavLink to="/createProject">
                 <Button theme="addproject" icon={<AddIcon />}>

@@ -13,14 +13,13 @@ import CreateWalletForm from '../../stores/FormsStore/CreateWalletForm';
 
 import styles from '../Login/Login.scss';
 
+@withTranslation()
 @inject('userStore', 'appStore')
 @observer
 class CreateWallet extends Component {
   createForm = new CreateWalletForm({
     hooks: {
-      onSuccess: (form) => {
-        this.createWallet(form);
-      },
+      onSuccess: (form) => this.createWallet(form),
       onError: () => {
       },
     },
@@ -105,4 +104,4 @@ CreateWallet.propTypes = {
   recover: propTypes.bool.isRequired,
 };
 
-export default withTranslation()(CreateWallet);
+export default CreateWallet;

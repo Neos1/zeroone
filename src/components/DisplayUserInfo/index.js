@@ -9,7 +9,7 @@ import Button from '../Button/Button';
 
 import styles from '../Login/Login.scss';
 
-const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, userStore: { balance, address } }) => (
+const DisplayUserInfo = withTranslation()(inject('userStore')(observer(({ t, userStore: { balance, address } }) => (
   <Container>
     <div className={styles.form}>
       <FormBlock>
