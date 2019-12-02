@@ -9,6 +9,10 @@ import DefinetelyAgree from './DefinetelyAgree';
 import RejectMessage from './RejectMessage';
 import TokenTransferSuccess from './TokenTransferSuccess';
 import TransferTokenInProgress from './TransferTokenInProgress';
+import AgreedMessage from './AgreedMessage';
+import DefinetelyReject from './DefinetelyReject';
+import TokenTransferDialog from './TokenTransferDialog';
+import TokenTransferError from './TokenTransferError';
 
 const defaultDialogStore = {
   remove: () => {},
@@ -70,6 +74,21 @@ storiesOf('Dialog', module)
     <Provider
       dialogStore={{
         ...defaultDialogStore,
+        dialog: 'agreed-message',
+      }}
+    >
+      {story()}
+    </Provider>
+  ))
+  .add('AgreedMessage', () => (
+    <AgreedMessage dialogStore={{}} />
+  ));
+
+storiesOf('Dialog', module)
+  .addDecorator((story) => (
+    <Provider
+      dialogStore={{
+        ...defaultDialogStore,
         dialog: 'definetely-agree',
       }}
     >
@@ -78,6 +97,21 @@ storiesOf('Dialog', module)
   ))
   .add('Definetely Agree', () => (
     <DefinetelyAgree dialogStore={{}} />
+  ));
+
+storiesOf('Dialog', module)
+  .addDecorator((story) => (
+    <Provider
+      dialogStore={{
+        ...defaultDialogStore,
+        dialog: 'definetely-reject',
+      }}
+    >
+      {story()}
+    </Provider>
+  ))
+  .add('DefinetelyReject', () => (
+    <DefinetelyReject dialogStore={{}} />
   ));
 
 storiesOf('Dialog', module)
@@ -97,6 +131,36 @@ storiesOf('Dialog', module)
         ...defaultDialogStore,
       }}
     />
+  ));
+
+storiesOf('Dialog', module)
+  .addDecorator((story) => (
+    <Provider
+      dialogStore={{
+        ...defaultDialogStore,
+        dialog: 'token-transfer',
+      }}
+    >
+      {story()}
+    </Provider>
+  ))
+  .add('TokenTransferDialog', () => (
+    <TokenTransferDialog dialogStore={{}} />
+  ));
+
+storiesOf('Dialog', module)
+  .addDecorator((story) => (
+    <Provider
+      dialogStore={{
+        ...defaultDialogStore,
+        dialog: 'token-transfer-error',
+      }}
+    >
+      {story()}
+    </Provider>
+  ))
+  .add('TokenTransferError', () => (
+    <TokenTransferError dialogStore={{}} />
   ));
 
 storiesOf('Dialog', module)
