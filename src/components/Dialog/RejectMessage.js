@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import Dialog from './Dialog';
 import { RejectIcon } from '../Icons';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 import styles from './Dialog.scss';
 
