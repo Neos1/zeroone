@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import TransferTokenForm from '../../stores/FormsStore/TransferTokenForm';
 import Input from '../Input';
 import { Password, Address, TokenCount } from '../Icons';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 import { EMPTY_DATA_STRING } from '../../constants';
 
 import styles from './TokenTransfer.scss';

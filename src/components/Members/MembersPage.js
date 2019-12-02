@@ -68,6 +68,7 @@ class MembersPage extends React.Component {
     return (
       <Container>
         <MembersTop
+          projectName="project test"
           onClick={() => {
             console.log('click');
           }}
@@ -84,7 +85,6 @@ class MembersPage extends React.Component {
                 wallet={group.wallet}
                 token={group.tokenName}
                 list={group.list}
-                text={group.list}
                 textForEmptyState={group.textForEmptyState}
               />
             ))
