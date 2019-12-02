@@ -23,6 +23,7 @@ class QuestionsWrapper extends Component {
       label: '1',
       value: '1',
     }];
+    const questions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     return (
       <Container className="container--small">
         <div className={styles.questions}>
@@ -44,11 +45,11 @@ class QuestionsWrapper extends Component {
             </div>
           </div>
           <div className={styles.questions__wrapper}>
-            <Question />
-            <Question />
-            <Question />
-            <Question />
-            <Question />
+            {
+              questions.map((id) => (
+                <Question id={id} />
+              ))
+            }
           </div>
         </div>
       </Container>
