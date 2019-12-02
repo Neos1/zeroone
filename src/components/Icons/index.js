@@ -13,6 +13,8 @@ import EyeIcon from './entities/EyeIcon';
 import IconInfo from './entities/InfoIcon';
 import Login from './entities/LoginIcon';
 import Password from './entities/PasswordIcon';
+import PlayCircleIcon from './entities/PlayCircleIcon';
+import Pudding from './entities/Pudding';
 import QuestionUploadingIcon from './entities/QuestionUploadingIcon';
 import SendingIcon from './entities/SendingIcon';
 import Stats from './entities/StatsIcon';
@@ -42,6 +44,8 @@ export {
   IconInfo,
   Login,
   Password,
+  PlayCircleIcon,
+  Pudding,
   QuestionUploadingIcon,
   SendingIcon,
   Stats,
