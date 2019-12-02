@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import Dropdown from '../Dropdown';
-import { QuestionUploadingIcon, Address } from '../Icons';
+import { Address, QuestionIcon } from '../Icons';
 import { Button } from '../Button';
 import Input from '../Input';
 import StarNewVoteForm from '../../stores/FormsStore/StartNewVoteForm';
@@ -65,7 +65,7 @@ class StartNewVote extends React.Component {
               field={{ set: () => {} }}
               onSelect={this.handleSelect}
             >
-              <QuestionUploadingIcon />
+              <QuestionIcon />
             </Dropdown>
             {
               isSelected

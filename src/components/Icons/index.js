@@ -23,6 +23,8 @@ import TxHashIcon from './entities/TxHashIcon';
 import TxRecieptIcon from './entities/TxRecieptIcon';
 import VerifyIcon from './entities/VerifyIcon';
 import RejectIcon from './entities/RejectIcon';
+import ThinArrow from './entities/ThinArrow';
+import QuestionIcon from './entities/QuestionIcon';
 
 export {
   AddIcon,
@@ -50,4 +52,6 @@ export {
   TxRecieptIcon,
   VerifyIcon,
   RejectIcon,
+  ThinArrow,
+  QuestionIcon,
 };
