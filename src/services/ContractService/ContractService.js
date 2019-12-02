@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-loop-func */
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
@@ -175,7 +173,6 @@ class ContractService {
       Web3Service, userStore,
     } = this.rootStore;
     const sysQuestion = this.sysQuestions[idx];
-    // eslint-disable-next-line consistent-return
     await this.fetchQuestion(idx).then((result) => {
       if (result.caption === '') {
         const { address, password } = userStore;
@@ -200,6 +197,7 @@ class ContractService {
             .then((txHash) => resolve(txHash));
         });
       }
+      return Promise.reject();
     });
   }
 

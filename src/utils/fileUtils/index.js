@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-param-reassign */
 import { SOL_IMPORT_REGEXP, SOL_VERSION_REGEXP } from '../../constants';
 import getImports from './get-sol-imports';
 import { fs, path } from '../../constants/windowModules';
