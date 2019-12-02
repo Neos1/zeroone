@@ -29,5 +29,7 @@ const other = {
   newVoteEmptyStateText: 'As soon as you select a question, all information on it will appear here.',
   selectQuestionGroup: 'Select a question group to start creating a new question.',
   createANewQuestion: 'Create a new question',
+  basicInfo: 'Basic information',
+  stepProgress: 'Step {{current}} from {{total}}',
 };
 export default other;

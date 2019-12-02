@@ -9,14 +9,22 @@
     .dropdown {
       width: 100%;
     }
+
+    &-left,
+    &-right {
+      display: inline-block;
+      width: 50%;
+      padding: 0 15px;
+      vertical-align: top;
+    }
   }
 
-  &__title,
-  &__dropdown {
-    display: inline-block;
-    width: 50%;
-    padding: 0 15px;
-    vertical-align: top;
+  &__sub-title {
+    margin-top: 8px;
+    margin-bottom: 13px;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 14px;
+    line-height: 16px;
   }
 
   &__content {
@@ -45,5 +53,17 @@
         vertical-align: middle;
       }
     }
+  }
+
+  &__description {
+    margin-top: 9px;
+    margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 11px;
+    line-height: 13px;
+  }
+
+  &__tab-list {
+    display: none;
   }
 }

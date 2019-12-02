@@ -29,5 +29,7 @@ const other = {
   newVoteEmptyStateText: 'Как только вы выберите вопрос здесь появится вся информация по нему',
   selectQuestionGroup: 'Выберите группу вопросов, чтобы приступить к созданию нового вопроса',
   createANewQuestion: 'Создать вопрос',
+  basicInfo: 'Основная информация',
+  stepProgress: 'Шаг {{current}} из {{total}}',
 };
 export default other;
