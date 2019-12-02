@@ -20,6 +20,8 @@ const other = {
   noData: 'No data',
   noDataAdmins: 'Unfortunately, no one can see the administrators. \nSuch is the secret design and limitation of the technologies used.',
   weightVote: 'Weight vote',
+  page: 'Page',
+  goTo: 'Go to',
   RUS: 'Русский',
   ENG: 'English',
 };
