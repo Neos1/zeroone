@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import Dialog from './Dialog';
 import { RejectIcon } from '../Icons';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 import styles from './Dialog.scss';
 
@@ -37,7 +37,6 @@ class RejectMessage extends React.Component {
         footer={(
           <div className={styles['dialog__footer--reject-message']}>
             <Button
-              className="btn--default btn--black"
               onClick={this.hide}
             >
               {t('buttons:continue')}
