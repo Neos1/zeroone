@@ -1,11 +1,9 @@
-/* eslint-disable global-require */
-/* eslint-disable no-undef */
 import readSolFile from '../utils/fileUtils/index';
 
 jest.mock('fs');
+const fs = require('fs');
 
 describe('readFile', () => {
-  const fs = require('fs');
   const FAIL_ON_QUESTIONS = {
     '.src/contracts/Voter/Voter.sol': 'import "./VoterBase.sol";',
     '.src/contracts/Voter/VoterBase.sol': 'import "../libs/QuestionGroups.sol"; import "../libs/UserGroups.sol"; import "../libs/Questions.sol"; import "../libs/Votings.sol"; import "./VoterInterface.sol"; import "../IERC20.sol";',

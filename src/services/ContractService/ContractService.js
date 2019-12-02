@@ -69,7 +69,9 @@ class ContractService {
       ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
       : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
 
-    let output = readSolFile(pathToMainFile);
+    const importedFiles = {};
+
+    let output = readSolFile(pathToMainFile, importedFiles);
     output = output.replace(SOL_VERSION_REGEXP, compiler);
     output = output.replace(/(calldata)/g, '');
 
