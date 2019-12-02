@@ -50,7 +50,6 @@ class QuestionStore {
    */
   @action getQuestionById = (id) => this._questions.filter((question) => question.id === id)
 
-
   /**
    * Getting list of questions for displaying
    * @function

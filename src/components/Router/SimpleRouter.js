@@ -2,7 +2,6 @@ import React from 'react';
 import {
   MemoryRouter, Route, Switch,
 } from 'react-router-dom';
-
 import Login from '../Login';
 import CreateWallet from '../CreateWallet';
 import InputSeed from '../InputSeed';
@@ -16,10 +15,11 @@ import AddNewProject from '../AddNewProject';
 import ProjectUploading from '../ProjectUploading';
 import CreationAlert from '../CreationAlert';
 import DisplayUserInfo from '../DisplayUserInfo';
-
+import Header from '../Header';
 
 const SimpleRouter = () => (
   <MemoryRouter>
+    <Header />
     <Switch>
       <Route path="/" exact component={Login} />
       <Route path="/create" exact component={CreateWallet} />
@@ -41,4 +41,5 @@ const SimpleRouter = () => (
     </Switch>
   </MemoryRouter>
 );
+
 export default SimpleRouter;

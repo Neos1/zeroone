@@ -31,5 +31,7 @@ const other = {
   createANewQuestion: 'Создать вопрос',
   basicInfo: 'Основная информация',
   stepProgress: 'Шаг {{current}} из {{total}}',
+  RUS: 'Русский',
+  ENG: 'English',
 };
 export default other;

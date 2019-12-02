@@ -1,6 +1,5 @@
 {
 	"host": "https://ropsten.infura.io/v3/14b2319f08e24f3aadfe1aa933301b38",
-	"gasPrice": 40000000000,
 	"projects": [
 		{
 			"name": "tetete",
@@ -13,34 +12,6 @@
 		{
 			"name": "T3st",
 			"address": "0xACA55c33D67d549CacA4f700D0319B865D8E0FC5"
-		},
-		{
-			"name": "T3qwe",
-			"address": "0xd0F558FD47C5cD55A4B651fBFd6a36c3D530968c"
-		},
-		{
-			"name": "Name",
-			"address": "0xd0F558FD47C5cD55A4B651fBFd6a36c3D530968c"
-		},
-		{
-			"name": "testing!",
-			"address": "0x118852809990A0133FE21efF928bD1472b683764"
-		},
-		{
-			"name": "Name123123",
-			"address": "0x104184d5E8CD2D830887BAfF03793507dFB2F46a"
-		},
-		{
-			"name": "name123213",
-			"address": "0x104184d5E8CD2D830887BAfF03793507dFB2F46a"
-		},
-		{
-			"name": "nasdeq",
-			"address": "0x104184d5E8CD2D830887BAfF03793507dFB2F46a"
-		},
-		{
-			"name": "name",
-			"address": "0xEa7e6b7c017d18671f666F23303628a48aBbe4aF"
 		}
 	]
 }

@@ -13,7 +13,6 @@ const passwordValidation = (value) => {
     Length: regexLength.test(value),
   };
 
-  // eslint-disable-next-line no-console
   return values;
 };
 
