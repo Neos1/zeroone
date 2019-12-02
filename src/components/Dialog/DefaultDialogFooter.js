@@ -3,7 +3,7 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { PropTypes } from 'prop-types';
 import { inject } from 'mobx-react';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 import styles from './Dialog.scss';
 
