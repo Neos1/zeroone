@@ -20,13 +20,6 @@ const other = {
   noData: 'No data',
   noDataAdmins: 'Unfortunately, no one can see the administrators. \nSuch is the secret design and limitation of the technologies used.',
   weightVote: 'Weight vote',
-  page: 'Page',
-  goTo: 'Go to',
-  voterList: 'Voter list',
-  agree: 'Agree',
-  against: 'Against',
-  startANewVote: 'Start a new vote',
-  newVoteEmptyStateText: 'As soon as you select a question, all information on it will appear here.',
   RUS: 'Русский',
   ENG: 'English',
 };
