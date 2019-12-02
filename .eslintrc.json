@@ -21,7 +21,8 @@
   "plugins": ["react"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    // "react/static-property-placement": ["error", "static public field"],
-    "no-underscore-dangle":"off"
+    "no-underscore-dangle":"off",
+    "linebreak-style": "off"
   }
 }
+

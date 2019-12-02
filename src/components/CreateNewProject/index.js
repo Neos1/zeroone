@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
-import { IconButton } from '../Button';
+import Button from '../Button/Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -11,19 +11,15 @@ import { Ethereum, CreateToken, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
+@withTranslation()
 @observer
 class CreateNewProject extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   render() {
     const { t } = this.props;
     return (
       <Container>
         <div className={`${styles.form} ${styles['form--wide']}`}>
-          <FormBlock className="form__block--wide">
+          <FormBlock className={styles['form__block--wide']}>
             <Heading>
               {t('headings:newProject.heading')}
               {t('headings:newProject.subheading')}
@@ -31,25 +27,22 @@ class CreateNewProject extends Component {
             <div className={styles.create}>
               <NavLink to="/createWithTokens">
                 <strong className={styles.create__label}>{t('other:withTokens')}</strong>
-                <IconButton className="btn--big btn--white icon--top">
-                  <Ethereum />
+                <Button theme="white" icon={<Ethereum />} iconPosition="top">
                   {t('buttons:withTokens')}
-                </IconButton>
+                </Button>
               </NavLink>
               <NavLink to="/createWithoutTokens">
                 <strong className={styles.create__label}>{t('other:withoutTokens')}</strong>
-                <IconButton className="btn--big btn--white icon--top">
-                  <CreateToken />
+                <Button theme="white" icon={<CreateToken />} iconPosition="top">
                   {t('buttons:withoutTokens')}
-                </IconButton>
+                </Button>
               </NavLink>
             </div>
           </FormBlock>
           <NavLink to="/createProject">
-            <IconButton className="btn--link btn--noborder btn--back">
-              <BackIcon />
+            <Button theme="back" icon={<BackIcon />}>
               {t('buttons:back')}
-            </IconButton>
+            </Button>
           </NavLink>
         </div>
       </Container>
@@ -61,5 +54,4 @@ CreateNewProject.propTypes = {
   t: propTypes.func.isRequired,
 };
 
-
-export default withTranslation()(CreateNewProject);
+export default CreateNewProject;

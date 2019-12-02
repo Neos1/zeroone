@@ -1,38 +1,25 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-
-import SeedForm from '../../stores/FormsStore/SeedForm';
-import styles from '../Login/Login.scss';
+import { withTranslation } from 'react-i18next';
 import Input from '../Input';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
+import styles from '../Login/Login.scss';
 
+@withTranslation()
 class SeedInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   render() {
-    const { seed, submit, error } = this.props;
-    const seedForm = new SeedForm({
-      hooks: {
-        onSuccess(form) {
-          submit(form);
-        },
-        onError() {
-          error();
-        },
-      },
-    });
+    const {
+      seed, form, t,
+    } = this.props;
 
     return (
-      <form form={seedForm} onSubmit={seedForm.onSubmit}>
+      <form form={form} onSubmit={form.onSubmit}>
         <div className={styles.seed}>
           {seed.map((word, index) => (
             <Input
               type="text"
-              field={seedForm.$(`word_${index + 1}`)}
+              field={form.$(`word_${index + 1}`)}
               key={`wordInput-${index + 1}`}
             >
               <span>{index + 1}</span>
@@ -40,7 +27,9 @@ class SeedInput extends Component {
           ))}
         </div>
         <div className={styles.form__submit}>
-          <Button className="btn--default btn--black" disabled={seedForm.loading} type="submit"> Продолжить </Button>
+          <Button theme="black" size="310" disabled={form.loading} type="submit">
+            {t('buttons:continue')}
+          </Button>
         </div>
       </form>
     );
@@ -48,9 +37,13 @@ class SeedInput extends Component {
 }
 
 SeedInput.propTypes = {
-  submit: propTypes.func.isRequired,
-  error: propTypes.func.isRequired,
+  form: propTypes.shape({
+    onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+    $: propTypes.func.isRequired,
+  }).isRequired,
   seed: propTypes.arrayOf(propTypes.string).isRequired,
+  t: propTypes.func.isRequired,
 };
 
 export default SeedInput;

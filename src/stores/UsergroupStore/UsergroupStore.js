@@ -79,5 +79,4 @@ class UsergroupStore {
   }
 }
 
-
 export default UsergroupStore;

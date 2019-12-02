@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { extendObservable, action } from 'mobx';
 import { Form } from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
