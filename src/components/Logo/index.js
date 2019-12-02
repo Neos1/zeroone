@@ -1,10 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Logo.scss';
 
 const Logo = () => (
-  <a href="/" className={styles.logo}>
-    <span className="logo__dark">01</span>
-    <span className="logo__light">ZeroOne</span>
-  </a>
+  <Link to="/" className={styles.logo}>
+    <span className={styles.logo__dark}>
+      <span>01</span>
+    </span>
+    <span className={styles.logo__light}>
+      <span>ZeroOne</span>
+    </span>
+  </Link>
 );
+
 export default Logo;

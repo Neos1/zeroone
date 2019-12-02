@@ -4,7 +4,7 @@ import styles from './Explanation.scss';
 
 const Explanation = ({ children }) => (
   <p className={`${styles.explanation}`}>
-    <p className={styles.explanation__string}>{children}</p>
+    <p className={`${styles.explanation__string}`}>{children}</p>
   </p>
 );
 
@@ -13,6 +13,6 @@ Explanation.defaultProps = {
 };
 
 Explanation.propTypes = {
-  children: propTypes.string,
+  children: propTypes.node,
 };
 export default Explanation;

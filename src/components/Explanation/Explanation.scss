@@ -1,6 +1,7 @@
 @import '../../assets/styles/partials/variables';
 .explanation {
   display: inline-block;
+  margin-bottom: 10px;
   padding: 5px;
   color: $border;
   font-size: 12px;
@@ -8,5 +9,12 @@
   &__string {
     padding-left: 10px;
     border-left: 1px solid $border;
+    p {
+      margin-bottom: 15px;
+      line-height: 17px;
+      &>span{
+        display: block;
+      }
+    }
   }
 }

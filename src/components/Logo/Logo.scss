@@ -1,37 +1,48 @@
 @import '../../assets/styles/partials/variables';
 
-.logo {
-  position: relative;
-  display: inline-block;
-  border: 2px solid $primary;
-
-  span{
-    display: inline-block;
-    vertical-align: middle;
-    transition: 0.2s linear;
-  }
+.logo{
+  display: table;
+  height: 53px;
+  color: $primary;
+  text-decoration: none;
+  border: 3px solid $primary;
 
   &__dark {
-    padding: 4px 5px;
-    color: $white;
-    font-size: 32px;
-    background-color: $primary;
+    display: table-cell;
+    min-width: 49px;
+    padding: 0 5px;
+    font-size: 0;
+    text-align: center;
+    background: $primary;
+    transition: 0.3s;
+    span {
+      color: $white;
+      font-weight: bold;
+      font-size: 32px;
+      font-family: "Roboto Mono";
+    }
   }
 
   &__light {
-    position: relative;
-    padding: 15px;
-    color: $primary;
-    font-weight: bold;
-    font-size: 12px;
-    background-color: $white;
+    display: table-cell;
+    min-width: 79px;
+    padding: 0 10px 0 10px;
+    font-size: 0;
+    text-align: center;
+    vertical-align: middle;
+    background: $white;
+    transition: 0.3s;
+    span {
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Grotesk";
+    }
   }
   
   &:hover {
-    .logo {
-      &__dark, &__light {
-        filter: invert(100%);
-      }
+    .logo__dark,
+    .logo__light {
+      filter: invert(100%);
     }
   }
 }

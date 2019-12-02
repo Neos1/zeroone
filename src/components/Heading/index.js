@@ -8,6 +8,7 @@ const Heading = ({ children }) => (
     {children[1] ? <p className={styles['heading--sub']}>{children[1]}</p> : ''}
   </div>
 );
+
 Heading.propTypes = {
   children: propTypes.arrayOf(propTypes.string).isRequired,
 };

@@ -1,7 +1,8 @@
 @import "../../assets/styles/partials/variables";
 
 .btn {
-  padding: 0;
+  padding: 14px 10px;
+  text-align: center;
   text-decoration: none;
   border: none;
   border-radius: 2px;
@@ -10,35 +11,35 @@
   transition: 0.2s linear;
 
   svg,
+  &__icon,
   &__text {
     vertical-align: middle;
   }
 
   svg {
-    margin-right: 10px;
     path,
     circle {
       transition: 00.2s;
     }
   }
 
-  &--big {
-    min-width: 140px;
-    padding: 30px 0;
-    font-weight: bold;
-    font-size: 14px;
+  &__icon {
+    svg {
+      margin-right: 10px;
+    }
+    &--block {
+      display: block;
+      text-align: center;
+      svg {
+        margin: 0 auto 10px;
+      }
+    }
   }
 
-  &--default {
-    min-width: 232px;
-    padding: 18px 0;
-    font-size: 12px;
-  }
-
-  &--small {
-    min-width: 124px;
-    padding: 5px;
-  }
+  &[disabled]{
+    cursor: default;
+    opacity: .5;
+  } 
 
   &--black {
     color: $white;
@@ -48,29 +49,15 @@
       color: $primary;
       background-color: $white;
       border-color: $lightGrey;
+      svg {
+        path {
+          transition: 0.2s;
+          stroke: $primary;
+        }
+      }
     }
     &:active {
       border-color: $primary;
-    }
-  }
-
-  &--link {
-    color: $linkColor;
-    background-color: transparent;
-    border-bottom: 1px solid $linkColor;
-    svg {
-      path {
-        stroke: $linkColor;
-      }
-    }
-    &:hover {
-      color: $secondary;
-      border-color: $secondary;
-      svg {
-        path {
-          stroke: $secondary;
-        }
-      }
     }
   }
 
@@ -114,18 +101,80 @@
     }
   }
 
-  &--dashed {
-    color: $grey;
+  &--link {
+    padding: 0;
+    color: $linkColor;
+    background-color: transparent;
+    border-bottom: 1px solid $linkColor;
+    svg {
+      path {
+        stroke: $linkColor;
+      }
+    }
+    &:hover {
+      color: $secondary;
+      border-color: $secondary;
+      svg {
+        path {
+          stroke: $secondary;
+        }
+      }
+    }
+  }
+
+  &--project {
+    @extend .btn--white;
+    width: 145px;
+    height: 85px;
+    padding: 10px 10px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  &--addproject {
+    @extend .btn--project;
+    color: $border;
+    font-weight: 400;
     border-style: dashed;
+    border-radius: 0;
+    .btn__content {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      .btn__icon {
+        flex-grow:1;
+      }
+      .btn__text {
+        flex-grow: 1;
+        width: 50px;
+        text-align: left;
+      }
+    }
     &:hover {
       color: $primary;
-    }
-    &:active {
-      color: $white;
-    }
+    } 
   }
-  
-  &--noborder {
+
+  &--showseed {
+    @extend .btn--white;
+  }
+
+  &--back {
+    @extend .btn--link;
     border: none;
   }
+
+  &--block {
+    display: block;
+    width: 100%;
+  }
+
+  &--240 {
+    width: 240px;
+  }
+
+  &--310 {
+    width: 310px;
+  }
 }
+

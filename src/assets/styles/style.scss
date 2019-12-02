@@ -9,6 +9,16 @@
   font-family: "Grotesk";
 }
 
-::-webkit-scrollbar-thumb {
-  border: 1px solid $border;
+body {
+  background-color: #FAFBFC;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+svg {
+  width: 18px;
+  height: 18px;
 }

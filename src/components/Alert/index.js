@@ -1,23 +1,27 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { InfoIcon, CloseIcon } from '../Icons';
+import { observer, inject } from 'mobx-react';
+import { IconInfo, CloseIcon } from '../Icons';
 import styles from './Alert.scss';
 
-const Alert = ({ children, visible }) => (
-  <div className={`${styles.alert} ${visible ? styles['alert--visible'] : ''}`}>
-    <InfoIcon />
+const Alert = inject('appStore')(observer(({ appStore, appStore: { alert } }) => (
+  <div className={`${styles.alert} ${alert.visible ? styles['alert--visible'] : ''}`}>
+    <IconInfo />
     <span className={styles.alert__text}>
-      {children}
+      {alert.text}
     </span>
-    <span className={styles.alert__close}>
+    <button type="button" className={styles.alert__close} onClick={() => appStore.closeAlert()}>
       <CloseIcon />
-    </span>
+    </button>
   </div>
-);
+)));
 
 Alert.propTypes = {
-  visible: propTypes.bool.isRequired,
-  children: propTypes.string.isRequired,
+  alertStore: propTypes.shape({
+    text: propTypes.string.isRequired,
+    visible: propTypes.bool.isRequired,
+    closeAlert: propTypes.func.isRequired,
+  }),
 };
 
 export default Alert;
