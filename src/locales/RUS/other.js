@@ -22,5 +22,7 @@ const other = {
   weightVote: 'Вес голоса',
   page: 'Страница',
   goTo: 'Перейти',
+  RUS: 'Русский',
+  ENG: 'English',
 };
 export default other;

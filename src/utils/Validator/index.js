@@ -1,7 +1,6 @@
 import validatorjs from 'validatorjs';
 import i18n from 'i18next';
 
-
 validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes) {
   if (!attributes) return;
   const modified = { ...attributes };
@@ -11,7 +10,6 @@ validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes)
     modified[attribute] = modified[attribute].toLowerCase();
   }
   this.messages._setAttributeNames(modified);
-  // eslint-disable-next-line no-console
 };
 
 const rules = {
@@ -23,12 +21,10 @@ const rules = {
   },
 };
 
-
 const plugins = {
   dvr: {
     package: validatorjs,
     extend: ({ validator }) => {
-      // eslint-disable-next-line no-console
       const { language } = i18n;
       const languages = {
         RUS: 'ru',

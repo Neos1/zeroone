@@ -22,5 +22,7 @@ const other = {
   weightVote: 'Weight vote',
   page: 'Page',
   goTo: 'Go to',
+  RUS: 'Русский',
+  ENG: 'English',
 };
 export default other;

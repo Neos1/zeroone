@@ -5,14 +5,13 @@ import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
-import { Button } from '../Button';
+import Button from '../Button/Button';
+
 import styles from '../Login/Login.scss';
 
-
-const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, userStore: { balance, address } }) => (
+const DisplayUserInfo = withTranslation()(inject('userStore')(observer(({ t, userStore: { balance, address } }) => (
   <Container>
     <div className={styles.form}>
-      {' '}
       <FormBlock>
         <Heading>
           {t('headings:walletRestoring.heading')}
@@ -22,24 +21,26 @@ const DisplayUserInfo = inject('userStore')(observer(withTranslation()(({ t, use
             {t('headings:walletRestoring.subheading.1')}
           </span>
         </Heading>
-        <form>
-          <div className="form__token">
-            <div className="form__token-half">
-              <p className="form__token-label">{t('other:walletAddress')}</p>
-              <p className="form__token-value">{`${address.substr(0, 8)}...${address.substr(35, 41)}`}</p>
+        <div>
+          <div className={styles.form__token}>
+            <div className={styles['form__token-half']}>
+              <p className={styles['form__token-label']}>{t('other:walletAddress')}</p>
+              <p className={styles['form__token-value']}>{`${address.substr(0, 8)}...${address.substr(35, 41)}`}</p>
             </div>
-            <div className="form__token-divider" />
-            <div className="form__token-half">
-              <p className="form__token-label">{t('other:balance')}</p>
-              <p className="form__token-value">{balance}</p>
+            <div className={styles['form__token-divider']} />
+            <div className={styles['form__token-half']}>
+              <p className={styles['form__token-label']}>{t('other:balance')}</p>
+              <p className={styles['form__token-value']}>{balance}</p>
             </div>
           </div>
           <div className={styles.form__submit}>
             <NavLink to="/recoverPassword">
-              <Button className="btn--default btn--black" type="button">{t('buttons:continue')}</Button>
+              <Button theme="black" size="310" type="button">
+                {t('buttons:continue')}
+              </Button>
             </NavLink>
           </div>
-        </form>
+        </div>
       </FormBlock>
     </div>
   </Container>
