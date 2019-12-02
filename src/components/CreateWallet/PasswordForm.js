@@ -6,11 +6,12 @@ import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import { Password, BackIcon } from '../Icons';
 import Input from '../Input';
-import { Button, IconButton } from '../Button';
+import Button from '../Button/Button';
 import Explanation from '../Explanation';
 import Indicator from '../Indicator';
-import styles from '../Login/Login.scss';
 import passwordValidation from '../../utils/PasswordValidation';
+
+import styles from '../Login/Login.scss';
 
 @withTranslation()
 class PasswordForm extends Component {
@@ -48,7 +49,14 @@ class PasswordForm extends Component {
             <Password />
           </Input>
           <div className={styles.form__submit}>
-            <Button type="submit" disabled={form.loading} className="btn--default btn--black">{t('buttons:continue')}</Button>
+            <Button
+              theme="black"
+              size="310"
+              type="submit"
+              disabled={form.loading}
+            >
+              {t('buttons:continue')}
+            </Button>
           </div>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
             <Explanation>
@@ -81,20 +89,25 @@ class PasswordForm extends Component {
           </div>
         </form>
         <NavLink to={`${state ? '/restore' : '/'}`}>
-          <IconButton className="btn--link btn--noborder btn--back">
-            <BackIcon />
+          <Button
+            theme="back"
+            icon={<BackIcon />}
+          >
             {t('buttons:back')}
-          </IconButton>
+          </Button>
         </NavLink>
       </FormBlock>
-
     );
   }
 }
 
 PasswordForm.propTypes = {
   state: propTypes.bool.isRequired,
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    $: propTypes.func.isRequired,
+    onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+  }).isRequired,
   t: propTypes.func.isRequired,
 };
 export default PasswordForm;

@@ -1,25 +1,22 @@
-/* eslint-disable react/no-unused-state */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { Button, IconButton } from '../Button';
+import Button from '../Button/Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
-
-import Loader from '../Loader';
-import Indicator from '../Indicator';
+import StepIndicator from '../StepIndicator';
+import LoadingBlock from '../LoadingBlock';
 import Explanation from '../Explanation';
 import Input from '../Input';
 import {
   BackIcon, Password, TokenSymbol, TokenCount, TokenName,
 } from '../Icons';
-
 import CreateTokenForm from '../../stores/FormsStore/CreateToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
+
 import styles from '../Login/Login.scss';
 
 @withTranslation()
@@ -28,83 +25,57 @@ import styles from '../Login/Login.scss';
 class CreateNewProjectWithoutTokens extends Component {
   form = new CreateTokenForm({
     hooks: {
-      onSuccess: (form) => new Promise((resolve, reject) => {
-        this.createToken(form).then(resolve()).catch(reject());
-      }),
-      onError: () => {
-        this.showValidationError();
-      },
+      onSuccess: (form) => this.createToken(form),
+      onError: () => this.showValidationError(),
     },
   });
+
+  createProject = new CreateProjectForm({
+    hooks: {
+      onSuccess: (form) => this.gotoUploading(form),
+      onError: () => this.showValidationError(),
+    },
+  });
+
+  steps = {
+    token: 1,
+    creation: 2,
+    tokenCreated: 3,
+    projectInfo: 4,
+  }
 
   constructor(props) {
     super(props);
     this.state = {
-      position: 'token',
-      step: 1,
-      tokenAddr: '',
-      disabled: false,
+      indicatorStep: 1,
+      currentStep: this.steps.token,
     };
   }
 
-
   returnToContractConnecting = () => {
+    const { steps } = this;
     this.setState({
-      position: 'tokenCreated',
+      currentStep: steps.tokenCreated,
     });
   }
 
   createToken = (form) => {
-    const { appStore, userStore, t } = this.props;
+    const { steps } = this;
+    const { userStore, t } = this.props;
     this.setState({
-      position: 'creation',
+      currentStep: steps.creation,
     });
     const {
       name, symbol, count, password,
     } = form.values();
     const deployArgs = [name, symbol, Number(count)];
-    return new Promise((resolve, reject) => {
-      userStore.readWallet(password)
-        .then((data) => {
-          if (!(data instanceof Error)) {
-            userStore.checkBalance(userStore.address).then((balance) => {
-              if (balance > 0.5) {
-                appStore.deployContract('ERC20', deployArgs, password).then((hash) => {
-                // eslint-disable-next-line no-unused-vars
-                  const interval = setInterval(() => {
-                  // eslint-disable-next-line consistent-return
-                    appStore.checkReceipt(hash).then((receipt) => {
-                      if (receipt) {
-                        this.setState({
-                          tokenAddr: receipt.contractAddress,
-                          position: 'tokenCreated',
-                        });
-                        appStore.deployArgs = [receipt.contractAddress];
-                        clearInterval(interval);
-                      }
-                    }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
-                  }, 5000);
-                });
-                resolve();
-              } else {
-                this.setState({
-                  position: 'token',
-                  step: 1,
-                });
-                appStore.displayAlert(t('errors:lowBalance'), 3000);
-                reject();
-              }
-            });
-          }
-        }).catch(() => {
-          this.setState({
-            position: 'token',
-            step: 1,
-          });
-          appStore.displayAlert(t('errors:wrongPassword'), 3000);
-          reject();
-        });
-    });
+
+    return userStore.readWallet(password)
+      .then(() => userStore.checkBalance(userStore.address))
+      .then((balance) => (this.isEnoughBalance(balance)
+        ? this.deployTokenContract(deployArgs, password)
+        : this.returnToTokenCreating(t('errors:lowBalance'))))
+      .catch(() => this.returnToTokenCreating(t('errors:tryAgain')));
   }
 
   showValidationError = () => {
@@ -113,79 +84,116 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   gotoProjectInfo = () => {
+    const { steps } = this;
     this.setState({
-      position: 'projectInfo',
-      step: 2,
+      currentStep: steps.projectInfo,
+      indicatorStep: 2,
     });
   }
 
-
   gotoUploading = (form) => {
+    const { steps } = this;
     const { userStore, appStore, t } = this.props;
     const { name, password } = form.values();
-    appStore.name = name;
-    appStore.password = password;
-    this.setState({ disabled: true });
-    userStore.readWallet(password)
-      .then(() => {
-        userStore.checkBalance(userStore.address)
-          .then((balance) => {
-            if (balance > 0.05) {
-              this.setState({
-                position: 'uploading',
-              });
-            } else {
-              this.setState({
-                position: 'projectInfo',
-                step: 2,
-                disabled: false,
-              });
-              appStore.displayAlert(t('errors:lowBalance'), 3000);
-            }
-          });
-      })
+    appStore.setProjectName(name);
+    userStore.setPassword(password);
+
+    return userStore.readWallet(password)
+      .then(() => userStore.checkBalance(userStore.address))
+      .then((balance) => (this.isEnoughBalance(balance)
+        ? this.setState({ currentStep: steps.uploading })
+        : this.returnToProjectInfo(t('errors:lowBalance'))))
       .catch(() => {
-        this.setState({
-          position: 'projectInfo',
-          step: 2,
-          disabled: false,
-        });
-        appStore.displayAlert(t('errors:tryAgain'), 3000);
+        this.returnToProjectInfo(t('errors:tryAgain'));
       });
   }
 
-  render() {
-    const { appStore, t } = this.props;
-    const { position, step, disabled } = this.state;
-    if (position === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
-    const { gotoUploading } = this;
-    const CreateProject = new CreateProjectForm({
-      hooks: {
-        onSuccess(form) {
-          return new Promise(() => {
-            gotoUploading(form);
-          });
-        },
-        onError() {
-          appStore.displayAlert(t('errors:validationError'), 3000);
-        },
-      },
+  // eslint-disable-next-line class-methods-use-this
+  isEnoughBalance(balance) {
+    return balance > 0.05;
+  }
+
+  deployTokenContract(deployArgs, password) {
+    const { steps } = this;
+    const { appStore } = this.props;
+    appStore.deployContract('ERC20', deployArgs, password)
+      .then((txHash) => appStore.checkReceipt(txHash))
+      .then((receipt) => {
+        this.setState({
+          currentStep: steps.tokenCreated,
+        });
+        appStore.setDeployArgs([receipt.contractAddress]);
+      });
+    return Promise.resolve();
+  }
+
+  returnToTokenCreating(errorText) {
+    const { steps } = this;
+    const { appStore } = this.props;
+    this.setState({
+      currentStep: steps.token,
+      indicatorStep: 1,
     });
+    appStore.displayAlert(errorText);
+    return Promise.resolve();
+  }
+
+  returnToProjectInfo(errorText) {
+    const { steps } = this;
+    const { appStore } = this.props;
+
+    this.setState({
+      currentStep: steps.projectInfo,
+      indicatorStep: 2,
+    });
+    appStore.displayAlert(errorText);
+    return Promise.resolve();
+  }
+
+  renderSwitch(step) {
+    const { t } = this.props;
+    const { steps } = this;
+    switch (step) {
+      case steps.token:
+        return <CreateTokenData form={this.form} />;
+      case steps.creation:
+        return (
+          <LoadingBlock>
+            <Heading>
+              {t('headings:tokensCreating.heading')}
+              {t('headings:tokensCreating.subheading')}
+            </Heading>
+          </LoadingBlock>
+        );
+      case steps.tokenCreated:
+        return <TokenCreationAlert onSubmit={this.gotoProjectInfo} />;
+      case steps.projectInfo:
+        return (
+          <InputProjectData
+            form={this.createProject}
+            onClick={this.returnToContractConnecting}
+          />
+        );
+      default:
+        return '';
+    }
+  }
+
+  render() {
+    const { currentStep, indicatorStep } = this.state;
+    if (currentStep === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
     return (
       <Container>
         <div className={styles.form}>
-          <StepIndicator step={step} count={2} />
-          {position === 'token' ? <CreateTokenData form={this.form} /> : ''}
-          {position === 'creation' ? <LoadingBlock /> : ''}
-          {position === 'tokenCreated' ? <TokenCreationAlert onSubmit={this.gotoProjectInfo} /> : ''}
-          {position === 'projectInfo' ? <InputProjectData form={CreateProject} disabled={disabled} onClick={this.returnToContractConnecting} /> : ''}
+          <StepIndicator currentStep={indicatorStep} stepCount={2} />
+          {this.renderSwitch(currentStep)}
         </div>
       </Container>
     );
   }
 }
 
-const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation()(({
+const CreateTokenData = withTranslation()(inject('userStore', 'appStore')(observer((({
   t, userStore: { address }, appStore: { balances }, form,
 }) => (
   <FormBlock>
@@ -206,7 +214,7 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
             {t('explanations:token.left.balance')}
             <span>
               <strong>
-                {(balances[address.replace('0x', '')] / 1.0e18).toFixed(5)}
+                {Number(balances[address.replace('0x', '')]).toFixed(5)}
                 {' ETH'}
               </strong>
             </span>
@@ -233,7 +241,14 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black btn--310" type="submit" disabled={form.loading}>{t('buttons:create')}</Button>
+        <Button
+          theme="black"
+          size="310"
+          type="submit"
+          disabled={form.loading}
+        >
+          {t('buttons:create')}
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -248,24 +263,13 @@ const CreateTokenData = inject('userStore', 'appStore')(observer(withTranslation
         </Explanation>
       </div>
       <NavLink to="/newProject">
-        <IconButton className="btn--link btn--noborder btn--back">
-          <BackIcon />
+        <Button theme="back" icon={<BackIcon />}>
           {t('buttons:back')}
-        </IconButton>
+        </Button>
       </NavLink>
     </form>
   </FormBlock>
-))));
-
-const LoadingBlock = withTranslation()(({ t }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:tokensCreating.heading')}
-      {t('headings:tokensCreating.subheading')}
-    </Heading>
-    <Loader />
-  </FormBlock>
-));
+)))));
 
 const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
   <FormBlock>
@@ -275,7 +279,12 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
     </Heading>
     <form>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black btn--240" type="button" onClick={() => { onSubmit(); }}>
+        <Button
+          theme="black"
+          size="240"
+          type="button"
+          onClick={onSubmit}
+        >
           {t('buttons:continue')}
         </Button>
       </div>
@@ -284,7 +293,7 @@ const TokenCreationAlert = withTranslation()(({ onSubmit, t }) => (
 ));
 
 const InputProjectData = withTranslation()(({
-  form, disabled, onClick, t,
+  form, onClick, t,
 }) => (
   <FormBlock>
     <Heading>
@@ -304,7 +313,9 @@ const InputProjectData = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black btn--310" disabled={disabled} type="submit"> Продолжить </Button>
+        <Button theme="black" size="310" disabled={form.loading} type="submit">
+          {t('buttons:continue')}
+        </Button>
       </div>
       <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
         <Explanation>
@@ -313,35 +324,15 @@ const InputProjectData = withTranslation()(({
           </p>
         </Explanation>
       </div>
-      <IconButton className="btn--link btn--noborder btn--back" onClick={() => { onClick(); }}>
-        <BackIcon />
+      <Button
+        theme="back"
+        icon={<BackIcon />}
+        onClick={onClick}
+      >
         {t('buttons:back')}
-      </IconButton>
+      </Button>
     </form>
   </FormBlock>
-));
-
-const StepIndicator = withTranslation()(({ t, step, count }) => (
-  <div className="step-indicator">
-    <p>
-      {t('other:step')}
-      <span>
-        {' '}
-        { step }
-        {' '}
-      </span>
-      {t('other:from')}
-      <span>
-        {' '}
-        { count }
-        {' '}
-      </span>
-    </p>
-    <p>
-      <Indicator checked={step >= 1} />
-      <Indicator checked={step >= 2} />
-    </p>
-  </div>
 ));
 
 CreateNewProjectWithoutTokens.propTypes = {
@@ -350,29 +341,35 @@ CreateNewProjectWithoutTokens.propTypes = {
     checkReceipt: propTypes.func.isRequired,
     deployArgs: propTypes.arrayOf(propTypes.any).isRequired,
     displayAlert: propTypes.func.isRequired,
-    name: propTypes.string.isRequired,
+    setProjectName: propTypes.func.isRequired,
     password: propTypes.string.isRequired,
+    setDeployArgs: propTypes.func.isRequired,
   }).isRequired,
   userStore: propTypes.shape({
     readWallet: propTypes.func.isRequired,
     checkBalance: propTypes.func.isRequired,
     address: propTypes.string.isRequired,
+    setPassword: propTypes.func.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
 };
 CreateTokenData.propTypes = {
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    onSubmit: propTypes.func.isRequired,
+    $: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+  }).isRequired,
 };
 TokenCreationAlert.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
 InputProjectData.propTypes = {
-  form: propTypes.func.isRequired,
+  form: propTypes.shape({
+    $: propTypes.func.isRequired,
+    onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+  }).isRequired,
   onClick: propTypes.func.isRequired,
-};
-StepIndicator.propTypes = {
-  step: propTypes.number.isRequired,
-  count: propTypes.number.isRequired,
 };
 
 export default CreateNewProjectWithoutTokens;

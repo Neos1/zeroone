@@ -1,9 +1,5 @@
-import ExtendedForm from '../../models/FormModel';
-
-/* eslint-disable no-alert */
-/* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
-
+import ExtendedForm from '../../models/FormModel';
 
 class SeedForm extends ExtendedForm {
   setup() {

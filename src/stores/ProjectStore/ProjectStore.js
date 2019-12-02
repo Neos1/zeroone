@@ -45,7 +45,6 @@ class ProjectStore {
     return (questionId, parameters);
   }
 
-
   /**
    * getting usergroups lentgh from contract
    */

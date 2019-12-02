@@ -1,17 +1,16 @@
-/* eslint-disable no-console */
 import Web3 from 'web3';
 import { BN } from 'ethereumjs-util';
+
 /**
- * Class for working with this.web3 (sending transactions)
+ * Service for working with web3 (sending signed transactions, creating transactions)
  */
-class web3Service {
+class Web3Service {
   /**
    * @constructor
    * @param {string} provider - provider for this.web3
    */
   constructor(url, rootStore) {
     this.web3 = new Web3(new Web3.providers.HttpProvider(url));
-    this.address2nonce = {};
     this.rootStore = rootStore;
   }
 
@@ -20,7 +19,7 @@ class web3Service {
     return new Contract(abi);
   }
 
-  formTxData(address, tx, maxGasPrice) {
+  createTxData(address, tx, maxGasPrice) {
     const { web3: { eth } } = this;
     let transaction = { ...tx };
     return eth.getTransactionCount(address, 'pending')
@@ -32,20 +31,26 @@ class web3Service {
         if (!maxGasPrice) return (Promise.resolve(gas));
         return this.getGasPrice()
           .then((gasPrice) => {
-            transaction.gasPrice = new BN(gasPrice).lte(new BN(maxGasPrice))
-              ? maxGasPrice
-              : maxGasPrice;
-            return Promise.resolve(gas);
+            const minGasPrice = 10000000000;
+            const gp = new BN(gasPrice);
+            const minGp = new BN(minGasPrice);
+            const maxGp = new BN(maxGasPrice);
+            transaction.gasPrice = (gp.gte(minGp) && gp.lte(maxGp))
+              ? gasPrice
+              : minGasPrice;
+            return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);
       })
       // eslint-disable-next-line no-unused-vars
-      .then((gas) => (
-        { ...transaction }
-      ))
+      .then((gasPrice) => (transaction))
       .catch((err) => Promise.reject(err));
   }
 
+  /**
+   * getting gas price
+   * @returns {number} gasPrice from network
+   */
   getGasPrice() {
     const { web3: { eth: { getGasPrice } } } = this;
     return getGasPrice();
@@ -70,28 +75,23 @@ class web3Service {
   }
 
   /**
-   * Getting nonce of address
-   * @param {string} address address, for which we getting nonce
+   * checking transaction receipt by hash every 5 seconds
+   * @param {string} txHash hash of transaction
+   * @return {Promise} Promise which resolves on successful receipt fetching
    */
-  getNonce(address) {
-    return new Promise((resolve, reject) => {
-      if (!this.address2nonce[address]) {
-        this.web3.eth.getTransactionCount(address, 'pending').then((nonce) => {
-          this.address2nonce[address] += nonce;
-          resolve(nonce);
-        }).catch((e) => reject(e));
-      } else {
-        resolve(this.address2nonce[address]);
-      }
+  subscribeTxReceipt(txHash) {
+    const { web3 } = this;
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        web3.eth.getTransactionReceipt(txHash).then((receipt) => {
+          if (receipt) {
+            clearInterval(interval);
+            resolve(receipt);
+          }
+        });
+      }, 5000);
     });
   }
-
-  /**
-   * Decreasing nonce of address
-   * @param {string} address address, for which we decrease nonce
-   */
-  decreaseNonce(address) {
-    if (this.address2nonce[address]) this.address2nonce[address] -= 1;
-  }
 }
-export default web3Service;
+
+export default Web3Service;

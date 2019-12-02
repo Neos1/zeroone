@@ -1,9 +1,6 @@
-
 const { app, BrowserWindow } = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
-
-
 const path = require('path');
 
 let mainWindow;
@@ -25,12 +22,10 @@ function createWindow() {
     ? process.env.NODE_ENV = 'production'
     : process.env.NODE_ENV = 'development';
   mainWindow.on('closed', () => mainWindow = null);
-
   electronLocalshortcut.register(mainWindow, 'F12', () => {
     mainWindow.webContents.toggleDevTools();
   });
 }
-
 
 app.on('ready', createWindow);
 

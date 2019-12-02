@@ -16,5 +16,7 @@ const other = {
   yourBalance: 'Your balance',
   notEnoughTokens: 'Perhaps there are not enough tokens',
   enterPassForConfirm: 'Enter your password to confirm your decision.',
+  RUS: 'Русский',
+  ENG: 'English',
 };
 export default other;
