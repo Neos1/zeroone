@@ -27,5 +27,7 @@ const other = {
   against: 'Against',
   startANewVote: 'Start a new vote',
   newVoteEmptyStateText: 'As soon as you select a question, all information on it will appear here.',
+  RUS: 'Русский',
+  ENG: 'English',
 };
 export default other;

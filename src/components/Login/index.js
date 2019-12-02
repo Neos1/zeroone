@@ -1,5 +1,3 @@
-/* eslint-disable no-alert */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -11,8 +9,8 @@ import Heading from '../Heading';
 import Dropdown from '../Dropdown';
 import { CreditCard, Password } from '../Icons';
 import Input from '../Input';
-import { Button } from '../Button';
-import Loader from '../Loader';
+import Button from '../Button/Button';
+import LoadingBlock from '../LoadingBlock';
 import LoginForm from '../../stores/FormsStore/LoginForm';
 
 import styles from './Login.scss';
@@ -21,33 +19,39 @@ import styles from './Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class Login extends Component {
+  loginForm = new LoginForm({
+    hooks: {
+      onSuccess: (form) => this.login(form),
+      onError: () => {
+        this.showError();
+      },
+    },
+  });
+
   componentDidMount() {
     const { appStore } = this.props;
     appStore.readWalletList();
   }
 
+  login(form) {
+    const { userStore } = this.props;
+    return userStore.login(form.values().password);
+  }
+
+  showError() {
+    const { appStore, t } = this.props;
+    appStore.displayAlert(t('errors:emptyFields'), 3000);
+  }
+
   render() {
-    // eslint-disable-next-line no-unused-vars
     const { appStore, userStore, t } = this.props;
-    const { logging } = userStore;
-    const loginForm = new LoginForm({
-      hooks: {
-        onSuccess(form) {
-          return new Promise(() => {
-            userStore.login(form.values().password);
-          });
-        },
-        onError() {
-          appStore.displayAlert(t('errors:emptyFields'), 3000);
-        },
-      },
-    });
+    const { loginForm } = this;
     if (userStore.authorized) return <Redirect to="/projects" />;
     return (
       <Container>
         <div className={styles.form}>
           {
-            !logging
+            !loginForm.loading
               ? (
                 <InputForm
                   appStore={appStore}
@@ -56,7 +60,14 @@ class Login extends Component {
                   onChange={this.getPassword}
                 />
               )
-              : <LoadingBlock />
+              : (
+                <LoadingBlock>
+                  <Heading>
+                    {t('headings:logging.heading')}
+                    {t('headings:logging.subheading')}
+                  </Heading>
+                </LoadingBlock>
+              )
           }
         </div>
       </Container>
@@ -80,25 +91,21 @@ const InputForm = withTranslation()(({
         <Password />
       </Input>
       <div className={styles.form__submit}>
-        <Button className="btn--default btn--black" type="submit">{t('buttons:continue')}</Button>
+        <Button theme="black" size="310" type="submit" disabled={form.loading}>
+          {t('buttons:continue')}
+        </Button>
         <NavLink to="/create">
-          <Button className="btn--link">{t('buttons:newWallet')}</Button>
+          <Button theme="link">
+            {t('buttons:newWallet')}
+          </Button>
         </NavLink>
         <NavLink to="/restore">
-          <Button className="btn--link" disabled={form.loading}>{t('buttons:forgotPassword')}</Button>
+          <Button theme="link">
+            {t('buttons:forgotPassword')}
+          </Button>
         </NavLink>
       </div>
     </form>
-  </FormBlock>
-));
-
-const LoadingBlock = withTranslation()(({ t }) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:logging.heading')}
-      {t('headings:logging.subheading')}
-    </Heading>
-    <Loader />
   </FormBlock>
 ));
 
@@ -114,13 +121,16 @@ Login.propTypes = {
   }).isRequired,
   t: propTypes.func.isRequired,
 };
+
 InputForm.propTypes = {
   appStore: propTypes.shape({
     wallets: propTypes.arrayOf(propTypes.object).isRequired,
   }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  form: propTypes.object.isRequired,
+  form: propTypes.shape({
+    $: propTypes.func.isRequired,
+    onSubmit: propTypes.func.isRequired,
+    loading: propTypes.bool.isRequired,
+  }).isRequired,
 };
 
-
-export default withTranslation()(Login);
+export default Login;

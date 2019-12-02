@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import Container from '../Container';
 import FormBlock from '../FormBlock';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 import Heading from '../Heading';
 
 import styles from '../Login/Login.scss';
@@ -17,6 +17,7 @@ const WalletAddress = withTranslation()(inject('userStore')(observer(({ t, userS
     <p className={styles['form__wallet-text']}>{userStore.address}</p>
   </div>
 ))));
+
 WalletAddress.propTypes = {
   userStore: propTypes.shape({
     address: propTypes.string.isRequired,
@@ -29,12 +30,20 @@ const CreationAlert = withTranslation()(({ t, success = false, recover = false }
     <div className={styles.form}>
       <FormBlock>
         <Heading>
-          {success ? t('headings:walletCreated.heading') : recover ? t('headings:walletRestored.heading') : ''}
-          {success ? t('headings:walletCreated.subheading') : recover ? t('headings:walletRestored.subheading') : ''}
+          {success
+            ? t('headings:walletCreated.heading')
+            : recover
+              ? t('headings:walletRestored.heading')
+              : ''}
+          {success
+            ? t('headings:walletCreated.subheading')
+            : recover
+              ? t('headings:walletRestored.subheading')
+              : ''}
         </Heading>
         <WalletAddress />
         <NavLink to="/">
-          <Button className="btn--default btn--black">
+          <Button theme="black" size="310" type="button">
             {t('buttons:toWallets')}
           </Button>
         </NavLink>
@@ -42,8 +51,10 @@ const CreationAlert = withTranslation()(({ t, success = false, recover = false }
     </div>
   </Container>
 ));
+
 CreationAlert.propTypes = {
   success: propTypes.bool.isRequired,
   recover: propTypes.bool.isRequired,
 };
+
 export default CreationAlert;

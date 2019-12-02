@@ -3,7 +3,8 @@ import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 
-@inject('userStore') @observer
+@inject('userStore')
+@observer
 class RequiredAuthorization extends React.Component {
   render() {
     const { props } = this;

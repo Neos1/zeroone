@@ -1,9 +1,6 @@
+/* eslint-disable class-methods-use-this */
 import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
-
-/* eslint-disable no-alert */
-/* eslint-disable no-console */
-/* eslint-disable class-methods-use-this */
 
 class CreateWalletForm extends ExtendedForm {
   setup() {
@@ -24,4 +21,5 @@ class CreateWalletForm extends ExtendedForm {
     };
   }
 }
+
 export default CreateWalletForm;

@@ -9,6 +9,7 @@
   border: 1px solid $primary;
   transform: rotate(45deg);
   transition: .3s linear;
+  
   &--checked {
     background-color: $primary;
   }

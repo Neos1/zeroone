@@ -37,7 +37,6 @@ class AgreedMessage extends React.Component {
         footer={(
           <div className={styles['dialog__footer--agreed-message']}>
             <Button
-              className="btn--default btn--black"
               onClick={this.hide}
             >
               {t('buttons:continue')}

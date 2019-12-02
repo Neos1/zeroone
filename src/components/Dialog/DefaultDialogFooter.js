@@ -37,7 +37,6 @@ class DefaultDialogFooter extends React.Component {
       >
         {/* TODO refactor after new button */}
         <Button
-          className={`btn--default btn--black ${styles.footer__button}`}
           onClick={hide}
         >
           {t('buttons:continue')}
