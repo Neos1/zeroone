@@ -61,10 +61,8 @@ class TokenTransfer extends React.Component {
           </Input>
         </div>
         <div className={styles.button__wrapper}>
-          {/* TODO refactor after finalize buttons component */}
           <Button
             type="submit"
-            className="btn--default btn--black"
           >
             {t('buttons:transfer')}
           </Button>
