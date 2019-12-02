@@ -12,6 +12,7 @@ import styles from './Members.scss';
  */
 const MembersTop = ({
   onClick,
+  projectName,
 }) => (
   <div className={styles.members__top}>
     <button
@@ -26,7 +27,7 @@ const MembersTop = ({
         <Trans
           i18nKey="other:connectOuterGroupToProject"
           values={{
-            project: 'test project',
+            project: projectName,
           }}
         />
       </span>
@@ -36,6 +37,7 @@ const MembersTop = ({
 
 MembersTop.propTypes = {
   onClick: PropTypes.func,
+  projectName: PropTypes.string.isRequired,
 };
 
 MembersTop.defaultProps = {
