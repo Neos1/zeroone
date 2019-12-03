@@ -11,15 +11,13 @@ import { fs, path, ROOT_DIR } from '../../constants/windowModules';
 
 class RootStore {
   // stores
-  @observable projectStore;
+  projectStore;
 
-  @observable appStore;
+  appStore;
 
-  @observable userStore;
+  userStore;
 
-  @observable alertStore;
-
-  @observable dialogStore;
+  dialogStore;
 
   // services
   walletService;
