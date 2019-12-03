@@ -18,12 +18,13 @@ import DisplayUserInfo from '../DisplayUserInfo';
 import Header from '../Header';
 import Questions from '../Questions';
 import FullQuestion from '../Questions/FullQuestion';
+import Settings from '../Settings';
 
 const SimpleRouter = () => (
   <MemoryRouter>
     <Header />
     <Switch>
-      <Route path="/" exact component={Questions} />
+      <Route path="/" exact component={Settings} />
       <Route path="/create" exact component={CreateWallet} />
       <Route path="/showSeed" exact component={ShowSeed} />
       <Route path="/checkSeed" exact component={() => (<InputSeed recover={false} />)} />
@@ -40,6 +41,7 @@ const SimpleRouter = () => (
       <Route path="/createWithoutTokens" exact component={CreateNewProjectWithoutTokens} />
       <Route path="/uploadWithExistingTokens" exact component={() => (<ProjectUploading newTokens={false} />)} />
       <Route path="/uploadWithNewTokens" exact component={() => (<ProjectUploading newTokens />)} />
+      <Route path="/questions" exact component={Questions} />
       <Route path="/question/:id" exact component={FullQuestion} />
     </Switch>
   </MemoryRouter>
