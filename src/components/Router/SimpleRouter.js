@@ -2,7 +2,7 @@ import React from 'react';
 import {
   MemoryRouter, Route, Switch,
 } from 'react-router-dom';
-import Login from '../Login';
+// import Login from '../Login';
 import CreateWallet from '../CreateWallet';
 import InputSeed from '../InputSeed';
 import ShowSeed from '../ShowSeed';
@@ -16,12 +16,14 @@ import ProjectUploading from '../ProjectUploading';
 import CreationAlert from '../CreationAlert';
 import DisplayUserInfo from '../DisplayUserInfo';
 import Header from '../Header';
+import Questions from '../Questions';
+import FullQuestion from '../Questions/FullQuestion';
 
 const SimpleRouter = () => (
   <MemoryRouter>
     <Header />
     <Switch>
-      <Route path="/" exact component={Login} />
+      <Route path="/" exact component={Questions} />
       <Route path="/create" exact component={CreateWallet} />
       <Route path="/showSeed" exact component={ShowSeed} />
       <Route path="/checkSeed" exact component={() => (<InputSeed recover={false} />)} />
@@ -38,6 +40,7 @@ const SimpleRouter = () => (
       <Route path="/createWithoutTokens" exact component={CreateNewProjectWithoutTokens} />
       <Route path="/uploadWithExistingTokens" exact component={() => (<ProjectUploading newTokens={false} />)} />
       <Route path="/uploadWithNewTokens" exact component={() => (<ProjectUploading newTokens />)} />
+      <Route path="/question/:id" exact component={FullQuestion} />
     </Switch>
   </MemoryRouter>
 );

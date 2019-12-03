@@ -1,11 +1,11 @@
 import React from 'react';
-import QuestionsWrapper from '.';
-import Question from './Question/Question';
+import Questions from '.';
+import Question from './ShortQuestion';
 
 export default ({ title: 'Questions' });
 
 export const Wrapper = () => (
-  <QuestionsWrapper />
+  <Questions />
 );
 
 export const defaultQuestion = () => <Question />;

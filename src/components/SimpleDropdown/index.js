@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { DropdownArrow } from '../Icons';
+import { DropdownArrowIcon } from '../Icons';
 import styles from '../Dropdown/Dropdown.scss';
 import DropdownOption from '../DropdownOption';
 
@@ -82,7 +82,7 @@ class SimpleDropdown extends Component {
           <span className="dropdown__selected" data-value={selectedValue}>
             {selectedLabel || 'Выберите' }
             <span className="dropdown__arrow">
-              <DropdownArrow />
+              <DropdownArrowIcon />
             </span>
           </span>
           <div className="dropdown__head-line" />

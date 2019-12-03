@@ -1,17 +1,28 @@
 @import '../../../assets/styles/partials/variables';
 .question {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: center;
   justify-content: start;
   height: 125px;
   background-color: $white;
   border: 1px solid $lightGrey;
+  &--extended {
+    align-items: flex-start;
+    height: auto;
+    .question__left {
+      width: 70%;
+      border: none;
+    }
+    .question__right {
+      padding-top: 28px;
+    }
+  }
   &__left {
     align-self: flex-start;
     width: 80%;
     height: 100%;
-    padding: 5px 30px;
+    padding: 10px 30px;
     border-right: 1px solid $lightGrey;
     cursor: pointer;
   }
@@ -25,7 +36,7 @@
   }
   &__caption {
     max-width: 70%;
-    margin: 10px 0 15px;
+    margin: 5px 0 10px;
     font-weight: 700;
     font-size: 18px;
   }
@@ -48,5 +59,28 @@
       color: $primary;
       font-size: 11px;
     }
+  }
+  &__parameter {
+    margin: 10px 0;
+    text-align: left;
+    &-heading {
+      font-weight: 700;
+      font-size: 14px;
+      text-align: left;
+    }
+    &-label {
+      margin-bottom: 5px;
+      color: $primary;
+      font-size: 11px;
+    }
+    &-text {
+      color: $border;
+      font-size: 11px;
+    }
+  }
+  &__formula {
+    padding: 10px 30px 30px;
+    color: $border;
+    font-size: 11px;
   }
 } 
