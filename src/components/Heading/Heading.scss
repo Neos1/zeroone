@@ -2,15 +2,17 @@
 
 .heading {
   text-align: center;
+
   &--main {
-    width: 112%;
     margin-bottom: 5px;
     color: $primary;
     font-weight: bold;
     font-size: 24px;
-    transform: translateX(-6%);
   }
+  
   &--sub {
+    width: 70%;
+    margin: 0 auto;
     color: $secondary;
     font-size: 14px;
   }

@@ -13,5 +13,7 @@ const other = {
   count: 'Quantity',
   withTokens: 'If you have ERC20 tokens',
   withoutTokens: "If you don't have ERC20 tokens",
+  RUS: 'Русский',
+  ENG: 'English',
 };
 export default other;

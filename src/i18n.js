@@ -13,7 +13,6 @@ import otherRu from './locales/RUS/other';
 import errorsEn from './locales/ENG/errors';
 import errorsRu from './locales/RUS/errors';
 
-
 const resources = {
   ENG: {
     headings: headingsEn,
@@ -37,7 +36,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    fallbackLng: 'ENG',
+    fallbackLng: ['RUS', 'ENG'],
     lng: 'RUS',
     react: {
       wait: false,
@@ -47,5 +46,5 @@ i18n
       useSuspense: false,
     },
   });
-
+window.i18n = i18n;
 export default i18n;

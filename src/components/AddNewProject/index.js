@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { IconButton } from '../Button';
+import Button from '../Button/Button';
 import FormBlock from '../FormBlock';
 import Heading from '../Heading';
 import Container from '../Container';
@@ -9,11 +9,10 @@ import { CreateToken, ChainIcon, BackIcon } from '../Icons';
 
 import styles from '../Login/Login.scss';
 
-
 const AddNewProject = withTranslation()(({ t }) => (
   <Container>
-    <div className={`${styles.form}`}>
-      <FormBlock className="form__block">
+    <div className={styles.form}>
+      <FormBlock className={styles.form__block}>
         <Heading>
           {t('headings:addingProject.heading')}
           <span>
@@ -24,24 +23,21 @@ const AddNewProject = withTranslation()(({ t }) => (
         </Heading>
         <div className={styles['add-project']}>
           <NavLink to="/newProject">
-            <IconButton className="btn--white">
-              <CreateToken />
+            <Button theme="white" icon={<CreateToken />}>
               {t('buttons:create')}
-            </IconButton>
+            </Button>
           </NavLink>
           <NavLink to="/addExisting">
-            <IconButton className="btn--white">
-              <ChainIcon />
+            <Button theme="white" icon={<ChainIcon />}>
               {t('buttons:connect')}
-            </IconButton>
+            </Button>
           </NavLink>
         </div>
       </FormBlock>
       <NavLink to="/projects">
-        <IconButton className="btn--link btn--noborder btn--back">
-          <BackIcon />
+        <Button theme="back" icon={<BackIcon />}>
           {t('buttons:back')}
-        </IconButton>
+        </Button>
       </NavLink>
     </div>
   </Container>

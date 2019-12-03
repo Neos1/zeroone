@@ -2,42 +2,45 @@
 
 .btn {
   padding: 14px 10px;
+  text-align: center;
   text-decoration: none;
   border: none;
   border-radius: 2px;
   outline: none;
   cursor: pointer;
   transition: 0.2s linear;
+
   svg,
+  &__icon,
   &__text {
     vertical-align: middle;
   }
+
+  svg {
+    path,
+    circle {
+      transition: 00.2s;
+    }
+  }
+
+  &__icon {
+    svg {
+      margin-right: 10px;
+    }
+    &--block {
+      display: block;
+      text-align: center;
+      svg {
+        margin: 0 auto 10px;
+      }
+    }
+  }
+
   &[disabled]{
     cursor: default;
     opacity: .5;
   } 
-  svg {
-    margin-right: 10px;
-    path,
-    circle {
-      transition: 0.2s;
-    }
-  }
-  &--big {
-    width: 140px;
-    padding: 30px 0;
-    font-weight: bold;
-    font-size: 14px;
-  }
-  &--default {
-    min-width: 232px;
-    padding: 16px 0;
-    font-size: 12px;
-  }
-  &--small {
-    min-width: 124px;
-    padding: 5px;
-  }
+
   &--black {
     color: $white;
     background-color: $primary;
@@ -57,26 +60,7 @@
       border-color: $primary;
     }
   }
-  &--link {
-    padding: 0;
-    color: $linkColor;
-    background-color: transparent;
-    border-bottom: 1px solid $linkColor;
-    svg {
-      path {
-        stroke: $linkColor;
-      }
-    }
-    &:hover {
-      color: $secondary;
-      border-color: $secondary;
-      svg {
-        path {
-          stroke: $secondary;
-        }
-      }
-    }
-  }
+
   &--white {
     color: $primary;
     background-color: $white;
@@ -116,81 +100,81 @@
       }
     }
   }
-  &--dashed {
-    color: $grey;
-    border-style: dashed;
-    border-radius: 0;
-    
-    &:hover {
-      color: $primary;
+
+  &--link {
+    padding: 0;
+    color: $linkColor;
+    background-color: transparent;
+    border-bottom: 1px solid $linkColor;
+    svg {
+      path {
+        stroke: $linkColor;
+      }
     }
-    &:active {
-      color: $white;
+    &:hover {
+      color: $secondary;
+      border-color: $secondary;
+      svg {
+        path {
+          stroke: $secondary;
+        }
+      }
     }
   }
-  &--add-project{
-    .btn__content{
-      display:  table;
-      line-height: 15px;
-      text-align:  center;
-      &>* {
-        display: table-cell;
+
+  &--project {
+    @extend .btn--white;
+    width: 145px;
+    height: 85px;
+    padding: 10px 10px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  &--addproject {
+    @extend .btn--project;
+    color: $border;
+    font-weight: 400;
+    border-style: dashed;
+    border-radius: 0;
+    .btn__content {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      .btn__icon {
+        flex-grow:1;
       }
-      &>.btn__text {
-        max-width: 65px;
+      .btn__text {
+        flex-grow: 1;
+        width: 50px;
         text-align: left;
       }
     }
+    &:hover {
+      color: $primary;
+    } 
   }
-  &--noborder {
+
+  &--showseed {
+    @extend .btn--white;
+  }
+
+  &--back {
+    @extend .btn--link;
     border: none;
   }
-  &--show-seed {
-    display: inline-block;
-    padding: 15px;
-    svg {
-      path{
-        fill: $white;
-      }
-    }
-    .btn__content {
-      display: inline-block;
-      &>* {
-        display: unset;
-      }
-    }
-    &:hover {
-      svg {
-        path{
-          fill: $white;
-          stroke: $primary;
-        }
-      }
-    }
-    &:active {
-      svg {
-        path{
-          fill: $primary;
-          stroke: $white;
-        }
-      }
-    }
+
+  &--block {
+    display: block;
+    width: 100%;
   }
-  &--310{
-    max-width: 310px;
+
+  &--240 {
+    width: 240px;
   }
-  &--240{
-    max-width: 240px;
-  }
-  &--project {
-    padding: 30px 10px;
-    .btn__text{
-      font-weight: 700;
-    }
-  }
-  &.icon--top{
-    svg {
-      width: 100%;
-    }
+
+  &--310 {
+    width: 310px;
   }
 }
+

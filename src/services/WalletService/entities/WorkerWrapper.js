@@ -5,11 +5,11 @@ class WorkerWrapper {
     worker;
 
     stack = {};
+
     /**
      * @constructor
      * @param {function} worker instance of worker, which will be used
      */
-
     constructor(worker) {
       this.worker = worker;
       this._listen();

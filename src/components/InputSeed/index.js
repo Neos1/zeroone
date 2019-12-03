@@ -6,9 +6,10 @@ import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Heading from '../Heading';
 import FormBlock from '../FormBlock';
-import { IconButton } from '../Button';
+import Button from '../Button/Button';
 import { BackIcon } from '../Icons';
 import Loader from '../Loader';
+import SeedForm from '../../stores/FormsStore/SeedForm';
 import SeedInput from './SeedForm';
 
 import styles from '../Login/Login.scss';
@@ -17,10 +18,18 @@ import styles from '../Login/Login.scss';
 @inject('appStore', 'userStore')
 @observer
 class InputSeed extends Component {
+  seedForm = new SeedForm({
+    hooks: {
+      onSuccess: (form) => this.submitForm(form),
+      onError: () => {
+        this.showError();
+      },
+    },
+  });
+
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
       redirect: false,
     };
   }
@@ -29,38 +38,35 @@ class InputSeed extends Component {
     this.setState({ redirect: true });
   }
 
-  toggleLoading = () => {
-    const { loading } = this.state;
-    this.setState({
-      loading: !loading,
-    });
-  }
-
   submitForm = (form) => {
     const {
       userStore, appStore, recover, t,
     } = this.props;
     const values = Object.values(form.values());
-    userStore.mnemonicRepeat = values;
+    userStore.setMnemonicRepeat(values);
     const mnemonic = values.join(' ');
-    if (userStore.isSeedValid(mnemonic)) {
-      this.toggleLoading();
-      if (recover) {
-        userStore.recoverWallet(mnemonic)
-          .then((data) => {
-            userStore.setEncryptedWallet(data.v3wallet);
-            userStore.getEthBalance();
+    return new Promise((resolve, reject) => {
+      if (userStore.isSeedValid(mnemonic)) {
+        if (recover) {
+          userStore.recoverWallet()
+            .then((data) => {
+              userStore.setEncryptedWallet(data.v3wallet);
+              userStore.getEthBalance();
+              this.setRedirect();
+              resolve();
+            });
+        } else if (!recover) {
+          if (userStore.isSeedValid(mnemonic)) {
+            userStore.saveWalletToFile();
             this.setRedirect();
-          });
-      } else if (!recover) {
-        if (userStore.isSeedValid(mnemonic)) {
-          userStore.saveWalletToFile();
-          this.setRedirect();
+            resolve();
+          }
         }
+      } else {
+        appStore.displayAlert(t('errors:validationError'), 2000);
+        reject();
       }
-    } else {
-      appStore.displayAlert(t('errors:validationError'), 2000);
-    }
+    });
   }
 
   showError = () => {
@@ -70,7 +76,8 @@ class InputSeed extends Component {
 
   render() {
     const { userStore, recover, t } = this.props;
-    const { loading, redirect } = this.state;
+    const { redirect } = this.state;
+    const { seedForm } = this;
     if (redirect) return recover ? <Redirect to="/userInfo" /> : <Redirect to="/creatingSuccess" />;
     return (
       <Container>
@@ -78,23 +85,22 @@ class InputSeed extends Component {
           <FormBlock>
             <Heading>
               {t('headings:seedCheck.heading')}
-              {loading ? t('headings:seedCheck.subheading.0') : t('headings:seedCheck.subheading.1')}
+              {seedForm.loading ? t('headings:seedCheck.subheading.0') : t('headings:seedCheck.subheading.1')}
             </Heading>
-            {loading
+            {seedForm.loading
               ? <Loader />
               : (
                 <SeedInput
-                  submit={this.submitForm}
+                  form={this.seedForm}
                   seed={userStore.mnemonic}
-                  error={this.showError}
                 />
               )}
           </FormBlock>
           <NavLink to={`${recover ? '/' : '/showSeed'}`}>
-            <IconButton className="btn--link btn--noborder btn--back">
+            <Button theme="back">
               <BackIcon />
               {t('buttons:back')}
-            </IconButton>
+            </Button>
           </NavLink>
         </div>
       </Container>
@@ -102,10 +108,9 @@ class InputSeed extends Component {
   }
 }
 
-
 InputSeed.propTypes = {
   userStore: propTypes.shape({
-    mnemonicRepeat: propTypes.arrayOf(propTypes.string).isRequired,
+    setMnemonicRepeat: propTypes.func.isRequired,
     isSeedValid: propTypes.func.isRequired,
     recoverWallet: propTypes.func.isRequired,
     setEncryptedWallet: propTypes.func.isRequired,
@@ -119,6 +124,5 @@ InputSeed.propTypes = {
   recover: propTypes.bool.isRequired,
   t: propTypes.func.isRequired,
 };
-
 
 export default InputSeed;

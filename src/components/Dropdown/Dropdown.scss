@@ -2,10 +2,12 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  
   button {
     background: transparent;
     outline: none;
   }
+
   &__head {
     position: relative;
     width: 100%;
@@ -14,7 +16,7 @@
     border: unset;
     border-bottom: 1px solid $lightGrey;
     cursor: pointer;
-    transition: .2s linear;
+    transition: 0.2s linear;
     &-line {
       position: absolute;
       top: 100%;
@@ -22,7 +24,7 @@
       width: 0;
       height: 1px;
       background-color: $primary;
-      transition: .2s ease-in;
+      transition: 0.2s ease-in;
     }
     &:hover {
       border-color: $border;
@@ -35,23 +37,24 @@
         }
       }
     }
-
   }
+
   &__arrow {
     position: absolute;
     top: 50%;
     right:  0;
     font-size: 0;
     transform: translateY(-50%) rotate(0deg);
-    transition: .2s;
+    transition: 0.2s;
     svg {
       path {
         opacity: 1;
-        transition: .2s;
+        transition: 0.2s;
         stroke: $lightGrey;
       }
     }
   }
+
   &__icon {
     position: relative;
     display: inline-block;
@@ -70,6 +73,7 @@
       content: "";
     }
   }
+
   &__selected {
     display: inline-block;
     max-width: 80%;
@@ -77,6 +81,7 @@
     text-overflow: ellipsis;
     vertical-align: middle;
   }
+
   &__options {
     position: absolute;
     top: 100%;
@@ -94,13 +99,11 @@
     &::-webkit-scrollbar {
       width: 20px;
     }
-    
     /* Track */
     &::-webkit-scrollbar-track {
       background: #fff;
       border: 2px solid #f1f1f1;
     }
-     
     /* Handle */
     &::-webkit-scrollbar-thumb {
       background-image: url(../../assets/images/thumb.png);
@@ -108,7 +111,6 @@
       background-position: center;
       border: 1px solid $border;
     }
-
     &::-webkit-scrollbar-button:vertical:decrement{
       width: 20px;
       height: 20px;
@@ -121,20 +123,20 @@
       position: relative;
       width: 20px;
       height: 20px;
-      background-image: url(../../assets/images/scrollbarBtn--down.svg);
+      background-image: url(../../assets/images/scrollbarBtnDown.svg);
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
     }
-    
-    
   }
+
   &__option {
     display: block;
     padding: 10px 0;
     border: none;
     cursor: pointer;
   }
+
   &__suboption {
     margin-left: 30px;
     color: $linkColor;
