@@ -1,11 +1,10 @@
-/* eslint-disable react/static-property-placement */
 import React from 'react';
 import { inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import Dialog from './Dialog';
 import { VerifyIcon } from '../Icons';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 import styles from './Dialog.scss';
 
