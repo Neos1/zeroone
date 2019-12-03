@@ -9,6 +9,7 @@
   outline: none;
   cursor: pointer;
   transition: 0.2s linear;
+
   svg,
   &__icon,
   &__text {
@@ -18,7 +19,7 @@
   svg {
     path,
     circle {
-      transition: 0.2s;
+      transition: 00.2s;
     }
   }
 

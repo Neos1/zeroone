@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { DropdownArrow } from '../Icons';
-import styles from './Dropdown.scss';
 import DropdownOption from '../DropdownOption';
+import { DropdownArrowIcon } from '../Icons';
+import styles from './Dropdown.scss';
 
 class Dropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      opened: false,
       selectedValue: '',
     };
 
@@ -77,7 +76,7 @@ class Dropdown extends Component {
           <span className={styles.dropdown__selected} data-value={selectedValue}>
             {field.value || field.placeholder }
             <span className={styles.dropdown__arrow}>
-              <DropdownArrow />
+              <DropdownArrowIcon />
             </span>
           </span>
           <div className={styles['dropdown__head-line']} />
@@ -106,5 +105,6 @@ Dropdown.defaultProps = {
   children: '',
   subOptions: {},
 };
+
 
 export default Dropdown;

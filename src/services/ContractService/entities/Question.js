@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import web3 from 'web3';
 
 class Question {
@@ -24,13 +23,13 @@ class Question {
     const FORMULA_REGEXP = new RegExp(/(group)|((?:[a-zA-Z0-9]{1,}))|((quorum|positive))|(>=|<=)|([0-9%]{1,})|(quorum|all)/g);
     const matched = this.formula.match(FORMULA_REGEXP);
     const convertedFormula = [];
-    matched[0] === 'group' ? convertedFormula.push(0) : convertedFormula.push(1);
-    matched[1] === 'Owners' ? convertedFormula.push(1) : convertedFormula.push(2);
-    matched[3] === 'quorum' ? convertedFormula.push(0) : convertedFormula.push(1);
-    matched[4] === '<=' ? convertedFormula.push(0) : convertedFormula.push(1);
+    convertedFormula.push(matched[0] === 'group' ? 0 : 1);
+    convertedFormula.push(matched[1] === 'Owners' ? 1 : 2);
+    convertedFormula.push(matched[3] === 'quorum' ? 0 : 1);
+    convertedFormula.push(matched[4] === '<=' ? 0 : 1);
     convertedFormula.push(Number(matched[5]));
     if (matched.length === 9) {
-      matched[8] === 'quorum' ? convertedFormula.push(0) : convertedFormula.push(1);
+      convertedFormula.push(matched[8] === 'quorum' ? 0 : 1);
     }
     return convertedFormula;
   }

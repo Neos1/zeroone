@@ -1,16 +1,16 @@
 import React from 'react';
 import Input from './index';
-import { Password } from '../Icons';
+import { PasswordIcon } from '../Icons';
 
 export default ({ title: 'Input' });
 
 export const simpleInput = () => (
   <Input type="password" required={false} placeholder="Введите пароль" errorText="Вы ошиблись, смиритесь и исправьтесь">
-    <Password />
+    <PasswordIcon />
   </Input>
 );
 export const inputError = () => (
   <Input type="password" required={false} placeholder="Введите пароль" errorText="Вы ошиблись, смиритесь и исправьтесь" className="field--error">
-    <Password />
+    <PasswordIcon />
   </Input>
 );
