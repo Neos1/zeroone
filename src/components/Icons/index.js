@@ -24,6 +24,7 @@ import TxRecieptIcon from './entities/TxRecieptIcon';
 import VerifyIcon from './entities/VerifyIcon';
 import StartIcon from './entities/StartIcon';
 import GithubIcon from './entities/GithubIcon';
+import SettingsIcon from './entities/SettingsIcon';
 
 export {
   AddIcon,
@@ -52,4 +53,5 @@ export {
   VerifyIcon,
   StartIcon,
   GithubIcon,
+  SettingsIcon,
 };

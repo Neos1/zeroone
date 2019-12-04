@@ -33,8 +33,18 @@
     position: relative;
     margin: 0 30px;
     transition: .2s linear;
+    svg {
+      path {
+        fill: $white;
+      }
+    }
     &.active{
       font-weight: bold;
+      svg {
+        path {
+          fill: $primary;
+        }
+      }
       &:before, &:after {
         position: absolute;
         left: 50%;
@@ -49,6 +59,28 @@
         transform: translateX(-50%) rotate(180deg);
       }
     } 
+  }
+
+  &__settings {
+    svg {
+      path {
+        fill: $white;
+      }
+    }
+    &.active{
+      font-weight: bold;
+      svg {
+        path {
+          fill: $primary;
+        }
+      }
+    }
+  }
+  
+  &__right {
+    display:  flex;
+    flex-flow: row nowrap;
+    align-items:  center;
   }
 
   .lang {

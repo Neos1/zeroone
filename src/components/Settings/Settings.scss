@@ -10,7 +10,7 @@
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
-    width: 32%;
+    width: 36%;
     padding: 45px 40px;
     text-align: center;
     background-color: $white;
@@ -26,7 +26,7 @@
       justify-content: space-around;
       .field {
         width: 100%;
-        margin-bottom: 25px;
+        margin-bottom: 35px;
       }
       .btn--white {
         width: 45%;
@@ -34,6 +34,8 @@
       }
     }
     &--lang {
+      width: 25%;
+      padding: 55px 0;
       background-color: unset;
       border: none;
       .settings__block-content {
