@@ -1,21 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import DefinetelyReject from './DefinetelyReject';
+import DefinetelyReject from '.';
 
 describe('DefinetelyReject', () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = shallow(
-      <DefinetelyReject
-        dialogStore={{
-          show: () => {},
-          hide: () => {},
-          add: () => {},
-          closing: false,
-        }}
-      />,
-    ).dive().dive();
+      <DefinetelyReject />,
+    ).dive();
   });
 
   it('should render without error', () => {

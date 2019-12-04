@@ -1,0 +1,30 @@
+.definetely-reject {
+  width: 100%;
+  text-align: center;
+
+  &__title {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    color: #000;
+    font-weight: 700;
+    font-size: 24px;
+    font-family: "Grotesk";
+    line-height: 28px;
+    text-align: center;
+  }
+
+  &__subtext {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  &__icon {
+    svg {
+      width: auto;
+      height: auto;
+      margin-top: 47px;
+    }
+  }
+}

@@ -77,21 +77,6 @@ storiesOf('Dialog', module)
     <Provider
       dialogStore={{
         ...defaultDialogStore,
-        dialog: 'definetely-reject',
-      }}
-    >
-      {story()}
-    </Provider>
-  ))
-  .add('DefinetelyReject', () => (
-    <DefinetelyReject dialogStore={{}} />
-  ));
-
-storiesOf('Dialog', module)
-  .addDecorator((story) => (
-    <Provider
-      dialogStore={{
-        ...defaultDialogStore,
         dialog: 'reject-message',
       }}
     >
@@ -107,36 +92,6 @@ storiesOf('Dialog', module)
         onButtonClick={() => {}}
       />
     </Dialog>
-  ));
-
-storiesOf('Dialog', module)
-  .addDecorator((story) => (
-    <Provider
-      dialogStore={{
-        ...defaultDialogStore,
-        dialog: 'token-transfer',
-      }}
-    >
-      {story()}
-    </Provider>
-  ))
-  .add('TokenTransferDialog', () => (
-    <TokenTransferDialog dialogStore={{}} />
-  ));
-
-storiesOf('Dialog', module)
-  .addDecorator((story) => (
-    <Provider
-      dialogStore={{
-        ...defaultDialogStore,
-        dialog: 'token-transfer-error',
-      }}
-    >
-      {story()}
-    </Provider>
-  ))
-  .add('TokenTransferError', () => (
-    <TokenTransferError dialogStore={{}} />
   ));
 
 storiesOf('Dialog', module)

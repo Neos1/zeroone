@@ -1,20 +1,12 @@
-/* eslint-disable react/static-property-placement */
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-import { inject } from 'mobx-react';
 import PropTypes from 'prop-types';
-import Dialog from './Dialog';
+import { withTranslation } from 'react-i18next';
 import { RejectIcon } from '../Icons';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 
-import styles from './Dialog.scss';
+import styles from './DefinetelyReject.scss';
 
-/**
- * Dialog with financial password
- * form for Agree decision
- */
-@inject('dialogStore')
 @withTranslation()
 class DefinetelyReject extends React.Component {
   form = new FinPassForm({
@@ -31,26 +23,24 @@ class DefinetelyReject extends React.Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
-    dialogStore: PropTypes.shape({}).isRequired,
   };
 
   render() {
     const { props, form } = this;
     const { t } = props;
     return (
-      <Dialog
-        name="definetely-reject"
-        header={t('dialogs:definetelyReject')}
-        topIcon={(<RejectIcon />)}
-        footer={null}
-        className="definetely-reject"
-        size="md"
-      >
-        <p className={styles.dialog__subtext}>
+      <div className={styles['definetely-reject']}>
+        <div className={styles['definetely-reject__icon']}>
+          <RejectIcon />
+        </div>
+        <h2 className={styles['definetely-reject__title']}>
+          {t('dialogs:definetelyReject')}
+        </h2>
+        <p className={styles['definetely-reject__subtext']}>
           {t('other:enterPassForConfirm')}
         </p>
         <FinPassFormWrapper form={form} />
-      </Dialog>
+      </div>
     );
   }
 }
