@@ -40,7 +40,7 @@ Input.propTypes = {
   children: propTypes.element.isRequired,
   className: propTypes.string,
   field: propTypes.shape({
-    error: propTypes.string.isRequired,
+    error: propTypes.string,
     value: propTypes.string.isRequired,
     placeholder: propTypes.string.isRequired,
     bind: propTypes.func.isRequired,

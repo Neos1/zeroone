@@ -17,8 +17,8 @@ const Button = ({
   <button
     type={type}
     disabled={disabled}
-    className={`${styles.btn} 
-                ${styles[`btn--${theme}`]} 
+    className={`${styles.btn}
+                ${styles[`btn--${theme}`]}
                 ${size ? styles[`btn--${size}`] : ''}`}
     onClick={onClick}
   >
@@ -38,8 +38,8 @@ Button.propTypes = {
   icon: propTypes.node,
   iconPosition: propTypes.bool,
   type: propTypes.string,
-  disabled: propTypes.bool.isRequired,
-  onClick: propTypes.func.isRequired,
+  disabled: propTypes.bool,
+  onClick: propTypes.func,
   theme: propTypes.string,
   size: propTypes.string,
 };
@@ -50,6 +50,8 @@ Button.defaultProps = {
   size: 'default',
   icon: null,
   iconPosition: false,
+  disabled: false,
+  onClick: () => {},
 };
 
 export default Button;

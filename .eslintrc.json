@@ -2,7 +2,7 @@
   "env": {
     "browser": true,
     "es6": true,
-    "jest": true
+    "jest/globals": true
   },
   "parser": "babel-eslint",
   "extends": [
@@ -22,12 +22,13 @@
   },
   "plugins": [
     "react",
-    "jsdoc"
+    "jsdoc",
+    "jest"
   ],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle":"off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "react/static-property-placement": "off"
   }
 }
-

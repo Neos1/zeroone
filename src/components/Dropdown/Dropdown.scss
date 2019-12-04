@@ -2,6 +2,7 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  
   button {
     background: transparent;
     outline: none;
@@ -15,7 +16,7 @@
     border: unset;
     border-bottom: 1px solid $lightGrey;
     cursor: pointer;
-    transition: .2s linear;
+    transition: 0.2s linear;
     &-line {
       position: absolute;
       top: 100%;
@@ -23,7 +24,7 @@
       width: 0;
       height: 1px;
       background-color: $primary;
-      transition: .2s ease-in;
+      transition: 0.2s ease-in;
     }
     &:hover {
       border-color: $border;
@@ -44,11 +45,11 @@
     right:  0;
     font-size: 0;
     transform: translateY(-50%) rotate(0deg);
-    transition: .2s;
+    transition: 0.2s;
     svg {
       path {
         opacity: 1;
-        transition: .2s;
+        transition: 0.2s;
         stroke: $lightGrey;
       }
     }

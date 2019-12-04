@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-loop-func */
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
@@ -8,6 +6,7 @@ import {
   fs, PATH_TO_CONTRACTS, path,
 } from '../../constants/windowModules';
 import Question from './entities/Question';
+import readSolFile from '../../utils/fileUtils/index';
 
 /**
  * Class for work with contracts
@@ -64,45 +63,15 @@ class ContractService {
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
-    const importedFiles = {};
     const dir = type === 'ERC20' ? './' : './Voter/';
     const compiler = 'pragma solidity ^0.4.24;';
-    const getImports = (file) => {
-      const files = file.match(SOL_PATH_REGEXP);
-      return files ? files.map((singleFile) => singleFile.replace(new RegExp(/(\'|\")/g), '')) : [];
-    };
-    const readFile = (src) => {
-      // read file by given src
-      let mainImport = fs.readFileSync(src, 'utf8');
-      // getting the list of files, which will be imported
-      const importList = getImports(mainImport);
-      // finding the folder, which contains file with given src
-      const currentFolder = src.replace(/(((\.\/|\.\.\/)).{1,})*([a-zA-z0-9])*(\.sol)/g, '');
-      importList.forEach((file) => {
-        // read file, which contains in list of imports
-        const pathToFile = path.join(currentFolder, file);
-        if (!importedFiles[pathToFile]) {
-          // if file not imported already reads the file and deleting compiler version
-          const includedFile = (readFile(pathToFile)).replace(SOL_VERSION_REGEXP, '');
-          if (mainImport.match(SOL_IMPORT_REGEXP)) {
-            // if main file contains import - replacing this import by content of imported file
-            mainImport = mainImport.replace(mainImport.match(SOL_IMPORT_REGEXP)[0], includedFile);
-          }
-          // marking that we succesfully import this file
-          importedFiles[pathToFile] = true;
-        } else {
-          // if file already imported, just delete matched file import declaration
-          mainImport = mainImport.replace(mainImport.match(SOL_IMPORT_REGEXP)[0], '');
-        }
-      });
-      return mainImport;
-    };
-
     const pathToMainFile = type === 'ERC20'
       ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
       : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
 
-    let output = readFile(pathToMainFile);
+    const importedFiles = {};
+
+    let output = readSolFile(pathToMainFile, importedFiles);
     output = output.replace(SOL_VERSION_REGEXP, compiler);
     output = output.replace(/(calldata)/g, '');
 
@@ -206,7 +175,6 @@ class ContractService {
       Web3Service, userStore,
     } = this.rootStore;
     const sysQuestion = this.sysQuestions[idx];
-    // eslint-disable-next-line consistent-return
     await this.fetchQuestion(idx).then((result) => {
       if (result.caption === '') {
         const { address, password } = userStore;
@@ -231,6 +199,7 @@ class ContractService {
             .then((txHash) => resolve(txHash));
         });
       }
+      return Promise.reject();
     });
   }
 
