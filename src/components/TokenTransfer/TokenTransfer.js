@@ -1,4 +1,3 @@
-/* eslint-disable react/static-property-placement */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
