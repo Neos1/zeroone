@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import { RejectIcon } from '../Icons';
 import Button from '../Button/Button';
 import DefaultMessage from './DefaultMessage';
@@ -14,24 +14,45 @@ import styles from './Message.scss';
 class RejectMessage extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
-    onButtonClick: PropTypes.func.isRequired,
+    onButtonClick: PropTypes.func,
+    buttonText: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({}),
+    ]),
   };
 
+  static defaultProps = {
+    onButtonClick: null,
+    buttonText: <Trans i18nKey="buttons:continue" />,
+  }
+
   render() {
-    const { t, onButtonClick } = this.props;
+    const {
+      props: {
+        onButtonClick,
+        t,
+        buttonText,
+      },
+    } = this;
     return (
       <div className={styles['message--reject']}>
         <RejectIcon width={27} height={27} />
         <DefaultMessage
           title={t('dialogs:rejectMessage')}
         />
-        <div className={styles.footer}>
-          <Button
-            onClick={onButtonClick}
-          >
-            {t('buttons:continue')}
-          </Button>
-        </div>
+        {
+          onButtonClick
+            ? (
+              <div className={styles.footer}>
+                <Button
+                  onClick={onButtonClick}
+                >
+                  {buttonText}
+                </Button>
+              </div>
+            )
+            : null
+        }
       </div>
     );
   }

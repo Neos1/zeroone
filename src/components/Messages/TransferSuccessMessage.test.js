@@ -38,4 +38,14 @@ describe('TransferSuccessMessage', () => {
     ).dive();
     expect(wrapperCustom.find('.value').text()).toEqual('0.1234 TKN');
   });
+
+  it('should render correct without onButtonClick', async () => {
+    const wrapperCustom = shallow(
+      <TransferSuccessMessage
+        value="0.1234 TKN"
+      />,
+    ).dive();
+    expect(wrapper.length).toEqual(1);
+    expect(wrapperCustom.find(Button).length).toEqual(0);
+  });
 });

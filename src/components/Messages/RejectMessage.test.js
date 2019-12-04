@@ -26,4 +26,12 @@ describe('RejectMessage', () => {
     button.prop('onClick')();
     expect(mockOnClick).toHaveBeenCalled();
   });
+
+  it('should render correct without onButtonClick', async () => {
+    const wrapperCustom = shallow(
+      <RejectMessage />,
+    ).dive();
+    expect(wrapper.length).toEqual(1);
+    expect(wrapperCustom.find(Button).length).toEqual(0);
+  });
 });

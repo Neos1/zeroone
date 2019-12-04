@@ -34,7 +34,10 @@ const Button = ({
 );
 
 Button.propTypes = {
-  children: propTypes.string.isRequired,
+  children: propTypes.oneOfType([
+    propTypes.string,
+    propTypes.shape({}),
+  ]).isRequired,
   icon: propTypes.node,
   iconPosition: propTypes.bool,
   type: propTypes.string,
