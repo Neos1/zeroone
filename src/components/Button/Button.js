@@ -39,7 +39,7 @@ Button.propTypes = {
   iconPosition: propTypes.bool,
   type: propTypes.string,
   disabled: propTypes.bool,
-  onClick: propTypes.func.isRequired,
+  onClick: propTypes.func,
   theme: propTypes.string,
   size: propTypes.string,
 };
@@ -51,6 +51,7 @@ Button.defaultProps = {
   icon: null,
   iconPosition: false,
   disabled: false,
+  onClick: () => {},
 };
 
 export default Button;

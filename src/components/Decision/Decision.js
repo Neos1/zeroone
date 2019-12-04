@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { RejectIcon } from '../Icons';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 
-import styles from './DefinetelyReject.scss';
+import styles from './Decision.scss';
 
 @withTranslation()
-class DefinetelyReject extends React.Component {
+class Decision extends React.Component {
   form = new FinPassForm({
     hooks: {
       onSuccess() {
@@ -23,20 +22,22 @@ class DefinetelyReject extends React.Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
+    icon: PropTypes.node.isRequired,
+    title: PropTypes.string.isRequired,
   };
 
   render() {
     const { props, form } = this;
-    const { t } = props;
+    const { t, icon, title } = props;
     return (
-      <div className={styles['definetely-reject']}>
-        <div className={styles['definetely-reject__icon']}>
-          <RejectIcon />
+      <div className={styles.decision}>
+        <div className={styles.decision__icon}>
+          {icon}
         </div>
-        <h2 className={styles['definetely-reject__title']}>
-          {t('dialogs:definetelyReject')}
+        <h2 className={styles.decision__title}>
+          {title}
         </h2>
-        <p className={styles['definetely-reject__subtext']}>
+        <p className={styles.decision__subtext}>
           {t('other:enterPassForConfirm')}
         </p>
         <FinPassFormWrapper form={form} />
@@ -45,4 +46,4 @@ class DefinetelyReject extends React.Component {
   }
 }
 
-export default DefinetelyReject;
+export default Decision;
