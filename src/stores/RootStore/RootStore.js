@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
@@ -11,15 +11,13 @@ import { fs, path, ROOT_DIR } from '../../constants/windowModules';
 
 class RootStore {
   // stores
-  @observable projectStore;
+  projectStore;
 
-  @observable appStore;
+  appStore;
 
-  @observable userStore;
+  userStore;
 
-  @observable alertStore;
-
-  @observable dialogStore;
+  dialogStore;
 
   // services
   walletService;

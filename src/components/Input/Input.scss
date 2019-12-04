@@ -9,6 +9,7 @@
     position: relative;
     vertical-align: middle;
   }
+
   &__input {
     width: 85%;
     margin-left: 20px;
@@ -32,6 +33,7 @@
       }
     }
   }
+
   &__label {
     position: absolute;
     top: 50%;
@@ -42,6 +44,7 @@
     transform: translateY(-50%);
     transition: 0.2s;
   }
+
   &__error-text {
     position: absolute;
     top: 35px;
@@ -51,6 +54,7 @@
     visibility: hidden;
     opacity: 0;
   }
+  
   &__line {
     position: absolute;
     bottom: -1px;

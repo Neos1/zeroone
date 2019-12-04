@@ -1,4 +1,3 @@
-/* eslint-disable react/static-property-placement */
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
@@ -21,7 +20,7 @@ class Dialog extends React.Component {
       'lg',
     ]),
     name: PropTypes.string.isRequired,
-    header: PropTypes.string.isRequired,
+    header: PropTypes.string,
     dialogStore: PropTypes.shape({
       add: PropTypes.func.isRequired,
       remove: PropTypes.func.isRequired,
@@ -33,7 +32,6 @@ class Dialog extends React.Component {
       ]),
       hide: PropTypes.func.isRequired,
     }).isRequired,
-    topIcon: PropTypes.node,
     footer: PropTypes.element,
     className: PropTypes.string,
     history: PropTypes.bool,
@@ -47,7 +45,7 @@ class Dialog extends React.Component {
   static defaultProps = {
     size: 'sm',
     className: '',
-    topIcon: null,
+    header: null,
     footer: (<DefaultDialogFooter />),
     history: true,
     onOpen: null,
@@ -114,7 +112,6 @@ class Dialog extends React.Component {
       header,
       footer,
       className,
-      topIcon,
       closeable,
     } = this.props;
     const store = props.dialogStore;
@@ -153,14 +150,15 @@ class Dialog extends React.Component {
                   )
                   : null
               }
-              <div className={`${styles.dialog__header}`}>
-                {
-                  topIcon
-                    ? (<div className={styles['dialog__header-icon']}>{topIcon}</div>)
-                    : null
-                }
-                <div className={styles.dialog__title}>{header}</div>
-              </div>
+              {
+                header
+                  ? (
+                    <div className={`${styles.dialog__header}`}>
+                      <div className={styles.dialog__title}>{header}</div>
+                    </div>
+                  )
+                  : null
+              }
               {
                 props.children
                   ? (

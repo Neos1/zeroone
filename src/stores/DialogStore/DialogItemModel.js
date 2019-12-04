@@ -4,24 +4,46 @@ const defaults = {
   history: true,
 };
 
+/**
+ * Single modal dialog model
+ */
 class DialogItem {
   constructor(name, options) {
     this._name = name;
     this.options = { ...defaults, ...options };
   }
 
+  /**
+   * Method for getting name dialog
+   *
+   * @returns {string} name
+   */
   get name() {
     return this._name;
   }
 
+  /**
+   * Method for getting id dialog
+   *
+   * @returns {string} id
+   */
   get id() {
     return `dialog-${this.name}`;
   }
 
+  /**
+   * Method for getting history dialogs
+   *
+   * @returns {Array} history
+   */
   get history() {
     return this.options.history;
   }
 
+  /**
+   * Method for call onOpen method with
+   * all necessary actions
+   */
   open() {
     const { options: { onOpen } } = this;
     const input = document.querySelector(`#${this.id} [open-focus]`);
@@ -40,6 +62,10 @@ class DialogItem {
     }
   }
 
+  /**
+   * Method for call onClose method with
+   * all necessary actions
+   */
   close() {
     const { options: { onClose } } = this;
     if (onClose && typeof onClose === 'function') {

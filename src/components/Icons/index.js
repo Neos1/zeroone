@@ -7,7 +7,7 @@ import CompilingIcon from './entities/CompilingIcon';
 import CreateToken from './entities/CreateTokenIcon';
 import CreditCard from './entities/CreditCardIcon';
 import CrossedEyeIcon from './entities/CrossedEyeIcon';
-import DropdownArrow from './entities/DropdownArrowIcon';
+import DropdownArrowIcon from './entities/DropdownArrowIcon';
 import Ethereum from './entities/EthereumIcon';
 import EyeIcon from './entities/EyeIcon';
 import IconInfo from './entities/InfoIcon';
@@ -34,7 +34,7 @@ export {
   CreateToken,
   CreditCard,
   CrossedEyeIcon,
-  DropdownArrow,
+  DropdownArrowIcon,
   Ethereum,
   EyeIcon,
   IconInfo,

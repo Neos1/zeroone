@@ -3,16 +3,13 @@ import { Provider } from 'mobx-react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { storiesOf } from '@storybook/react';
 import Dialog from './Dialog';
-import { VerifyIcon } from '../Icons';
 import DefaultDialogFooter from './DefaultDialogFooter';
-import DefinetelyAgree from './DefinetelyAgree';
-import RejectMessage from './RejectMessage';
-import TokenTransferSuccess from './TokenTransferSuccess';
-import TransferTokenInProgress from './TransferTokenInProgress';
-import AgreedMessage from './AgreedMessage';
-import DefinetelyReject from './DefinetelyReject';
-import TokenTransferDialog from './TokenTransferDialog';
-import TokenTransferError from './TokenTransferError';
+import {
+  AgreedMessage,
+  RejectMessage,
+  TransferSuccessMessage,
+  TokenInProgressMessage,
+} from '../Messages';
 
 const defaultDialogStore = {
   remove: () => {},
@@ -51,22 +48,6 @@ storiesOf('Dialog', module)
     >
       0x295856bcf02b2017607e4f61cfc1573fd05d511f
     </Dialog>
-  ))
-  .add('With icon', () => (
-    <Dialog
-      name="dialog-stories"
-      header="Заголовок"
-      topIcon={(<VerifyIcon />)}
-      footer={(
-        <DefaultDialogFooter
-          dialogStore={{
-            ...defaultDialogStore,
-          }}
-        />
-      )}
-    >
-      0x295856bcf02b2017607e4f61cfc1573fd05d511f
-    </Dialog>
   ));
 
 storiesOf('Dialog', module)
@@ -80,23 +61,15 @@ storiesOf('Dialog', module)
       {story()}
     </Provider>
   ))
-  .add('AgreedMessage', () => (
-    <AgreedMessage dialogStore={{}} />
-  ));
-
-storiesOf('Dialog', module)
-  .addDecorator((story) => (
-    <Provider
-      dialogStore={{
-        ...defaultDialogStore,
-        dialog: 'definetely-agree',
-      }}
+  .add('Agreed', () => (
+    <Dialog
+      name="agreed-message"
+      footer={null}
     >
-      {story()}
-    </Provider>
-  ))
-  .add('Definetely Agree', () => (
-    <DefinetelyAgree dialogStore={{}} />
+      <AgreedMessage
+        onButtonClick={() => {}}
+      />
+    </Dialog>
   ));
 
 storiesOf('Dialog', module)
@@ -125,12 +98,15 @@ storiesOf('Dialog', module)
       {story()}
     </Provider>
   ))
-  .add('RejectMessage', () => (
-    <RejectMessage
-      dialogStore={{
-        ...defaultDialogStore,
-      }}
-    />
+  .add('Reject', () => (
+    <Dialog
+      name="reject-message"
+      footer={null}
+    >
+      <RejectMessage
+        onButtonClick={() => {}}
+      />
+    </Dialog>
   ));
 
 storiesOf('Dialog', module)
@@ -175,10 +151,16 @@ storiesOf('Dialog', module)
     </Provider>
   ))
   .add('TokenTransferSuccess', () => (
-    <TokenTransferSuccess
-      dialogStore={{}}
-      value="0.134234 TKN"
-    />
+    <Dialog
+      name="token-transfer-success"
+      footer={null}
+      size="md"
+    >
+      <TransferSuccessMessage
+        onButtonClick={() => {}}
+        value="0.134234 TKN"
+      />
+    </Dialog>
   ));
 
 storiesOf('Dialog', module)
@@ -192,6 +174,15 @@ storiesOf('Dialog', module)
       {story()}
     </Provider>
   ))
-  .add('TransferTokenInProgress', () => (
-    <TransferTokenInProgress dialogStore={{}} />
+  .add('TokenInProgress', () => (
+    <Dialog
+      name="transfer-token-in-progress"
+      footer={null}
+      closeable={false}
+      size="md"
+    >
+      <TokenInProgressMessage
+        onButtonClick={() => {}}
+      />
+    </Dialog>
   ));
