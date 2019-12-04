@@ -109,6 +109,7 @@ storiesOf('Dialog', module)
     <Dialog
       name="token-transfer-success"
       footer={null}
+      size="md"
     >
       <TransferSuccessMessage
         onButtonClick={() => {}}
@@ -133,6 +134,7 @@ storiesOf('Dialog', module)
       name="transfer-token-in-progress"
       footer={null}
       closeable={false}
+      size="md"
     >
       <TokenInProgressMessage
         onButtonClick={() => {}}
