@@ -5,6 +5,7 @@ import DefaultMessage from './DefaultMessage';
 import Button from '../Button/Button';
 
 import styles from './Message.scss';
+
 /**
  * Dialog with message about success token transfer
  */
