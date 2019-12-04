@@ -1,16 +1,11 @@
+@import '../../assets/styles/includes/mixin';
+
 .decision {
   width: 100%;
   text-align: center;
 
   &__title {
-    margin-top: 18px;
-    margin-bottom: 8px;
-    color: #000;
-    font-weight: 700;
-    font-size: 24px;
-    font-family: "Grotesk";
-    line-height: 28px;
-    text-align: center;
+    @include title;
   }
 
   &__subtext {
