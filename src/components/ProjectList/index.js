@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import Button from '../Button/Button';
@@ -17,7 +17,10 @@ import styles from '../Login/Login.scss';
 class ProjectList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      redirectToProject: false,
+      redirectToUploading: false,
+    };
   }
 
   componentDidMount() {
@@ -25,16 +28,42 @@ class ProjectList extends Component {
     appStore.readProjectList();
   }
 
+  gotoProject = (address) => {
+    const { appStore } = this.props;
+    appStore.gotoProject(address);
+    this.setState({ redirectToProject: true });
+  }
+
+  startUploading = (address) => {
+    const { appStore } = this.props;
+    appStore.setProjectAddress(address);
+    this.setState({ redirectToUploading: true });
+  }
+
+  checkProject = async (address) => {
+    const { appStore } = this.props;
+    const isQuestionsUploaded = await appStore.checkIsQuestionsUploaded(address);
+    // eslint-disable-next-line no-unused-expressions
+    isQuestionsUploaded
+      ? this.gotoProject(address)
+      : this.startUploading(address);
+  }
+
   render() {
     const { appStore: { projectList }, t } = this.props;
+    const { redirectToProject, redirectToUploading } = this.state;
     const projects = projectList.map((project, index) => (
       <Button
         theme="project"
         key={`Button-${index + 1}`}
+        onClick={() => { this.checkProject(project.address); }}
       >
         {project.name.replace(/([!@#$%^&*()_+\-=])+/g, ' ')}
       </Button>
     ));
+
+    if (redirectToProject) return <Redirect to="/questions" />;
+    if (redirectToUploading) return <Redirect to="/uploadQuestions" />;
     return (
       <Container>
         <div className={`${styles.form} ${styles['form--wide']}`}>
@@ -62,6 +91,9 @@ ProjectList.propTypes = {
   appStore: propTypes.shape({
     readProjectList: propTypes.func.isRequired,
     projectList: propTypes.arrayOf(propTypes.object).isRequired,
+    checkIsQuestionsUploaded: propTypes.func.isRequired,
+    gotoProject: propTypes.func.isRequired,
+    setProjectAddress: propTypes.func.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
 };

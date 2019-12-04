@@ -27,6 +27,8 @@ class AppStore {
 
   @observable userInProject = false;
 
+  @observable _projectAddress = '';
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.readWalletList();
@@ -152,6 +154,16 @@ class AppStore {
     fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'));
   }
 
+  async checkIsQuestionsUploaded(address) {
+    const { Web3Service, contractService } = this.rootStore;
+    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi'), 'utf8'));
+    const contract = Web3Service.createContractInstance(abi);
+    contract.options.address = address;
+    contractService.setContract(contract);
+    const { countOfUploaded, totalCount } = await contractService.checkQuestions();
+    return countOfUploaded > totalCount;
+  }
+
   /**
    * Check transaction receipt
    * @param {string} hash Transaction hash
@@ -186,12 +198,25 @@ class AppStore {
     return this.userInProject;
   }
 
+  @computed get projectAddress() {
+    return this._projectAddress;
+  }
+
   @action setProjectName(value) {
     this.name = value;
   }
 
   @action setDeployArgs(value) {
     this.deployArgs = value;
+  }
+
+  @action gotoProject(address) {
+    this.setProjectAddress(address);
+    this.userInProject = true;
+  }
+
+  @action setProjectAddress(value) {
+    this._projectAddress = value;
   }
 }
 

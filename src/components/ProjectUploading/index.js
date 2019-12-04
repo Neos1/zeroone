@@ -37,11 +37,34 @@ class ProjectUploading extends Component {
   componentDidMount() {
     const { steps } = this;
     const {
-      appStore, appStore: { deployArgs, name }, userStore: { password }, t,
+      appStore, appStore: { deployArgs, projectAddress }, userStore: { password }, type,
     } = this.props;
-    this.setState({
-      step: steps.sending,
-    });
+
+    switch (type) {
+      case ('project'):
+        this.setState({
+          step: steps.sending,
+        });
+        this.deployProject(deployArgs, password);
+        break;
+      case ('question'):
+        this.setState({
+          step: steps.questions,
+        });
+        appStore.deployQuestions(projectAddress).then(() => {
+          this.setState({
+            uploading: false,
+          });
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
+  deployProject(deployArgs, password) {
+    const { steps } = this;
+    const { appStore, appStore: { name }, t } = this.props;
 
     appStore.deployContract('project', deployArgs, password)
       .then((txHash) => {
@@ -55,6 +78,7 @@ class ProjectUploading extends Component {
           this.setState({
             step: steps.questions,
           });
+          appStore.setProjectAddress(receipt.contractAddress);
           appStore.addProjectToList({ name, address: receipt.contractAddress });
           appStore.deployQuestions(receipt.contractAddress).then(() => {
             this.setState({
@@ -126,9 +150,11 @@ const AlertBlock = withTranslation()(({ t }) => (
         {t('headings:projectCreated.subheading.1')}
       </span>
     </Heading>
-    <Button theme="black" width="310" icon={<Login />} type="submit">
-      {t('buttons:toCreatedProject')}
-    </Button>
+    <NavLink to="/questions">
+      <Button theme="black" width="310" icon={<Login />} type="submit">
+        {t('buttons:toCreatedProject')}
+      </Button>
+    </NavLink>
     <NavLink to="/projects">
       <Button theme="link" type="submit">
         {t('buttons:otherProject')}
@@ -147,11 +173,14 @@ ProjectUploading.propTypes = {
     addProjectToList: propTypes.func.isRequired,
     deployQuestions: propTypes.func.isRequired,
     displayAlert: propTypes.func.isRequired,
+    projectAddress: propTypes.func.isRequired,
+    setProjectAddress: propTypes.func.isRequired,
   }).isRequired,
   userStore: propTypes.shape({
     password: propTypes.string.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
+  type: propTypes.string.isRequired,
 };
 
 Progress.propTypes = {
