@@ -182,34 +182,6 @@ describe('Dialog', () => {
     });
   });
 
-  describe('topIcon not null', () => {
-    let wrapper;
-
-    beforeEach(() => {
-      wrapper = shallow(
-        <Dialog
-          dialogStore={{
-            add: () => {},
-            remove: () => {},
-            hide: () => {},
-            open: false,
-            closing: false,
-            dialog: 'test',
-          }}
-          name="test"
-          header="Test title"
-          topIcon={<span className="test-top-icon">test top icon</span>}
-          footer={null}
-        />,
-      ).dive().dive();
-    });
-
-    it('should render without footer', () => {
-      expect(wrapper.find('.footer').length).toEqual(0);
-      expect(wrapper.find('.test-top-icon').text()).toEqual('test top icon');
-    });
-  });
-
   describe('open & closing', () => {
     let wrapper;
 
