@@ -22,5 +22,8 @@ const headings = {
   walletRestored: { heading: 'Восстановление кошелька', subheading: 'Кошелек успешно восстанолен' },
   walletCreated: { heading: 'Создание кошелька', subheading: 'Кошелек успешно создан' },
   walletRestoring: { heading: 'Процесс восстановления кошелька', subheading: ['Проверьте правильность данных', ' перед тем, как продолжить'] },
+  nodeConnection: 'Подключение ноды',
+  creatingAndUpload: 'Создание или загрузка контрактов',
+  interfaceLanguage: 'Язык интерфейса',
 };
 export default headings;

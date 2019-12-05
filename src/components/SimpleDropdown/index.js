@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { DropdownArrowIcon } from '../Icons';
-import styles from '../Dropdown/Dropdown.scss';
 import DropdownOption from '../DropdownOption';
+
+import styles from '../Dropdown/Dropdown.scss';
 
 class SimpleDropdown extends Component {
   constructor(props) {
@@ -71,8 +72,6 @@ class SimpleDropdown extends Component {
         select={this.handleSelect}
       />
     ));
-    // eslint-disable-next-line no-console
-
 
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
@@ -97,12 +96,10 @@ class SimpleDropdown extends Component {
 
 SimpleDropdown.propTypes = {
   children: propTypes.element,
-  options: propTypes.arrayOf(propTypes.object).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
+  options: propTypes.arrayOf(propTypes.shape({})).isRequired,
   onSelect: propTypes.func,
-  // eslint-disable-next-line react/forbid-prop-types
-
 };
+
 SimpleDropdown.defaultProps = {
   children: '',
   onSelect: () => false,

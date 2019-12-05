@@ -17,5 +17,6 @@ const buttons = {
   withTokens: 'Подключить контракт и создать проект',
   withoutTokens: 'Создать новые токены и проект',
   toWallets: 'К выбору кошелька',
+  apply: 'Применить',
 };
 export default buttons;
