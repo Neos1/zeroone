@@ -1,0 +1,44 @@
+@import '../../assets/styles/partials/variables'; 
+.questions {
+  margin: 0 auto;
+  &__head {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    &-create {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      width: 45%;
+      .btn {
+        svg {
+          path { 
+            fill: $white;
+          }
+        }
+        &:active {
+          path {
+            stroke: $white;
+          }
+        }
+      }
+    }
+    &-filters {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      width: 25%;
+      .dropdown {
+        width: 100%;
+      }
+    }
+  }
+  &__wrapper {
+    display: grid;
+    grid-template-columns:1fr;
+    row-gap: 10px;
+    margin-bottom: 30px;
+  }
+}

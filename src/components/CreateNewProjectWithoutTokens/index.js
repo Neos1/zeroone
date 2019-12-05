@@ -181,7 +181,7 @@ class CreateNewProjectWithoutTokens extends Component {
 
   render() {
     const { currentStep, indicatorStep } = this.state;
-    if (currentStep === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
+    if (currentStep === 'uploading') return <Redirect to="/uploadProject" />;
     return (
       <Container>
         <div className={styles.form}>

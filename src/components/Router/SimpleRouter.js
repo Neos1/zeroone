@@ -16,6 +16,8 @@ import ProjectUploading from '../ProjectUploading';
 import CreationAlert from '../CreationAlert';
 import DisplayUserInfo from '../DisplayUserInfo';
 import Header from '../Header';
+import Questions from '../Questions';
+import FullQuestion from '../Questions/FullQuestion';
 
 const SimpleRouter = () => (
   <MemoryRouter>
@@ -36,8 +38,10 @@ const SimpleRouter = () => (
       <Route path="/newProject" exact component={CreateNewProject} />
       <Route path="/createWithTokens" exact component={CreateNewProjectWithTokens} />
       <Route path="/createWithoutTokens" exact component={CreateNewProjectWithoutTokens} />
-      <Route path="/uploadWithExistingTokens" exact component={() => (<ProjectUploading newTokens={false} />)} />
-      <Route path="/uploadWithNewTokens" exact component={() => (<ProjectUploading newTokens />)} />
+      <Route path="/uploadProject" exact component={() => (<ProjectUploading type="project" />)} />
+      <Route path="/uploadQuestions" exact component={() => (<ProjectUploading type="question" />)} />
+      <Route path="/questions" exact component={Questions} />
+      <Route path="/question/:id" exact component={FullQuestion} />
     </Switch>
   </MemoryRouter>
 );

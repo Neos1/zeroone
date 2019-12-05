@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
@@ -191,15 +192,17 @@ class ContractService {
           gasLimit: 8000000,
           value: '0x0',
         };
-
         return new Promise((resolve) => {
           Web3Service.createTxData(address, rawTx, maxGasPrice)
+            // eslint-disable-next-line max-len
             .then((formedTx) => userStore.singTransaction(formedTx, password))
+            // eslint-disable-next-line no-console
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            // eslint-disable-next-line no-console
             .then((txHash) => resolve(txHash));
         });
-      }
-      return Promise.reject();
+      // eslint-disable-next-line prefer-promise-reject-errors
+      } return Promise.reject('WATAFAk');
     });
   }
 

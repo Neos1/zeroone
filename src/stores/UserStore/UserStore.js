@@ -118,6 +118,7 @@ class UserStore {
         this.privateKey = data.privateKey;
         this.setEncryptedWallet(JSON.parse(data.wallet));
         this.authorized = true;
+        this.setPassword(password);
         Promise.resolve();
       }).catch(() => {
         appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
