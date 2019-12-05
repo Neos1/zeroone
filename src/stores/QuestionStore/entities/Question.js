@@ -1,4 +1,22 @@
 class Question {
+  id;
+
+  caption;
+
+  groupId;
+
+  text;
+
+  methodSelector;
+
+  status;
+
+  target;
+
+  params;
+
+  formula;
+
   /**
    * @constructor
    * @param {object} data data about question
@@ -8,14 +26,19 @@ class Question {
    * @param {string} data.text description of the question
    * @param {Array} data.params parameters which will be used after voting
    */
-  constructor({
-    id, groupId, caption, text, params,
-  }) {
+  constructor(id, question) {
+    const {
+      groupId, caption, text, target, status, methodSelector, _formula, _parameters,
+    } = question;
     this.id = id;
     this.caption = caption;
     this.groupId = groupId;
     this.text = text;
-    this.params = params;
+    this.methodSelector = methodSelector;
+    this.status = status;
+    this.target = target;
+    this.params = _parameters;
+    this.formula = _formula;
   }
 }
 

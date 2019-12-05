@@ -33,6 +33,7 @@ class RootStore {
     this.Web3Service = new Web3Service(config.host, this);
     this.appStore = new AppStore(this);
     this.userStore = new UserStore(this);
+    this.projectStore = new ProjectStore(this);
     this.walletService = new WalletService();
     this.eventEmitterService = new EventEmitterService();
     this.contractService = new ContractService(this);
@@ -42,8 +43,8 @@ class RootStore {
    * initiating project
    * @param {string} address adress of project
    */
-  @action initProject(address) {
-    this.projectStore = new ProjectStore(address);
+  @action async initProject(address) {
+    this.projectStore.init(address);
   }
 }
 

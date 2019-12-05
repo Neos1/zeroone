@@ -7,30 +7,20 @@ import Question from './entities/Question';
 class QuestionStore {
   @observable _questions;
 
-  constructor(projectAddress) {
+  constructor(rootStore) {
     this._questions = [];
-    this.fetchQuestionsCount(projectAddress);
+    this.rootStore = rootStore;
+    this.fetchQuestions();
   }
 
-  /**
-   * Recieving questions count for fetching them from contract
-   * @function
-   * @param {string} address user address
-   * @returns {number} count of questions
-   */
-  @action fetchQuestionsCount = (address) => address
-
-  /**
-   * Recieving question from contract
-   * @function
-   * @param {string} address user address
-   */
-  @action fetchQuestions = (address) => {
-    this.fetchQuestionsCount(address);
-    /**
-     * gets the question
-     */
-    this.addQuestion();
+  @action fetchQuestions = async () => {
+    const { contractService } = this.rootStore;
+    const { countOfUploaded } = await contractService.checkQuestions();
+    for (let i = 1; i < countOfUploaded; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const question = await contractService.fetchQuestion(i);
+      this.addQuestion(i, question);
+    }
   }
 
   /**
@@ -38,8 +28,8 @@ class QuestionStore {
    * @function
    * @param {object} question Question which will be added
    */
-  @action addQuestion = (question) => {
-    this._questions.push(new Question(question));
+  @action addQuestion = (id, question) => {
+    this._questions.push(new Question(id, question));
   }
 
   /**
@@ -48,7 +38,7 @@ class QuestionStore {
    * @param {number} id id of question
    * @returns {object} question matched by id
    */
-  @action getQuestionById = (id) => this._questions.filter((question) => question.id === id)
+  @action getQuestionById = (id) => this._questions.filter((question) => question.id === Number(id))
 
   /**
    * Getting list of questions for displaying

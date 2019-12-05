@@ -216,7 +216,9 @@ class AppStore {
   }
 
   @action gotoProject(address) {
+    const { rootStore } = this;
     this.setProjectAddress(address);
+    rootStore.initProject(address);
     this.userInProject = true;
   }
 

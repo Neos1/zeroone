@@ -212,7 +212,8 @@ class ContractService {
    * @returns {Object} Question data from contract
    */
   fetchQuestion(id) {
-    return this.callMethod('question', [id]);
+    console.log(id);
+    return this.callMethod('question', id);
   }
 
   /**

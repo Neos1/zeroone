@@ -1,8 +1,9 @@
 import { observable, action } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
-import HistoryStore from '../HistoryStore';
+// import HistoryStore from '../HistoryStore';
 import { votingStates } from '../../constants';
+import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
 
 /**
  * Class implements whole project
@@ -18,11 +19,19 @@ class ProjectStore {
 
   @observable historyStore;
 
-  constructor(projectAddress) {
-    this.projectAddress = projectAddress;
-    this.questionStore = new QuestionStore(projectAddress);
-    this.historyStore = new HistoryStore(projectAddress);
-    this.userGrops = this.fetchUserGroups(projectAddress);
+  constructor(rootStore) {
+    this.rootStore = rootStore;
+    this.projectAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
+  }
+
+  @action init(projectAddress) {
+    const { contractService, Web3Service } = this.rootStore;
+    const contract = Web3Service.createContractInstance(this.projectAbi);
+    contract.options.address = projectAddress;
+    contractService.setContract(contract);
+    this.questionStore = new QuestionStore(this.rootStore);
+    // this.historyStore = new HistoryStore(projectAddress);
+    // this.userGrops = this.fetchUserGroups(projectAddress);
   }
 
   /**

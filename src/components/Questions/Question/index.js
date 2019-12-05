@@ -41,56 +41,53 @@ const ParametersBlock = () => (
   </div>
 );
 
-const ShortDescription = () => (
+const ShortDescription = (text) => (
   <p className={styles.question__description}>
-    {`Иногда описания могут не влазить, потому что для важных вопросов 
-    нужно много описать, чтобы даже дурак все понял и принял правильное 
-    решение, тогда делаем что то типо того, ща еще чуть чуть чтобы прям
-    забить строчку эту и еще чуть чуть.`}
+    {text}
   </p>
 );
 
-const FullDescription = () => (
+const FullDescription = (text) => (
   <p className={styles.question__description}>
-    {`Иногда описания могут не влазить, потому что для важных вопросов 
-    нужно много описать, чтобы даже дурак все понял и принял правильное 
-    решение, тогда делаем что то типо того, ща еще чуть чуть чтобы прям
-    забить строчку эту и еще чуть чуть.`}
-    {`Иногда описания могут не влазить, потому что для важных вопросов 
-    нужно много описать, чтобы даже дурак все понял и принял правильное 
-    решение, тогда делаем что то типо того, ща еще чуть чуть чтобы прям
-    забить строчку эту и еще чуть чуть.`}
-    {`Иногда описания могут не влазить, потому что для важных вопросов 
-    нужно много описать, чтобы даже дурак все понял и принял правильное 
-    решение, тогда делаем что то типо того, ща еще чуть чуть чтобы прям
-    забить строчку эту и еще чуть чуть.`}
+    {text}
   </p>
 );
 
-const FormulaBlock = () => (
+const FormulaBlock = (formula) => (
   <p className={styles.question__formula}>
-    Формула голосования: (group (0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54)→condition (quorum=20%))
+    Формула голосования:
+    {formula}
   </p>
 );
 
 // eslint-disable-next-line no-unused-vars
-const Question = ({ id, extended }) => (
+const Question = ({
+  extended, id,
+  caption,
+  text,
+  formula,
+  params,
+}) => (
   <div className={`${styles.question} ${extended ? styles['question--extended'] : ''}`}>
     <NavLink className={styles.question__left} to={`/question/${id}`}>
       <div>
         <p className={styles.question__id}>{`#${id}`}</p>
-        <p className={styles.question__caption}>Я очень люблю писать рыбные заголовки</p>
-        {extended ? FullDescription() : ShortDescription()}
+        <p className={styles.question__caption}>{caption}</p>
+        {extended ? FullDescription(text) : ShortDescription(text)}
       </div>
     </NavLink>
-    {extended ? ParametersBlock() : startBlock()}
-    {extended ? FormulaBlock() : null}
+    {extended ? ParametersBlock(params) : startBlock()}
+    {extended ? FormulaBlock(formula) : null}
   </div>
 );
 
 Question.propTypes = {
   id: propTypes.number.isRequired,
   extended: propTypes.bool,
+  caption: propTypes.string.isRequired,
+  text: propTypes.string.isRequired,
+  formula: propTypes.arrayOf(propTypes.number).isRequired,
+  params: propTypes.arrayOf(propTypes.string).isRequired,
 };
 Question.defaultProps = {
   extended: false,
