@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import Dropdown from '../Dropdown';
 import { Address, QuestionIcon } from '../Icons';
-import { Button } from '../Button';
 import Input from '../Input';
+import Button from '../Button/Button';
 import StarNewVoteForm from '../../stores/FormsStore/StartNewVoteForm';
 
 import styles from './StartNewVote.scss';
@@ -122,9 +122,7 @@ class StartNewVote extends React.Component {
                   <div className={styles['new-vote__form-row']}>
                     <div className={styles['new-vote__form-col']} />
                     <div className={styles['new-vote__form-col']}>
-                      {/* TODO fix button after refactor */}
                       <Button
-                        className="btn--default btn--black"
                         type="submit"
                       >
                         {t('buttons:start')}
