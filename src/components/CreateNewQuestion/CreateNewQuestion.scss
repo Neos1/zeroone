@@ -1,7 +1,9 @@
 @import "../../assets/styles/partials/variables";
+@import "../../assets/styles/includes/mixin";
 
 .create-question {
   width: 100%;
+  padding: 41px 60px 0;
 
   &__top {
     display: inline-block;
@@ -17,8 +19,16 @@
       display: inline-block;
       width: 50%;
       padding: 0 15px;
+      text-align: left;
       vertical-align: top;
     }
+  }
+
+  &__title {
+    color: $primary;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 42px;
   }
 
   &__sub-title {
@@ -110,12 +120,12 @@
   &__form {
     &--basic {
       padding-top: 49px;
-      padding-bottom: 45px;
+      padding-bottom: 20px;
     }
 
     &--dynamic {
       padding-top: 46px;
-      padding-bottom: 53px;
+      padding-bottom: 29px;
     }
 
     .field {
@@ -135,6 +145,7 @@
       position: relative;
       margin: 0 -15px;
       padding: 15px 0;
+      text-align: left;
 
       &:hover {
         .create-question__field-remove {
@@ -147,6 +158,7 @@
       display: inline-block;
       width: 50%;
       padding: 0 15px;
+      vertical-align: top;
 
       &--full {
         width: 100%;
@@ -155,6 +167,15 @@
       button {
         width: 100%;
       }
+    }
+
+    &-text {
+      margin-top: 8px;
+      padding: 0 10px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      text-align: center;
     }
   }
 

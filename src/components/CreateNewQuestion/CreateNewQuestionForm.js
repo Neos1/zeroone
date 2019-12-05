@@ -21,7 +21,7 @@ import Dropdown from '../Dropdown';
 import 'react-tabs/style/react-tabs.css';
 import styles from './CreateNewQuestion.scss';
 
-@withTranslation('buttons')
+@withTranslation()
 @observer
 class CreateNewQuestionForm extends React.PureComponent {
   /** Form with basic info for new question */
@@ -261,6 +261,9 @@ class CreateNewQuestionForm extends React.PureComponent {
                 </div>
                 <div className={styles['create-question__form-col']}>
                   <Button type="submit">{t('buttons:create')}</Button>
+                  <div className={styles['create-question__form-text']}>
+                    {t('other:voteLaunchDescription')}
+                  </div>
                 </div>
               </div>
             </form>

@@ -33,5 +33,6 @@ const other = {
   stepProgress: 'Step {{current}} from {{total}}',
   RUS: 'Русский',
   ENG: 'English',
+  voteLaunchDescription: 'A vote will be launched to create a question; if the decision is positive, a question will be created',
 };
 export default other;

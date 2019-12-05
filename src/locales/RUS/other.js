@@ -33,5 +33,6 @@ const other = {
   stepProgress: 'Шаг {{current}} из {{total}}',
   RUS: 'Русский',
   ENG: 'English',
+  voteLaunchDescription: 'Будет запущено голосование по созданию вопроса, при положительном решении вопрос будет создан',
 };
 export default other;
