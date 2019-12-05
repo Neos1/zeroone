@@ -34,7 +34,6 @@ class DefaultDialogFooter extends React.Component {
           ${styles['dialog__footer--default']}
         `}
       >
-        {/* TODO refactor after new button */}
         <Button
           onClick={hide}
         >

@@ -58,6 +58,26 @@
     }
   }
 
+  &--transfer-error {
+    .subtext {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .message {
+      &__title {
+        margin-top: 57px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .footer {
+      padding-top: 73px;
+      padding-bottom: 51px;
+    }
+  }
+
   &--progress {
     .message {
       &__title {
@@ -76,6 +96,16 @@
       padding-top: 92px;
       padding-bottom: 110px;
       text-align: center;
+    }
+  }
+
+  &--agreed,
+  &--reject,
+  &--transfer-success,
+  &--transfer-error {
+    button {
+      width: 100%;
+      max-width: 309px;
     }
   }
 }
