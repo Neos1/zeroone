@@ -22,5 +22,6 @@ const buttons = {
   vote: 'Vote',
   start: 'Start',
   nextStep: 'Next step',
+  addParameter: '+ Add parameter',
 };
 export default buttons;

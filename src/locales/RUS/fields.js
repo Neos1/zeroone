@@ -15,9 +15,10 @@ const placeholders = {
   questionTitle: 'Название вопроса',
   questionLifeTime: 'Время жизни вопроса',
   parameter: 'Параметр',
-  parameterWithNumber: 'Параметр {{number}}',
+  enterNewParameterName: 'Введите название нового параметра',
   votingFormula: 'Формула голосования',
   questionDescription: 'Описание вопроса',
+  selectParameterType: 'Выберите тип параметра',
 };
 
 export default placeholders;

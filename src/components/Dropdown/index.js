@@ -97,7 +97,10 @@ Dropdown.propTypes = {
   field: propTypes.shape({
     set: propTypes.func.isRequired,
     value: propTypes.string.isRequired,
-    placeholder: propTypes.string.isRequired,
+    placeholder: propTypes.oneOfType([
+      propTypes.string,
+      propTypes.shape({}),
+    ]).isRequired,
   }).isRequired,
 };
 

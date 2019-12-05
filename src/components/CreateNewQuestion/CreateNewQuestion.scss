@@ -1,3 +1,5 @@
+@import "../../assets/styles/partials/variables";
+
 .create-question {
   width: 100%;
 
@@ -71,13 +73,13 @@
     .step-indicator {
       position: relative;
       left: unset;
-      width: 126px;
+      text-align: left;
       transform: unset;
     }
 
     p {
       &:first-child {
-        float: right;
+        display: inline-block;
         margin: 8px 13px;
       }
 
@@ -88,6 +90,16 @@
   }
 
   &__form {
+    &--basic {
+      padding-top: 49px;
+      padding-bottom: 45px;
+    }
+
+    &--dynamic {
+      padding-top: 46px;
+      padding-bottom: 53px;
+    }
+
     .field {
       width: 100%;
 
@@ -95,6 +107,10 @@
         width: 100%;
         min-width: 100%;
       }
+    }
+
+    .dropdown {
+      width: 100%;
     }
 
     &-row {
@@ -114,6 +130,27 @@
       button {
         width: 100%;
       }
+    }
+  }
+
+  &__button-new-param {
+    margin-bottom: 26px;
+    padding: 8px 0;
+    color: $placeholderColor;
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
+    background-color: transparent;
+    border: unset;
+    border-bottom: 1px solid $placeholderColor;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover,
+    &:active {
+      color: $primary;
+      border-bottom: 1px solid $primary;
     }
   }
 }

@@ -22,5 +22,6 @@ const buttons = {
   vote: 'Голосовать',
   start: 'Начать',
   nextStep: 'Следующий шаг',
+  addParameter: '+ Добавить параметр',
 };
 export default buttons;
