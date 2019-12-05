@@ -5,6 +5,7 @@ import { StartIcon } from '../../Icons';
 
 import styles from './Question.scss';
 
+// eslint-disable-next-line no-unused-vars
 const startBlock = () => (
   <div className={styles.question__right}>
     <div className={styles.question__start}>
@@ -12,7 +13,7 @@ const startBlock = () => (
         <StartIcon />
       </p>
       <p className={styles['question__start-label']}>
-      Начать новое голосование
+        Начать новое голосование
       </p>
     </div>
   </div>
@@ -72,6 +73,7 @@ const FormulaBlock = () => (
   </p>
 );
 
+// eslint-disable-next-line no-unused-vars
 const Question = ({ id, extended }) => (
   <div className={`${styles.question} ${extended ? styles['question--extended'] : ''}`}>
     <NavLink className={styles.question__left} to={`/question/${id}`}>

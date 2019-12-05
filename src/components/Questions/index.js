@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import propTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import Container from '../Container';
 import Button from '../Button/Button';
 import { CreateToken } from '../Icons';
@@ -7,6 +9,7 @@ import styles from './Questions.scss';
 import SimpleDropdown from '../SimpleDropdown';
 import Footer from '../Footer';
 
+@withTranslation()
 class Questions extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +17,7 @@ class Questions extends Component {
   }
 
   render() {
+    const { t } = this.props;
     const options = [{
       label: '1',
       value: '1',
@@ -31,10 +35,10 @@ class Questions extends Component {
           <div className={styles.questions__head}>
             <div className={styles['questions__head-create']}>
               <Button theme="white" icon={<CreateToken />}>
-              Создать группу вопросов
+                {t('buttons:createQuestionGroup')}
               </Button>
               <Button theme="white" icon={<CreateToken />}>
-              Создать вопрос
+                {t('buttons:createQuestion')}
               </Button>
             </div>
             <div className={styles['questions__head-filters']}>
@@ -56,4 +60,8 @@ class Questions extends Component {
     );
   }
 }
+
+Questions.propTypes = {
+  t: propTypes.func.isRequired,
+};
 export default Questions;
