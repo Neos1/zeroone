@@ -28,7 +28,7 @@ class DialogStore {
     /**
      * Actual open state
      *
-     * @returns {string, boolean} name dialog or boolean state
+     * @returns {string|boolean} name dialog or boolean state
      */
     get isOpen() {
       if (this.open && this.dialog) return this.dialog;
@@ -39,7 +39,7 @@ class DialogStore {
      * Method for getting dialog by name in list
      *
      * @param {string} dialogName name dialog
-     * @return {object} dialog item model
+     * @returns {object} dialog item model
      */
     getDialog(dialogName) {
       const { list } = this;
@@ -144,6 +144,7 @@ class DialogStore {
      * Method for adding dialog in history dialogs
      *
      * @param {object} dialog dialog item model
+     * @returns {number} length history
      */
     addToHistory(dialog) {
       if (dialog.history === false) return false;
