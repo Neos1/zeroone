@@ -14,109 +14,6 @@
     position: relative;
     z-index: 1;
     min-height: 325px;
-
-    .dialog__subtext {
-      margin: 0 auto;
-      color: rgba(0, 0, 0, 0.7);
-      font-size: 14px;
-      line-height: 16px;
-    }
-
-    &.agreed-message,
-    &.reject-message {
-      .dialog__header {
-        padding-top: 92px;
-      }
-    }
-
-    &.transfer-progress {
-      .dialog {
-        &__header {
-          padding-top: 67px;
-          padding-bottom: 0;
-        }
-      }
-    }
-
-    &.transfer-success {
-      .dialog {
-        &__value {
-          margin-top: 8px;
-          font-weight: 700;
-          font-size: 14px;
-          line-height: 16px;
-        }
-      }
-    }
-
-    &.token-transfer {
-      .dialog {
-        &__header {
-          padding-top: 82px;
-          padding-bottom: 62px;
-        }
-
-        &__footer-button {
-          width: 100%;
-          padding: 13px 15px 18px;
-          color: #c8c9ca;
-          font-weight: 300;
-          font-family: "Grotesk";
-          letter-spacing: 0.02em;
-          text-decoration: underline;
-          background-color: #fff;
-          border: unset;
-          border-top: 1px solid #E1E4E8;
-          outline: none;
-          cursor: pointer;
-        }
-      }
-    }
-
-    &.transfer-error {
-      .dialog {
-        &__header {
-          padding-top: 67px;
-          padding-bottom: 24px;
-        }
-
-        &__footer {
-          padding-top: 63px;
-        }
-      }
-
-      .footer__button {
-        min-width: 232px;
-      }
-    }
-
-    &.definetely-agree {
-      .dialog {
-        &__header {
-          padding-bottom: 0;
-        }
-
-        &__subtext {
-          max-width: 247px;
-        }
-      }
-    }
-
-    &.voter-list {
-      .dialog {
-        &__body {
-          padding: 0;
-        }
-      }
-    }
-
-    &.new-vote {
-      .dialog {
-        &__body {
-          padding: 50px 110px;
-        }
-      }
-    }
   }
 }
 
@@ -138,15 +35,6 @@
     padding: 10px;
     padding-top: 55px;
     text-align: center;
-
-    &-icon {
-      margin-bottom: 18px;
-
-      svg {
-        width: auto;
-        height: auto;
-      }
-    }
   }
 
   &__title {
@@ -164,27 +52,15 @@
     padding: 10px 40px;
   }
 
-  &__loader {
-    width: 100%;
-    padding-top: 92px;
-    padding-bottom: 110px;
-    text-align: center;
-  }
-
   &__footer {
     position: relative;
     z-index: 5;
+    box-sizing: border-box;
     width: 100%;
-    padding: 25px 0;
+    padding: 25px 10px;
 
     &--default {
       padding-top: 55px;
-    }
-
-    &--agreed-message,
-    &--reject-message {
-      padding-top: 53px;
-      padding-bottom: 58px;
     }
   }
 

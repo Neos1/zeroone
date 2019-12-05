@@ -1,18 +1,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import TransferTokenInProgress from './TransferTokenInProgress';
+import TokenInProgressMessage from './TokenInProgressMessage';
 
-describe('TransferTokenInProgress', () => {
+describe('TokenInProgressMessage', () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = shallow(
-      <TransferTokenInProgress />,
+      <TokenInProgressMessage />,
     ).dive();
   });
 
   it('should render without error', () => {
     expect(wrapper.length).toEqual(1);
-    expect(wrapper.find('.dialog__loader').length).toEqual(1);
   });
 });
