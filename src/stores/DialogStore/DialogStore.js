@@ -61,6 +61,11 @@ class DialogStore {
      *
      * @param {string} name name new dialog
      * @param {object} options options for new dialog
+     * @param {boolean} options.history add to history or not
+     * @param {Function} options.onOpen method that is called
+     * on open dialog
+     * @param {Function} options.onClose method that is called
+     * on close dialog
      */
     add(name, options) {
       this.list[name] = new DialogItem(name, options);
