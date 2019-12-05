@@ -9,7 +9,7 @@ import {
   RejectMessage,
   TransferSuccessMessage,
   TokenInProgressMessage,
-} from '../Messages';
+} from '../Message';
 
 const defaultDialogStore = {
   remove: () => {},

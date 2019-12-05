@@ -8,6 +8,15 @@ const defaults = {
  * Single modal dialog model
  */
 class DialogItem {
+  /**
+   * @param {string} name name dialog
+   * @param {object} options options for dialog
+   * @param {boolean} options.history add to history or not
+   * @param {Function} options.onOpen method that is called
+   * on open dialog
+   * @param {Function} options.onClose method that is called
+   * on close dialog
+   */
   constructor(name, options) {
     this._name = name;
     this.options = { ...defaults, ...options };
