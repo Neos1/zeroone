@@ -22,7 +22,6 @@ class CreateNewQuestion extends React.Component {
     super();
     this.state = {
       isSelected: false,
-      step: null,
       activeTab: 0,
     };
   }
@@ -41,7 +40,7 @@ class CreateNewQuestion extends React.Component {
   }
 
   render() {
-    const { step, isSelected, activeTab } = this.state;
+    const { isSelected, activeTab } = this.state;
     const { props } = this;
     const { t } = props;
     return (
@@ -71,9 +70,11 @@ class CreateNewQuestion extends React.Component {
           </div>
           <div className={styles['create-question__top-right']}>
             <div className={styles['create-question__dropdown']}>
+              {/* TODO make without field & with correct options */}
               <Dropdown
                 options={[{
                   label: 'Вопросы дизайнеров',
+                  value: 'designers',
                 }]}
                 field={{ set: () => {} }}
                 onSelect={this.handleDropdownSelect}
@@ -110,7 +111,6 @@ class CreateNewQuestion extends React.Component {
                 </div>
               )
           }
-          {step}
         </div>
       </div>
     );

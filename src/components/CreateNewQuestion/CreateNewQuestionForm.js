@@ -78,7 +78,6 @@ class CreateNewQuestionForm extends React.PureComponent {
     const { props, formDynamic } = this;
     const { t } = props;
     const key = uniqKey();
-    console.log(key);
     // Add input field
     formDynamic.add({
       // this format important!!!
