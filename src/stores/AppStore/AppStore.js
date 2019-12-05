@@ -154,6 +154,11 @@ class AppStore {
     fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'));
   }
 
+  /**
+   * checks count of uploaded Questions
+   * @param {string} address address of project
+   * @returns {boolean} countOfUploaded > totalQuestionCount
+   */
   async checkIsQuestionsUploaded(address) {
     const { Web3Service, contractService } = this.rootStore;
     const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi'), 'utf8'));
