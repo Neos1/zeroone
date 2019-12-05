@@ -1,7 +1,9 @@
 @import '../../assets/styles/includes/mixin';
 
 .voter-list {
-  width: 100%;
+  // compensate dialog padding
+  width: calc(100% + 80px);
+  margin: -10px -40px;
 
   &__top {
     padding: 12px 0 12px 30px;
@@ -63,7 +65,7 @@
     width: 100%;
     background-color: #fff;
     border-collapse: collapse;
-    
+
     &-th {
       padding: 8px;
       color: #808080;
