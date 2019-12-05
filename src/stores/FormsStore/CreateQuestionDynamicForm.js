@@ -7,14 +7,14 @@ class CreateQuestionDynamicForm extends ExtendedForm {
     return {
       fields: [
         {
-          name: 'param_input--0',
+          name: 'input--0',
           type: 'text',
           label: 'parameter',
           placeholder: i18n.t('fields:enterNewParameterName'),
           rules: 'required',
         },
         {
-          name: 'param_select--0',
+          name: 'select--0',
           type: 'text',
           label: 'parameter',
           placeholder: i18n.t('fields:selectParameterType'),

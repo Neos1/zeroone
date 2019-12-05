@@ -1,6 +1,7 @@
 /* eslint-disable react/static-property-placement */
 import React from 'react';
 import PropTypes from 'prop-types';
+import uniqKey from 'react-id-generator';
 import {
   Tab,
   Tabs,
@@ -12,7 +13,7 @@ import { observer } from 'mobx-react';
 import Input from '../Input';
 import CreateQuestionBasicForm from '../../stores/FormsStore/CreateQuestionBasicForm';
 import CreateQuestionDynamicForm from '../../stores/FormsStore/CreateQuestionDynamicForm';
-import { TokenName, DateIcon } from '../Icons';
+import { TokenName, DateIcon, CloseIcon } from '../Icons';
 import InputTextarea from '../Input/InputTextarea';
 import Button from '../Button/Button';
 import Dropdown from '../Dropdown';
@@ -70,27 +71,20 @@ class CreateNewQuestionForm extends React.PureComponent {
   }
 
   /**
-   * Method for getting correct row index
-   * for dynamic fields
-   *
-   * @param {number} index number for convert
-   * @returns {number} row index
-   */
-  getRowIndex = (index) => (
-    Math.floor(index / 2)
-  )
-
-  /**
    * Method for adding new fields (input & select)
    * to dynamic form
    */
   addDynamicFields = () => {
     const { props, formDynamic } = this;
     const { t } = props;
-    const rowIndex = this.getRowIndex(formDynamic.fields.size);
+    const key = uniqKey();
+    console.log(key);
     // Add input field
     formDynamic.add({
-      name: `param_input--${rowIndex}`,
+      // this format important!!!
+      // @see getFieldKey
+      // @see removeRowFields
+      name: `input--${key}`,
       type: 'text',
       label: 'parameter',
       placeholder: t('fields:enterNewParameterName'),
@@ -98,12 +92,40 @@ class CreateNewQuestionForm extends React.PureComponent {
     });
     // Add select field
     formDynamic.add({
-      name: `param_select--${rowIndex}`,
+      // this format important!!!
+      // @see getFieldKey
+      // @see removeRowFields
+      name: `select--${key}`,
       type: 'text',
       label: 'parameter',
       placeholder: t('fields:selectParameterType'),
       rules: 'required',
     });
+  }
+
+  /**
+   * Method for getting uniq key for
+   * similar fields (input & select)
+   *
+   * @param {string} name name field
+   * @returns {string} uniq key for
+   * select & input
+   */
+  getFieldKey = (name) => (
+    name.split('--')[1] || ''
+  )
+
+  /**
+   * Method for removing fields
+   * with similar uniq key (input & select)
+   *
+   * @param {string} name name field
+   */
+  removeRowFields = (name) => {
+    const key = this.getFieldKey(name);
+    const { formDynamic } = this;
+    formDynamic.del(`input--${key}`);
+    formDynamic.del(`select--${key}`);
   }
 
   render() {
@@ -180,27 +202,36 @@ class CreateNewQuestionForm extends React.PureComponent {
               {/* Render dynamic fields start */}
               {
                 formDynamic.map((field, index) => {
-                  const rowIndex = this.getRowIndex(index);
+                  const key = this.getFieldKey(field.name);
                   // Since two fields are added at a time,
                   // duplicates need to be excluded
                   // @see addDynamicFields method
                   if (Number.isInteger(index / 2) === false) return null;
                   return (
-                    <div className={styles['create-question__form-row']} key={rowIndex}>
+                    <div className={styles['create-question__form-row']} key={field.name}>
                       <div className={styles['create-question__form-col']}>
-                        <Input field={formDynamic.$(`param_input--${rowIndex}`)}>
+                        <Input field={formDynamic.$(`input--${key}`)}>
                           <TokenName />
                         </Input>
                       </div>
                       <div className={styles['create-question__form-col']}>
                         <Dropdown
                           options={[{ label: 'String', value: 'string' }]}
-                          field={formDynamic.$(`param_select--${rowIndex}`)}
+                          field={formDynamic.$(`select--${key}`)}
                           onSelect={() => {}}
                         >
                           <TokenName />
                         </Dropdown>
                       </div>
+                      <button
+                        type="button"
+                        onClick={
+                          () => this.removeRowFields(field.name)
+                        }
+                        className={styles['create-question__field-remove']}
+                      >
+                        <CloseIcon fill="#000" />
+                      </button>
                     </div>
                   );
                 })
