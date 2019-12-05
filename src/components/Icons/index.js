@@ -22,6 +22,7 @@ import TokenName from './entities/TokenNameIcon';
 import TxHashIcon from './entities/TxHashIcon';
 import TxRecieptIcon from './entities/TxRecieptIcon';
 import VerifyIcon from './entities/VerifyIcon';
+import RejectIcon from './entities/RejectIcon';
 
 export {
   AddIcon,
@@ -48,4 +49,5 @@ export {
   TxHashIcon,
   TxRecieptIcon,
   VerifyIcon,
+  RejectIcon,
 };

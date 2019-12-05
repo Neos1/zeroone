@@ -8,10 +8,14 @@ import './i18n';
 
 import './assets/styles/style.scss';
 
-const { userStore, appStore } = rootStore;
+const { userStore, appStore, dialogStore } = rootStore;
 
 render(
-  <Provider appStore={appStore} userStore={userStore}>
+  <Provider
+    appStore={appStore}
+    userStore={userStore}
+    dialogStore={dialogStore}
+  >
     <SimpleRouter />
     <Alert />
   </Provider>,
