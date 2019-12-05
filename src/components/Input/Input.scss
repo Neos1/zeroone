@@ -32,6 +32,16 @@
         font-size: 9px;
       }
     }
+
+    &--textarea {
+      max-width: 100%;
+      min-height: 80px;
+      padding: 10px;
+      background-color: transparent;
+      border: 1px solid #e1e4e8;
+      border-radius: 2px;
+      outline: none;
+    }
   }
 
   &__label {
@@ -43,6 +53,13 @@
     font-size: 14px;
     transform: translateY(-50%);
     transition: 0.2s;
+
+    &--textarea {
+      margin-bottom: 4px;
+      color: $placeholderColor;
+      font-size: 14px;
+      line-height: 16px;
+    }
   }
 
   &__error-text {
@@ -54,7 +71,7 @@
     visibility: hidden;
     opacity: 0;
   }
-  
+
   &__line {
     position: absolute;
     bottom: -1px;
@@ -103,6 +120,15 @@
           width: 0;
         }
       }
+    }
+  }
+
+  &--textarea {
+    position: relative;
+
+    .field__error-text {
+      top: unset;
+      bottom: -17px;
     }
   }
 }

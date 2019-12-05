@@ -21,5 +21,6 @@ const buttons = {
   designateGroupAdministrator: 'designate group administrator',
   vote: 'Vote',
   start: 'Start',
+  nextStep: 'Next step',
 };
 export default buttons;

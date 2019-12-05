@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import Dropdown from '../Dropdown';
 import { QuestionUploadingIcon } from '../Icons';
 import CreateNewQuestionForm from './CreateNewQuestionForm';
-// import StepProgress from '../StepProgress';
+import StepIndicator from '../StepIndicator';
 
 import styles from './CreateNewQuestion.scss';
 
@@ -31,6 +31,15 @@ class CreateNewQuestion extends React.Component {
     this.setState({ isSelected: true });
   }
 
+  /**
+   * Method for toggle active tab
+   *
+   * @param {number} number index active tab
+   */
+  toggleActiveTab = (number) => {
+    this.setState({ activeTab: number });
+  }
+
   render() {
     const { step, isSelected, activeTab } = this.state;
     const { props } = this;
@@ -50,10 +59,10 @@ class CreateNewQuestion extends React.Component {
                       {t('other:basicInfo')}
                     </div>
                     <div className={styles['create-question__step-progress']}>
-                      {/* <StepProgress
-                        total={2}
-                        current={activeTab + 1}
-                      /> */}
+                      <StepIndicator
+                        stepCount={2}
+                        currentStep={activeTab + 1}
+                      />
                     </div>
                   </>
                 )
@@ -87,7 +96,12 @@ class CreateNewQuestion extends React.Component {
         <div className={styles['create-question__content']}>
           {
             isSelected
-              ? (<CreateNewQuestionForm activeTab={activeTab} />)
+              ? (
+                <CreateNewQuestionForm
+                  activeTab={activeTab}
+                  onToggle={this.toggleActiveTab}
+                />
+              )
               : (
                 <div className={styles['create-question__content--empty']}>
                   <p className={styles['create-question__content--empty-text']}>

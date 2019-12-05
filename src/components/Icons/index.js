@@ -29,6 +29,7 @@ import BorderArrowIcon from './entities/BorderArrowIcon';
 import AdminIcon from './entities/AdminIcon';
 import ThinArrow from './entities/ThinArrow';
 import QuestionIcon from './entities/QuestionIcon';
+import DateIcon from './entities/DateIcon';
 
 export {
   AddIcon,
@@ -62,4 +63,5 @@ export {
   AdminIcon,
   ThinArrow,
   QuestionIcon,
+  DateIcon,
 };
