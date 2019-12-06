@@ -9,7 +9,7 @@ const HeaderNav = () => (
     /
     <NavLink className={styles.header__link} to="/questions">Вопросы</NavLink>
     /
-    <NavLink className={styles.header__link} to="/usergroups">Участники</NavLink>
+    <NavLink className={styles.header__link} to="/members">Участники</NavLink>
   </nav>
 );
 

@@ -18,6 +18,7 @@ import DisplayUserInfo from '../DisplayUserInfo';
 import Header from '../Header';
 import Questions from '../Questions';
 import FullQuestion from '../Questions/FullQuestion';
+import Members from '../Members';
 
 const SimpleRouter = () => (
   <MemoryRouter>
@@ -42,6 +43,7 @@ const SimpleRouter = () => (
       <Route path="/uploadQuestions" exact component={() => (<ProjectUploading type="question" />)} />
       <Route path="/questions" exact component={Questions} />
       <Route path="/question/:id" exact component={FullQuestion} />
+      <Route path="/members" exact component={Members} />
     </Switch>
   </MemoryRouter>
 );

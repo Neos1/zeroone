@@ -40,7 +40,7 @@ class RootStore {
     this.eventEmitterService = new EventEmitterService();
     this.contractService = new ContractService(this);
     this.dialogStore = new DialogStore();
-    this.membersStore = new MembersStore([]);
+    this.membersStore = new MembersStore([], this);
   }
 
   /**

@@ -17,32 +17,32 @@ class MembersGroup {
    */
   constructor({
     name,
-    description,
-    wallet,
-    balance,
-    customTokenName,
-    tokenName,
-    list,
+    // description,
+    groupAddress,
+    totalSupply,
+    tokenSymbol,
+    // tokenName,
+    members,
     textForEmptyState,
   }) {
     if (
       !name
-      || !description
-      || !customTokenName
-      || !tokenName
-      || !wallet
-      || Array.isArray(list) === false
+      // || !description
+      || !tokenSymbol
+      // || !tokenName
+      || !groupAddress
+      || Array.isArray(members) === false
     ) throw new Error('Incorrect data provided!');
     this.name = name;
-    this.description = description;
-    this.wallet = wallet;
-    this.balance = balance;
-    this.customTokenName = customTokenName;
-    this.tokenName = tokenName;
+    // this.description = description;
+    this.wallet = groupAddress;
+    this.balance = totalSupply;
+    this.customTokenName = tokenSymbol;
+    // this.tokenName = tokenName;
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }
-    list.forEach((member) => {
+    members.forEach((member) => {
       this.addToList(member);
     });
   }
