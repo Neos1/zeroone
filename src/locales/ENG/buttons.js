@@ -20,5 +20,6 @@ const buttons = {
   transfer: 'Transfer',
   designateGroupAdministrator: 'designate group administrator',
   vote: 'Vote',
+  startNewVote: 'Start a new vote',
 };
 export default buttons;
