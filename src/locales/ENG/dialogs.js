@@ -8,6 +8,7 @@ const dialog = {
   tokenTransferSuccess: 'Tokens successfully transferred!',
   tokenTransfer: 'Transfer token',
   tokenTransferError: 'Transfer error',
+  createAGroupOfQuestions: 'Create a group of questions',
 };
 
 export default dialog;

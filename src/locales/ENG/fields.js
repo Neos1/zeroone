@@ -19,6 +19,8 @@ const placeholders = {
   votingFormula: 'Voting formula',
   questionDescription: 'Question description',
   selectParameterType: 'Select parameter type',
+  titleGroupQuestions: 'Title group questions',
+  descriptionOrComment: 'Description or comment',
 };
 
 export default placeholders;

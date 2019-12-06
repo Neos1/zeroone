@@ -19,6 +19,8 @@ const placeholders = {
   votingFormula: 'Формула голосования',
   questionDescription: 'Описание вопроса',
   selectParameterType: 'Выберите тип параметра',
+  titleGroupQuestions: 'Название группы вопросов',
+  descriptionOrComment: 'Описание или комментарий',
 };
 
 export default placeholders;

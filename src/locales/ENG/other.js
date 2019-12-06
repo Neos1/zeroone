@@ -34,5 +34,8 @@ const other = {
   RUS: 'Русский',
   ENG: 'English',
   voteLaunchDescription: 'A vote will be launched to create a question; if the decision is positive, a question will be created',
+  voteLaunchAdminDescription: 'A vote will be launched among administrators to create a group, if the decision is positive, the group will be created',
+  createGroupQuestionsDescription: 'Project participants can then be divided into groups \n \nFor example: Designers who are only in the Design group will be able to vote on issues of only this group',
+  createNameForTheGroupQuestions: 'Come up with a name that best reflects the essence of the group',
 };
 export default other;
