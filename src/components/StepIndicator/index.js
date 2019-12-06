@@ -19,7 +19,16 @@ const StepIndicator = withTranslation()(({ t, currentStep, stepCount }) => {
         </span>
       </p>
       <p>
-        {arr.map((item, index) => <Indicator checked={currentStep >= index + 1} />)}
+        {
+          arr.map(
+            (item, index) => (
+              <Indicator
+                checked={currentStep >= index + 1}
+                key={`step-indicator--${index + 1}`}
+              />
+            ),
+          )
+        }
       </p>
     </div>
   );

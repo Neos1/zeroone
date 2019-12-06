@@ -20,5 +20,11 @@ const buttons = {
   createQuestion: 'Создать вопрос',
   createQuestionGroup: 'Создать группу воросов',
   startNewVoting: 'Начать новое голосование',
+  transfer: 'Перевести',
+  designateGroupAdministrator: 'назначить администратором группы',
+  vote: 'Голосовать',
+  start: 'Начать',
+  nextStep: 'Следующий шаг',
+  addParameter: '+ Добавить параметр',
 };
 export default buttons;

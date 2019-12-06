@@ -5,7 +5,7 @@ import styles from './Hint.scss';
 
 const Hint = ({ children }) => (
   <div className={`${styles.hint}`}>
-    <span className={styles.hint__icon}> ? </span>
+    <span className={styles.hint__icon} />
     <span className={styles.hint__text}>
       {children}
     </span>
@@ -13,7 +13,7 @@ const Hint = ({ children }) => (
 );
 
 Hint.propTypes = {
-  children: propTypes.arrayOf(propTypes.string).isRequired,
+  children: propTypes.string.isRequired,
 };
 
 export default Hint;

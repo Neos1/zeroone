@@ -13,6 +13,8 @@ import EyeIcon from './entities/EyeIcon';
 import IconInfo from './entities/InfoIcon';
 import Login from './entities/LoginIcon';
 import Password from './entities/PasswordIcon';
+import PlayCircleIcon from './entities/PlayCircleIcon';
+import Pudding from './entities/Pudding';
 import QuestionUploadingIcon from './entities/QuestionUploadingIcon';
 import SendingIcon from './entities/SendingIcon';
 import Stats from './entities/StatsIcon';
@@ -24,6 +26,12 @@ import TxRecieptIcon from './entities/TxRecieptIcon';
 import VerifyIcon from './entities/VerifyIcon';
 import StartIcon from './entities/StartIcon';
 import GithubIcon from './entities/GithubIcon';
+import RejectIcon from './entities/RejectIcon';
+import BorderArrowIcon from './entities/BorderArrowIcon';
+import AdminIcon from './entities/AdminIcon';
+import ThinArrow from './entities/ThinArrow';
+import QuestionIcon from './entities/QuestionIcon';
+import DateIcon from './entities/DateIcon';
 
 export {
   AddIcon,
@@ -41,6 +49,8 @@ export {
   IconInfo,
   Login,
   Password,
+  PlayCircleIcon,
+  Pudding,
   QuestionUploadingIcon,
   SendingIcon,
   Stats,
@@ -52,4 +62,10 @@ export {
   VerifyIcon,
   StartIcon,
   GithubIcon,
+  RejectIcon,
+  BorderArrowIcon,
+  AdminIcon,
+  ThinArrow,
+  QuestionIcon,
+  DateIcon,
 };

@@ -20,5 +20,11 @@ const buttons = {
   createQuestion: 'Create question',
   createQuestionGroup: 'Create group of questions',
   startNewVoting: 'Start new voting',
+  transfer: 'Transfer',
+  designateGroupAdministrator: 'designate group administrator',
+  vote: 'Vote',
+  start: 'Start',
+  nextStep: 'Next step',
+  addParameter: '+ Add parameter',
 };
 export default buttons;

@@ -12,6 +12,8 @@ import otherEn from './locales/ENG/other';
 import otherRu from './locales/RUS/other';
 import errorsEn from './locales/ENG/errors';
 import errorsRu from './locales/RUS/errors';
+import dialogsEn from './locales/ENG/dialogs';
+import dialogsRu from './locales/RUS/dialogs';
 
 const resources = {
   ENG: {
@@ -21,6 +23,7 @@ const resources = {
     fields: fieldsEn,
     other: otherEn,
     errors: errorsEn,
+    dialogs: dialogsEn,
   },
   RUS: {
     headings: headingsRu,
@@ -29,6 +32,7 @@ const resources = {
     fields: fieldsRu,
     other: otherRu,
     errors: errorsRu,
+    dialogs: dialogsRu,
   },
 };
 

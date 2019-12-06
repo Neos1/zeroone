@@ -1,22 +1,24 @@
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
+import DialogStore from '../DialogStore';
 import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
+import { MembersStore } from '../MembersStore';
 import EventEmitterService from '../../services/EventEmitterService';
 import { fs, path, ROOT_DIR } from '../../constants/windowModules';
 
 class RootStore {
   // stores
-  @observable projectStore;
+  projectStore;
 
-  @observable appStore;
+  appStore;
 
-  @observable userStore;
+  userStore;
 
-  @observable alertStore;
+  dialogStore;
 
   // services
   walletService;
@@ -37,10 +39,13 @@ class RootStore {
     this.walletService = new WalletService();
     this.eventEmitterService = new EventEmitterService();
     this.contractService = new ContractService(this);
+    this.dialogStore = new DialogStore();
+    this.membersStore = new MembersStore([]);
   }
 
   /**
    * initiating project
+   *
    * @param {string} address adress of project
    */
   @action async initProject(address) {

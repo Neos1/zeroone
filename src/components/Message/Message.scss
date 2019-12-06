@@ -1,0 +1,111 @@
+.message {
+  &__container {
+    width: 100%;
+  }
+
+  &__title {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    color: #000;
+    font-weight: 700;
+    font-size: 24px;
+    font-family: "Grotesk";
+    line-height: 28px;
+    text-align: center;
+  }
+
+  &--agreed,
+  &--reject {
+    text-align: center;
+
+    .footer {
+      padding-top: 53px;
+      padding-bottom: 48px;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+      padding-top: 82px;
+    }
+  }
+
+  &--transfer-success {
+    text-align: center;
+
+    .subtext {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .value {
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .message {
+      &__title {
+        margin-top: 57px;
+      }
+    }
+
+    .footer {
+      padding-top: 48px;
+      padding-bottom: 51px;
+    }
+  }
+
+  &--transfer-error {
+    .subtext {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .message {
+      &__title {
+        margin-top: 57px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .footer {
+      padding-top: 73px;
+      padding-bottom: 51px;
+    }
+  }
+
+  &--progress {
+    .message {
+      &__title {
+        margin-top: 57px;
+      }
+    }
+
+    .subtext {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .loader__container {
+      width: 100%;
+      padding-top: 92px;
+      padding-bottom: 110px;
+      text-align: center;
+    }
+  }
+
+  &--agreed,
+  &--reject,
+  &--transfer-success,
+  &--transfer-error {
+    button {
+      width: 100%;
+      max-width: 309px;
+    }
+  }
+}
