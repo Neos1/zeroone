@@ -110,9 +110,10 @@ class CreateNewQuestionForm extends React.PureComponent {
    * @returns {string} uniq key for
    * select & input
    */
-  getFieldKey = (name) => (
-    name.split('--')[1] || ''
-  )
+  getFieldKey = (name) => {
+    if (!name || !name.split) return '';
+    return name.split('--')[1] || '';
+  }
 
   /**
    * Method for removing fields
@@ -142,7 +143,9 @@ class CreateNewQuestionForm extends React.PureComponent {
             <Tab />
             <Tab />
           </TabList>
+          {/* TODO remove react-tabs */}
           <TabPanel>
+            {/* TODO separate form in other files */}
             <form
               form={formBasic}
               onSubmit={formBasic.onSubmit}

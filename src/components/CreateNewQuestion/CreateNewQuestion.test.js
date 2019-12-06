@@ -17,13 +17,13 @@ describe('CreateNewQuestion', () => {
     expect(wrapper.length).toEqual(1);
   });
 
-  it('handleDropdownSelect should change isSelected to true', async () => {
+  it('handleDropdownSelect should change isSelected to true', () => {
     expect(wrapperInstance.state.isSelected).toEqual(false);
     wrapperInstance.handleDropdownSelect();
     expect(wrapperInstance.state.isSelected).toEqual(true);
   });
 
-  it('toggleActiveTab with (1) should change activeTab to 1', async () => {
+  it('toggleActiveTab with (1) should change activeTab to 1', () => {
     expect(wrapperInstance.state.activeTab).toEqual(0);
     wrapperInstance.toggleActiveTab(1);
     expect(wrapperInstance.state.activeTab).toEqual(1);
