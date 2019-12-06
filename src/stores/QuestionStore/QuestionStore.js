@@ -13,6 +13,10 @@ class QuestionStore {
     this.fetchQuestions();
   }
 
+  /**
+   * fetching questions from smart contract
+   * @function
+   */
   @action fetchQuestions = async () => {
     const { contractService } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
@@ -37,7 +41,7 @@ class QuestionStore {
    * Getting question by given id
    * @function
    * @param {number} id id of question
-   * @returns {object} question matched by id
+   * @returns {Array} array with lenght == 1, contains question matched by id
    */
   @action getQuestionById = (id) => this._questions.filter((question) => question.id === Number(id))
 

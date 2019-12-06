@@ -15,8 +15,6 @@ const FullQuestion = withTranslation()(inject('projectStore')(observer(({ t, pro
   const { goBack } = useHistory();
   const { questionStore } = projectStore;
   const [question] = questionStore.getQuestionById(pageid);
-  // eslint-disable-next-line no-console
-  console.log(question);
   return (
     <Container className="container--small">
       <div className={styles.questions}>
