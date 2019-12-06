@@ -5,12 +5,14 @@
     "jest/globals": true
   },
   "parser": "babel-eslint",
-  "extends": ["airbnb"],
+  "extends": [
+    "airbnb",
+    "plugin:jsdoc/recommended"
+  ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -18,7 +20,11 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "jest"],
+  "plugins": [
+    "react",
+    "jsdoc",
+    "jest"
+  ],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle":"off",
