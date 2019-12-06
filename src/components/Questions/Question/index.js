@@ -19,25 +19,15 @@ const startBlock = () => (
   </div>
 );
 
-const ParametersBlock = () => (
+const ParametersBlock = (params) => (
   <div className={styles.question__right}>
     <p className={styles['question__parameter-heading']}>Параметры</p>
-    <div className={styles.question__parameter}>
-      <p className={styles['question__parameter-label']}>Дата применения</p>
-      <p className={styles['question__parameter-text']}>
-      старое
-      </p>
-    </div>
-    <div className={styles.question__parameter}>
-      <p className={styles['question__parameter-label']}>Дата применения</p>
-      <p className={styles['question__parameter-text']}>
-      Начать
-      </p>
-    </div>
-    <div className={styles.question__parameter}>
-      <p className={styles['question__parameter-label']}>Дата применения</p>
-      <p className={styles['question__parameter-text']}>голосование</p>
-    </div>
+    {params.map((param) => (
+      <div className={styles.question__parameter}>
+        <p className={styles['question__parameter-label']}>{param[0]}</p>
+        <p className={styles['question__parameter-text']}>{param[1]}</p>
+      </div>
+    ))}
   </div>
 );
 
@@ -55,8 +45,7 @@ const FullDescription = (text) => (
 
 const FormulaBlock = (formula) => (
   <p className={styles.question__formula}>
-    Формула голосования:
-    {formula}
+    {`Формула голосования: ${formula}`}
   </p>
 );
 
@@ -80,7 +69,6 @@ const Question = ({
     {extended ? FormulaBlock(formula) : null}
   </div>
 );
-
 Question.propTypes = {
   id: propTypes.number.isRequired,
   extended: propTypes.bool,
