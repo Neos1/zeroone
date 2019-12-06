@@ -15,6 +15,7 @@ class QuestionStore {
 
   /**
    * fetching questions from smart contract
+   *
    * @function
    */
   @action fetchQuestions = async () => {
@@ -28,10 +29,12 @@ class QuestionStore {
   }
 
   /**
-   * Adding question to the list
-   * @function
-   * @param {object} question Question which will be added
-   */
+ * Adding question to the list
+ *
+ * @function
+ * @param id
+ * @param {object} question Question which will be added
+ */
   @action addQuestion = (id, question) => {
     const { Web3Service: { web3 } } = this.rootStore;
     this._questions.push(new Question(id, question, web3));
@@ -39,6 +42,7 @@ class QuestionStore {
 
   /**
    * Getting question by given id
+   *
    * @function
    * @param {number} id id of question
    * @returns {Array} array with lenght == 1, contains question matched by id
@@ -47,11 +51,19 @@ class QuestionStore {
 
   /**
    * Getting list of questions for displaying
+   *
    * @function
    * @returns {Array} list of all questions
    */
   @computed get questions() {
     return this._questions;
+  }
+
+  @computed get options() {
+    return this._questions.map((question) => ({
+      value: question.id,
+      label: question.caption,
+    }));
   }
 }
 

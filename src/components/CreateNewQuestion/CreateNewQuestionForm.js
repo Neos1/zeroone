@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import CreateQuestionBasicForm from '../../stores/FormsStore/CreateQuestionBasicForm';
 import CreateQuestionDynamicForm from '../../stores/FormsStore/CreateQuestionDynamicForm';
 import FormBasic from './FormBasic';
@@ -11,6 +11,7 @@ import FormDynamic from './FormDynamic';
 import styles from './CreateNewQuestion.scss';
 
 @withTranslation()
+@inject('dialogStore')
 @observer
 class CreateNewQuestionForm extends React.PureComponent {
   /** Form with basic info for new question */
@@ -44,6 +45,9 @@ class CreateNewQuestionForm extends React.PureComponent {
     activeTab: PropTypes.number.isRequired,
     /** Method called on toggle tab */
     onToggle: PropTypes.func.isRequired,
+    dialogStore: PropTypes.shape({
+      toggle: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   /** Action on basic form submit */
@@ -55,7 +59,8 @@ class CreateNewQuestionForm extends React.PureComponent {
 
   /** Action on dynamic form submit */
   onDynamicSubmit = () => {
-    console.log('dynamic submit');
+    const { dialogStore } = this.props;
+    dialogStore.toggle('password_form');
   }
 
   renderStep = () => {

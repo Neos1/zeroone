@@ -13,7 +13,7 @@ const {
   appStore,
   dialogStore,
   membersStore,
-  projectStore
+  projectStore,
 } = rootStore;
 
 render(

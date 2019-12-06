@@ -1,6 +1,7 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
 import Hint from '../Hint';
 import CreateGroupQuestionsForm from '../../stores/FormsStore/CreateGroupQuestionsForm';
 
@@ -11,13 +12,17 @@ import InputTextarea from '../Input/InputTextarea';
 import Button from '../Button/Button';
 
 @withTranslation()
+@inject('dialogStore')
+@observer
 class CreateGroupQuestions extends React.PureComponent {
   form = new CreateGroupQuestionsForm({
     hooks: {
-      onSuccess() {
+      onSuccess: () => {
+        const { dialogStore } = this.props;
+        dialogStore.toggle('password_form');
         return Promise.resolve();
       },
-      onError() {
+      onError: () => {
         /* eslint-disable-next-line */
         console.error('error');
       },
@@ -26,6 +31,9 @@ class CreateGroupQuestions extends React.PureComponent {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
+    dialogStore: PropTypes.shape({
+      toggle: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   render() {
