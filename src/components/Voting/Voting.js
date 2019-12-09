@@ -36,6 +36,16 @@ class Voting extends React.PureComponent {
               end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
             }}
           />
+          <VotingItem
+            index={1}
+            title="Withdraw profit"
+            description="Stop mining farm"
+            actualState="cons"
+            date={{
+              start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
+              end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
+            }}
+          />
         </div>
         <div>
           pagination

@@ -4,9 +4,9 @@ import moment from 'moment';
 import { withTranslation, Trans } from 'react-i18next';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { EMPTY_DATA_STRING } from '../../constants';
+import VotingDecision from './VotingDecision';
 
 import styles from './Voting.scss';
-import VotingDecision from './VotingDecision';
 
 @withTranslation()
 class VotingItem extends React.PureComponent {
@@ -42,7 +42,7 @@ class VotingItem extends React.PureComponent {
       case 'pros':
         return (<VotingDecision prosState />);
       case 'cons':
-        return (<div>Cons</div>);
+        return (<VotingDecision prosState={false} />);
       default:
         return (<div>Voting</div>);
     }
