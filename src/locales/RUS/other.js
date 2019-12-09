@@ -33,5 +33,10 @@ const other = {
   votingFormula: 'Формула голосования',
   iAgree: 'Я согласен',
   iAmAgainst: 'Я против',
+  statistics: 'Статистика',
+  agree: 'Согласны',
+  against: 'Против',
+  didNotVote: 'Не проголосовали',
+  everyoneVoted: 'Проголосовали все',
 };
 export default other;

@@ -139,6 +139,47 @@
         }
       }
     }
+
+    &__stats {
+      margin-top: 16px;
+
+      svg {
+        width: auto;
+        height: auto;
+      }
+
+      button {
+        padding: 11px 15px;
+
+        svg path {
+          fill: #fff;
+        }
+
+        &:hover {
+          svg path {
+            fill: #fff;
+          }
+        }
+
+        &:active {
+          svg path {
+            fill: #000;
+          }
+        }
+      }
+
+      &-button {
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      &-content {
+        margin-bottom: 40px;
+        padding: 40px 60px 53px;
+        background: #fff;
+        border: 1px solid #e1e4e8;
+      }
+    }
   }
 
   &__top {
@@ -318,5 +359,38 @@
     background: #fff;
     border: 1px solid #e1e4e8;
     border-radius: 2px;
+  }
+
+  &__stats {
+    text-align: center;
+
+    &-col {
+      display: inline-block;
+      width: 33.3333%;
+      vertical-align: top;
+
+      .recharts-wrapper {
+        margin: 0 auto;
+      }
+
+      &-title {
+        margin-top: 17px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        text-align: center;
+      }
+
+      &-subtitle {
+        margin-top: 9px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: center;
+      }
+    }
+
+    @include clearfix;
   }
 }

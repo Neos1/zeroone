@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import moment from 'moment';
+import { Collapse } from 'react-collapse';
 import Container from '../Container';
 import { EMPTY_DATA_STRING } from '../../constants';
-import { VerifyIcon, RejectIcon } from '../Icons';
+import { VerifyIcon, RejectIcon, Stats } from '../Icons';
+import Button from '../Button/Button';
+import VotingStats from './VotingStats';
 
 import styles from './Voting.scss';
 
@@ -35,6 +38,22 @@ class VotingInfo extends React.PureComponent {
     onRejectClick: PropTypes.func.isRequired,
   };
 
+  constructor() {
+    super();
+    this.state = {
+      isOpen: false,
+    };
+  }
+
+  /**
+   * Method for change isOpen state
+   */
+  toggleOpen = () => {
+    this.setState((prevState) => ({
+      isOpen: !prevState.isOpen,
+    }));
+  }
+
   /**
    * Method for getting formatted date string
    *
@@ -58,6 +77,7 @@ class VotingInfo extends React.PureComponent {
   }
 
   render() {
+    const { isOpen } = this.state;
     const { props } = this;
     const {
       t,
@@ -192,6 +212,28 @@ class VotingInfo extends React.PureComponent {
                 {t('other:iAmAgainst')}
               </button>
             </div>
+          </div>
+          <div
+            className={styles['voting-info__stats']}
+          >
+            <div
+              className={styles['voting-info__stats-button']}
+            >
+              <Button
+                theme="white"
+                icon={(<Stats />)}
+                onClick={this.toggleOpen}
+              >
+                {t('other:statistics')}
+              </Button>
+            </div>
+            <Collapse isOpened={isOpen}>
+              <div
+                className={styles['voting-info__stats-content']}
+              >
+                <VotingStats />
+              </div>
+            </Collapse>
           </div>
         </Container>
       </div>
