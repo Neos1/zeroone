@@ -27,5 +27,11 @@ const other = {
   timeLeft: 'Осталось',
   dateInFormat: '{{date}} в {{time}}',
   decisionIsMade: 'Решение принято',
+  dateOfApplication: 'Дата применения',
+  durationInBlocks: 'Продолжительность тиража в блоках',
+  newAddressContract: 'Новый адрес контракта',
+  votingFormula: 'Формула голосования',
+  iAgree: 'Я согласен',
+  iAmAgainst: 'Я против',
 };
 export default other;

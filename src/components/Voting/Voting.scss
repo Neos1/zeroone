@@ -1,5 +1,145 @@
+@import '../../assets/styles/includes/mixin';
+
 .voting {
-  margin-top: 120px;
+  &-page {
+    margin-top: 120px;
+  }
+
+  &-info {
+    margin-top: 120px;
+
+    &__back {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &__date {
+      float: right;
+      padding: 5px 0;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: middle;
+
+      span {
+        &:first-child {
+          padding-right: 24px;
+        }
+      }
+    }
+
+    &__card {
+      margin-top: 7px;
+      background-color: #fff;
+      border: 1px solid #e1e4e8;
+
+      &-inner {
+        padding: 20px 45px 0;
+      }
+    }
+
+    &__index {
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.2);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &__title {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &__main {
+      margin-bottom: 32px;
+      font-size: 0;
+    }
+
+    &__description {
+      display: inline-block;
+      width: 50%;
+      padding-right: 50px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: top;
+    }
+
+    &__data {
+      display: inline-block;
+      width: 50%;
+      padding-left: 50px;
+      color: rgba(0, 0, 0, 1);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: top;
+
+      &-title {
+        margin-bottom: 4px;
+      }
+
+      &-value {
+        margin-bottom: 16px;
+        font-weight: 700;
+      }
+    }
+
+    &__formula {
+      margin-bottom: 16px;
+      color: #808080;
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &__buttons {
+      border-top: 1px solid #e1e4e8;
+
+      button {
+        float: left;
+        width: 50%;
+        padding: 28px 30px 23px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        background-color: #fff;
+        border: unset;
+        outline: none;
+        cursor: pointer;
+
+        &:first-child {
+          position: relative;
+
+          &::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background-color: #e1e4e8;
+            content: '';
+          }
+        }
+      }
+
+      @include clearfix;
+    }
+
+    &__button {
+      &-icon {
+        margin-bottom: 8px;
+        text-align: center;
+
+        svg {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+  }
 
   &__top {
     width: 100%;
@@ -167,5 +307,16 @@
         text-align: left;
       }
     }
+  }
+
+  &__back {
+    display: inline-block;
+    padding: 5px 35px;
+    color: #c8c9ca;
+    font-size: 14px;
+    line-height: 107.5%;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 2px;
   }
 }

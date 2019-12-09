@@ -1,14 +1,14 @@
 import React from 'react';
 import VotingTop from './VotingTop';
+import VotingItem from './VotingItem';
 
 import styles from './Voting.scss';
-import VotingItem from './VotingItem';
 
 class Voting extends React.PureComponent {
   render() {
     return (
       <div
-        className={styles.voting}
+        className={styles['voting-page']}
       >
         <div>
           filter

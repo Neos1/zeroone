@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { EMPTY_DATA_STRING } from '../../constants';
@@ -80,60 +81,62 @@ class VotingItem extends React.PureComponent {
       date,
     } = props;
     return (
-      <div
-        className={styles.voting__item}
-      >
+      <Link to="/votingInfo/1">
         <div
-          className={styles['voting__item-info']}
+          className={styles.voting__item}
         >
           <div
-            className={styles['voting__item-index']}
-          >
-            {`#${index}`}
-          </div>
-          <div
-            className={styles['voting__item-title']}
-          >
-            {title}
-          </div>
-          <div
-            className={styles['voting__item-description']}
-          >
-            {description}
-          </div>
-        </div>
-        <div
-          className={styles['voting__item-date']}
-        >
-          <div
-            className={styles['voting__item-date-block']}
+            className={styles['voting__item-info']}
           >
             <div
-              className={styles['voting__item-date-text']}
+              className={styles['voting__item-index']}
             >
-              {t('other:start')}
-              <br />
-              {this.getDateString(date.start)}
+              {`#${index}`}
+            </div>
+            <div
+              className={styles['voting__item-title']}
+            >
+              {title}
+            </div>
+            <div
+              className={styles['voting__item-description']}
+            >
+              {description}
             </div>
           </div>
           <div
-            className={styles['voting__item-date-block']}
+            className={styles['voting__item-date']}
           >
             <div
-              className={styles['voting__item-date-text']}
+              className={styles['voting__item-date-block']}
             >
-              {t('other:end')}
-              <br />
-              {this.getDateString(date.end)}
+              <div
+                className={styles['voting__item-date-text']}
+              >
+                {t('other:start')}
+                <br />
+                {this.getDateString(date.start)}
+              </div>
+            </div>
+            <div
+              className={styles['voting__item-date-block']}
+            >
+              <div
+                className={styles['voting__item-date-text']}
+              >
+                {t('other:end')}
+                <br />
+                {this.getDateString(date.end)}
+              </div>
             </div>
           </div>
+          <div
+            className={styles['voting__item-progress']}
+          >
+            {this.renderDecisionState()}
+          </div>
         </div>
-        <div
-          className={styles['voting__item-progress']}
-        >
-          {this.renderDecisionState()}
-        </div>
-      </div>
+      </Link>
     );
   }
 }
