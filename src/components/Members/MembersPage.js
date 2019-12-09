@@ -8,6 +8,7 @@ import MembersTop from './MembersTop';
 import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import MembersGroupComponent from './MembersGroupComponent';
 
+
 import styles from './Members.scss';
 
 /**

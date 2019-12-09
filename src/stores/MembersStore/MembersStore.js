@@ -6,7 +6,7 @@ import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
 /**
  * Store for manage Members groups
  *
- * @param {Array} group group
+ * @param group
  */
 class MembersStore {
   /**
@@ -15,17 +15,25 @@ class MembersStore {
    * @param {Array} groups groups with members
    * @param {object} rootStore rootStore
    */
-  constructor(groups, rootStore) {
+
+  transferSteps = {
+    input: 0,
+    transfering: 1,
+    success: 2,
+    error: 3,
+  }
+
+  constructor(rootStore) {
     this.rootStore = rootStore;
-    if (
-      Array.isArray(groups) === false
-    ) throw new Error('Incorrect groups provided');
-    groups.forEach((group) => {
-      this.addToGroups(group);
-    });
   }
 
   @observable groups = [];
+
+  @observable _transferStatus = 0;
+
+  @action init() {
+    this.fetchUserGroups();
+  }
 
   fetchUserGroupsLength = () => {
     const { contractService } = this.rootStore;
@@ -107,6 +115,23 @@ class MembersStore {
   addToGroups = (group) => {
     // TODO maybe fix for duplicate
     this.groups.push(new MembersGroup(group));
+  }
+
+
+  @action setTransferStatus(status) {
+    this._transferStatus = this.transferSteps[status];
+  }
+
+  @action
+  transferTokens(groupId, from, to, count) {
+    const { contract } = this.list[groupId];
+    const txData = contract.methods.transferFrom(from, to, count).encodeABI();
+    return txData;
+  }
+
+  @computed
+  get transferStatus() {
+    return this._transferStatus;
   }
 
   @computed

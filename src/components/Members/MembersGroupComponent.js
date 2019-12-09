@@ -3,17 +3,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-collapse';
 import { withTranslation } from 'react-i18next';
+import { inject, observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
 import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
+import Dialog from '../Dialog/Dialog';
+import TokenTransfer from '../TokenTransfer/TokenTransfer';
 
 import styles from './Members.scss';
 
 /**
  * Group members component
+ *
+ * @param selectedWallet selected wallet
+ * @param item
  */
 @withTranslation()
+@inject('dialogStore', 'membersStore')
+@observer
 class MembersGroupComponent extends React.Component {
+  transferSteps = {
+    input: 0,
+    transfering: 1,
+    success: 2,
+    error: 3,
+  }
+
   static propTypes = {
     /** id group */
     id: PropTypes.number.isRequired,
@@ -33,12 +48,20 @@ class MembersGroupComponent extends React.Component {
     textForEmptyState: PropTypes.string.isRequired,
     /** translate method */
     t: PropTypes.func.isRequired,
+    dialogStore: PropTypes.shape({
+      show: PropTypes.func.isRequired,
+    }).isRequired,
+    membersStore: PropTypes.shape({
+      transferStatus: PropTypes.number.isRequired,
+    }).isRequired,
   }
+
 
   constructor() {
     super();
     this.state = {
       isOpen: false,
+      selectedWallet: '',
     };
   }
 
@@ -49,6 +72,31 @@ class MembersGroupComponent extends React.Component {
     this.setState((prevState) => ({
       isOpen: !prevState.isOpen,
     }));
+  }
+
+  handleClick = (selectedWallet) => {
+    const { dialogStore, id } = this.props;
+    this.setState({ selectedWallet });
+    dialogStore.show(`transfer-token-${id}`);
+  }
+
+  // eslint-disable-next-line consistent-return
+  modalContentSwitch(step) {
+    const { id } = this.props;
+    const { selectedWallet } = this.state;
+    const { transferSteps } = this;
+    switch (step) {
+      case (transferSteps.input):
+        return <TokenTransfer wallet={selectedWallet} groupId={id} />;
+      case (transferSteps.transfering):
+        return null;
+      case (transferSteps.success):
+        return null;
+      case (transferSteps.error):
+        return null;
+      default:
+        return null;
+    }
   }
 
   render() {
@@ -62,6 +110,7 @@ class MembersGroupComponent extends React.Component {
       list,
       textForEmptyState,
       t,
+      membersStore: { transferStatus },
     } = this.props;
     const { isOpen } = this.state;
     return (
@@ -98,7 +147,7 @@ class MembersGroupComponent extends React.Component {
                 <div className={styles['members__group-data']}>
                   <MembersGroupTable
                     list={list}
-                    onRowClick={() => { console.log('row click'); }}
+                    onRowClick={this.handleClick}
                   />
                 </div>
               )
@@ -114,6 +163,9 @@ class MembersGroupComponent extends React.Component {
               )
           }
         </Collapse>
+        <Dialog name={`transfer-token-${id}`} size="md" footer={null}>
+          {this.modalContentSwitch(transferStatus)}
+        </Dialog>
       </div>
     );
   }

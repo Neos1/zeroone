@@ -17,33 +17,28 @@ class MembersGroup {
    */
   constructor({
     name,
-    // description,
     groupAddress,
+    contract,
     totalSupply,
     tokenSymbol,
-    // tokenName,
     members,
     textForEmptyState,
   }) {
     if (
       !name
-      // || !description
+      || !contract
       || !tokenSymbol
-      // || !tokenName
       || !groupAddress
       || Array.isArray(members) === false
     ) throw new Error('Incorrect data provided!');
     this.name = name;
-    // this.description = description;
     this.wallet = groupAddress;
     this.balance = totalSupply;
+    this.contract = contract;
     this.customTokenName = tokenSymbol;
-    // this.tokenName = tokenName;
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }
-    // eslint-disable-next-line no-console
-    console.log(`length = ${members.length}`);
     this.addToList(members);
   }
 
@@ -85,8 +80,6 @@ class MembersGroup {
    */
   addToList = (members) => {
     // TODO maybe fix for duplicate wallets
-    // eslint-disable-next-line no-console
-    console.log(members);
     members.forEach((member) => {
       this.list.push(new MemberItem(member));
     });

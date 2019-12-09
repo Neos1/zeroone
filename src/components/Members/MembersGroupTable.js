@@ -60,7 +60,7 @@ class MembersGroupTable extends React.PureComponent {
             list.map((item, index) => (
               <tr
                 key={`membersGroupTableTr--${index + 1}`}
-                onClick={() => onRowClick(item)}
+                onClick={() => { onRowClick(item.wallet); }}
                 className={`
                   ${styles['members__group-table-tr']}
                 `}
