@@ -6,6 +6,7 @@ import VotingDecisionProgress from './VotingDecisionProgress';
 import { EMPTY_DATA_STRING } from '../../constants';
 
 import styles from './Voting.scss';
+import VotingDecision from './VotingDecision';
 
 @withTranslation()
 class VotingItem extends React.PureComponent {
@@ -39,7 +40,7 @@ class VotingItem extends React.PureComponent {
           />
         );
       case 'pros':
-        return (<div>Pros</div>);
+        return (<VotingDecision prosState />);
       case 'cons':
         return (<div>Cons</div>);
       default:

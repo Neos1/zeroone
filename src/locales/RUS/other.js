@@ -26,5 +26,6 @@ const other = {
   end: 'Конец',
   timeLeft: 'Осталось',
   dateInFormat: '{{date}} в {{time}}',
+  decisionIsMade: 'Решение принято',
 };
 export default other;

@@ -41,6 +41,7 @@
 
   &__item {
     min-height: 126px;
+    margin-bottom: 8px;
     padding: 16px 8px 16px 30px;
     font-size : 0;
     background: #fff;
@@ -117,12 +118,43 @@
   }
 
   &__decision {
-    &-title {
-      margin-bottom: 8px;
-      color: #000;
+    &--progress {
+      .voting__decision {
+        &-title {
+          margin-bottom: 8px;
+          color: #000;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+    }
+
+    &-state {
+      color: rgba(0, 0, 0, 1);
       font-weight: 700;
       font-size: 14px;
       line-height: 16px;
+      text-align: center;
+    }
+
+    &-icon {
+      margin-top: 16px;
+      text-align: center;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &-title {
+      margin-bottom: 4px;
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 13px;
+      text-align: center;
     }
 
     &-text {

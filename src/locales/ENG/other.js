@@ -26,5 +26,6 @@ const other = {
   end: 'End',
   timeLeft: 'Time left',
   dateInFormat: '{{date}} in {{time}}',
+  decisionIsMade: 'Decision is made',
 };
 export default other;

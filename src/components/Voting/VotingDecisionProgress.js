@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import ProgressBar from '../ProgressBar/ProgressBar';
 
 import styles from './Voting.scss';
-import ProgressBar from '../ProgressBar/ProgressBar';
 
 /**
  * Component render voting decision
