@@ -25,5 +25,6 @@ const other = {
   start: 'Start',
   end: 'End',
   timeLeft: 'Time left',
+  dateInFormat: '{{date}} in {{time}}',
 };
 export default other;

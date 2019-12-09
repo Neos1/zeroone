@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { EMPTY_DATA_STRING } from '../../constants';
 
@@ -21,6 +21,12 @@ class VotingItem extends React.PureComponent {
     }).isRequired,
   };
 
+  /**
+   * Method for render decision state
+   *
+   * @returns {Node} element for actual
+   * state
+   */
   renderDecisionState = () => {
     const { props } = this;
     const { actualState } = props;
@@ -41,12 +47,26 @@ class VotingItem extends React.PureComponent {
     }
   }
 
+  /**
+   * Method for getting formatted date string
+   *
+   * @param {Date} date date for formatting
+   * @returns {string} formatted date
+   */
   getDateString = (date) => {
     if (
       !date
       || date instanceof Date !== true
     ) return EMPTY_DATA_STRING;
-    return `${moment(date).format('DD.MM.YYYY')}`;
+    return (
+      <Trans
+        i18nKey="other:dateInFormat"
+        values={{
+          date: moment(date).format('DD.MM.YYYY'),
+          time: moment(date).format('HH:mm'),
+        }}
+      />
+    );
   }
 
   render() {

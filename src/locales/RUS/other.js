@@ -25,5 +25,6 @@ const other = {
   start: 'Начало',
   end: 'Конец',
   timeLeft: 'Осталось',
+  dateInFormat: '{{date}} в {{time}}',
 };
 export default other;
