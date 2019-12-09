@@ -2,6 +2,7 @@ import React from 'react';
 import VotingTop from './VotingTop';
 
 import styles from './Voting.scss';
+import VotingItem from './VotingItem';
 
 class Voting extends React.PureComponent {
   render() {
@@ -15,7 +16,16 @@ class Voting extends React.PureComponent {
         {/* eslint-disable-next-line */}
         <VotingTop onClick={() => { console.log('voting top click'); }} />
         <div>
-          Voting list
+          <VotingItem
+            index={0}
+            title="Title"
+            description="Some description for voting"
+            actualState="progress"
+            date={{
+              start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
+              end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
+            }}
+          />
         </div>
         <div>
           pagination

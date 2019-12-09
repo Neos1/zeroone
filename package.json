@@ -36,6 +36,7 @@
     "mobx-react": "^6.1.4",
     "mobx-react-form": "^2.0.8",
     "mobx-utils": "^5.5.1",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-collapse": "^5.0.0",

@@ -38,4 +38,102 @@
       }
     }
   }
+
+  &__item {
+    min-height: 126px;
+    padding: 16px 8px 16px 30px;
+    font-size : 0;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    transition: border-color 0.3s;
+
+    &-info,
+    &-date,
+    &-progress {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &-info {
+      width: 60%;
+    }
+
+    &-date,
+    &-progress {
+      width: 20%;
+    }
+
+    &-date {
+      padding: 10px 0;
+      text-align: center;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+
+      &-block {
+        display: inline-block;
+        padding: 0 39px;
+
+        &:first-child {
+          margin-bottom: 16px;
+        }
+      }
+
+      &-text {
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: left;
+      }
+    }
+
+    &-progress {
+      padding: 0 36px;
+    }
+
+    &-index {
+      margin-bottom: 5px;
+      color: rgba(0, 0, 0, 0.2);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-title {
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 1);
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &-description {
+      margin-bottom: 10px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &:hover {
+      border: 1px solid #000;
+    }
+  }
+
+  &__decision {
+    &-title {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    &-text {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+
+      &--remained {
+        margin-top: 16px;
+        text-align: left;
+      }
+    }
+  }
 }
