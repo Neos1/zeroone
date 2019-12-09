@@ -25,7 +25,7 @@ class MemberItem {
       || !balance
     ) throw new Error('Incorrect data provided for MemberItem!');
     this.wallet = wallet;
-    this.weight = weight;
+    this.weight = weight.toFixed(2);
     this.balance = balance;
     this.customTokenName = customTokenName;
     if (typeof isAdmin === 'boolean') this.isAdmin = isAdmin;

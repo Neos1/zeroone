@@ -42,9 +42,9 @@ class MembersGroup {
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }
-    members.forEach((member) => {
-      this.addToList(member);
-    });
+    // eslint-disable-next-line no-console
+    console.log(`length = ${members.length}`);
+    this.addToList(members);
   }
 
   /** Name group (Example: Admins) */
@@ -83,9 +83,13 @@ class MembersGroup {
    *
    * @param {object} member all data about member
    */
-  addToList = (member) => {
+  addToList = (members) => {
     // TODO maybe fix for duplicate wallets
-    this.list.push(new MemberItem(member));
+    // eslint-disable-next-line no-console
+    console.log(members);
+    members.forEach((member) => {
+      this.list.push(new MemberItem(member));
+    });
   }
 }
 
