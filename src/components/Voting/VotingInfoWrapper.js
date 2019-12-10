@@ -7,6 +7,7 @@ import Dialog from '../Dialog/Dialog';
 import DecisionAgree from '../Decision/DecisionAgree';
 import DecisionReject from '../Decision/DecisionReject';
 import VoterList from '../VoterList/VoterList';
+import Footer from '../Footer';
 
 @inject('dialogStore')
 @observer
@@ -46,6 +47,7 @@ class VotingInfoWrapper extends React.PureComponent {
             }
           }
         />
+        <Footer />
         <Dialog
           name="decision_agree"
           size="md"
