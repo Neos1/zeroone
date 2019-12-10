@@ -264,6 +264,63 @@ class ContractService {
     return (this, id, from, params);
   }
 
+  sendVote(votingId, descision) {
+    const {
+      ercAbi,
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+        appStore,
+        membersStore,
+        historyStore,
+      },
+    } = this;
+    // const voting = historyStore.getVotingById;
+    const groupId = 0;
+    const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
+    if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
+      this.approveErc(groupContainsUser)
+        .then((receipt) => {
+          const tx = {
+            from: userStore.address,
+            data: _contract.methods.sendVote(descision).encodeABI(),
+            value: '0x0',
+            gasLimit: 8000000,
+          };
+          return Web3Service.createTxData(userStore.address, tx)
+            .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+            .then((rec) => { console.log(rec); });
+        });
+    }
+  }
+
+
+  approveErc(group) {
+    const {
+      ercAbi,
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+      },
+    } = this;
+    const ercContract = Web3Service.createContractInstance(ercAbi);
+    ercContract.options.address = group.wallet;
+    // eslint-disable-next-line max-len
+    const txData = ercContract.methods.approve(_contract.options.address, userStore.address).encodeABI();
+    const tx = {
+      data: txData,
+      from: userStore.address,
+      value: '0x0',
+      gasLimit: 8000000,
+    };
+    return Web3Service.createTxData(userStore.address, tx)
+      .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+  }
+
   /**
    * Finishes the voting
    */

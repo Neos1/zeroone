@@ -117,6 +117,11 @@ class MembersStore {
     this.groups.push(new MembersGroup(group));
   }
 
+  @action
+  isUserInGroup(groupId, address) {
+    const memberItem = this.groups[groupId].list.filter((user) => user.wallet === address);
+    return memberItem.length > 0 ? this.groups[groupId] : null;
+  }
 
   @action setTransferStatus(status) {
     this._transferStatus = this.transferSteps[status];

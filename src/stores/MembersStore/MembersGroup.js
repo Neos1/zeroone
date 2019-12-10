@@ -20,6 +20,7 @@ class MembersGroup {
     groupAddress,
     contract,
     totalSupply,
+    groupType,
     tokenSymbol,
     members,
     textForEmptyState,
@@ -27,12 +28,14 @@ class MembersGroup {
     if (
       !name
       || !contract
+      || !groupType
       || !tokenSymbol
       || !groupAddress
       || Array.isArray(members) === false
     ) throw new Error('Incorrect data provided!');
     this.name = name;
     this.wallet = groupAddress;
+    this.groupType = groupType;
     this.balance = totalSupply;
     this.contract = contract;
     this.customTokenName = tokenSymbol;
