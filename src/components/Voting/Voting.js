@@ -1,10 +1,14 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
+import PropTypes from 'prop-types';
 import VotingTop from './VotingTop';
 import VotingItem from './VotingItem';
 import VotingFilter from './VotingFilter';
 import Container from '../Container';
 import Footer from '../Footer';
 import Pagination from '../Pagination';
+import Dialog from '../Dialog/Dialog';
+import StartNewVote from '../StartNewVote';
 
 import styles from './Voting.scss';
 
@@ -38,8 +42,19 @@ const data = [
   },
 ];
 
-class Voting extends React.PureComponent {
+@inject('dialogStore')
+@observer
+class Voting extends React.Component {
+  static propTypes = {
+    dialogStore: PropTypes.shape({
+      show: PropTypes.func.isRequired,
+    }).isRequired,
+  };
+
   render() {
+    const { props } = this;
+    const { dialogStore } = props;
+    console.log(dialogStore);
     return (
       <Container className="container--small">
         <div
@@ -47,7 +62,7 @@ class Voting extends React.PureComponent {
         >
           <VotingFilter />
           {/* eslint-disable-next-line */}
-          <VotingTop onClick={() => { console.log('voting top click'); }} />
+          <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
           <div>
             {
               data && data.length
@@ -74,6 +89,14 @@ class Voting extends React.PureComponent {
           />
         </div>
         <Footer />
+        <Dialog
+          size="xlg"
+          name="start_new_vote"
+          header={null}
+          footer={null}
+        >
+          <StartNewVote />
+        </Dialog>
       </Container>
     );
   }
