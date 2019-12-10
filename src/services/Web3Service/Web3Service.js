@@ -6,7 +6,7 @@ import { BN } from 'ethereumjs-util';
  */
 class Web3Service {
   /**
-   * @constructor
+   * @class
    * @param {string} provider - provider for this.web3
    */
   constructor(url, rootStore) {
@@ -49,6 +49,7 @@ class Web3Service {
 
   /**
    * getting gas price
+   *
    * @returns {number} gasPrice from network
    */
   getGasPrice() {
@@ -58,8 +59,10 @@ class Web3Service {
 
   /**
    * Sending transaction to contract
+   *
+   * @param rawTx
    * @param {string} txData Raw transaction (without 0x)
-   * @return {Promise} promise with web3 transaction PromiEvent
+   * @returns {Promise} promise with web3 transaction PromiEvent
    */
   sendSignedTransaction(rawTx) {
     const { web3: { eth: { sendSignedTransaction } } } = this;
@@ -76,8 +79,9 @@ class Web3Service {
 
   /**
    * checking transaction receipt by hash every 5 seconds
+   *
    * @param {string} txHash hash of transaction
-   * @return {Promise} Promise which resolves on successful receipt fetching
+   * @returns {Promise} Promise which resolves on successful receipt fetching
    */
   subscribeTxReceipt(txHash) {
     const { web3 } = this;

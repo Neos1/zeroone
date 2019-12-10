@@ -12,6 +12,7 @@ import TokenTransfer from '../TokenTransfer/TokenTransfer';
 import TokenInProgressMessage from '../Message/TokenInProgressMessage';
 
 import styles from './Members.scss';
+import TransferSuccessMessage from '../Message/TransferSuccessMessage';
 
 /**
  * Group members component
@@ -54,6 +55,7 @@ class MembersGroupComponent extends React.Component {
     }).isRequired,
     membersStore: PropTypes.shape({
       transferStatus: PropTypes.number.isRequired,
+      setTransferStatus: PropTypes.func.isRequired,
     }).isRequired,
   }
 
@@ -70,9 +72,11 @@ class MembersGroupComponent extends React.Component {
    * Method for change isOpen state
    */
   toggleOpen = () => {
+    const { membersStore } = this.props;
     this.setState((prevState) => ({
       isOpen: !prevState.isOpen,
     }));
+    membersStore.setTransferStatus('input');
   }
 
   handleClick = (selectedWallet) => {
@@ -92,7 +96,7 @@ class MembersGroupComponent extends React.Component {
       case (transferSteps.transfering):
         return <TokenInProgressMessage />;
       case (transferSteps.success):
-        return null;
+        return <TransferSuccessMessage />;
       case (transferSteps.error):
         return null;
       default:
@@ -164,7 +168,11 @@ class MembersGroupComponent extends React.Component {
               )
           }
         </Collapse>
-        <Dialog name={`transfer-token-${id}`} size="md" footer={null}>
+        <Dialog
+          name={`transfer-token-${id}`}
+          size="md"
+          footer={null}
+        >
           {this.modalContentSwitch(transferStatus)}
         </Dialog>
       </div>

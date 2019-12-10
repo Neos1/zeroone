@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { computed, action } from 'mobx';
 
 class MemberItem {
   /**
@@ -51,6 +51,11 @@ class MemberItem {
   /** Method for getting full balance text */
   get fullBalance() {
     return `${this.balance} ${this.customTokenName}`;
+  }
+
+  @action
+  setTokenBalance(balance) {
+    this.balance = balance;
   }
 }
 
