@@ -1,9 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
 import VotingInfo from './VotingInfo';
 import Container from '../Container';
+import Dialog from '../Dialog/Dialog';
+import DecisionAgree from '../Decision/DecisionAgree';
+import DecisionReject from '../Decision/DecisionReject';
 
+@inject('dialogStore')
+@observer
 class VotingInfoWrapper extends React.PureComponent {
+  static propTypes = {
+    dialogStore: PropTypes.shape({
+      show: PropTypes.func.isRequired,
+    }).isRequired,
+  };
+
   render() {
+    const { props } = this;
+    const { dialogStore } = props;
     return (
       <Container className="container--small">
         <VotingInfo
@@ -21,10 +36,26 @@ class VotingInfoWrapper extends React.PureComponent {
           Устанавливает количество бесплатных билетов у новых игроков. Иногда описания могут не влазить и оно сокращается до троеточия. Зато в карточке голосвания можно уместить гораздно больше текста"
           formula="(group (0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54)→condition (quorum=20%))"
           /* eslint-disable-next-line */
-          onVerifyClick={() => { console.log('onVerifyClick'); }}
+          onVerifyClick={() => { dialogStore.show('decision_agree'); }}
           /* eslint-disable-next-line */
-          onRejectClick={() => { console.log('onRejectClick'); }}
+          onRejectClick={() => { dialogStore.show('decision_reject'); }}
         />
+        <Dialog
+          name="decision_agree"
+          size="md"
+          header={null}
+          footer={null}
+        >
+          <DecisionAgree />
+        </Dialog>
+        <Dialog
+          name="decision_reject"
+          size="md"
+          header={null}
+          footer={null}
+        >
+          <DecisionReject />
+        </Dialog>
       </Container>
     );
   }

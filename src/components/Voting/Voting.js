@@ -54,7 +54,6 @@ class Voting extends React.Component {
   render() {
     const { props } = this;
     const { dialogStore } = props;
-    console.log(dialogStore);
     return (
       <Container className="container--small">
         <div
