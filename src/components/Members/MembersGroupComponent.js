@@ -9,6 +9,7 @@ import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
 import TokenTransfer from '../TokenTransfer/TokenTransfer';
+import TokenInProgressMessage from '../Message/TokenInProgressMessage';
 
 import styles from './Members.scss';
 
@@ -89,7 +90,7 @@ class MembersGroupComponent extends React.Component {
       case (transferSteps.input):
         return <TokenTransfer wallet={selectedWallet} groupId={id} />;
       case (transferSteps.transfering):
-        return null;
+        return <TokenInProgressMessage />;
       case (transferSteps.success):
         return null;
       case (transferSteps.error):

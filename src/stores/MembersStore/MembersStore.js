@@ -125,8 +125,22 @@ class MembersStore {
   @action
   transferTokens(groupId, from, to, count) {
     const { contract } = this.list[groupId];
-    const txData = contract.methods.transferFrom(from, to, count).encodeABI();
-    return txData;
+    const { Web3Service, userStore: { address, password, singTransaction } } = this.rootStore;
+    const maxGasPrice = 30000000000;
+    const txData = {
+      to: contract.options.address,
+      data: contract.methods.transferFrom(from, to, count).encodeABI(),
+      gasLimit: 8000000,
+      value: '0x0',
+    };
+
+    return Web3Service.createTxData(address, txData, maxGasPrice)
+      .then((formedTx) => singTransaction(formedTx, password))
+      .then((signedTx) => {
+        console.log(signedTx);
+        // return Web3Service.sendSignedTransaction(`0x${signedTx}`)
+      })
+      .then((txHash) => Promise.resolve(txHash));
   }
 
   @computed

@@ -26,12 +26,7 @@ class TokenTransfer extends React.Component {
         const { address, count, password } = form.values();
         userStore.setPassword(password);
         membersStore.setTransferStatus('transfering');
-        const data = membersStore.transferTokens(groupId, wallet, address, count);
-        return userStore.singTransaction(data, password)
-          .then((signedTx) => {
-            console.log(`signedTx = ${signedTx}`);
-          })
-          .catch(() => {});
+        return membersStore.transferTokens(groupId, wallet, address, count);
       },
       onError: () => {
         /* eslint-disable-next-line */
