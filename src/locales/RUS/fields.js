@@ -13,6 +13,8 @@ const placeholders = {
   question: 'Вопрос',
   status: 'Статус',
   date: 'Дата',
+  dateFrom: 'Дата с',
+  dateTo: 'Дата по',
 };
 
 export default placeholders;

@@ -1,14 +1,17 @@
 import React from 'react';
 import { DateRangePicker } from 'react-dates';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
+import { DateIcon } from '../Icons';
 import 'react-dates/initialize';
 
 import 'react-dates/lib/css/_datepicker.css';
-import './DatePicker.scss';
+import styles from './DatePicker.scss';
 
+@withTranslation()
 class DatePicker extends React.PureComponent {
   static propTypes = {
-    placeholder: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -23,9 +26,12 @@ class DatePicker extends React.PureComponent {
   render() {
     const { start, end, focusedInput } = this.state;
     const { props } = this;
-    const { placeholder } = props;
+    const { t } = props;
     return (
-      <div>
+      <div className={styles['date-picker']}>
+        <div className={styles['date-picker__icon']}>
+          <DateIcon />
+        </div>
         <DateRangePicker
           startDate={start}
           startDateId="your_unique_start_date_id"
@@ -36,8 +42,9 @@ class DatePicker extends React.PureComponent {
               this.setState({ start: startDate, end: endDate });
             }
           }
-          startDatePlaceholderText={placeholder}
-          endDatePlaceholderText=""
+          customArrowIcon="-"
+          startDatePlaceholderText={t('fields:dateFrom')}
+          endDatePlaceholderText={t('fields:dateTo')}
           focusedInput={focusedInput}
           onFocusChange={
             (focusedInputChanged) => {

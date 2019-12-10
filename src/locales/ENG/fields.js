@@ -13,6 +13,8 @@ const placeholders = {
   question: 'Question',
   status: 'Status',
   date: 'Date',
+  dateFrom: 'Date from',
+  dateTo: 'Date to',
 };
 
 export default placeholders;

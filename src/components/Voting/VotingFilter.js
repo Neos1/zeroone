@@ -1,6 +1,4 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import VotingFilterForm from '../../stores/FormsStore/VotingFilterForm';
 import Dropdown from '../Dropdown';
 import { QuestionIcon, Stats } from '../Icons';
@@ -8,7 +6,6 @@ import DatePicker from '../DatePicker/DatePicker';
 
 import styles from './Voting.scss';
 
-@withTranslation()
 class VotingFilter extends React.PureComponent {
   form = new VotingFilterForm({
     hooks: {
@@ -22,14 +19,8 @@ class VotingFilter extends React.PureComponent {
     },
   });
 
-  static propTypes = {
-    t: PropTypes.func.isRequired,
-  };
-
   render() {
     const { form } = this;
-    const { props } = this;
-    const { t } = props;
     return (
       <form form={form} onSubmit={form.onSubmit}>
         <div className={styles['voting__filter-dropdown']}>
@@ -51,9 +42,7 @@ class VotingFilter extends React.PureComponent {
           </Dropdown>
         </div>
         <div className={styles['voting__filter-date']}>
-          <DatePicker
-            placeholder={t('fields:date')}
-          />
+          <DatePicker />
         </div>
       </form>
     );
