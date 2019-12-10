@@ -10,6 +10,9 @@ const placeholders = {
   contractAddress: 'Enter contract address',
   address: 'Address',
   countTokens: 'Count tokens',
+  question: 'Question',
+  status: 'Status',
+  date: 'Date',
 };
 
 export default placeholders;

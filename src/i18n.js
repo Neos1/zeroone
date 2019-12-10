@@ -1,5 +1,8 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import moment from 'moment';
+import 'moment/locale/ru';
+import 'moment/locale/en-gb';
 import headingsEn from './locales/ENG/headings';
 import headingsRu from './locales/RUS/headings';
 import explanationsEn from './locales/ENG/explanations';
@@ -49,6 +52,8 @@ i18n
       nsMode: 'default',
       useSuspense: false,
     },
+  }, () => {
+    moment.locale(i18n.language);
   });
 window.i18n = i18n;
 export default i18n;

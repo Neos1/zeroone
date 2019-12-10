@@ -182,6 +182,22 @@
     }
   }
 
+  &__filter  {
+    &-dropdown {
+      display: inline-block;
+      width: 220px;
+      margin-right: 29px;
+
+      .dropdown {
+        width: 100%;
+      }
+    }
+
+    &-date {
+      display: inline-block;
+    }
+  }
+
   &__top {
     width: 100%;
     margin-top: 36px;

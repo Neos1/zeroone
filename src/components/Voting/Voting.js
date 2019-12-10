@@ -3,6 +3,7 @@ import VotingTop from './VotingTop';
 import VotingItem from './VotingItem';
 
 import styles from './Voting.scss';
+import VotingFilter from './VotingFilter';
 
 const data = [
   {
@@ -40,9 +41,7 @@ class Voting extends React.PureComponent {
       <div
         className={styles['voting-page']}
       >
-        <div>
-          filter
-        </div>
+        <VotingFilter />
         {/* eslint-disable-next-line */}
         <VotingTop onClick={() => { console.log('voting top click'); }} />
         <div>

@@ -27,6 +27,7 @@ import VerifyIcon from './entities/VerifyIcon';
 import RejectIcon from './entities/RejectIcon';
 import BorderArrowIcon from './entities/BorderArrowIcon';
 import AdminIcon from './entities/AdminIcon';
+import QuestionIcon from './entities/QuestionIcon';
 
 export {
   AddIcon,
@@ -58,4 +59,5 @@ export {
   RejectIcon,
   BorderArrowIcon,
   AdminIcon,
+  QuestionIcon,
 };
