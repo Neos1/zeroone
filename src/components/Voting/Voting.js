@@ -1,9 +1,9 @@
 import React from 'react';
 import VotingTop from './VotingTop';
 import VotingItem from './VotingItem';
+import VotingFilter from './VotingFilter';
 
 import styles from './Voting.scss';
-import VotingFilter from './VotingFilter';
 
 const data = [
   {

@@ -12,7 +12,24 @@ import styles from './DatePicker.scss';
 class DatePicker extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    fieldBefore: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      set: PropTypes.func.isRequired,
+      value: PropTypes.string.isRequired,
+      placeholder: PropTypes.string.isRequired,
+    }).isRequired,
+    fieldAfter: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      set: PropTypes.func.isRequired,
+      value: PropTypes.string.isRequired,
+      placeholder: PropTypes.string.isRequired,
+    }).isRequired,
+    onDatesSet: PropTypes.func,
   };
+
+  static defaultProps = {
+    onDatesSet: () => {},
+  }
 
   constructor() {
     super();
@@ -23,10 +40,19 @@ class DatePicker extends React.PureComponent {
     };
   }
 
+  handleDatesChange = ({ startDate, endDate }) => {
+    const { props } = this;
+    const { fieldBefore, fieldAfter, onDatesSet } = props;
+    this.setState({ start: startDate, end: endDate });
+    if (startDate) fieldBefore.set(startDate.format('DD.MM.YYYY'));
+    if (endDate) fieldAfter.set(endDate.format('DD.MM.YYYY'));
+    if (startDate && endDate) onDatesSet();
+  }
+
   render() {
     const { start, end, focusedInput } = this.state;
     const { props } = this;
-    const { t } = props;
+    const { t, fieldBefore, fieldAfter } = props;
     return (
       <div className={styles['date-picker']}>
         <div className={styles['date-picker__icon']}>
@@ -34,14 +60,10 @@ class DatePicker extends React.PureComponent {
         </div>
         <DateRangePicker
           startDate={start}
-          startDateId="your_unique_start_date_id"
+          startDateId={fieldBefore.name}
           endDate={end}
-          endDateId="your_unique_end_date_id"
-          onDatesChange={
-            ({ startDate, endDate }) => {
-              this.setState({ start: startDate, end: endDate });
-            }
-          }
+          endDateId={fieldAfter.name}
+          onDatesChange={this.handleDatesChange}
           customArrowIcon="-"
           startDatePlaceholderText={t('fields:dateFrom')}
           endDatePlaceholderText={t('fields:dateTo')}
