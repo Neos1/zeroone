@@ -21,6 +21,7 @@ import FullQuestion from '../Questions/FullQuestion';
 import Members from '../Members';
 import Voting from '../Voting';
 import VotingInfoWrapper from '../Voting/VotingInfoWrapper';
+import Settings from '../Settings';
 
 const SimpleRouter = () => (
   <MemoryRouter>
@@ -48,6 +49,11 @@ const SimpleRouter = () => (
       <Route path="/members" exact component={Members} />
       <Route path="/votings" exact component={Voting} />
       <Route path="/votingInfo/:id" exact component={VotingInfoWrapper} />
+      <Route path="/uploadWithExistingTokens" exact component={() => (<ProjectUploading newTokens={false} />)} />
+      <Route path="/uploadWithNewTokens" exact component={() => (<ProjectUploading newTokens />)} />
+      <Route path="/questions" exact component={Questions} />
+      <Route path="/question/:id" exact component={FullQuestion} />
+      <Route path="/settings" exact component={Settings} />
     </Switch>
   </MemoryRouter>
 );

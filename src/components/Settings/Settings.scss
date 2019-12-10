@@ -1,0 +1,50 @@
+@import '../../assets/styles/partials/variables';
+
+.settings {
+  display: flex;
+  flex-flow: row nowrap;
+  align-self: center;
+  justify-content: space-between;
+  padding-top: 50px;
+  &__block {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    width: 36%;
+    padding: 45px 40px;
+    text-align: center;
+    background-color: $white;
+    border: 1px solid $lightGrey;
+    &-heading {
+      margin-bottom: 35px;
+      font-weight: 700;
+      font-size: 24px;
+    }
+    &-content {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      .field {
+        width: 100%;
+        margin-bottom: 35px;
+      }
+      .btn--white {
+        width: 45%;
+        margin: 5px 0;
+      }
+    }
+    &--lang {
+      width: 25%;
+      padding: 55px 0;
+      background-color: unset;
+      border: none;
+      .settings__block-content {
+        flex-flow: column nowrap;
+        align-items: center;
+        .lang {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}

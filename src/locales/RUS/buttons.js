@@ -27,5 +27,6 @@ const buttons = {
   start: 'Начать',
   nextStep: 'Следующий шаг',
   addParameter: '+ Добавить параметр',
+  apply: 'Применить',
 };
 export default buttons;

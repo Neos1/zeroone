@@ -27,5 +27,6 @@ const buttons = {
   start: 'Start',
   nextStep: 'Next step',
   addParameter: '+ Add parameter',
+  apply: 'Apply',
 };
 export default buttons;
