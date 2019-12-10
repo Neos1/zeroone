@@ -42,7 +42,10 @@ Input.propTypes = {
   field: propTypes.shape({
     error: propTypes.string,
     value: propTypes.string.isRequired,
-    placeholder: propTypes.string.isRequired,
+    placeholder: propTypes.oneOfType([
+      propTypes.string,
+      propTypes.shape({}),
+    ]).isRequired,
     bind: propTypes.func.isRequired,
     onChange: propTypes.func.isRequired,
   }).isRequired,

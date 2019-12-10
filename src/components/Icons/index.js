@@ -24,10 +24,14 @@ import TokenName from './entities/TokenNameIcon';
 import TxHashIcon from './entities/TxHashIcon';
 import TxRecieptIcon from './entities/TxRecieptIcon';
 import VerifyIcon from './entities/VerifyIcon';
+import StartIcon from './entities/StartIcon';
+import GithubIcon from './entities/GithubIcon';
 import RejectIcon from './entities/RejectIcon';
 import BorderArrowIcon from './entities/BorderArrowIcon';
 import AdminIcon from './entities/AdminIcon';
 import QuestionIcon from './entities/QuestionIcon';
+import ThinArrow from './entities/ThinArrow';
+import DateIcon from './entities/DateIcon';
 
 export {
   AddIcon,
@@ -56,8 +60,12 @@ export {
   TxHashIcon,
   TxRecieptIcon,
   VerifyIcon,
+  StartIcon,
+  GithubIcon,
   RejectIcon,
   BorderArrowIcon,
   AdminIcon,
   QuestionIcon,
+  ThinArrow,
+  DateIcon,
 };

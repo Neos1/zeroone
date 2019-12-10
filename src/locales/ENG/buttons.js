@@ -17,9 +17,15 @@ const buttons = {
   withTokens: 'Connect contract and create project',
   withoutTokens: 'Create new contract and project',
   toWallets: 'To wallets',
+  createQuestion: 'Create question',
+  createQuestionGroup: 'Create group of questions',
+  startNewVoting: 'Start new voting',
   transfer: 'Transfer',
   designateGroupAdministrator: 'designate group administrator',
   vote: 'Vote',
   startNewVote: 'Start a new vote',
+  start: 'Start',
+  nextStep: 'Next step',
+  addParameter: '+ Add parameter',
 };
 export default buttons;

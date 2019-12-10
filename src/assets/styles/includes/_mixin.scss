@@ -1,3 +1,44 @@
+@import '../partials/variables';
+
+@mixin scrollbar {
+  &::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #fff;
+    border: 2px solid #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background-image: url(../../assets/images/thumb.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid $border;
+  }
+
+  &::-webkit-scrollbar-button:vertical:decrement{
+    width: 20px;
+    height: 20px;
+    background-image: url(../../assets/images/scrollbarBtn.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  &::-webkit-scrollbar-button:vertical:increment{
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-image: url(../../assets/images/scrollbarBtnDown.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}
+
 @mixin title {
   margin-top: 18px;
   margin-bottom: 8px;

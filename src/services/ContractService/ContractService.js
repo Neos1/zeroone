@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
@@ -21,6 +22,7 @@ class ContractService {
 
   /**
    * sets instance of contract to this._contract
+   *
    * @param {object} instance instance of contract created by Web3Service
    */
   // eslint-disable-next-line consistent-return
@@ -32,6 +34,7 @@ class ContractService {
 
   /**
    * compiles contracts and returning type of compiled contract, bytecode & abi
+   *
    * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
    * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
    */
@@ -58,6 +61,7 @@ class ContractService {
 
   /**
    * reading all imports in main contract file and importing all files in one output file
+   *
    * @param {string} type type of project - ERC20 for ERC-20 tokens, Project for project contract
    * @returns {string} combined contracts
    */
@@ -80,8 +84,9 @@ class ContractService {
 
   /**
    * Sendind transaction with contract to blockchain
+   *
    * @param {object} params parameters for deploying
-   * @param {array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
+   * @param {Array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
    * @param {string} params.bytecode bytecode of contract
    * @param {JSON} params.abi JSON interface of contract
    * @param {string} params.password password of user wallet
@@ -115,8 +120,9 @@ class ContractService {
 
   /**
    * checks erc20 tokens contract on totalSupply and symbol
+   *
    * @param {string} address address of erc20 contract
-   * @return {object} {totalSypply, symbol}
+   * @returns {object} {totalSypply, symbol}
    */
   async checkTokens(address) {
     const { rootStore: { Web3Service }, ercAbi } = this;
@@ -129,8 +135,9 @@ class ContractService {
 
   /**
    * checks is the address of contract
+   *
    * @param {string} address address of contract
-   * @return {Promise} Promise with function which resolves, if address is contract
+   * @returns {Promise} Promise with function which resolves, if address is contract
    */
   // eslint-disable-next-line class-methods-use-this
   checkProject(address) {
@@ -145,6 +152,7 @@ class ContractService {
 
   /**
    * calling contract method
+   *
    * @param {string} method method, which will be called
    * @param {string} from address of caller
    * @param params parameters for method
@@ -156,6 +164,7 @@ class ContractService {
 
   /**
    * checks count of uploaded to contract questions and total count of system questions
+   *
    * @function
    * @returns {object} {countOfUploaded, totalCount}
    */
@@ -167,8 +176,9 @@ class ContractService {
 
   /**
    * send question to created contract
+   *
    * @param {number} idx id of question;
-   * @return {Promise} Promise, which resolves on transaction hash
+   * @returns {Promise} Promise, which resolves on transaction hash
    */
   async sendQuestion(idx) {
     const {
@@ -191,29 +201,33 @@ class ContractService {
           gasLimit: 8000000,
           value: '0x0',
         };
-
         return new Promise((resolve) => {
           Web3Service.createTxData(address, rawTx, maxGasPrice)
+            // eslint-disable-next-line max-len
             .then((formedTx) => userStore.singTransaction(formedTx, password))
+            // eslint-disable-next-line no-console
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            // eslint-disable-next-line no-console
             .then((txHash) => resolve(txHash));
         });
-      }
-      return Promise.reject();
+      // eslint-disable-next-line prefer-promise-reject-errors
+      } return Promise.reject('WATAFAk');
     });
   }
 
   /**
    * Fetching one question from contract
+   *
    * @param {number} id id of question
-   * @returns {Object} Question data from contract
+   * @returns {object} Question data from contract
    */
   fetchQuestion(id) {
-    return this.callMethod('question', [id]);
+    return this.callMethod('question', id);
   }
 
   /**
    * getting one voting
+   *
    * @param {number} id id of voting
    * @param {string} from address who calls method
    */
@@ -221,8 +235,10 @@ class ContractService {
     return this.callMethod('getVoting', [id]);
   }
 
+
   /**
    * getting votes weights for voting
+   *
    * @param {number} id id of voting
    * @param {string} from address, who calls
    */
@@ -231,7 +247,15 @@ class ContractService {
   }
 
   /**
+   * Fetch length of usergroups in contract
+   */
+  fetchUserGroupsLength() {
+    return this._contract.methods.getUserGroupsLength().call();
+  }
+
+  /**
    * Starting the voting
+   *
    * @param {id} id id of question
    * @param {string} from address, who starts
    * @param params parameters of voting

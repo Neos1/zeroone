@@ -1,4 +1,4 @@
-import { computed } from 'mobx';
+import { computed, action } from 'mobx';
 
 class MemberItem {
   /**
@@ -25,7 +25,7 @@ class MemberItem {
       || !balance
     ) throw new Error('Incorrect data provided for MemberItem!');
     this.wallet = wallet;
-    this.weight = weight;
+    this.weight = weight.toFixed(2);
     this.balance = balance;
     this.customTokenName = customTokenName;
     if (typeof isAdmin === 'boolean') this.isAdmin = isAdmin;
@@ -51,6 +51,11 @@ class MemberItem {
   /** Method for getting full balance text */
   get fullBalance() {
     return `${this.balance} ${this.customTokenName}`;
+  }
+
+  @action
+  setTokenBalance(balance) {
+    this.balance = balance;
   }
 }
 

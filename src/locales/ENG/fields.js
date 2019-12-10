@@ -13,6 +13,16 @@ const placeholders = {
   question: 'Question',
   status: 'Status',
   date: 'Date',
+  durationInBlocks: 'Duration of circulation in blocks',
+  questionTitle: 'Question title',
+  questionLifeTime: 'Question lifetime',
+  parameter: 'Parameter',
+  enterNewParameterName: 'Enter new parameter name',
+  votingFormula: 'Voting formula',
+  questionDescription: 'Question description',
+  selectParameterType: 'Select parameter type',
+  titleGroupQuestions: 'Title group questions',
+  descriptionOrComment: 'Description or comment',
 };
 
 export default placeholders;

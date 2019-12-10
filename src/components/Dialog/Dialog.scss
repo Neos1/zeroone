@@ -110,8 +110,15 @@
 
   &--lg {
     .content {
-      width: 740px;
-      min-width: 740px;
+      width: 754px;
+      min-width: 754px;
+    }
+  }
+
+  &--xlg {
+    .content {
+      width: 845px;
+      min-width: 845px;
     }
   }
 }

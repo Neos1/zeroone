@@ -17,34 +17,29 @@ class MembersGroup {
    */
   constructor({
     name,
-    description,
-    wallet,
-    balance,
-    customTokenName,
-    tokenName,
-    list,
+    groupAddress,
+    contract,
+    totalSupply,
+    tokenSymbol,
+    members,
     textForEmptyState,
   }) {
     if (
       !name
-      || !description
-      || !customTokenName
-      || !tokenName
-      || !wallet
-      || Array.isArray(list) === false
+      || !contract
+      || !tokenSymbol
+      || !groupAddress
+      || Array.isArray(members) === false
     ) throw new Error('Incorrect data provided!');
     this.name = name;
-    this.description = description;
-    this.wallet = wallet;
-    this.balance = balance;
-    this.customTokenName = customTokenName;
-    this.tokenName = tokenName;
+    this.wallet = groupAddress;
+    this.balance = totalSupply;
+    this.contract = contract;
+    this.customTokenName = tokenSymbol;
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }
-    list.forEach((member) => {
-      this.addToList(member);
-    });
+    this.addToList(members);
   }
 
   /** Name group (Example: Admins) */
@@ -83,9 +78,11 @@ class MembersGroup {
    *
    * @param {object} member all data about member
    */
-  addToList = (member) => {
+  addToList = (members) => {
     // TODO maybe fix for duplicate wallets
-    this.list.push(new MemberItem(member));
+    members.forEach((member) => {
+      this.list.push(new MemberItem(member));
+    });
   }
 }
 

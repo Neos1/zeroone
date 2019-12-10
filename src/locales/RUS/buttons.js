@@ -17,9 +17,15 @@ const buttons = {
   withTokens: 'Подключить контракт и создать проект',
   withoutTokens: 'Создать новые токены и проект',
   toWallets: 'К выбору кошелька',
+  createQuestion: 'Создать вопрос',
+  createQuestionGroup: 'Создать группу воросов',
+  startNewVoting: 'Начать новое голосование',
   transfer: 'Перевести',
   designateGroupAdministrator: 'назначить администратором группы',
   vote: 'Голосовать',
   startNewVote: 'Начать новое голосование',
+  start: 'Начать',
+  nextStep: 'Следующий шаг',
+  addParameter: '+ Добавить параметр',
 };
 export default buttons;
