@@ -1,9 +1,12 @@
 import React from 'react';
 import VotingTop from './VotingTop';
 import VotingItem from './VotingItem';
+import VotingFilter from './VotingFilter';
+import Container from '../Container';
+import Footer from '../Footer';
+import Pagination from '../Pagination';
 
 import styles from './Voting.scss';
-import VotingFilter from './VotingFilter';
 
 const data = [
   {
@@ -38,32 +41,40 @@ const data = [
 class Voting extends React.PureComponent {
   render() {
     return (
-      <div
-        className={styles['voting-page']}
-      >
-        <VotingFilter />
-        {/* eslint-disable-next-line */}
-        <VotingTop onClick={() => { console.log('voting top click'); }} />
-        <div>
-          {
-            data && data.length
-              ? data.map((item, index) => (
-                <VotingItem
-                  key={`voting__item--${index + 1}`}
-                  index={index + 1}
-                  title={item.title}
-                  description={item.description}
-                  actualState={item.actualState}
-                  date={item.date}
-                />
-              ))
-              : null
-          }
+      <Container className="container--small">
+        <div
+          className={styles['voting-page']}
+        >
+          <VotingFilter />
+          {/* eslint-disable-next-line */}
+          <VotingTop onClick={() => { console.log('voting top click'); }} />
+          <div>
+            {
+              data && data.length
+                ? data.map((item, index) => (
+                  <VotingItem
+                    key={`voting__item--${index + 1}`}
+                    index={index + 1}
+                    title={item.title}
+                    description={item.description}
+                    actualState={item.actualState}
+                    date={item.date}
+                  />
+                ))
+                : null
+            }
+          </div>
+          <Pagination
+            activePage={1}
+            lastPage={10}
+            handlePageChange={() => {}}
+            itemsCountPerPage={10}
+            totalItemsCount={100}
+            pageRangeDisplayed={5}
+          />
         </div>
-        <div>
-          pagination
-        </div>
-      </div>
+        <Footer />
+      </Container>
     );
   }
 }

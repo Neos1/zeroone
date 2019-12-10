@@ -19,6 +19,8 @@ import Header from '../Header';
 import Questions from '../Questions';
 import FullQuestion from '../Questions/FullQuestion';
 import Members from '../Members';
+import Voting from '../Voting';
+import VotingInfoWrapper from '../Voting/VotingInfoWrapper';
 
 const SimpleRouter = () => (
   <MemoryRouter>
@@ -44,6 +46,8 @@ const SimpleRouter = () => (
       <Route path="/questions" exact component={Questions} />
       <Route path="/question/:id" exact component={FullQuestion} />
       <Route path="/members" exact component={Members} />
+      <Route path="/votings" exact component={Voting} />
+      <Route path="/votingInfo/:id" exact component={VotingInfoWrapper} />
     </Switch>
   </MemoryRouter>
 );

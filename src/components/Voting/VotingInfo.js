@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import moment from 'moment';
 import { Collapse } from 'react-collapse';
-import Container from '../Container';
 import { EMPTY_DATA_STRING } from '../../constants';
 import { VerifyIcon, RejectIcon, Stats } from '../Icons';
 import Button from '../Button/Button';
@@ -95,147 +94,145 @@ class VotingInfo extends React.PureComponent {
       <div
         className={styles['voting-info']}
       >
-        <Container>
-          <div
-            className={styles['voting-info__back']}
+        <div
+          className={styles['voting-info__back']}
+        >
+          <Link
+            to="/votings"
+            className={styles.voting__back}
           >
-            <Link
-              to="/"
-              className={styles.voting__back}
-            >
-              {t('buttons:back')}
-            </Link>
-          </div>
+            {t('buttons:back')}
+          </Link>
+        </div>
+        <div
+          className={styles['voting-info__date']}
+        >
+          <span>
+            {t('other:start')}
+            :
+            {this.getDateString(date.start)}
+          </span>
+          <span>
+            {t('other:end')}
+            :
+            {this.getDateString(date.end)}
+          </span>
+        </div>
+        <div
+          className={styles['voting-info__card']}
+        >
           <div
-            className={styles['voting-info__date']}
-          >
-            <span>
-              {t('other:start')}
-              :
-              {this.getDateString(date.start)}
-            </span>
-            <span>
-              {t('other:end')}
-              :
-              {this.getDateString(date.end)}
-            </span>
-          </div>
-          <div
-            className={styles['voting-info__card']}
+            className={styles['voting-info__card-inner']}
           >
             <div
-              className={styles['voting-info__card-inner']}
+              className={styles['voting-info__index']}
+            >
+              #
+              {index}
+            </div>
+            <div
+              className={styles['voting-info__title']}
+            >
+              {title}
+            </div>
+            <div
+              className={styles['voting-info__main']}
             >
               <div
-                className={styles['voting-info__index']}
+                className={styles['voting-info__description']}
               >
-                #
-                {index}
+                {description}
               </div>
               <div
-                className={styles['voting-info__title']}
-              >
-                {title}
-              </div>
-              <div
-                className={styles['voting-info__main']}
+                className={styles['voting-info__data']}
               >
                 <div
-                  className={styles['voting-info__description']}
+                  className={styles['voting-info__data-title']}
                 >
-                  {description}
+                  {t('other:dateOfApplication')}
                 </div>
                 <div
-                  className={styles['voting-info__data']}
+                  className={styles['voting-info__data-value']}
                 >
-                  <div
-                    className={styles['voting-info__data-title']}
-                  >
-                    {t('other:dateOfApplication')}
-                  </div>
-                  <div
-                    className={styles['voting-info__data-value']}
-                  >
-                    {this.getDateString(date.application)}
-                  </div>
-                  <div
-                    className={styles['voting-info__data-title']}
-                  >
-                    {t('other:durationInBlocks')}
-                  </div>
-                  <div
-                    className={styles['voting-info__data-value']}
-                  >
-                    {duration}
-                  </div>
-                  <div
-                    className={styles['voting-info__data-title']}
-                  >
-                    {t('other:newAddressContract')}
-                  </div>
-                  <div
-                    className={styles['voting-info__data-value']}
-                  >
-                    {addressContract}
-                  </div>
+                  {this.getDateString(date.application)}
                 </div>
-              </div>
-              <div
-                className={styles['voting-info__formula']}
-              >
-                {`${t('other:votingFormula')}: ${formula}`}
+                <div
+                  className={styles['voting-info__data-title']}
+                >
+                  {t('other:durationInBlocks')}
+                </div>
+                <div
+                  className={styles['voting-info__data-value']}
+                >
+                  {duration}
+                </div>
+                <div
+                  className={styles['voting-info__data-title']}
+                >
+                  {t('other:newAddressContract')}
+                </div>
+                <div
+                  className={styles['voting-info__data-value']}
+                >
+                  {addressContract}
+                </div>
               </div>
             </div>
             <div
-              className={styles['voting-info__buttons']}
+              className={styles['voting-info__formula']}
             >
-              <button
-                type="button"
-                onClick={onVerifyClick}
-              >
-                <div
-                  className={styles['voting-info__button-icon']}
-                >
-                  <VerifyIcon />
-                </div>
-                {t('other:iAgree')}
-              </button>
-              <button
-                type="button"
-                onClick={onRejectClick}
-              >
-                <div
-                  className={styles['voting-info__button-icon']}
-                >
-                  <RejectIcon />
-                </div>
-                {t('other:iAmAgainst')}
-              </button>
+              {`${t('other:votingFormula')}: ${formula}`}
             </div>
           </div>
           <div
-            className={styles['voting-info__stats']}
+            className={styles['voting-info__buttons']}
           >
-            <div
-              className={styles['voting-info__stats-button']}
+            <button
+              type="button"
+              onClick={onVerifyClick}
             >
-              <Button
-                theme="white"
-                icon={(<Stats />)}
-                onClick={this.toggleOpen}
-              >
-                {t('other:statistics')}
-              </Button>
-            </div>
-            <Collapse isOpened={isOpen}>
               <div
-                className={styles['voting-info__stats-content']}
+                className={styles['voting-info__button-icon']}
               >
-                <VotingStats />
+                <VerifyIcon />
               </div>
-            </Collapse>
+              {t('other:iAgree')}
+            </button>
+            <button
+              type="button"
+              onClick={onRejectClick}
+            >
+              <div
+                className={styles['voting-info__button-icon']}
+              >
+                <RejectIcon />
+              </div>
+              {t('other:iAmAgainst')}
+            </button>
           </div>
-        </Container>
+        </div>
+        <div
+          className={styles['voting-info__stats']}
+        >
+          <div
+            className={styles['voting-info__stats-button']}
+          >
+            <Button
+              theme="white"
+              icon={(<Stats />)}
+              onClick={this.toggleOpen}
+            >
+              {t('other:statistics')}
+            </Button>
+          </div>
+          <Collapse isOpened={isOpen}>
+            <div
+              className={styles['voting-info__stats-content']}
+            >
+              <VotingStats />
+            </div>
+          </Collapse>
+        </div>
       </div>
     );
   }
