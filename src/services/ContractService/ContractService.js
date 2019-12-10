@@ -264,6 +264,13 @@ class ContractService {
     return (this, id, from, params);
   }
 
+  /**
+   * creates transaction for sending descision about voting
+   *
+   * @param {number} votingId  voting
+   * @param {number} descision 0 - negative, 1 - positive
+   */
+  // eslint-disable-next-line consistent-return
   sendVote(votingId, descision) {
     const {
       ercAbi,
@@ -293,10 +300,53 @@ class ContractService {
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
             .then((rec) => { console.log(rec); });
         });
+    } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
+      const tx = {
+        from: userStore.address,
+        data: _contract.methods.sendVote(descision).encodeABI(),
+        value: '0x0',
+        gasLimit: 8000000,
+      };
+      return Web3Service.createTxData(userStore.address, tx)
+        .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
+        .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        .then((rec) => { console.log(rec); });
     }
   }
 
+  startVoting(questionId, params) {
+    const {
+      _contract,
+      rootStore: {
+        projectStore: { questionStore },
+        Web3Service,
+        userStore,
+      },
+    } = this;
+    const [question] = questionStore.getQuestionById(questionId);
+    const parameters = question.getParameters();
+    const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
+    const votingData = (data).replace('0x', question.methodSelector);
+    console.log(votingData);
+    const tx = {
+      data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
+      to: _contract.options.address,
+      gasLimit: 8000000,
+      value: '0x0',
+    };
 
+    return Web3Service.createTxData(userStore.address, tx)
+      .then((formedTx) => userStore.singTransaction(formedTx))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then((receipt) => { console.log(receipt); });
+  }
+
+  /**
+   * approve token transfer from user to Voter contract
+   *
+   * @param {object} group group instance
+   */
   approveErc(group) {
     const {
       ercAbi,

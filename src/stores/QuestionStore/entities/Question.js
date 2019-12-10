@@ -18,7 +18,7 @@ class Question {
   formula;
 
   /**
-   * @constructor
+   * @class
    * @param {object} data data about question
    * @param {number} data.groupId id of group, which can start voting for this question
    * @param {string} data.caption question caption
@@ -82,7 +82,7 @@ class Question {
   }
 
   getParameters() {
-    return this.params;
+    return this.params.map((param) => param[1]);
   }
 
   getFormula() {
