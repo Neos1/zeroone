@@ -35,6 +35,7 @@ class VotingInfo extends React.PureComponent {
     }).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
     onRejectClick: PropTypes.func.isRequired,
+    onBarClick: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -89,6 +90,7 @@ class VotingInfo extends React.PureComponent {
       formula,
       onVerifyClick,
       onRejectClick,
+      onBarClick,
     } = props;
     return (
       <div
@@ -229,7 +231,9 @@ class VotingInfo extends React.PureComponent {
             <div
               className={styles['voting-info__stats-content']}
             >
-              <VotingStats />
+              <VotingStats
+                onBarClick={onBarClick}
+              />
             </div>
           </Collapse>
         </div>

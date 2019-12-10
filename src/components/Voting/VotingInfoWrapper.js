@@ -6,6 +6,7 @@ import Container from '../Container';
 import Dialog from '../Dialog/Dialog';
 import DecisionAgree from '../Decision/DecisionAgree';
 import DecisionReject from '../Decision/DecisionReject';
+import VoterList from '../VoterList/VoterList';
 
 @inject('dialogStore')
 @observer
@@ -35,10 +36,15 @@ class VotingInfoWrapper extends React.PureComponent {
           Устанавливает количество бесплатных билетов у новых игроков. Иногда описания могут не влазить и оно сокращается до троеточия. Зато в карточке голосвания можно уместить гораздно больше текста
           Устанавливает количество бесплатных билетов у новых игроков. Иногда описания могут не влазить и оно сокращается до троеточия. Зато в карточке голосвания можно уместить гораздно больше текста"
           formula="(group (0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54)→condition (quorum=20%))"
-          /* eslint-disable-next-line */
           onVerifyClick={() => { dialogStore.show('decision_agree'); }}
-          /* eslint-disable-next-line */
           onRejectClick={() => { dialogStore.show('decision_reject'); }}
+          onBarClick={
+            (name, data) => {
+              console.log('name', name);
+              console.log('data', data);
+              dialogStore.show('voter_list');
+            }
+          }
         />
         <Dialog
           name="decision_agree"
@@ -55,6 +61,14 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
         >
           <DecisionReject />
+        </Dialog>
+        <Dialog
+          name="voter_list"
+          size="lg"
+          header={null}
+          footer={null}
+        >
+          <VoterList />
         </Dialog>
       </Container>
     );

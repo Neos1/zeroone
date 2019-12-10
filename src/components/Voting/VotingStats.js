@@ -18,6 +18,7 @@ const data = [
 class VotingStats extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    onBarClick: PropTypes.func.isRequired,
   };
 
   /**
@@ -71,7 +72,7 @@ class VotingStats extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const { t } = props;
+    const { t, onBarClick } = props;
     return (
       <div className={styles.voting__stats}>
         {
@@ -97,6 +98,7 @@ class VotingStats extends React.PureComponent {
                     dataKey="pros"
                     fill="#fff"
                     stroke="#000"
+                    onClick={() => onBarClick('pros', item)}
                   >
                     <LabelList
                       dataKey="pros"
@@ -108,6 +110,7 @@ class VotingStats extends React.PureComponent {
                     dataKey="cons"
                     fill="#000"
                     stroke="#000"
+                    onClick={() => onBarClick('cons', item)}
                   >
                     <LabelList
                       dataKey="cons"
