@@ -23,6 +23,8 @@ const placeholders = {
   selectParameterType: 'Выберите тип параметра',
   titleGroupQuestions: 'Название группы вопросов',
   descriptionOrComment: 'Описание или комментарий',
+  dateFrom: 'Дата с',
+  dateTo: 'Дата по',
 };
 
 export default placeholders;

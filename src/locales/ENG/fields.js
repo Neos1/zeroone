@@ -23,6 +23,8 @@ const placeholders = {
   selectParameterType: 'Select parameter type',
   titleGroupQuestions: 'Title group questions',
   descriptionOrComment: 'Description or comment',
+  dateFrom: 'Date from',
+  dateTo: 'Date to',
 };
 
 export default placeholders;

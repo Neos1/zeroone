@@ -1,6 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 import VotingFilterForm from '../../stores/FormsStore/VotingFilterForm';
 import Dropdown from '../Dropdown';
 import { QuestionIcon, Stats } from '../Icons';
@@ -8,13 +7,11 @@ import DatePicker from '../DatePicker/DatePicker';
 
 import styles from './Voting.scss';
 
-@withTranslation()
+@observer
 class VotingFilter extends React.PureComponent {
   form = new VotingFilterForm({
     hooks: {
-      onSuccess() {
-        return Promise.resolve();
-      },
+      onSuccess: () => Promise.resolve(),
       onError() {
         /* eslint-disable-next-line */
         console.error('error');
@@ -22,14 +19,8 @@ class VotingFilter extends React.PureComponent {
     },
   });
 
-  static propTypes = {
-    t: PropTypes.func.isRequired,
-  };
-
   render() {
     const { form } = this;
-    const { props } = this;
-    const { t } = props;
     return (
       <form form={form} onSubmit={form.onSubmit}>
         <div className={styles['voting__filter-dropdown']}>
@@ -52,7 +43,9 @@ class VotingFilter extends React.PureComponent {
         </div>
         <div className={styles['voting__filter-date']}>
           <DatePicker
-            placeholder={t('fields:date')}
+            fieldBefore={form.$('date_before')}
+            fieldAfter={form.$('date_after')}
+            onDatesSet={() => {}}
           />
         </div>
       </form>
