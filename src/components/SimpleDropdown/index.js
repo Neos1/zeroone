@@ -6,6 +6,20 @@ import DropdownOption from '../DropdownOption';
 import styles from '../Dropdown/Dropdown.scss';
 
 class SimpleDropdown extends Component {
+  static propTypes = {
+    children: propTypes.oneOfType([
+      propTypes.element,
+      propTypes.string,
+    ]),
+    options: propTypes.arrayOf(propTypes.shape({})).isRequired,
+    onSelect: propTypes.func,
+  };
+
+  static defaultProps = {
+    children: '',
+    onSelect: () => false,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -93,16 +107,5 @@ class SimpleDropdown extends Component {
     );
   }
 }
-
-SimpleDropdown.propTypes = {
-  children: propTypes.element,
-  options: propTypes.arrayOf(propTypes.shape({})).isRequired,
-  onSelect: propTypes.func,
-};
-
-SimpleDropdown.defaultProps = {
-  children: '',
-  onSelect: () => false,
-};
 
 export default SimpleDropdown;

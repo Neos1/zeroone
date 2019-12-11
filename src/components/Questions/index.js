@@ -37,6 +37,28 @@ class Questions extends Component {
     },
   });
 
+  static propTypes = {
+    t: propTypes.func.isRequired,
+    projectStore: propTypes.shape({
+      questionStore: propTypes.shape({
+        questions: propTypes.arrayOf(propTypes.shape({})).isRequired,
+        options: propTypes.arrayOf(propTypes.shape({
+          value: propTypes.number.isRequired,
+          label: propTypes.string.isRequired,
+        })).isRequired,
+        pagination: propTypes.instanceOf(PaginationStore).isRequired,
+        dataManager: propTypes.instanceOf(DataManagerStore).isRequired,
+      }),
+    }).isRequired,
+    dialogStore: propTypes.shape({
+      show: propTypes.func.isRequired,
+      hide: propTypes.func.isRequired,
+    }).isRequired,
+    history: propTypes.shape({
+      push: propTypes.func.isRequired,
+    }).isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -152,25 +174,4 @@ class Questions extends Component {
   }
 }
 
-Questions.propTypes = {
-  t: propTypes.func.isRequired,
-  projectStore: propTypes.shape({
-    questionStore: propTypes.shape({
-      questions: propTypes.arrayOf(propTypes.shape({})).isRequired,
-      options: propTypes.arrayOf(propTypes.shape({
-        value: propTypes.number.isRequired,
-        label: propTypes.string.isRequired,
-      })).isRequired,
-      pagination: propTypes.instanceOf(PaginationStore).isRequired,
-      dataManager: propTypes.instanceOf(DataManagerStore).isRequired,
-    }),
-  }).isRequired,
-  dialogStore: propTypes.shape({
-    show: propTypes.func.isRequired,
-    hide: propTypes.func.isRequired,
-  }).isRequired,
-  history: propTypes.shape({
-    push: propTypes.func.isRequired,
-  }).isRequired,
-};
 export default Questions;
