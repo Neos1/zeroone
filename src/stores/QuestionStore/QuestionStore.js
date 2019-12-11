@@ -2,11 +2,14 @@ import { observable, action, computed } from 'mobx';
 import Question from './entities/Question';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import { PATH_TO_DATA } from '../../constants/windowModules';
+import PaginationStore from '../PaginationStore';
 
 /**
  * Contains methods for working
  */
 class QuestionStore {
+  @observable pagination;
+
   /** List models Question */
   @observable _questions;
 
@@ -17,6 +20,10 @@ class QuestionStore {
     this._questions = [];
     this.rootStore = rootStore;
     this.getActualQuestions();
+    this.pagination = new PaginationStore({
+      totalItemsCount: this.questions.length,
+      itemsCountPerPage: 2,
+    });
   }
 
   /**

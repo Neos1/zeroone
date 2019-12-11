@@ -15,6 +15,8 @@ import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
+import Pagination from '../Pagination';
+import PaginationStore from '../../stores/PaginationStore';
 
 @withRouter
 @withTranslation()
@@ -41,8 +43,7 @@ class Questions extends Component {
 
   render() {
     const { t, projectStore, dialogStore } = this.props;
-    // eslint-disable-next-line no-console
-    const { questionStore: { options, questions } } = projectStore;
+    const { questionStore: { options, questions, pagination } } = projectStore;
     return (
       <Container className="container--small">
         <div className={styles.questions}>
@@ -77,6 +78,14 @@ class Questions extends Component {
               ))
             }
           </div>
+          <Pagination
+            activePage={pagination.activePage}
+            lastPage={pagination.lastPage}
+            handlePageChange={pagination.handleChange}
+            itemsCountPerPage={pagination.itemsCountPerPage}
+            totalItemsCount={pagination.totalItemsCount}
+            pageRangeDisplayed={pagination.pageRangeDisplayed}
+          />
         </div>
         <Dialog name="create_group_question" size="md" footer={null}>
           <CreateGroupQuestions />
@@ -107,6 +116,7 @@ Questions.propTypes = {
         value: propTypes.number.isRequired,
         label: propTypes.string.isRequired,
       })).isRequired,
+      pagination: propTypes.instanceOf(PaginationStore).isRequired,
     }),
   }).isRequired,
   dialogStore: propTypes.shape({
