@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import Question from './entities/Question';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
+import { PATH_TO_DATA } from '../../constants/windowModules';
 
 /**
  * Contains methods for working
@@ -35,36 +36,64 @@ class QuestionStore {
   }
 
   /**
-   * Method for getting actual question
-   * from the contract & file
+   * Method for getting questions from contract
+   * & save then to json file
+   *
+   * @param {string} address address project for
+   * uniq folder
    */
-  @action getActualQuestions = async () => {
-    const firstQuestionIndex = 1;
-    const { contractService } = this.rootStore;
-    const { countOfUploaded } = await contractService.checkQuestions();
-    const questions = readDataFromFile({ name: 'questions' });
-    // If there are no questions in the file, then
-    // we will get them FROM THE CONTRACT
-    if (!questions || !questions.data) {
-      await this.fetchQuestions();
-      writeDataToFile({
-        name: 'questions',
-        data: {
-          data: this.rawQuestions,
-        },
-      });
-      return;
-    }
-    const questionsFromFileLength = questions.data.length;
-    const countQuestionFromContract = countOfUploaded - firstQuestionIndex;
-    // Add questions FROM THE FILE
+  getQuestionsFromContract = async (address) => {
+    await this.fetchQuestions();
+    writeDataToFile({
+      name: 'questions',
+      data: {
+        data: this.rawQuestions,
+      },
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
+  }
+
+  /**
+   * Method for getting & adding questions
+   * from file
+   *
+   * @param {string} address address project
+   * @returns {object} questions object
+   */
+  getQuestionsFromFile = (address) => {
+    const questions = readDataFromFile({
+      name: 'questions',
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
+    const questionsFromFileLength = questions.data && questions.data.length
+      ? questions.data.length
+      : 0;
     for (let i = 0; i < questionsFromFileLength; i += 1) {
       const question = questions.data[i];
+      // For correct work {getMissingQuestions} method
       this.rawQuestions.push(question);
       this.addQuestion(i, question);
     }
-    // Add questions that are not in the file,
-    // but are in the contract
+    return questions;
+  }
+
+  /**
+   * Get & add questions that are not in the file,
+   * but are in the contract
+   *
+   * @param {object} param0 data for method
+   * @param {object} param0.questions question object data
+   * @param {string} param0.address address project
+   */
+  getMissingQuestions = async ({
+    questions,
+    address,
+  }) => {
+    const firstQuestionIndex = 1;
+    const { contractService } = this.rootStore;
+    const { countOfUploaded } = await contractService.checkQuestions();
+    const questionsFromFileLength = questions.data.length;
+    const countQuestionFromContract = countOfUploaded - firstQuestionIndex;
     if (countQuestionFromContract > questionsFromFileLength) {
       for (let i = questionsFromFileLength + firstQuestionIndex; i < countOfUploaded; i += 1) {
         // eslint-disable-next-line no-await-in-loop
@@ -77,8 +106,27 @@ class QuestionStore {
         data: {
           data: this.rawQuestions,
         },
+        basicPath: `${PATH_TO_DATA}${address}`,
       });
     }
+  }
+
+  /**
+   * Method for getting actual question
+   * from the contract & file
+   */
+  @action getActualQuestions = async () => {
+    const { contractService } = this.rootStore;
+    const { address } = contractService._contract.options;
+    const questions = this.getQuestionsFromFile(address);
+    if (!questions || !questions.data) {
+      await this.getQuestionsFromContract(address);
+      return;
+    }
+    this.getMissingQuestions({
+      questions,
+      address,
+    });
   }
 
   /**
