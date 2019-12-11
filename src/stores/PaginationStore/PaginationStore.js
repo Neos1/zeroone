@@ -32,7 +32,6 @@ class PaginationStore {
     key,
     value,
   }) => {
-    console.log('key', key, 'value', value);
     this[key] = value;
   }
 

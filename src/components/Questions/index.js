@@ -42,6 +42,21 @@ class Questions extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    const { projectStore } = this.props;
+    const {
+      questionStore: {
+        pagination,
+        dataManager,
+      },
+    } = projectStore;
+    pagination.update({
+      key: 'activePage',
+      value: 1,
+    });
+    dataManager.reset();
+  }
+
   /**
    * Method for handle sort
    *
@@ -51,9 +66,14 @@ class Questions extends Component {
     const { projectStore } = this.props;
     const {
       questionStore: {
+        pagination,
         dataManager,
       },
     } = projectStore;
+    pagination.update({
+      key: 'activePage',
+      value: 1,
+    });
     dataManager.addRule({ caption: selected });
   }
 

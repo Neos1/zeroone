@@ -78,6 +78,11 @@ class DataManagerStore {
       this.rules[key] = rule[key];
     });
   }
+
+  @action
+  reset = () => {
+    this.rules = {};
+  }
 }
 
 export default DataManagerStore;
