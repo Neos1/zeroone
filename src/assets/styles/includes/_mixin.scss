@@ -49,3 +49,11 @@
   line-height: 28px;
   text-align: center;
 }
+
+@mixin clearfix {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}

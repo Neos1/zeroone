@@ -22,5 +22,8 @@ const headings = {
   walletRestored: { heading: 'Wallet restoring', subheading: 'Wallet is succesfully restored' },
   walletCreated: { heading: 'Wallet creating', subheading: 'Wallet is succesfully created' },
   walletRestoring: { heading: 'Wallet restoring', subheading: 'Check the data accuracy before continuing' },
+  nodeConnection: 'Node connection',
+  creatingAndUpload: 'Create and upload contract',
+  interfaceLanguage: 'Interface language',
 };
 export default headings;

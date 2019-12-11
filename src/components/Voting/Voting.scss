@@ -1,0 +1,409 @@
+@import '../../assets/styles/includes/mixin';
+
+.voting {
+  &-page {
+    margin-bottom: 40px;
+  }
+
+  &-info {
+    margin-bottom: 40px;
+
+    &__back {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &__date {
+      float: right;
+      padding: 5px 0;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: middle;
+
+      span {
+        &:first-child {
+          padding-right: 24px;
+        }
+      }
+    }
+
+    &__card {
+      margin-top: 7px;
+      background-color: #fff;
+      border: 1px solid #e1e4e8;
+
+      &-inner {
+        padding: 20px 45px 0;
+      }
+    }
+
+    &__index {
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.2);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &__title {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &__main {
+      margin-bottom: 32px;
+      font-size: 0;
+    }
+
+    &__description {
+      display: inline-block;
+      width: 50%;
+      padding-right: 50px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: top;
+    }
+
+    &__data {
+      display: inline-block;
+      width: 50%;
+      padding-left: 50px;
+      color: rgba(0, 0, 0, 1);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: top;
+
+      &-title {
+        margin-bottom: 4px;
+      }
+
+      &-value {
+        margin-bottom: 16px;
+        font-weight: 700;
+      }
+    }
+
+    &__formula {
+      margin-bottom: 16px;
+      color: #808080;
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &__buttons {
+      border-top: 1px solid #e1e4e8;
+
+      button {
+        float: left;
+        width: 50%;
+        padding: 28px 30px 23px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        background-color: #fff;
+        border: unset;
+        outline: none;
+        cursor: pointer;
+
+        &:first-child {
+          position: relative;
+
+          &::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            height: 100%;
+            background-color: #e1e4e8;
+            content: '';
+          }
+        }
+      }
+
+      @include clearfix;
+    }
+
+    &__button {
+      &-icon {
+        margin-bottom: 8px;
+        text-align: center;
+
+        svg {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+
+    &__stats {
+      margin-top: 16px;
+
+      svg {
+        width: auto;
+        height: auto;
+      }
+
+      button {
+        padding: 11px 15px;
+
+        svg path {
+          fill: #fff;
+        }
+
+        &:hover {
+          svg path {
+            fill: #fff;
+          }
+        }
+
+        &:active {
+          svg path {
+            fill: #000;
+          }
+        }
+      }
+
+      &-button {
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      &-content {
+        margin-bottom: 40px;
+        padding: 40px 60px 53px;
+        background: #fff;
+        border: 1px solid #e1e4e8;
+      }
+    }
+  }
+
+  &__filter  {
+    &-dropdown {
+      display: inline-block;
+      width: 220px;
+      margin-right: 29px;
+
+      .dropdown {
+        width: 100%;
+      }
+    }
+
+    &-date {
+      float: right;
+    }
+  }
+
+  &__top {
+    width: 100%;
+    margin-top: 36px;
+    margin-bottom: 16px;
+
+    &-button {
+      width: 100%;
+      padding: 26px 96px 26px 100px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      outline: none;
+      cursor: pointer;
+
+      &-icon,
+      &-text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        margin-right: 16px;
+
+        svg {
+          width: auto;
+          height: auto;
+        }
+      }
+
+      &-text {
+        color: #000;
+        font-weight: 300;
+        font-size: 18px;
+        font-family: "Grotesk";
+        line-height: 21px;
+      }
+    }
+  }
+
+  &__item {
+    min-height: 126px;
+    margin-bottom: 8px;
+    padding: 16px 8px 16px 30px;
+    font-size : 0;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    transition: border-color 0.3s;
+
+    &-info,
+    &-date,
+    &-progress {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &-info {
+      width: 54%;
+    }
+
+    &-date {
+      width: 24%;
+      padding: 10px 0;
+      text-align: center;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+
+      &-block {
+        display: inline-block;
+        padding: 0 39px;
+
+        &:first-child {
+          margin-bottom: 16px;
+        }
+      }
+
+      &-text {
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: left;
+      }
+    }
+
+    &-progress {
+      width: 22%;
+      padding: 0 36px;
+    }
+
+    &-index {
+      margin-bottom: 5px;
+      color: rgba(0, 0, 0, 0.2);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-title {
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 1);
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &-description {
+      margin-bottom: 10px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &:hover {
+      border: 1px solid #000;
+    }
+  }
+
+  &__decision {
+    &--progress {
+      .voting__decision {
+        &-title {
+          margin-bottom: 8px;
+          color: #000;
+          font-size: 14px;
+          line-height: 16px;
+          text-align: left;
+        }
+      }
+    }
+
+    &-state {
+      color: rgba(0, 0, 0, 1);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+    }
+
+    &-icon {
+      margin-top: 16px;
+      text-align: center;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &-title {
+      margin-bottom: 4px;
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 13px;
+      text-align: center;
+    }
+
+    &-text {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+
+      &--remained {
+        margin-top: 16px;
+        text-align: left;
+      }
+    }
+  }
+
+  &__back {
+    display: inline-block;
+    padding: 5px 35px;
+    color: #c8c9ca;
+    font-size: 14px;
+    line-height: 107.5%;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 2px;
+  }
+
+  &__stats {
+    text-align: center;
+
+    &-col {
+      display: inline-block;
+      width: 33.3333%;
+      vertical-align: top;
+
+      .recharts-wrapper {
+        margin: 0 auto;
+      }
+
+      &-title {
+        margin-top: 17px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        text-align: center;
+      }
+
+      &-subtitle {
+        margin-top: 9px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: center;
+      }
+    }
+
+    @include clearfix;
+  }
+}

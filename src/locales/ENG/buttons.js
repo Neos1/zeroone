@@ -23,8 +23,10 @@ const buttons = {
   transfer: 'Transfer',
   designateGroupAdministrator: 'designate group administrator',
   vote: 'Vote',
+  startNewVote: 'Start a new vote',
   start: 'Start',
   nextStep: 'Next step',
   addParameter: '+ Add parameter',
+  apply: 'Apply',
 };
 export default buttons;

@@ -1,0 +1,15 @@
+.progress-bar {
+  &__indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    background: #fff;
+    border: 1px solid #000;
+
+    &--filled {
+      background-color: #000;
+    }
+  }
+}

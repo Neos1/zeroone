@@ -23,8 +23,10 @@ const buttons = {
   transfer: 'Перевести',
   designateGroupAdministrator: 'назначить администратором группы',
   vote: 'Голосовать',
+  startNewVote: 'Начать новое голосование',
   start: 'Начать',
   nextStep: 'Следующий шаг',
   addParameter: '+ Добавить параметр',
+  apply: 'Применить',
 };
 export default buttons;

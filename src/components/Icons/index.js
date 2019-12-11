@@ -29,9 +29,10 @@ import GithubIcon from './entities/GithubIcon';
 import RejectIcon from './entities/RejectIcon';
 import BorderArrowIcon from './entities/BorderArrowIcon';
 import AdminIcon from './entities/AdminIcon';
-import ThinArrow from './entities/ThinArrow';
 import QuestionIcon from './entities/QuestionIcon';
+import ThinArrow from './entities/ThinArrow';
 import DateIcon from './entities/DateIcon';
+import SettingsIcon from './entities/SettingsIcon';
 
 export {
   AddIcon,
@@ -65,7 +66,8 @@ export {
   RejectIcon,
   BorderArrowIcon,
   AdminIcon,
-  ThinArrow,
   QuestionIcon,
+  ThinArrow,
   DateIcon,
+  SettingsIcon,
 };

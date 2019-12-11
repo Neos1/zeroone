@@ -35,7 +35,6 @@ const QuestionIcon = ({
       />
     </g>
   </svg>
-
 );
 
 QuestionIcon.propTypes = {

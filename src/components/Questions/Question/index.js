@@ -5,17 +5,19 @@ import { StartIcon } from '../../Icons';
 
 import styles from './Question.scss';
 
-// eslint-disable-next-line no-unused-vars
 const startBlock = () => (
   <div className={styles.question__right}>
-    <div className={styles.question__start}>
+    <NavLink
+      className={styles.question__start}
+      to="/votings"
+    >
       <p className={styles['question__start-icon']}>
         <StartIcon />
       </p>
       <p className={styles['question__start-label']}>
         Начать новое голосование
       </p>
-    </div>
+    </NavLink>
   </div>
 );
 

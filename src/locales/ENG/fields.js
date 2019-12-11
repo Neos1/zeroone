@@ -10,8 +10,10 @@ const placeholders = {
   contractAddress: 'Enter contract address',
   address: 'Address',
   countTokens: 'Count tokens',
-  durationInBlocks: 'Duration of circulation in blocks',
+  question: 'Question',
+  status: 'Status',
   date: 'Date',
+  durationInBlocks: 'Duration of circulation in blocks',
   questionTitle: 'Question title',
   questionLifeTime: 'Question lifetime',
   parameter: 'Parameter',
@@ -21,6 +23,8 @@ const placeholders = {
   selectParameterType: 'Select parameter type',
   titleGroupQuestions: 'Title group questions',
   descriptionOrComment: 'Description or comment',
+  dateFrom: 'Date from',
+  dateTo: 'Date to',
 };
 
 export default placeholders;

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { DropdownArrowIcon } from '../Icons';
-import styles from '../Dropdown/Dropdown.scss';
 import DropdownOption from '../DropdownOption';
+
+import styles from '../Dropdown/Dropdown.scss';
 
 class SimpleDropdown extends Component {
   constructor(props) {

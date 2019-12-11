@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import Container from '../Container';
 import Button from '../Button/Button';
 import { CreateToken } from '../Icons';
@@ -15,14 +16,20 @@ import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 
-
+@withRouter
 @withTranslation()
 @inject('projectStore', 'dialogStore')
 @observer
 class Questions extends Component {
   passwordForm = new FinPassForm({
     hooks: {
-      onSuccess: () => Promise.resolve(),
+      onSuccess: () => {
+        const { props } = this;
+        const { history, dialogStore } = props;
+        dialogStore.hide();
+        history.push('/votings');
+        return Promise.resolve();
+      },
       onError: () => Promise.reject(),
     },
   });
@@ -77,7 +84,12 @@ class Questions extends Component {
         <Dialog name="create_question" size="xlg" footer={null}>
           <CreateNewQuestion />
         </Dialog>
-        <Dialog name="password_form" size="md" footer={null}>
+        <Dialog
+          name="password_form"
+          size="md"
+          footer={null}
+          header={t('fields:enterPassword')}
+        >
           <FinPasswordFormWrapper form={this.passwordForm} />
         </Dialog>
         <Footer />
@@ -99,6 +111,10 @@ Questions.propTypes = {
   }).isRequired,
   dialogStore: propTypes.shape({
     show: propTypes.func.isRequired,
+    hide: propTypes.func.isRequired,
+  }).isRequired,
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
   }).isRequired,
 };
 export default Questions;

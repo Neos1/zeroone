@@ -10,10 +10,11 @@ import styles from './Decision.scss';
 class Decision extends React.Component {
   form = new FinPassForm({
     hooks: {
-      onSuccess() {
+      onSuccess: () => {
+        this.onSuccess();
         return Promise.resolve();
       },
-      onError() {
+      onError: () => {
         /* eslint-disable-next-line */
         console.error('error');
       },
@@ -22,9 +23,16 @@ class Decision extends React.Component {
 
   static propTypes = {
     t: PropTypes.func.isRequired,
+    onSuccess: PropTypes.func.isRequired,
     icon: PropTypes.node.isRequired,
     title: PropTypes.string.isRequired,
   };
+
+  onSuccess = () => {
+    const { props } = this;
+    const { onSuccess } = props;
+    onSuccess();
+  }
 
   render() {
     const { props, form } = this;
