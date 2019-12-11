@@ -12,48 +12,53 @@ import StartNewVote from '../StartNewVote';
 
 import styles from './Voting.scss';
 
-const data = [
-  {
-    title: 'Launch mining farm ',
-    description: 'Some description for voting',
-    actualState: 'progress',
-    date: {
-      start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-      end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-    },
-  },
-  {
-    title: 'Withdraw profit',
-    description: 'Some description for voting',
-    actualState: 'pros',
-    date: {
-      start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-      end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-    },
-  },
-  {
-    title: 'Stop mining farm',
-    description: 'Some description for voting',
-    actualState: 'cons',
-    date: {
-      start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-      end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-    },
-  },
-];
+// const data = [
+//   {
+//     title: 'Launch mining farm ',
+//     description: 'Some description for voting',
+//     actualState: 'progress',
+//     date: {
+//       start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
+//       end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
+//     },
+//   },
+//   {
+//     title: 'Withdraw profit',
+//     description: 'Some description for voting',
+//     actualState: 'pros',
+//     date: {
+//       start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
+//       end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
+//     },
+//   },
+//   {
+//     title: 'Stop mining farm',
+//     description: 'Some description for voting',
+//     actualState: 'cons',
+//     date: {
+//       start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
+//       end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
+//     },
+//   },
+// ];
 
-@inject('dialogStore')
+@inject('dialogStore', 'projectStore')
 @observer
 class Voting extends React.Component {
   static propTypes = {
     dialogStore: PropTypes.shape({
       show: PropTypes.func.isRequired,
     }).isRequired,
+    projectStore: PropTypes.shape({
+      historyStore: PropTypes.shape({
+        votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   render() {
     const { props } = this;
-    const { dialogStore } = props;
+    const { dialogStore, projectStore: { historyStore: { votingsList } } } = props;
     return (
       <Container className="container--small">
         <div
@@ -64,15 +69,15 @@ class Voting extends React.Component {
           <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
           <div>
             {
-              data && data.length
-                ? data.map((item, index) => (
+              votingsList && votingsList.length
+                ? votingsList.map((item, index) => (
                   <VotingItem
                     key={`voting__item--${index + 1}`}
-                    index={index + 1}
-                    title={item.title}
-                    description={item.description}
-                    actualState={item.actualState}
-                    date={item.date}
+                    index={item.id}
+                    title={item.caption}
+                    description={item.text}
+                    actualState={Number(item.status)}
+                    date={{ start: Number(item.startTime), end: Number(item.endTime) }}
                   />
                 ))
                 : null

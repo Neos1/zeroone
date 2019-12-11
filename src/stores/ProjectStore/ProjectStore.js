@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
-// import HistoryStore from '../HistoryStore';
+import HistoryStore from '../HistoryStore';
 import { votingStates } from '../../constants';
 import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
 
@@ -30,7 +30,7 @@ class ProjectStore {
     contract.options.address = projectAddress;
     contractService.setContract(contract);
     this.questionStore = new QuestionStore(this.rootStore);
-    // this.historyStore = new HistoryStore(projectAddress);
+    this.historyStore = new HistoryStore(this.rootStore);
     // this.userGrops = this.fetchUserGroups(projectAddress);
   }
 
@@ -43,8 +43,9 @@ class ProjectStore {
 
   /**
    * Preparing app for start voting
+   *
    * @param {number} questionId
-   * @param {array} parameters
+   * @param {Array} parameters
    */
   @action prepareVoting(questionId, parameters) {
     /**
@@ -67,8 +68,9 @@ class ProjectStore {
 
   /**
    * getting usergroups from contract
+   *
    * @param {number} projectAddress address of project
-   * @return {array} list of usergroups
+   * @returns {array} list of usergroups
    */
   @action fetchUserGroups = (projectAddress) => {
     this.fetchUserGroupsLength(projectAddress);

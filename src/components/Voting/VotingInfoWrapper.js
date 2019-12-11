@@ -9,34 +9,71 @@ import DecisionReject from '../Decision/DecisionReject';
 import VoterList from '../VoterList/VoterList';
 import Footer from '../Footer';
 
-@inject('dialogStore')
+@inject('dialogStore', 'projectStore')
 @observer
 class VotingInfoWrapper extends React.PureComponent {
   static propTypes = {
     dialogStore: PropTypes.shape({
       show: PropTypes.func.isRequired,
     }).isRequired,
+    projectStore: PropTypes.shape({
+      historyStore: PropTypes.shape({
+        getVotingById: PropTypes.func.isRequired,
+      }).isRequired,
+      questionStore: PropTypes.shape({
+        getQuestionById: PropTypes.func.isRequired,
+      }).isRequired,
+      rootStore: PropTypes.shape({
+        Web3Service: PropTypes.shape({
+          web3: PropTypes.shape().isRequired,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
+
+
+  // eslint-disable-next-line class-methods-use-this
+  prepareParameters(voting, question) {
+    const { projectStore: { rootStore: { Web3Service } } } = this.props;
+    const { data } = voting;
+    const { methodSelector, params } = question;
+    const votingData = data.replace(methodSelector, '0x');
+    const parameters = params.map((param) => param[1]);
+    const decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, votingData);
+    const decodedParams = params.map((param, index) => [param[0], decodedRawParams[index]]);
+    return decodedParams;
+  }
 
   render() {
     const { props } = this;
-    const { dialogStore } = props;
+    const {
+      dialogStore,
+      projectStore: { historyStore, questionStore },
+      match: { params: { id } },
+    } = props;
+    const [voting] = historyStore.getVotingById(Number(id));
+    const [question] = questionStore.getQuestionById(voting.questionId);
+    // eslint-disable-next-line no-unused-vars
+    const params = this.prepareParameters(voting, question);
     return (
       <Container className="container--small">
         <VotingInfo
           date={{
-            start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-            end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-            application: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
+            start: Number(voting.startTime),
+            end: Number(voting.endTime),
           }}
-          index={0}
-          title="Set no free tickets for old players"
-          duration={50}
-          addressContract="0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54"
-          description="Устанавливает количество бесплатных билетов у новых игроков. Иногда описания могут не влазить и оно сокращается до троеточия. Зато в карточке голосвания можно уместить гораздно больше текста
-          Устанавливает количество бесплатных билетов у новых игроков. Иногда описания могут не влазить и оно сокращается до троеточия. Зато в карточке голосвания можно уместить гораздно больше текста
-          Устанавливает количество бесплатных билетов у новых игроков. Иногда описания могут не влазить и оно сокращается до троеточия. Зато в карточке голосвания можно уместить гораздно больше текста"
-          formula="(group (0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54)→condition (quorum=20%))"
+          index={id}
+          title={question.caption}
+          duration={Number(question.time)}
+          addressContract={question.target}
+          description={question.text}
+          formula={question.getFormula()}
+          params={params}
           onVerifyClick={() => { dialogStore.show('decision_agree'); }}
           onRejectClick={() => { dialogStore.show('decision_reject'); }}
           onBarClick={

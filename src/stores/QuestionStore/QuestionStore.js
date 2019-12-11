@@ -29,12 +29,12 @@ class QuestionStore {
   }
 
   /**
- * Adding question to the list
- *
- * @function
- * @param id
- * @param {object} question Question which will be added
- */
+   * Adding question to the list
+   *
+   * @function
+   * @param id
+   * @param {object} question Question which will be added
+   */
   @action addQuestion = (id, question) => {
     const { Web3Service: { web3 } } = this.rootStore;
     this._questions.push(new Question(id, question, web3));

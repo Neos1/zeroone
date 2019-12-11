@@ -18,10 +18,24 @@ class VotingItem extends React.PureComponent {
     t: PropTypes.func.isRequired,
     actualState: PropTypes.string.isRequired,
     date: PropTypes.shape({
-      start: PropTypes.instanceOf(Date).isRequired,
-      end: PropTypes.instanceOf(Date).isRequired,
+      start: PropTypes.number.isRequired,
+      end: PropTypes.number.isRequired,
     }).isRequired,
   };
+
+
+  // eslint-disable-next-line class-methods-use-this
+  getProgress(date) {
+    const startStamp = Number(date.start);
+    const endStamp = Number(date.end);
+    const dateStart = (new Date()).setTime(startStamp);
+    const dateEnd = (new Date()).setTime(endStamp);
+    const dateNow = new Date();
+    const remainig = dateEnd - dateNow;
+    const duration = dateEnd - dateStart;
+    return ((remainig / duration) * 100);
+  }
+
 
   /**
    * Method for render decision state
@@ -31,23 +45,26 @@ class VotingItem extends React.PureComponent {
    */
   renderDecisionState = () => {
     const { props } = this;
-    const { actualState } = props;
+    const { actualState, date } = props;
+    // eslint-disable-next-line no-unused-vars
+    const progress = this.getProgress(date);
     switch (actualState) {
-      case 'progress':
+      case 0:
         return (
           <VotingDecisionProgress
             progress={60}
             remained="22 ч 15 мин"
           />
         );
-      case 'pros':
+      case 1:
         return (<VotingDecision prosState />);
-      case 'cons':
+      case 2:
         return (<VotingDecision prosState={false} />);
       default:
         return (<div>Voting</div>);
     }
   }
+
 
   /**
    * Method for getting formatted date string
@@ -58,14 +75,14 @@ class VotingItem extends React.PureComponent {
   getDateString = (date) => {
     if (
       !date
-      || date instanceof Date !== true
+      || typeof date !== 'number'
     ) return EMPTY_DATA_STRING;
     return (
       <Trans
         i18nKey="other:dateInFormat"
         values={{
-          date: moment(date).format('DD.MM.YYYY'),
-          time: moment(date).format('HH:mm'),
+          date: moment(date * 1000).format('DD.MM.YYYY'),
+          time: moment(date * 1000).format('HH:mm'),
         }}
       />
     );
@@ -81,7 +98,7 @@ class VotingItem extends React.PureComponent {
       date,
     } = props;
     return (
-      <Link to="/votingInfo/1">
+      <Link to={`/votingInfo/${index}`}>
         <div
           className={styles.voting__item}
         >

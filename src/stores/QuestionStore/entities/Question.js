@@ -31,12 +31,13 @@ class Question {
    */
   constructor(id, question, web3) {
     const {
-      groupId, caption, text, target, status, methodSelector, _formula, _parameters,
+      groupId, caption, text, target, time, status, methodSelector, _formula, _parameters,
     } = question;
     this.id = id;
     this.caption = caption;
     this.groupId = groupId;
     this.text = text;
+    this.time = time;
     this.methodSelector = methodSelector;
     this.status = status;
     this.target = target;

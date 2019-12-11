@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  MemoryRouter, Route, Switch,
+  MemoryRouter, Route, Switch, withRouter,
 } from 'react-router-dom';
 import Login from '../Login';
 import CreateWallet from '../CreateWallet';
@@ -48,7 +48,7 @@ const SimpleRouter = () => (
       <Route path="/question/:id" exact component={FullQuestion} />
       <Route path="/members" exact component={Members} />
       <Route path="/votings" exact component={Voting} />
-      <Route path="/votingInfo/:id" exact component={VotingInfoWrapper} />
+      <Route path="/votingInfo/:id" exact component={withRouter(VotingInfoWrapper)} />
       <Route path="/uploadWithExistingTokens" exact component={() => (<ProjectUploading newTokens={false} />)} />
       <Route path="/uploadWithNewTokens" exact component={() => (<ProjectUploading newTokens />)} />
       <Route path="/questions" exact component={Questions} />

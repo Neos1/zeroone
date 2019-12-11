@@ -327,7 +327,6 @@ class ContractService {
     const parameters = question.getParameters();
     const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
     const votingData = (data).replace('0x', question.methodSelector);
-    console.log(votingData);
     const tx = {
       data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
       to: _contract.options.address,

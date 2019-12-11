@@ -17,14 +17,10 @@ class VotingInfo extends React.PureComponent {
     t: PropTypes.func.isRequired,
     /** Index voting in list */
     index: PropTypes.number.isRequired,
-    /** Duration of circulation in blocks */
-    duration: PropTypes.number.isRequired,
     /** Description voting */
     description: PropTypes.string.isRequired,
     /** Title voting */
     title: PropTypes.string.isRequired,
-    /** Address contract */
-    addressContract: PropTypes.string.isRequired,
     /** Formula */
     formula: PropTypes.string.isRequired,
     /** All needed date for voting */
@@ -33,6 +29,7 @@ class VotingInfo extends React.PureComponent {
       end: PropTypes.instanceOf(Date).isRequired,
       application: PropTypes.instanceOf(Date).isRequired,
     }).isRequired,
+    params: PropTypes.arrayOf(PropTypes.array).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
     onRejectClick: PropTypes.func.isRequired,
     onBarClick: PropTypes.func.isRequired,
@@ -69,8 +66,8 @@ class VotingInfo extends React.PureComponent {
       <Trans
         i18nKey="other:dateInFormat"
         values={{
-          date: moment(date).format('DD.MM.YYYY'),
-          time: moment(date).format('HH:mm'),
+          date: moment(date * 1000).format('DD.MM.YYYY'),
+          time: moment(date * 1000).format('HH:mm'),
         }}
       />
     );
@@ -85,9 +82,8 @@ class VotingInfo extends React.PureComponent {
       description,
       index,
       title,
-      duration,
-      addressContract,
       formula,
+      params,
       onVerifyClick,
       onRejectClick,
       onBarClick,
@@ -148,36 +144,20 @@ class VotingInfo extends React.PureComponent {
               <div
                 className={styles['voting-info__data']}
               >
-                <div
-                  className={styles['voting-info__data-title']}
-                >
-                  {t('other:dateOfApplication')}
-                </div>
-                <div
-                  className={styles['voting-info__data-value']}
-                >
-                  {this.getDateString(date.application)}
-                </div>
-                <div
-                  className={styles['voting-info__data-title']}
-                >
-                  {t('other:durationInBlocks')}
-                </div>
-                <div
-                  className={styles['voting-info__data-value']}
-                >
-                  {duration}
-                </div>
-                <div
-                  className={styles['voting-info__data-title']}
-                >
-                  {t('other:newAddressContract')}
-                </div>
-                <div
-                  className={styles['voting-info__data-value']}
-                >
-                  {addressContract}
-                </div>
+                {params.map((item) => (
+                  <div>
+                    <div
+                      className={styles['voting-info__data-title']}
+                    >
+                      {item[0]}
+                    </div>
+                    <div
+                      className={styles['voting-info__data-value']}
+                    >
+                      {item[1]}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
             <div

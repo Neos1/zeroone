@@ -1,17 +1,24 @@
 class Voting {
   /**
-   * @constructor
-   * @param {Object} data object contains info adout voting
-   * @param {Number} data.votingId id of voting
-   * @param {Number} data.questionId id of question which selected for voting
+   * @class
+   * @param {object} data object contains info adout voting
+   * @param {number} data.id id of voting
+   * @param {number} data.questionId id of question which selected for voting
    * @param {Array} data.params parameters of voting
    */
   constructor({
-    votingId, questionId, params,
+    id, descision, questionId, data, status, startTime, endTime, caption, text, userVote,
   }) {
-    this.id = votingId;
+    this.id = id;
     this.questionId = questionId;
-    this.params = params;
+    this.descision = descision;
+    this.data = data;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.status = status;
+    this.caption = caption;
+    this.text = text;
+    this.userVote = userVote;
   }
 }
 
