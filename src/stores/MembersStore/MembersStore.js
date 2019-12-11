@@ -2,6 +2,7 @@
 import { observable, computed, action } from 'mobx';
 import MembersGroup from './MembersGroup';
 import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
+import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 
 /**
  * Store for manage Members groups
@@ -42,7 +43,7 @@ class MembersStore {
 
   fetchUserGroups = () => {
     this.fetchUserGroupsLength()
-      .then((length) => this.getUserGroups(length))
+      .then((length) => this.getActualUserGroups(length))
       .then((groups) => this.getPrimaryGroupsInfo(groups))
       .then((groups) => this.getUsersBalances(groups))
       .then((groups) => {
@@ -64,6 +65,35 @@ class MembersStore {
       groups.push(group);
     }
     return groups;
+  }
+
+  /**
+   * Method for getting groups from file
+   * or from contract
+   *
+   * @param {number} length length groups
+   * @returns {Array} actual groups data
+   */
+  async getActualUserGroups(length) {
+    // Groups FROM FILE
+    let groups = readDataFromFile({ name: 'groups' });
+    // Groups FROM CONTRACT
+    if (
+      !groups
+      || !groups.data
+      || !groups.data.length
+      || groups.data.length < length
+    ) {
+      groups = await this.getUserGroups(length);
+      writeDataToFile({
+        name: 'groups',
+        data: {
+          data: groups,
+        },
+      });
+      return groups;
+    }
+    return groups.data;
   }
 
   async getPrimaryGroupsInfo(groups) {
