@@ -42,6 +42,21 @@ class Questions extends Component {
     this.state = {};
   }
 
+  /**
+   * Method for handle sort
+   *
+   * @param {string} selected new sort value
+   */
+  handleSortSelect = (selected) => {
+    const { projectStore } = this.props;
+    const {
+      questionStore: {
+        dataManager,
+      },
+    } = projectStore;
+    dataManager.addRule({ caption: selected });
+  }
+
   render() {
     const { t, projectStore, dialogStore } = this.props;
     const {
@@ -73,6 +88,7 @@ class Questions extends Component {
             <div className={styles['questions__head-filters']}>
               <SimpleDropdown
                 options={options}
+                onSelect={this.handleSortSelect}
               />
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import PaginationStore from '../PaginationStore';
 
 /**
@@ -31,14 +31,47 @@ class DataManagerStore {
     return [lowRange, highRange];
   }
 
+  /**
+   * Method for getting list filtered
+   * by rules and pagination
+   *
+   * @returns {Array} correct list
+   */
   @computed
   get filteredList() {
-    const range = this.paginationRange;
-    return this.list.slice(range[0], range[1] + 1);
+    let resultList = [];
+    // const range = this.paginationRange;
+    const rulesKeys = Object.keys(this.rules);
+    if (rulesKeys.length) {
+      rulesKeys.forEach((key) => {
+        const filtered = this.list.filter((item) => item[key] === this.rules[key]);
+        resultList = resultList.concat(filtered);
+      });
+    } else {
+      resultList = this.list;
+    }
+    return resultList;
+    // return this.list.slice(range[0], range[1] + 1);
   }
 
-  // Contain all items
+  /** List with all the data */
   @observable list;
+
+  /** List of rules for filtering data */
+  @observable rules = {};
+
+  /**
+   * Method for adding (or rewrite)
+   * a list filter rule
+   *
+   * @param {object} rule filter rule
+   */
+  @action
+  addRule = (rule) => {
+    Object.keys(rule).forEach((key) => {
+      this.rules[key] = rule[key];
+    });
+  }
 }
 
 export default DataManagerStore;
