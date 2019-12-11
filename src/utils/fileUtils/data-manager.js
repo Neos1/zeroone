@@ -20,6 +20,9 @@ const writeDataToFile = ({
   basicPath,
 }) => {
   const dataPath = path.join(basicPath || PATH_TO_DATA);
+  if (!fs.existsSync(path.join(PATH_TO_DATA))) {
+    fs.mkdirSync(path.join(PATH_TO_DATA));
+  }
   // Create folder for file, if folder does not exist
   if (!fs.existsSync(dataPath)) {
     fs.mkdirSync(dataPath);
