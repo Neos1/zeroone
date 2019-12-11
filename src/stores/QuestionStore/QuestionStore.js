@@ -25,7 +25,7 @@ class QuestionStore {
     this.dataManager = new DataManagerStore({
       list: this.questions,
       // TODO remove after full realization
-      itemsCountPerPage: 1,
+      itemsCountPerPage: 2,
     });
     this.pagination = this.dataManager.pagination;
   }

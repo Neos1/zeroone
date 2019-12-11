@@ -9,9 +9,9 @@ class DataManagerStore {
     list,
     itemsCountPerPage,
   }) {
-    this.list = list;
+    this.rawList = list;
     this.pagination = new PaginationStore({
-      totalItemsCount: this.list.length,
+      totalItemsCount: this.rawList.length,
       itemsCountPerPage,
     });
   }
@@ -37,25 +37,31 @@ class DataManagerStore {
    *
    * @returns {Array} correct list
    */
-  @computed
-  get filteredList() {
+  filteredList() {
     let resultList = [];
-    // const range = this.paginationRange;
     const rulesKeys = Object.keys(this.rules);
     if (rulesKeys.length) {
       rulesKeys.forEach((key) => {
-        const filtered = this.list.filter((item) => item[key] === this.rules[key]);
+        const filtered = this.rawList.filter((item) => item[key] === this.rules[key]);
         resultList = resultList.concat(filtered);
       });
     } else {
-      resultList = this.list;
+      resultList = this.rawList;
     }
+    this.pagination.update({
+      key: 'totalItemsCount',
+      value: resultList.length,
+    });
     return resultList;
-    // return this.list.slice(range[0], range[1] + 1);
+  }
+
+  list() {
+    const range = this.paginationRange;
+    return this.filteredList().slice(range[0], range[1] + 1);
   }
 
   /** List with all the data */
-  @observable list;
+  @observable rawList;
 
   /** List of rules for filtering data */
   @observable rules = {};

@@ -64,7 +64,7 @@ class Questions extends Component {
         options, pagination, dataManager,
       },
     } = projectStore;
-    const questions = dataManager.filteredList;
+    const questions = dataManager.list();
     return (
       <Container className="container--small">
         <div className={styles.questions}>

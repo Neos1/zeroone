@@ -28,6 +28,15 @@ class PaginationStore {
   @observable pageRangeDisplayed;
 
   @action
+  update = ({
+    key,
+    value,
+  }) => {
+    console.log('key', key, 'value', value);
+    this[key] = value;
+  }
+
+  @action
   handleChange = (page) => {
     let activePage = page;
     if (page > this.lastPage) activePage = this.lastPage;
