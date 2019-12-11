@@ -1,7 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import { observable, computed, action } from 'mobx';
 import MembersGroup from './MembersGroup';
-import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
+import {
+  fs,
+  path,
+  PATH_TO_CONTRACTS,
+  PATH_TO_DATA,
+} from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 
 /**
@@ -33,6 +38,7 @@ class MembersStore {
   @observable _transferStatus = 0;
 
   @action init() {
+    this.groups = [];
     this.fetchUserGroups();
   }
 
@@ -75,8 +81,13 @@ class MembersStore {
    * @returns {Array} actual groups data
    */
   async getActualUserGroups(length) {
+    const { contractService } = this.rootStore;
+    const { address } = contractService._contract.options;
     // Groups FROM FILE
-    let groups = readDataFromFile({ name: 'groups' });
+    let groups = readDataFromFile({
+      name: 'groups',
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
     // Groups FROM CONTRACT
     if (
       !groups
@@ -90,6 +101,7 @@ class MembersStore {
         data: {
           data: groups,
         },
+        basicPath: `${PATH_TO_DATA}${address}`,
       });
       return groups;
     }
