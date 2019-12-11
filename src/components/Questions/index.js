@@ -17,6 +17,7 @@ import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import Pagination from '../Pagination';
 import PaginationStore from '../../stores/PaginationStore';
+import DataManagerStore from '../../stores/DataManagerStore';
 
 @withRouter
 @withTranslation()
@@ -43,7 +44,12 @@ class Questions extends Component {
 
   render() {
     const { t, projectStore, dialogStore } = this.props;
-    const { questionStore: { options, questions, pagination } } = projectStore;
+    const {
+      questionStore: {
+        options, pagination, dataManager,
+      },
+    } = projectStore;
+    const questions = dataManager.filteredList;
     return (
       <Container className="container--small">
         <div className={styles.questions}>
@@ -73,8 +79,11 @@ class Questions extends Component {
           <div className={styles.questions__wrapper}>
             {
               questions.map((question) => (
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                <Question {...question} />
+                <Question
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...question}
+                  key={`question__item--${question.id}`}
+                />
               ))
             }
           </div>
@@ -117,6 +126,7 @@ Questions.propTypes = {
         label: propTypes.string.isRequired,
       })).isRequired,
       pagination: propTypes.instanceOf(PaginationStore).isRequired,
+      dataManager: propTypes.instanceOf(DataManagerStore).isRequired,
     }),
   }).isRequired,
   dialogStore: propTypes.shape({
