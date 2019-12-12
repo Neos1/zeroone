@@ -88,15 +88,10 @@ class Questions extends Component {
     const { projectStore } = this.props;
     const {
       questionStore: {
-        pagination,
         dataManager,
       },
     } = projectStore;
-    pagination.update({
-      key: 'activePage',
-      value: 1,
-    });
-    dataManager.addRule({ caption: selected });
+    dataManager.addFilterRule({ caption: selected });
   }
 
   render() {
