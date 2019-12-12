@@ -5,6 +5,7 @@ import { VerifyIcon, RejectIcon, NoQuorum } from '../Icons';
 
 import styles from './Voting.scss';
 
+// eslint-disable-next-line consistent-return
 const Descision = ({ prosState }) => {
   switch (prosState) {
     case true:
