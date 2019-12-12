@@ -6,6 +6,7 @@ import { Collapse } from 'react-collapse';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
+import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
@@ -61,7 +62,9 @@ class MembersGroupComponent extends React.Component {
     membersStore: PropTypes.shape({
       transferStatus: PropTypes.number.isRequired,
       setTransferStatus: PropTypes.func.isRequired,
-      list: PropTypes.func.isRequired,
+      list: PropTypes.arrayOf(
+        PropTypes.instanceOf(MembersGroup),
+      ).isRequired,
     }).isRequired,
   }
 

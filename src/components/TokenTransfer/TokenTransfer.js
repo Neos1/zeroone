@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import TransferTokenForm from '../../stores/FormsStore/TransferTokenForm';
+import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import Input from '../Input';
 import { Password, Address, TokenCount } from '../Icons';
 import Button from '../Button/Button';
@@ -44,11 +45,16 @@ class TokenTransfer extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     wallet: PropTypes.string,
-    groupId: PropTypes.string.isRequired,
+    groupId: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
     membersStore: PropTypes.shape({
       transferTokens: PropTypes.func.isRequired,
       setTransferStatus: PropTypes.func.isRequired,
-      list: PropTypes.func.isRequired,
+      list: PropTypes.arrayOf(
+        PropTypes.instanceOf(MembersGroup),
+      ).isRequired,
     }).isRequired,
     userStore: PropTypes.shape({
       setPassword: PropTypes.func.isRequired,
