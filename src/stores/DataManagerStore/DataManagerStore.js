@@ -32,6 +32,39 @@ class DataManagerStore {
   }
 
   /**
+   * Method for filter by date
+   *
+   * @returns {Array} list from date range
+   */
+  @computed
+  get filteredByDateList() {
+    let resultList = [];
+    const rulesKeys = Object.keys(this.rules);
+    if (rulesKeys.length) {
+      rulesKeys.forEach((key) => {
+        if (key === 'date') {
+          const { start, end } = this.rules[key];
+          // Filter list with startTime by start & end date rule
+          const filtered = this.rawList.filter(
+            (item) => (
+              parseInt(item.startTime, 10) >= start
+              && parseInt(item.startTime, 10) <= end
+            ),
+          );
+          resultList = resultList.concat(filtered);
+          // If result by date not found
+          // return rawList
+        } else if (resultList.length === 0) {
+          resultList = this.rawList;
+        }
+      });
+    } else {
+      resultList = this.rawList;
+    }
+    return resultList;
+  }
+
+  /**
    * Method for getting list filtered
    * by filter rules
    *
@@ -39,14 +72,23 @@ class DataManagerStore {
    */
   filteredList() {
     let resultList = [];
+    const listByDate = this.filteredByDateList;
     const rulesKeys = Object.keys(this.rules);
     if (rulesKeys.length) {
       rulesKeys.forEach((key) => {
-        const filtered = this.rawList.filter((item) => item[key] === this.rules[key]);
-        resultList = resultList.concat(filtered);
+        if (key !== 'date') {
+          const filtered = listByDate.filter(
+            (item) => (
+              item[key] === this.rules[key]
+              // Check that the item has not been added to the resultList
+              && !resultList.find((included) => Object.is(included, item))
+            ),
+          );
+          resultList = resultList.concat(filtered);
+        }
       });
     } else {
-      resultList = this.rawList;
+      resultList = listByDate;
     }
     this.pagination.update({
       key: 'totalItemsCount',
