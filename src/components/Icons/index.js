@@ -33,6 +33,7 @@ import QuestionIcon from './entities/QuestionIcon';
 import ThinArrow from './entities/ThinArrow';
 import DateIcon from './entities/DateIcon';
 import SettingsIcon from './entities/SettingsIcon';
+import NoQuorum from './entities/NoQuorum';
 
 export {
   AddIcon,
@@ -70,4 +71,5 @@ export {
   ThinArrow,
   DateIcon,
   SettingsIcon,
+  NoQuorum,
 };
