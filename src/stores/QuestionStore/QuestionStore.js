@@ -83,7 +83,7 @@ class QuestionStore {
       const question = questions.data[i];
       // For correct work {getMissingQuestions} method
       this.rawQuestions.push(question);
-      this.addQuestion(i, question);
+      this.addQuestion(i + 1, question);
     }
     return questions;
   }
@@ -110,7 +110,7 @@ class QuestionStore {
         // eslint-disable-next-line no-await-in-loop
         const question = await contractService.fetchQuestion(i);
         this.rawQuestions.push(question);
-        this.addQuestion(i, question);
+        this.addQuestion(i + 1, question);
       }
       writeDataToFile({
         name: 'questions',
@@ -172,12 +172,12 @@ class QuestionStore {
   }
 
   /**
-   * @returns
+   * @returns options for dropdown
    */
   @computed get options() {
     return this._questions.map((question) => ({
-      value: question.id,
-      label: `${question.id}. ${question.caption}`,
+      value: Number(question.id),
+      label: `${Number(question.id)}. ${question.caption}`,
     }));
   }
 }

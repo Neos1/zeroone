@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { DropdownArrowIcon } from '../Icons';
-import DropdownOption from '../DropdownOption';
+import DropdownOption from '../SimpleDropdownOption';
 
 import styles from '../Dropdown/Dropdown.scss';
 
@@ -13,6 +13,7 @@ class SimpleDropdown extends Component {
     ]),
     options: propTypes.arrayOf(propTypes.shape({})).isRequired,
     onSelect: propTypes.func,
+    field: propTypes.shape().isRequired,
   };
 
   static defaultProps = {
@@ -55,10 +56,11 @@ class SimpleDropdown extends Component {
 
 
   handleSelect = (selected) => {
-    const { onSelect } = this.props;
+    const { onSelect, field } = this.props;
+    field.set(selected.value);
     this.setState({
-      selectedLabel: selected,
-      selectedValue: selected,
+      selectedLabel: selected.label,
+      selectedValue: selected.value,
     });
     onSelect(selected);
     this.toggleOptions();
@@ -82,7 +84,7 @@ class SimpleDropdown extends Component {
       <DropdownOption
         key={`dropdown-${option.label}`}
         label={option.label}
-        value={option.label}
+        value={option.value}
         select={this.handleSelect}
       />
     ));
