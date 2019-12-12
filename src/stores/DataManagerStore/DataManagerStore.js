@@ -33,7 +33,7 @@ class DataManagerStore {
 
   /**
    * Method for getting list filtered
-   * by rules and pagination
+   * by filter rules
    *
    * @returns {Array} correct list
    */
@@ -55,6 +55,12 @@ class DataManagerStore {
     return resultList;
   }
 
+  /**
+   * Method for getting list filtered
+   * by filter rules & pagination
+   *
+   * @returns {Array} actual list
+   */
   list() {
     const range = this.paginationRange;
     return this.filteredList().slice(range[0], range[1] + 1);
@@ -73,12 +79,19 @@ class DataManagerStore {
    * @param {object} rule filter rule
    */
   @action
-  addRule = (rule) => {
+  addFilterRule = (rule) => {
+    this.pagination.update({
+      key: 'activePage',
+      value: 1,
+    });
     Object.keys(rule).forEach((key) => {
       this.rules[key] = rule[key];
     });
   }
 
+  /**
+   * Method for reset state this store
+   */
   @action
   reset = () => {
     this.rules = {};
