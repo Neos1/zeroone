@@ -60,7 +60,6 @@ class MembersGroupTable extends React.PureComponent {
             list.map((item, index) => (
               <tr
                 key={`membersGroupTableTr--${index + 1}`}
-                onClick={() => { onRowClick(item.wallet); }}
                 className={`
                   ${styles['members__group-table-tr']}
                 `}
@@ -107,10 +106,15 @@ class MembersGroupTable extends React.PureComponent {
                     ${styles['members__group-table-td--balance']}
                   `}
                 >
-                  {item.fullBalance}
-                  <span>
-                    <BorderArrowIcon />
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => { onRowClick(item.wallet); }}
+                  >
+                    {item.fullBalance}
+                    <span>
+                      <BorderArrowIcon />
+                    </span>
+                  </button>
                 </td>
               </tr>
             ))

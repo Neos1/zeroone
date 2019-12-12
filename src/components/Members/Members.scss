@@ -179,6 +179,15 @@
       &-td {
         padding: 10px;
 
+        button {
+          width: 100%;
+          height: 100%;
+          background-color: transparent;
+          border: none;
+          outline: unset;
+          cursor: pointer;
+        }
+
         &--is {
           min-width: 20px;
           padding: 0;
@@ -226,7 +235,6 @@
 
       &-tr {
         background-color: #fff;
-        cursor: pointer;
         transition: background-color 0.5s;
 
         &:hover {
