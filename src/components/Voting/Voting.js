@@ -9,40 +9,10 @@ import Footer from '../Footer';
 import Pagination from '../Pagination';
 import Dialog from '../Dialog/Dialog';
 import StartNewVote from '../StartNewVote';
-
-import styles from './Voting.scss';
 import PaginationStore from '../../stores/PaginationStore';
 import DataManagerStore from '../../stores/DataManagerStore';
 
-// const data = [
-//   {
-//     title: 'Launch mining farm ',
-//     description: 'Some description for voting',
-//     actualState: 'progress',
-//     date: {
-//       start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-//       end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-//     },
-//   },
-//   {
-//     title: 'Withdraw profit',
-//     description: 'Some description for voting',
-//     actualState: 'pros',
-//     date: {
-//       start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-//       end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-//     },
-//   },
-//   {
-//     title: 'Stop mining farm',
-//     description: 'Some description for voting',
-//     actualState: 'cons',
-//     date: {
-//       start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
-//       end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
-//     },
-//   },
-// ];
+import styles from './Voting.scss';
 
 @inject('dialogStore', 'projectStore')
 @observer
@@ -59,7 +29,6 @@ class Voting extends React.Component {
       }).isRequired,
     }).isRequired,
   };
-
 
   componentDidMount() {
     const { projectStore } = this.props;
