@@ -72,6 +72,62 @@ describe('DataManagerStore', () => {
       ]);
     });
 
+    it('filteredList should be correct only with date rule', () => {
+      expect(dataManager.rules).toEqual({});
+      dataManager.addFilterRule({
+        date: {
+          start: 1566383552,
+          end: 1566385552,
+        },
+      });
+      expect(dataManager.rules).toEqual({
+        date: {
+          start: 1566383552,
+          end: 1566385552,
+        },
+      });
+      expect(dataManager.filteredByDateList).toEqual([
+        {
+          data: 1,
+          test: 1,
+          startTime: '1566383552',
+          endTime: '1566383852',
+        },
+        {
+          data: 2,
+          test: 2,
+          startTime: '1566384552',
+          endTime: '1566384852',
+        },
+        {
+          data: 3,
+          test: 3,
+          startTime: '1566385552',
+          endTime: '1566385852',
+        },
+      ]);
+      expect(dataManager.filteredList()).toEqual([
+        {
+          data: 1,
+          test: 1,
+          startTime: '1566383552',
+          endTime: '1566383852',
+        },
+        {
+          data: 2,
+          test: 2,
+          startTime: '1566384552',
+          endTime: '1566384852',
+        },
+        {
+          data: 3,
+          test: 3,
+          startTime: '1566385552',
+          endTime: '1566385852',
+        },
+      ]);
+    });
+
     it('filteredList should be correct with date & other rule', () => {
       expect(dataManager.rules).toEqual({});
       dataManager.addFilterRule({
