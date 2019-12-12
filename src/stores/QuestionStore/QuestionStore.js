@@ -171,10 +171,13 @@ class QuestionStore {
     return this._questions;
   }
 
+  /**
+   * @returns
+   */
   @computed get options() {
     return this._questions.map((question) => ({
       value: question.id,
-      label: question.caption,
+      label: `${question.id}. ${question.caption}`,
     }));
   }
 }

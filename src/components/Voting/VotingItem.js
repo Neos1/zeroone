@@ -43,11 +43,28 @@ class VotingItem extends React.PureComponent {
    * @returns {Node} element for actual
    * state
    */
+  // eslint-disable-next-line consistent-return
   renderDecisionState = () => {
     const { props } = this;
     const { actualState, date } = props;
     // eslint-disable-next-line no-unused-vars
     const progress = this.getProgress(date);
+    switch (progress) {
+      case (progress < 100):
+        return (
+          <VotingDecisionProgress
+            progress={progress}
+            remained="22 ч 15 мин"
+          />
+        );
+      case (progress >= 100):
+        return this.getVotingDescision(actualState);
+      default:
+        break;
+    }
+  }
+
+  getVotingDescision = (actualState) => {
     switch (actualState) {
       case 0:
         return (

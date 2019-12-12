@@ -58,7 +58,6 @@ class VotingInfoWrapper extends React.PureComponent {
     } = props;
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(voting.questionId);
-    // eslint-disable-next-line no-unused-vars
     const params = this.prepareParameters(voting, question);
     return (
       <Container className="container--small">
