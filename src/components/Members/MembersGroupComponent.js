@@ -9,10 +9,13 @@ import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
 import TokenTransfer from '../TokenTransfer/TokenTransfer';
-import TokenInProgressMessage from '../Message/TokenInProgressMessage';
+import {
+  TokenInProgressMessage,
+  TransferSuccessMessage,
+  TransferErrorMessage,
+} from '../Message';
 
 import styles from './Members.scss';
-import TransferSuccessMessage from '../Message/TransferSuccessMessage';
 
 /**
  * Group members component
@@ -98,7 +101,7 @@ class MembersGroupComponent extends React.Component {
       case (transferSteps.success):
         return <TransferSuccessMessage />;
       case (transferSteps.error):
-        return null;
+        return <TransferErrorMessage />;
       default:
         return null;
     }
