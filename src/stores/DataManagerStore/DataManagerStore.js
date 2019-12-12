@@ -74,22 +74,29 @@ class DataManagerStore {
     let resultList = [];
     const listByDate = this.filteredByDateList;
     const rulesKeys = Object.keys(this.rules);
-    if (rulesKeys.length) {
-      rulesKeys.forEach((key) => {
-        if (key !== 'date') {
-          const filtered = listByDate.filter(
-            (item) => (
-              item[key] === this.rules[key]
-              // Check that the item has not been added to the resultList
-              && !resultList.find((included) => Object.is(included, item))
-            ),
-          );
-          resultList = resultList.concat(filtered);
-        }
+    // If rules not exist return list by date
+    if (!rulesKeys.length) {
+      this.pagination.update({
+        key: 'totalItemsCount',
+        value: listByDate.length,
       });
-    } else {
-      resultList = listByDate;
+      return listByDate;
     }
+    rulesKeys.forEach((key) => {
+      if (key !== 'date') {
+        const filtered = listByDate.filter(
+          (item) => (
+            item[key] === this.rules[key]
+            // Check that the item has not been added to the resultList
+            && !resultList.find((included) => Object.is(included, item))
+          ),
+        );
+        resultList = resultList.concat(filtered);
+        // If exist only date rule result is list by date
+      } else if (rulesKeys.length === 1) {
+        resultList = listByDate;
+      }
+    });
     this.pagination.update({
       key: 'totalItemsCount',
       value: resultList.length,
