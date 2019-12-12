@@ -1,7 +1,13 @@
 /* eslint-disable no-await-in-loop */
 import { observable, computed, action } from 'mobx';
 import MembersGroup from './MembersGroup';
-import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
+import {
+  fs,
+  path,
+  PATH_TO_CONTRACTS,
+  PATH_TO_DATA,
+} from '../../constants/windowModules';
+import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 
 /**
  * Store for manage Members groups
@@ -32,6 +38,7 @@ class MembersStore {
   @observable _transferStatus = 0;
 
   @action init() {
+    this.groups = [];
     this.fetchUserGroups();
   }
 
@@ -42,7 +49,7 @@ class MembersStore {
 
   fetchUserGroups = () => {
     this.fetchUserGroupsLength()
-      .then((length) => this.getUserGroups(length))
+      .then((length) => this.getActualUserGroups(length))
       .then((groups) => this.getPrimaryGroupsInfo(groups))
       .then((groups) => this.getUsersBalances(groups))
       .then((groups) => {
@@ -64,6 +71,41 @@ class MembersStore {
       groups.push(group);
     }
     return groups;
+  }
+
+  /**
+   * Method for getting groups from file
+   * or from contract
+   *
+   * @param {number} length length groups
+   * @returns {Array} actual groups data
+   */
+  async getActualUserGroups(length) {
+    const { contractService } = this.rootStore;
+    const { address } = contractService._contract.options;
+    // Groups FROM FILE
+    let groups = readDataFromFile({
+      name: 'groups',
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
+    // Groups FROM CONTRACT
+    if (
+      !groups
+      || !groups.data
+      || !groups.data.length
+      || groups.data.length < length
+    ) {
+      groups = await this.getUserGroups(length);
+      writeDataToFile({
+        name: 'groups',
+        data: {
+          data: groups,
+        },
+        basicPath: `${PATH_TO_DATA}${address}`,
+      });
+      return groups;
+    }
+    return groups.data;
   }
 
   async getPrimaryGroupsInfo(groups) {

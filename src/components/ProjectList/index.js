@@ -15,6 +15,17 @@ import styles from '../Login/Login.scss';
 @inject('appStore')
 @observer
 class ProjectList extends Component {
+  static propTypes = {
+    appStore: propTypes.shape({
+      readProjectList: propTypes.func.isRequired,
+      projectList: propTypes.arrayOf(propTypes.object).isRequired,
+      checkIsQuestionsUploaded: propTypes.func.isRequired,
+      gotoProject: propTypes.func.isRequired,
+      setProjectAddress: propTypes.func.isRequired,
+    }).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -86,16 +97,5 @@ class ProjectList extends Component {
     );
   }
 }
-
-ProjectList.propTypes = {
-  appStore: propTypes.shape({
-    readProjectList: propTypes.func.isRequired,
-    projectList: propTypes.arrayOf(propTypes.object).isRequired,
-    checkIsQuestionsUploaded: propTypes.func.isRequired,
-    gotoProject: propTypes.func.isRequired,
-    setProjectAddress: propTypes.func.isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
 
 export default ProjectList;

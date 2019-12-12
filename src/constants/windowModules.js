@@ -18,3 +18,7 @@ export const PATH_TO_WALLETS = window.__ENV === 'production'
 export const PATH_TO_CONTRACTS = window.__ENV === 'production'
   ? path.join(prodPath, './contracts/')
   : path.join(devPath, './src/contracts/');
+
+export const PATH_TO_DATA = window.__ENV === 'production'
+  ? path.join(prodPath, './data/')
+  : path.join(devPath, './src/data/');

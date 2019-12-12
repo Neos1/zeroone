@@ -1,6 +1,7 @@
 /* eslint-disable react/static-property-placement */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 import ReactJsPagination from 'react-js-pagination';
 import { withTranslation } from 'react-i18next';
 import { ThinArrow } from '../Icons';
@@ -11,6 +12,7 @@ import './Pagination.scss';
  * Component for pagination
  */
 @withTranslation()
+@observer
 class Pagination extends React.Component {
   static propTypes = {
     activePage: PropTypes.number.isRequired,
