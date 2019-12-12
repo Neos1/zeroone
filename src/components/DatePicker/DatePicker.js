@@ -12,19 +12,8 @@ import styles from './DatePicker.scss';
 class DatePicker extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
-    fieldBefore: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      set: PropTypes.func.isRequired,
-      value: PropTypes.string.isRequired,
-      placeholder: PropTypes.string.isRequired,
-    }).isRequired,
-    fieldAfter: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      set: PropTypes.func.isRequired,
-      value: PropTypes.string.isRequired,
-      placeholder: PropTypes.string.isRequired,
-    }).isRequired,
     onDatesSet: PropTypes.func,
+    id: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -42,17 +31,15 @@ class DatePicker extends React.PureComponent {
 
   handleDatesChange = ({ startDate, endDate }) => {
     const { props } = this;
-    const { fieldBefore, fieldAfter, onDatesSet } = props;
+    const { onDatesSet } = props;
     this.setState({ start: startDate, end: endDate });
-    if (startDate) fieldBefore.set(startDate.format('DD.MM.YYYY'));
-    if (endDate) fieldAfter.set(endDate.format('DD.MM.YYYY'));
-    if (startDate && endDate) onDatesSet();
+    if (startDate && endDate) onDatesSet({ startDate, endDate });
   }
 
   render() {
     const { start, end, focusedInput } = this.state;
     const { props } = this;
-    const { t, fieldBefore, fieldAfter } = props;
+    const { t, id } = props;
     return (
       <div className={styles['date-picker']}>
         <div className={styles['date-picker__icon']}>
@@ -60,14 +47,16 @@ class DatePicker extends React.PureComponent {
         </div>
         <DateRangePicker
           startDate={start}
-          startDateId={fieldBefore.name}
+          startDateId={`date_start--${id}`}
           endDate={end}
-          endDateId={fieldAfter.name}
+          endDateId={`date_end--${id}`}
           onDatesChange={this.handleDatesChange}
           customArrowIcon="-"
           startDatePlaceholderText={t('fields:dateFrom')}
           endDatePlaceholderText={t('fields:dateTo')}
           focusedInput={focusedInput}
+          // Allow past dates see: https://github.com/airbnb/react-dates/issues/239#issuecomment-302574295
+          isOutsideRange={() => false}
           onFocusChange={
             (focusedInputChanged) => {
               this.setState({ focusedInput: focusedInputChanged });

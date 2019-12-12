@@ -1,54 +1,70 @@
 import React from 'react';
-import { observer } from 'mobx-react';
-import VotingFilterForm from '../../stores/FormsStore/VotingFilterForm';
-import Dropdown from '../Dropdown';
-import { QuestionIcon, Stats } from '../Icons';
+import { observer, inject } from 'mobx-react';
+import PropTypes from 'prop-types';
+import uniqKey from 'react-id-generator';
+import SimpleDropdown from '../SimpleDropdown';
+import { QuestionIcon } from '../Icons';
 import DatePicker from '../DatePicker/DatePicker';
+import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
 import styles from './Voting.scss';
 
+@inject('projectStore')
 @observer
 class VotingFilter extends React.PureComponent {
-  form = new VotingFilterForm({
-    hooks: {
-      onSuccess: () => Promise.resolve(),
-      onError() {
-        /* eslint-disable-next-line */
-        console.error('error');
+  static propTypes = {
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
+  };
+
+  /**
+   * Method for handle sort
+   *
+   * @param {string} selected new sort value
+   */
+  handleQuestionSelect = (selected) => {
+    // TODO change after refactor SimpleDropdown to value & rule by questionId
+    const question = selected.split('. ')[1];
+    const { projectStore: { historyStore: { dataManager } } } = this.props;
+    dataManager.addFilterRule({ caption: question });
+  }
+
+  /**
+   * Method for handle date change
+   */
+  handleDateSelect = ({
+    startDate,
+    endDate,
+  }) => {
+    const { projectStore: { historyStore: { dataManager } } } = this.props;
+    dataManager.addFilterRule({
+      // TODO not work
+      date: {
+        // Convert to vote time format
+        start: startDate.valueOf() / 1000,
+        end: endDate.valueOf() / 1000,
       },
-    },
-  });
+    });
+  }
 
   render() {
-    const { form } = this;
+    const { projectStore: { questionStore: { options } } } = this.props;
     return (
-      <form form={form} onSubmit={form.onSubmit}>
+      <>
         <div className={styles['voting__filter-dropdown']}>
-          <Dropdown
-            options={[{ label: '1. Первый вопрос' }]}
-            field={form.$('question')}
-            onSelect={() => {}}
+          <SimpleDropdown
+            options={options}
+            onSelect={this.handleQuestionSelect}
           >
             <QuestionIcon />
-          </Dropdown>
-        </div>
-        <div className={styles['voting__filter-dropdown']}>
-          <Dropdown
-            options={[{ label: 'На голосовании' }]}
-            field={form.$('status')}
-            onSelect={() => {}}
-          >
-            <Stats />
-          </Dropdown>
+          </SimpleDropdown>
         </div>
         <div className={styles['voting__filter-date']}>
           <DatePicker
-            fieldBefore={form.$('date_before')}
-            fieldAfter={form.$('date_after')}
-            onDatesSet={() => {}}
+            id={uniqKey()}
+            onDatesSet={this.handleDateSelect}
           />
         </div>
-      </form>
+      </>
     );
   }
 }
