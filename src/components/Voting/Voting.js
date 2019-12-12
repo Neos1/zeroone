@@ -11,6 +11,8 @@ import Dialog from '../Dialog/Dialog';
 import StartNewVote from '../StartNewVote';
 
 import styles from './Voting.scss';
+import PaginationStore from '../../stores/PaginationStore';
+import DataManagerStore from '../../stores/DataManagerStore';
 
 // const data = [
 //   {
@@ -52,13 +54,32 @@ class Voting extends React.Component {
     projectStore: PropTypes.shape({
       historyStore: PropTypes.shape({
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+        pagination: PropTypes.instanceOf(PaginationStore).isRequired,
+        dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,
       }).isRequired,
     }).isRequired,
   };
 
+
+  componentDidMount() {
+    const { projectStore } = this.props;
+    const {
+      historyStore: {
+        pagination,
+        dataManager,
+      },
+    } = projectStore;
+    pagination.update({
+      key: 'activePage',
+      value: 1,
+    });
+    dataManager.reset();
+  }
+
   render() {
     const { props } = this;
-    const { dialogStore, projectStore: { historyStore: { votingsList } } } = props;
+    const { dialogStore, projectStore: { historyStore: { pagination, dataManager } } } = props;
+    const votings = dataManager.list();
     return (
       <Container className="container--small">
         <div
@@ -69,8 +90,8 @@ class Voting extends React.Component {
           <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
           <div>
             {
-              votingsList && votingsList.length
-                ? votingsList.map((item, index) => (
+              votings && votings.length
+                ? votings.map((item, index) => (
                   <VotingItem
                     key={`voting__item--${index + 1}`}
                     index={item.id}
@@ -84,12 +105,12 @@ class Voting extends React.Component {
             }
           </div>
           <Pagination
-            activePage={1}
-            lastPage={10}
-            handlePageChange={() => {}}
-            itemsCountPerPage={10}
-            totalItemsCount={100}
-            pageRangeDisplayed={5}
+            activePage={pagination.activePage}
+            lastPage={pagination.lastPage}
+            handlePageChange={pagination.handleChange}
+            itemsCountPerPage={pagination.itemsCountPerPage}
+            totalItemsCount={pagination.totalItemsCount}
+            pageRangeDisplayed={pagination.pageRangeDisplayed}
           />
         </div>
         <Footer />

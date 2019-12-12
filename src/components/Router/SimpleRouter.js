@@ -51,8 +51,6 @@ const SimpleRouter = () => (
       <Route path="/votingInfo/:id" exact component={withRouter(VotingInfoWrapper)} />
       <Route path="/uploadWithExistingTokens" exact component={() => (<ProjectUploading newTokens={false} />)} />
       <Route path="/uploadWithNewTokens" exact component={() => (<ProjectUploading newTokens />)} />
-      <Route path="/questions" exact component={Questions} />
-      <Route path="/question/:id" exact component={FullQuestion} />
       <Route path="/settings" exact component={Settings} />
     </Switch>
   </MemoryRouter>
