@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
 import { AdminIcon, BorderArrowIcon } from '../Icons';
 
@@ -11,6 +12,7 @@ import styles from './Members.scss';
  * Component for displaying table with members
  */
 @withTranslation('other')
+@observer
 class MembersGroupTable extends React.PureComponent {
   static propTypes = {
     /** List members */

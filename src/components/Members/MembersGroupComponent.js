@@ -61,6 +61,7 @@ class MembersGroupComponent extends React.Component {
     membersStore: PropTypes.shape({
       transferStatus: PropTypes.number.isRequired,
       setTransferStatus: PropTypes.func.isRequired,
+      list: PropTypes.func.isRequired,
     }).isRequired,
   }
 
@@ -106,9 +107,10 @@ class MembersGroupComponent extends React.Component {
   modalContentSwitch = () => {
     const {
       id,
-      membersStore: { transferStatus },
+      membersStore,
       dialogStore,
     } = this.props;
+    const { transferStatus } = membersStore;
     const { selectedWallet } = this.state;
     const { transferSteps } = this;
     switch (transferStatus) {
@@ -117,9 +119,9 @@ class MembersGroupComponent extends React.Component {
       case (transferSteps.transfering):
         return <TokenInProgressMessage />;
       case (transferSteps.success):
-        return <TransferSuccessMessage onButtonClick={dialogStore.hide} />;
+        return <TransferSuccessMessage onButtonClick={() => dialogStore.hide()} />;
       case (transferSteps.error):
-        return <TransferErrorMessage onButtonClick={dialogStore.hide} />;
+        return <TransferErrorMessage onButtonClick={() => dialogStore.hide()} />;
       default:
         return null;
     }

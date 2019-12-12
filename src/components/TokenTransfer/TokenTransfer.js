@@ -27,7 +27,11 @@ class TokenTransfer extends React.Component {
         userStore.setPassword(password);
         membersStore.setTransferStatus('transfering');
         return membersStore.transferTokens(groupId, wallet, address, count)
-          .then(() => { membersStore.setTransferStatus('success'); })
+          .then(() => {
+            membersStore.setTransferStatus('success');
+            membersStore.list[groupId].updateMemberBalanceAndWeight(wallet);
+            membersStore.list[groupId].updateMemberBalanceAndWeight(address);
+          })
           .catch(() => { membersStore.setTransferStatus('error'); });
       },
       onError: () => {
@@ -44,6 +48,7 @@ class TokenTransfer extends React.Component {
     membersStore: PropTypes.shape({
       transferTokens: PropTypes.func.isRequired,
       setTransferStatus: PropTypes.func.isRequired,
+      list: PropTypes.func.isRequired,
     }).isRequired,
     userStore: PropTypes.shape({
       setPassword: PropTypes.func.isRequired,
