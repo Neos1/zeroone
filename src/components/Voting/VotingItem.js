@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { computed } from 'mobx';
 import { withTranslation, Trans } from 'react-i18next';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { EMPTY_DATA_STRING, statusStates, votingStates } from '../../constants';
@@ -12,6 +13,10 @@ import styles from './Voting.scss';
 
 @withTranslation()
 class VotingItem extends React.PureComponent {
+  progress;
+
+  intervalProgress = 5000;
+
   static propTypes = {
     index: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -25,16 +30,31 @@ class VotingItem extends React.PureComponent {
     }).isRequired,
   };
 
+  componentDidMount() {
+    const { props } = this;
+    const { date } = props;
+    const initProgress = progressByDateRange(date);
+    this.progress = initProgress;
+    if (initProgress !== 100) {
+      const intervalId = setInterval(() => {
+        this.progress = progressByDateRange(date);
+        if (this.progress === 100) {
+          clearInterval(intervalId);
+        }
+      }, this.intervalProgress);
+    }
+  }
+
   /**
    * Method for render decision state
    *
    * @returns {Node} element for actual
    * state
    */
-  renderDecisionState = () => {
-    const { props } = this;
+  @computed
+  get renderDecisionState() {
+    const { props, progress } = this;
     const { date } = props;
-    const progress = progressByDateRange(date);
     switch (true) {
       case (progress < 100):
         return (
@@ -169,7 +189,7 @@ class VotingItem extends React.PureComponent {
           <div
             className={styles['voting__item-progress']}
           >
-            {this.renderDecisionState()}
+            {this.renderDecisionState}
           </div>
         </div>
       </Link>
