@@ -342,7 +342,6 @@ class VotingInfo extends React.PureComponent {
       onBarClick,
     } = props;
     const progress = progressByDateRange(date);
-    console.log(voting);
     return (
       <div
         className={styles['voting-info']}
