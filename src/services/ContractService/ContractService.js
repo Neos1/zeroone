@@ -292,14 +292,19 @@ class ContractService {
       rootStore: {
         Web3Service,
         userStore,
-        appStore,
         membersStore,
-        historyStore,
+        projectStore: {
+          historyStore,
+          questionStore,
+        },
       },
     } = this;
-    const [voting] = historyStore.getVotingById;
-    const { groupId } = voting;
+    const [voting] = historyStore.getVotingById(votingId);
+    const { questionId } = voting;
+    const [question] = questionStore.getQuestionById(Number(questionId));
+    const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
+    // TODO check work method
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
         .then(() => {

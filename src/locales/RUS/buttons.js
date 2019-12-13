@@ -28,5 +28,6 @@ const buttons = {
   nextStep: 'Следующий шаг',
   addParameter: '+ Добавить параметр',
   apply: 'Применить',
+  completeTheVote: 'Завершить голосование',
 };
 export default buttons;

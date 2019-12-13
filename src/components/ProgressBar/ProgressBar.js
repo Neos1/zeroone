@@ -7,10 +7,12 @@ class ProgressBar extends React.PureComponent {
   static propTypes = {
     progress: PropTypes.number.isRequired,
     countIndicator: PropTypes.number,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
     countIndicator: 10,
+    className: '',
   };
 
   /**
@@ -40,10 +42,10 @@ class ProgressBar extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const { countIndicator } = props;
+    const { countIndicator, className } = props;
     const arrIndicator = new Array(countIndicator).fill('');
     return (
-      <div>
+      <div className={className}>
         {
           arrIndicator.map((item, index) => (
             <div

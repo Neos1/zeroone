@@ -23,17 +23,31 @@ const VotingDecisionProgress = ({
     <div className={styles['voting__decision-title']}>
       Voting
     </div>
-    <ProgressBar progress={progress} />
-    <div
-      className={`
-        ${styles['voting__decision-text']}
-        ${styles['voting__decision-text--remained']}
-      `}
-    >
-      {t('other:timeLeft')}
-      <br />
-      {`~${remained}`}
-    </div>
+    <ProgressBar progress={progress} className={styles['voting__decision-progress-bar']} />
+    {
+      progress >= 100
+        ? (
+          <div
+            className={`
+              ${styles['voting__decision-text']}
+            `}
+          >
+            {t('other:endOfVoteRequired')}
+          </div>
+        )
+        : (
+          <div
+            className={`
+              ${styles['voting__decision-text']}
+              ${styles['voting__decision-text--remained']}
+            `}
+          >
+            {t('other:timeLeft')}
+            <br />
+            {`~${remained}`}
+          </div>
+        )
+    }
   </div>
 );
 
