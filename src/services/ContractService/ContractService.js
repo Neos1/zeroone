@@ -305,6 +305,7 @@ class ContractService {
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
     // TODO check work method
+    const maxGasPrice = 20000000000;
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
         .then(() => {
@@ -314,7 +315,7 @@ class ContractService {
             value: '0x0',
             gasLimit: 8000000,
           };
-          return Web3Service.createTxData(userStore.address, tx)
+          return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
             .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
             // TODO PASTE METHOD CALL TO HERE @PZ
