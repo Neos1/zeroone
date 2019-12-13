@@ -86,7 +86,8 @@ class Voting extends React.Component {
                     index={item.id}
                     title={item.caption}
                     description={item.text}
-                    actualState={Number(item.status)}
+                    actualStatus={item.status}
+                    actualDecisionStatus={item.descision}
                     date={{ start: Number(item.startTime), end: Number(item.endTime) }}
                   />
                 ))

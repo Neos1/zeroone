@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import moment from 'moment';
 import { Collapse } from 'react-collapse';
-import { EMPTY_DATA_STRING } from '../../constants';
+import { EMPTY_DATA_STRING, votingStates } from '../../constants';
 import { VerifyIcon, RejectIcon, Stats } from '../Icons';
 import Button from '../Button/Button';
 import VotingStats from './VotingStats';
+import ProgressBar from '../ProgressBar/ProgressBar';
+import progressByDateRange from '../../utils/Date';
 
 import styles from './Voting.scss';
 
@@ -28,6 +30,10 @@ class VotingInfo extends React.PureComponent {
       start: PropTypes.instanceOf(Date).isRequired,
       end: PropTypes.instanceOf(Date).isRequired,
       application: PropTypes.instanceOf(Date).isRequired,
+    }).isRequired,
+    voting: PropTypes.shape({
+      status: PropTypes.string.isRequired,
+      userVote: PropTypes.string.isRequired,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
@@ -60,7 +66,6 @@ class VotingInfo extends React.PureComponent {
   getDateString = (date) => {
     if (
       !date
-      || date instanceof Date !== true
     ) return EMPTY_DATA_STRING;
     return (
       <Trans
@@ -84,6 +89,7 @@ class VotingInfo extends React.PureComponent {
       title,
       formula,
       params,
+      voting,
       onVerifyClick,
       onRejectClick,
       onBarClick,
@@ -105,6 +111,16 @@ class VotingInfo extends React.PureComponent {
         <div
           className={styles['voting-info__date']}
         >
+          {
+            voting.status === votingStates.default
+              ? (
+                <span className={styles['voting-info__progress-container']}>
+                  Идет голосование:
+                  <ProgressBar className={styles['voting-info__progress']} progress={progressByDateRange(date)} />
+                </span>
+              )
+              : null
+          }
           <span>
             {t('other:start')}
             :

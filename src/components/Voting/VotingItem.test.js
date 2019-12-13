@@ -5,7 +5,7 @@ import VotingDecision from './VotingDecision';
 import VotingDecisionProgress from './VotingDecisionProgress';
 
 describe('VotingItem', () => {
-  describe('actualState is cons', () => {
+  describe('actualStatus is cons', () => {
     let wrapper;
 
     beforeEach(() => {
@@ -14,7 +14,7 @@ describe('VotingItem', () => {
           index={0}
           title="Stop mining farm"
           description="Some description for voting"
-          actualState="cons"
+          actualStatus="cons"
           date={{
             start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
             end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
@@ -29,7 +29,7 @@ describe('VotingItem', () => {
     });
   });
 
-  describe('actualState is pros', () => {
+  describe('actualStatus is pros', () => {
     let wrapper;
 
     beforeEach(() => {
@@ -38,7 +38,7 @@ describe('VotingItem', () => {
           index={0}
           title="Stop mining farm"
           description="Some description for voting"
-          actualState="pros"
+          actualStatus="pros"
           date={{
             start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
             end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),
@@ -53,7 +53,7 @@ describe('VotingItem', () => {
     });
   });
 
-  describe('actualState in progress', () => {
+  describe('actualStatus in progress', () => {
     let wrapper;
 
     beforeEach(() => {
@@ -62,7 +62,7 @@ describe('VotingItem', () => {
           index={0}
           title="Stop mining farm"
           description="Some description for voting"
-          actualState="progress"
+          actualStatus="progress"
           date={{
             start: new Date('Wed Jan 09 2019 14:45:00 GMT+0700'),
             end: new Date('Wed Jan 09 2019 16:44:00 GMT+0700'),

@@ -4,8 +4,9 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import VotingDecisionProgress from './VotingDecisionProgress';
-import { EMPTY_DATA_STRING } from '../../constants';
+import { EMPTY_DATA_STRING, statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
+import progressByDateRange from '../../utils/Date';
 
 import styles from './Voting.scss';
 
@@ -16,26 +17,13 @@ class VotingItem extends React.PureComponent {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    actualState: PropTypes.string.isRequired,
+    actualStatus: PropTypes.string.isRequired,
+    actualDecisionStatus: PropTypes.string.isRequired,
     date: PropTypes.shape({
       start: PropTypes.number.isRequired,
       end: PropTypes.number.isRequired,
     }).isRequired,
   };
-
-
-  // eslint-disable-next-line class-methods-use-this
-  getProgress(date) {
-    const startStamp = Number(date.start);
-    const endStamp = Number(date.end);
-    const dateStart = (new Date()).setTime(startStamp);
-    const dateEnd = (new Date()).setTime(endStamp);
-    const dateNow = new Date();
-    const remainig = dateEnd - dateNow;
-    const duration = dateEnd - dateStart;
-    return ((remainig / duration) * 100);
-  }
-
 
   /**
    * Method for render decision state
@@ -43,42 +31,56 @@ class VotingItem extends React.PureComponent {
    * @returns {Node} element for actual
    * state
    */
-  // eslint-disable-next-line consistent-return
   renderDecisionState = () => {
     const { props } = this;
-    const { actualState, date } = props;
-    // eslint-disable-next-line no-unused-vars
-    const progress = this.getProgress(date);
-    switch (progress) {
+    const { date } = props;
+    const progress = progressByDateRange(date);
+    switch (true) {
       case (progress < 100):
         return (
           <VotingDecisionProgress
             progress={progress}
-            remained="22 ч 15 мин"
+            remained={moment(date.end * 1000).fromNow()}
           />
         );
       case (progress >= 100):
-        return this.getVotingDescision(actualState);
+        return this.getVotingDecision();
       default:
-        break;
+        return null;
     }
   }
 
-  getVotingDescision = (actualState) => {
-    switch (actualState) {
-      case 0:
+  getVotingDecision = () => {
+    const { props } = this;
+    const { actualStatus, actualDecisionStatus } = props;
+    switch (true) {
+      case (
+        actualStatus === statusStates.active
+        && actualDecisionStatus === votingStates.default
+      ):
         return (
           <VotingDecisionProgress
-            progress={60}
-            remained="22 ч 15 мин"
+            progress={100}
+            remained=""
           />
         );
-      case 1:
+      case (
+        actualStatus === statusStates.closed
+        && actualDecisionStatus === votingStates.decisionFor
+      ):
         return (<VotingDecision prosState />);
-      case 2:
+      case (
+        actualStatus === statusStates.closed
+        && actualDecisionStatus === votingStates.decisionAgainst
+      ):
         return (<VotingDecision prosState={false} />);
+      case (
+        actualStatus === statusStates.closed
+        && actualDecisionStatus === votingStates.default
+      ):
+        return (<VotingDecision prosState={null} />);
       default:
-        return (<div>Voting</div>);
+        return null;
     }
   }
 

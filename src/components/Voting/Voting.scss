@@ -22,8 +22,8 @@
       vertical-align: middle;
 
       span {
-        &:first-child {
-          padding-right: 24px;
+        &:last-child {
+          padding-left: 24px;
         }
       }
     }
@@ -180,6 +180,28 @@
         border: 1px solid #e1e4e8;
       }
     }
+
+    &__progress {
+      display: inline-block;
+      margin-left: 5px;
+
+      &-container {
+        padding-right: 24px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+      }
+
+      .progress-bar__indicator {
+        width: 4px;
+        height: 4px;
+        margin-right: 2px;
+
+        &--filled {
+          background-color: rgba(0, 0, 0, 0.7);
+        }
+      }
+    }
   }
 
   &__filter  {
@@ -319,9 +341,12 @@
           color: #000;
           font-size: 14px;
           line-height: 16px;
-          text-align: left;
         }
       }
+    }
+
+    &-progress-bar {
+      text-align: center;
     }
 
     &-state {
@@ -330,6 +355,7 @@
       font-size: 14px;
       line-height: 16px;
       text-align: center;
+      text-transform: uppercase;
     }
 
     &-icon {
@@ -352,12 +378,13 @@
     }
 
     &-text {
+      margin-top: 16px;
       color: rgba(0, 0, 0, 0.7);
       font-size: 11px;
       line-height: 13px;
+      text-align: center;
 
       &--remained {
-        margin-top: 16px;
         text-align: left;
       }
     }

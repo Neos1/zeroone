@@ -66,6 +66,7 @@ class VotingInfoWrapper extends React.PureComponent {
             start: Number(voting.startTime),
             end: Number(voting.endTime),
           }}
+          voting={voting}
           index={id}
           title={question.caption}
           duration={Number(question.time)}
