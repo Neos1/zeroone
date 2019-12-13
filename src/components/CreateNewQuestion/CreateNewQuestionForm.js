@@ -125,7 +125,7 @@ class CreateNewQuestionForm extends React.PureComponent {
       parameters,
     });
     const rawVotingData = question.getUploadingParams(data.target);
-    projectStore.setVotingData(1, 0, rawVotingData);
+    projectStore.setVotingData(1, 0, ...rawVotingData);
     dialogStore.toggle('password_form');
     this.formBasic.clear();
     form.clear();
