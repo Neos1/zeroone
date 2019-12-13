@@ -6,7 +6,7 @@ class CreateGroupQuestionsForm extends ExtendedForm {
   setup() {
     return {
       fields: [{
-        name: 'name_group',
+        name: 'name',
         type: 'text',
         label: i18n.t('fields:titleGroupQuestions'),
         placeholder: i18n.t('fields:titleGroupQuestions'),
@@ -16,7 +16,7 @@ class CreateGroupQuestionsForm extends ExtendedForm {
         type: 'text',
         label: i18n.t('fields:descriptionOrComment'),
         placeholder: i18n.t('fields:descriptionOrComment'),
-        rules: 'required|string',
+        rules: 'string',
       }],
     };
   }

@@ -115,8 +115,8 @@ class HistoryStore {
         for (let j = 0; j < 7; j += 1) {
           delete voting[j];
         }
-        this.rawVotings.unsh(voting);
-        this.votings.unsh(new Voting(voting));
+        this.rawVotings.unshift(voting);
+        this.votings.unshift(new Voting(voting));
       }
       writeDataToFile({
         name: 'votings',

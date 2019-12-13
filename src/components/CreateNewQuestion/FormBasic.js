@@ -2,7 +2,7 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import Input from '../Input';
-import { TokenName, DateIcon } from '../Icons';
+import { TokenName, DateIcon, Address } from '../Icons';
 import InputTextarea from '../Input/InputTextarea';
 import Button from '../Button/Button';
 
@@ -41,13 +41,20 @@ class FormBasic extends React.Component {
         </div>
         <div className={styles['create-question__form-row']}>
           <div className={styles['create-question__form-col']}>
-            <Input field={formBasic.$('param_question')}>
+            <Input field={formBasic.$('voting_formula')}>
               <TokenName />
             </Input>
           </div>
           <div className={styles['create-question__form-col']}>
-            <Input field={formBasic.$('voting_formula')}>
-              <TokenName />
+            <Input field={formBasic.$('target')}>
+              <Address />
+            </Input>
+          </div>
+        </div>
+        <div className={styles['create-question__form-row']}>
+          <div className={styles['create-question__form-col']}>
+            <Input field={formBasic.$('methodSelector')}>
+              <Address />
             </Input>
           </div>
         </div>
