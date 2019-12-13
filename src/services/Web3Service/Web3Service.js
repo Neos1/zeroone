@@ -31,7 +31,7 @@ class Web3Service {
         if (!maxGasPrice) return (Promise.resolve(gas));
         return this.getGasPrice()
           .then((gasPrice) => {
-            const minGasPrice = 10000000000;
+            const minGasPrice = 20000000000;
             const gp = new BN(gasPrice);
             const minGp = new BN(minGasPrice);
             const maxGp = new BN(maxGasPrice);

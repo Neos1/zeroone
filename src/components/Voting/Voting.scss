@@ -22,8 +22,8 @@
       vertical-align: middle;
 
       span {
-        &:first-child {
-          padding-right: 24px;
+        &:last-child {
+          padding-left: 24px;
         }
       }
     }
@@ -138,6 +138,22 @@
           height: 32px;
         }
       }
+
+      &--close {
+        display: inline-block;
+        width: 100%;
+        padding: 46px;
+        color: #000;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        text-transform: uppercase;
+        background: transparent;
+        border: unset;
+        border-top: 1px solid #E1E4E8;
+        outline: none;
+        cursor: pointer;
+      }
     }
 
     &__stats {
@@ -178,6 +194,91 @@
         padding: 40px 60px 53px;
         background: #fff;
         border: 1px solid #e1e4e8;
+      }
+    }
+
+    &__progress {
+      display: inline-block;
+      margin-left: 5px;
+
+      &-container {
+        padding-right: 24px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+      }
+
+      .progress-bar__indicator {
+        width: 4px;
+        height: 4px;
+        margin-right: 2px;
+
+        &--filled {
+          background-color: rgba(0, 0, 0, 0.7);
+        }
+      }
+    }
+
+    &__decision {
+      padding: 49px 20px;
+      text-align: center;
+      border-top: 1px solid #e1e4e8;
+
+      &-text {
+        display: inline-block;
+        margin-right: 8px;
+        color: #000;
+        font-size: 11px;
+        line-height: 13px;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        display: inline-block;
+        color: #000;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        text-transform: uppercase;
+        vertical-align: middle;
+
+        svg {
+          display: inline-block;
+          width: auto;
+          height: auto;
+          margin-right: 4px;
+          vertical-align: middle;
+        }
+      }
+    }
+
+    &__result {
+      display: inline-block;
+      width: 100%;
+      padding: 33px 20px 44px;
+      text-align: center;
+      border-top: 1px solid #e1e4e8;
+
+      &-item {
+        display: inline-block;
+        margin: 0 32px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: left;
+        vertical-align: top;
+
+        &-value {
+          margin-top: 3px;
+          color: rgba(0, 0, 0, 1);
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+
+      .voting-info__decision-icon {
+        margin-top: 3px;
       }
     }
   }
@@ -319,9 +420,12 @@
           color: #000;
           font-size: 14px;
           line-height: 16px;
-          text-align: left;
         }
       }
+    }
+
+    &-progress-bar {
+      text-align: center;
     }
 
     &-state {
@@ -330,6 +434,7 @@
       font-size: 14px;
       line-height: 16px;
       text-align: center;
+      text-transform: uppercase;
     }
 
     &-icon {
@@ -352,12 +457,13 @@
     }
 
     &-text {
+      margin-top: 16px;
       color: rgba(0, 0, 0, 0.7);
       font-size: 11px;
       line-height: 13px;
+      text-align: center;
 
       &--remained {
-        margin-top: 16px;
         text-align: left;
       }
     }

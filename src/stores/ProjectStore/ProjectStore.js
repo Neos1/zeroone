@@ -13,6 +13,13 @@ class ProjectStore {
 
   @observable prepared = 0;
 
+  @observable votingData = '';
+
+  @observable votingQuestion = '';
+
+  @observable votingGroupId = '';
+
+
   @observable userGrops = [];
 
   @observable questionStore;
@@ -39,6 +46,12 @@ class ProjectStore {
    */
   @action startVoting() {
     this.prepared = votingStates.active;
+  }
+
+  @action setVotingData(questionId, groupId, data) {
+    this.votingQuestion = questionId;
+    this.votingGroupId = groupId;
+    this.votingData = data;
   }
 
   /**
@@ -70,7 +83,6 @@ class ProjectStore {
    * getting usergroups from contract
    *
    * @param {number} projectAddress address of project
-   * @returns {array} list of usergroups
    */
   @action fetchUserGroups = (projectAddress) => {
     this.fetchUserGroupsLength(projectAddress);

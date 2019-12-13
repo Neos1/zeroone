@@ -7,6 +7,13 @@ class CreateQuestionBasicForm extends ExtendedForm {
     return {
       fields: [
         {
+          name: 'GroupId',
+          type: 'text',
+          label: 'Question title',
+          placeholder: 'Группа вопросов',
+          rules: '',
+        },
+        {
           name: 'question_title',
           type: 'text',
           label: 'Question title',
@@ -18,23 +25,36 @@ class CreateQuestionBasicForm extends ExtendedForm {
           type: 'text',
           label: 'Question lifetime',
           placeholder: i18n.t('fields:questionLifeTime'),
+          rules: 'required',
+
         },
         {
-          name: 'param_question',
+          name: 'target',
           type: 'text',
           label: 'Parameter question',
-          placeholder: i18n.t('fields:parameter'),
+          placeholder: 'Адрес целевого контракта',
+
+        },
+        {
+          name: 'methodSelector',
+          type: 'text',
+          label: 'Parameter question',
+          placeholder: 'Селектор функции',
+
         },
         {
           name: 'voting_formula',
           type: 'text',
           label: 'Voting formula',
           placeholder: i18n.t('fields:votingFormula'),
+          rules: 'required',
+
         },
         {
           name: 'description',
           type: 'text',
           label: i18n.t('fields:questionDescription'),
+          rules: 'required',
         },
       ],
     };

@@ -162,6 +162,20 @@ class ContractService {
     return data;
   }
 
+  createVotingData(votingQuestion, status, votingGroupId, votingData) {
+    const { rootStore: { userStore }, _contract } = this;
+    // eslint-disable-next-line max-len
+    const data = {
+      // eslint-disable-next-line max-len
+      data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
+      gasLimit: 8000000,
+      from: userStore.address,
+      value: '0x0',
+      to: _contract.options.address,
+    };
+    return data;
+  }
+
   /**
    * checks count of uploaded to contract questions and total count of system questions
    *
@@ -278,26 +292,33 @@ class ContractService {
       rootStore: {
         Web3Service,
         userStore,
-        appStore,
         membersStore,
-        historyStore,
+        projectStore: {
+          historyStore,
+          questionStore,
+        },
       },
     } = this;
-    // const voting = historyStore.getVotingById;
-    const groupId = 0;
+    const [voting] = historyStore.getVotingById(votingId);
+    const { questionId } = voting;
+    const [question] = questionStore.getQuestionById(Number(questionId));
+    const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
+    // TODO check work method
+    const maxGasPrice = 20000000000;
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
-        .then((receipt) => {
+        .then(() => {
           const tx = {
             from: userStore.address,
             data: _contract.methods.sendVote(descision).encodeABI(),
             value: '0x0',
             gasLimit: 8000000,
           };
-          return Web3Service.createTxData(userStore.address, tx)
+          return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
             .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+            // TODO PASTE METHOD CALL TO HERE @PZ
             .then((rec) => { console.log(rec); });
         });
     } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
@@ -310,6 +331,7 @@ class ContractService {
       return Web3Service.createTxData(userStore.address, tx)
         .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        // TODO PASTE METHOD CALL TO HERE @PZ
         .then((rec) => { console.log(rec); });
     }
   }

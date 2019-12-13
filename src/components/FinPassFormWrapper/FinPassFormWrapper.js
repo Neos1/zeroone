@@ -25,10 +25,11 @@ class FinPassFormWrapper extends React.Component {
         className={styles['form-fin-pass']}
       >
         <form
+          form={form}
           onSubmit={form.onSubmit}
         >
           <div className={styles.input__wrapper}>
-            <Input field={form.$('fin-password')}>
+            <Input field={form.$('password')}>
               <Password />
             </Input>
           </div>

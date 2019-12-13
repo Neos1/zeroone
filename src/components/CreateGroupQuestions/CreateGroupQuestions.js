@@ -12,13 +12,31 @@ import InputTextarea from '../Input/InputTextarea';
 import Button from '../Button/Button';
 
 @withTranslation()
-@inject('dialogStore')
+@inject('dialogStore', 'projectStore')
 @observer
 class CreateGroupQuestions extends React.PureComponent {
   form = new CreateGroupQuestionsForm({
     hooks: {
-      onSuccess: () => {
-        const { dialogStore } = this.props;
+      onSuccess: (form) => {
+        const {
+          projectStore: {
+            rootStore: {
+              Web3Service,
+            },
+            questionStore,
+          },
+          projectStore,
+          dialogStore,
+        } = this.props;
+        const questionId = 3;
+        console.log(form.values());
+        const { name } = form.values();
+        const [question] = questionStore.getQuestionById(questionId);
+        const { params: parameters, groupId, methodSelector } = question;
+        const params = parameters.map((param) => (param[1]));
+        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, [name]);
+        const votingData = encodedParams.replace('0x', methodSelector);
+        projectStore.setVotingData(questionId, groupId, votingData);
         dialogStore.toggle('password_form');
         return Promise.resolve();
       },
@@ -34,6 +52,7 @@ class CreateGroupQuestions extends React.PureComponent {
     dialogStore: PropTypes.shape({
       toggle: PropTypes.func.isRequired,
     }).isRequired,
+    projectStore: PropTypes.shape().isRequired,
   };
 
   render() {
@@ -58,7 +77,7 @@ class CreateGroupQuestions extends React.PureComponent {
           form={form}
           onSubmit={form.onSubmit}
         >
-          <Input field={form.$('name_group')}>
+          <Input field={form.$('name')}>
             <TokenName />
           </Input>
           <InputTextarea

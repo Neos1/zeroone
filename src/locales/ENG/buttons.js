@@ -28,5 +28,6 @@ const buttons = {
   nextStep: 'Next step',
   addParameter: '+ Add parameter',
   apply: 'Apply',
+  completeTheVote: 'Complete the vote',
 };
 export default buttons;

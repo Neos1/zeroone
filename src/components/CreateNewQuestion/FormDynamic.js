@@ -4,11 +4,11 @@ import { withTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import uniqKey from 'react-id-generator';
 import Input from '../Input';
-import Dropdown from '../Dropdown';
 import { TokenName, CloseIcon } from '../Icons';
 import Button from '../Button/Button';
 
 import styles from './CreateNewQuestion.scss';
+import SimpleDropdown from '../SimpleDropdown';
 
 @withTranslation()
 @observer
@@ -109,13 +109,13 @@ class FormDynamic extends React.Component {
                   </Input>
                 </div>
                 <div className={styles['create-question__form-col']}>
-                  <Dropdown
+                  <SimpleDropdown
                     options={[{ label: 'String', value: 'string' }]}
                     field={formDynamic.$(`select--${key}`)}
                     onSelect={() => {}}
                   >
                     <TokenName />
-                  </Dropdown>
+                  </SimpleDropdown>
                 </div>
                 <button
                   type="button"

@@ -5,14 +5,16 @@ import { VerifyIcon, RejectIcon, NoQuorum } from '../Icons';
 
 import styles from './Voting.scss';
 
-// eslint-disable-next-line consistent-return
-const Descision = ({ prosState }) => {
+const Decision = ({
+  prosState,
+  t,
+}) => {
   switch (prosState) {
     case true:
       return (
         <div>
           <div className={styles['voting__decision-state']}>
-            PROS
+            {t('other:pros')}
           </div>
           <div className={styles['voting__decision-icon']}>
             <VerifyIcon />
@@ -23,7 +25,7 @@ const Descision = ({ prosState }) => {
       return (
         <div>
           <div className={styles['voting__decision-state']}>
-            CONS
+            {t('other:cons')}
           </div>
           <div className={styles['voting__decision-icon']}>
             <RejectIcon />
@@ -34,7 +36,7 @@ const Descision = ({ prosState }) => {
       return (
         <div>
           <div className={styles['voting__decision-state']}>
-            Не принято
+            {t('other:notAccepted')}
           </div>
           <div className={styles['voting__decision-icon']}>
             <NoQuorum />
@@ -42,9 +44,17 @@ const Descision = ({ prosState }) => {
         </div>
       );
     default:
-      break;
+      return null;
   }
 };
+
+Decision.propTypes = {
+  prosState: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+};
+
+const DecisionTranslated = withTranslation()(Decision);
+
 /**
  * Voting decision for pros & cons state
  *
@@ -57,10 +67,20 @@ const VotingDecision = ({
   t,
 }) => (
   <div className={styles.voting__decision}>
-    <div className={styles['voting__decision-title']}>
-      {t('other:decisionIsMade')}
-    </div>
-    <Descision prosState={prosState} />
+    {
+      prosState === null
+        ? (
+          <div className={styles['voting__decision-title']}>
+            {t('other:decision')}
+          </div>
+        )
+        : (
+          <div className={styles['voting__decision-title']}>
+            {t('other:decisionIsMade')}
+          </div>
+        )
+    }
+    <DecisionTranslated prosState={prosState} />
   </div>
 );
 
