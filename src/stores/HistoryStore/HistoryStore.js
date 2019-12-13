@@ -70,7 +70,9 @@ class HistoryStore {
     });
   }
 
-  getVotingsFromFile = (address) => {
+  getVotingsFromFile = async (address) => {
+    const { contractService } = this.rootStore;
+
     const votings = readDataFromFile({
       name: 'votings',
       basicPath: `${PATH_TO_DATA}${address}`,
@@ -78,10 +80,14 @@ class HistoryStore {
     const votingsFromFileLength = votings.data && votings.data.length
       ? votings.data.length
       : 0;
-    for (let i = 0; i < votingsFromFileLength; i += 1) {
+    for (let i = votingsFromFileLength; i > 0; i -= 1) {
       const voting = votings.data[i];
       // For correct work {getMissingQuestions} method
       this.rawVotings.push(voting);
+      voting.descision = await contractService.callMethod('getVotingDescision', [i]);
+      voting.userVote = await contractService.callMethod('getUserVote', [i]);
+      voting.questionId = voting.id;
+      voting.id = i;
       this.votings.push(new Voting(voting));
     }
     return votings;
@@ -93,15 +99,24 @@ class HistoryStore {
   }) => {
     const firstVotingIndex = 1;
     const { contractService } = this.rootStore;
-    const { countOfUploaded } = await contractService.checkQuestions();
+    const countOfVotings = await this.fetchVotingsCount();
     const votingsFromFileLength = votings.data.length;
-    const countVotingFromContract = countOfUploaded - firstVotingIndex;
+    const countVotingFromContract = countOfVotings - firstVotingIndex;
+    console.log(countVotingFromContract, votingsFromFileLength);
     if (countVotingFromContract > votingsFromFileLength) {
-      for (let i = votingsFromFileLength + firstVotingIndex; i < countOfUploaded; i += 1) {
+      for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
+        console.log(`index=${i}`);
         const voting = await contractService.callMethod('voting', [i]);
-        this.rawVotings.push(voting);
-        this.votings.push(new Voting(voting));
+        voting.descision = await contractService.callMethod('getVotingDescision', [i]);
+        voting.userVote = await contractService.callMethod('getUserVote', [i]);
+        voting.questionId = voting.id;
+        voting.id = i;
+        for (let j = 0; j < 7; j += 1) {
+          delete voting[j];
+        }
+        this.rawVotings.unsh(voting);
+        this.votings.unsh(new Voting(voting));
       }
       writeDataToFile({
         name: 'votings',
