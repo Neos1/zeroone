@@ -13,6 +13,8 @@ class ProjectStore {
 
   @observable prepared = 0;
 
+  @observable votingData = 0;
+
   @observable userGrops = [];
 
   @observable questionStore;
@@ -39,6 +41,10 @@ class ProjectStore {
    */
   @action startVoting() {
     this.prepared = votingStates.active;
+  }
+
+  @action setVotingData(data) {
+    this.votingData = data;
   }
 
   /**
@@ -70,7 +76,6 @@ class ProjectStore {
    * getting usergroups from contract
    *
    * @param {number} projectAddress address of project
-   * @returns {array} list of usergroups
    */
   @action fetchUserGroups = (projectAddress) => {
     this.fetchUserGroupsLength(projectAddress);

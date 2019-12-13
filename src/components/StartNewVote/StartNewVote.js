@@ -27,6 +27,8 @@ class StartNewVote extends React.Component {
             },
             questionStore,
           },
+          projectStore,
+          dialogStore,
         } = this.props;
         const data = form.values();
         const { question: questionId } = data;
@@ -37,7 +39,8 @@ class StartNewVote extends React.Component {
         const params = parameters.map((param) => (param[1]));
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, values);
         const votingData = encodedParams.replace('0x', methodSelector);
-        this.votingData = votingData;
+        projectStore.setVotingData(votingData);
+        dialogStore.toggle('password_form');
         return Promise.resolve();
       },
       onError: (form) => {

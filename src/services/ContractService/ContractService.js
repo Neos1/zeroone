@@ -283,12 +283,12 @@ class ContractService {
         historyStore,
       },
     } = this;
-    // const voting = historyStore.getVotingById;
-    const groupId = 0;
+    const [voting] = historyStore.getVotingById;
+    const { groupId } = voting;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
-        .then((receipt) => {
+        .then(() => {
           const tx = {
             from: userStore.address,
             data: _contract.methods.sendVote(descision).encodeABI(),
@@ -298,6 +298,7 @@ class ContractService {
           return Web3Service.createTxData(userStore.address, tx)
             .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+            // TODO PASTE METHOD CALL TO HERE @PZ
             .then((rec) => { console.log(rec); });
         });
     } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
@@ -310,6 +311,7 @@ class ContractService {
       return Web3Service.createTxData(userStore.address, tx)
         .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        // TODO PASTE METHOD CALL TO HERE @PZ
         .then((rec) => { console.log(rec); });
     }
   }
