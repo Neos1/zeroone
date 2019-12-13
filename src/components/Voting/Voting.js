@@ -15,23 +15,50 @@ import DataManagerStore from '../../stores/DataManagerStore';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
-
-import styles from './Voting.scss';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 
+import styles from './Voting.scss';
+
 @withTranslation()
-@inject('dialogStore', 'projectStore')
+@inject('dialogStore', 'projectStore', 'userStore')
 @observer
 class Voting extends React.Component {
   passwordForm = new FinPassForm({
     hooks: {
-      onSuccess: () => {
+      onSuccess: (form) => {
         const { props } = this;
-        const { dialogStore } = props;
-        dialogStore.hide();
-        return Promise.resolve();
+        const {
+          // eslint-disable-next-line no-unused-vars
+          dialogStore,
+          projectStore: {
+            rootStore: { Web3Service, contractService },
+            votingData,
+            votingQuestion,
+            votingGroupId,
+          },
+          userStore,
+        } = props;
+        const { password } = form.values();
+        const maxGasPrice = 30000000000;
+        userStore.setPassword(password);
+        return userStore.readWallet(password)
+          .then(() => {
+            // eslint-disable-next-line max-len
+            const transaction = contractService.createVotingData(Number(votingQuestion), 0, Number(votingGroupId), votingData);
+            return transaction;
+          })
+          .then((tx) => Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+            .then((formedTx) => userStore.singTransaction(formedTx, password))
+            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
+          .then((receipt) => { console.log(receipt); })
+          .catch((error) => {
+            console.error(error);
+          });
       },
-      onError: () => Promise.reject(),
+      onError: (form) => {
+        console.log(form.error);
+      },
     },
   });
 
@@ -41,12 +68,17 @@ class Voting extends React.Component {
       hide: PropTypes.func.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape({
+      votingData: PropTypes.string.isRequired,
+      votingQuestion: PropTypes.number.isRequired,
+      votingGroupId: PropTypes.number.isRequired,
+      rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         pagination: PropTypes.instanceOf(PaginationStore).isRequired,
         dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,
       }).isRequired,
     }).isRequired,
+    userStore: PropTypes.shape().isRequired,
     t: PropTypes.func.isRequired,
   };
 

@@ -35,11 +35,12 @@ class StartNewVote extends React.Component {
         delete data.question;
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
-        const { params: parameters, methodSelector } = question;
+        const { params: parameters, groupId, methodSelector } = question;
         const params = parameters.map((param) => (param[1]));
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, values);
         const votingData = encodedParams.replace('0x', methodSelector);
-        projectStore.setVotingData(votingData);
+        projectStore.setVotingData(questionId, groupId, votingData);
+
         dialogStore.toggle('password_form');
         return Promise.resolve();
       },

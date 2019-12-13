@@ -6,7 +6,7 @@ class FinPassForm extends ExtendedForm {
   setup() {
     return {
       fields: [{
-        name: 'fin-password',
+        name: 'password',
         type: 'password',
         label: 'Password',
         placeholder: i18n.t('fields:password'),

@@ -162,6 +162,20 @@ class ContractService {
     return data;
   }
 
+  createVotingData(votingQuestion, status, votingGroupId, votingData) {
+    const { rootStore: { userStore }, _contract } = this;
+    // eslint-disable-next-line max-len
+    const data = {
+      // eslint-disable-next-line max-len
+      data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
+      gasLimit: 8000000,
+      from: userStore.address,
+      value: '0x0',
+      to: _contract.options.address,
+    };
+    return data;
+  }
+
   /**
    * checks count of uploaded to contract questions and total count of system questions
    *

@@ -13,7 +13,12 @@ class ProjectStore {
 
   @observable prepared = 0;
 
-  @observable votingData = 0;
+  @observable votingData = '';
+
+  @observable votingQuestion = '';
+
+  @observable votingGroupId = '';
+
 
   @observable userGrops = [];
 
@@ -43,7 +48,9 @@ class ProjectStore {
     this.prepared = votingStates.active;
   }
 
-  @action setVotingData(data) {
+  @action setVotingData(questionId, groupId, data) {
+    this.votingQuestion = questionId;
+    this.votingGroupId = groupId;
     this.votingData = data;
   }
 
