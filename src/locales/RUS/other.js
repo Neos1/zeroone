@@ -56,5 +56,12 @@ const other = {
   pros: 'За',
   cons: 'Против',
   notAccepted: 'Не принято',
+  votingInProgress: 'Идет голосование',
+  youVoted: 'Вы проголосовали',
+  votingDone: 'Голосование проведено',
+  decisionWasMade: 'Принято решение',
+  yourDecision: 'Ваш голос',
+  totalVoted: 'Проголосовало',
+  theVoteLasted: 'Голосование длилось',
 };
 export default other;

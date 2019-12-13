@@ -76,6 +76,7 @@ class VotingInfoWrapper extends React.PureComponent {
           params={params}
           onVerifyClick={() => { dialogStore.show('decision_agree'); }}
           onRejectClick={() => { dialogStore.show('decision_reject'); }}
+          onCompleteVoteClick={() => { console.log('complete vote'); }}
           onBarClick={
             (name, data) => {
               console.log('name', name);

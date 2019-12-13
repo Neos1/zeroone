@@ -1,11 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import uniqKey from 'react-id-generator';
 import { withTranslation, Trans } from 'react-i18next';
 import moment from 'moment';
 import { Collapse } from 'react-collapse';
-import { EMPTY_DATA_STRING, votingStates } from '../../constants';
-import { VerifyIcon, RejectIcon, Stats } from '../Icons';
+import {
+  EMPTY_DATA_STRING,
+  statusStates,
+  votingStates,
+  userVotingStates,
+} from '../../constants';
+import {
+  VerifyIcon,
+  RejectIcon,
+  Stats,
+  NoQuorum,
+} from '../Icons';
 import Button from '../Button/Button';
 import VotingStats from './VotingStats';
 import ProgressBar from '../ProgressBar/ProgressBar';
@@ -18,7 +29,10 @@ class VotingInfo extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     /** Index voting in list */
-    index: PropTypes.number.isRequired,
+    index: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]).isRequired,
     /** Description voting */
     description: PropTypes.string.isRequired,
     /** Title voting */
@@ -27,17 +41,18 @@ class VotingInfo extends React.PureComponent {
     formula: PropTypes.string.isRequired,
     /** All needed date for voting */
     date: PropTypes.shape({
-      start: PropTypes.instanceOf(Date).isRequired,
-      end: PropTypes.instanceOf(Date).isRequired,
-      application: PropTypes.instanceOf(Date).isRequired,
+      start: PropTypes.number.isRequired,
+      end: PropTypes.number.isRequired,
     }).isRequired,
     voting: PropTypes.shape({
       status: PropTypes.string.isRequired,
+      descision: PropTypes.string.isRequired,
       userVote: PropTypes.string.isRequired,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
     onRejectClick: PropTypes.func.isRequired,
+    onCompleteVoteClick: PropTypes.func.isRequired,
     onBarClick: PropTypes.func.isRequired,
   };
 
@@ -78,6 +93,240 @@ class VotingInfo extends React.PureComponent {
     );
   }
 
+  /**
+   * Method for render icon with text
+   *
+   * @param {string} state state for icon
+   * @returns {Node} ready node element
+   */
+  renderDecisionIcon = (state) => {
+    const { props } = this;
+    const { t } = props;
+    switch (state) {
+      case '0':
+        return (
+          <div className={styles['voting-info__decision-icon']}>
+            <NoQuorum width={14} height={14} />
+            {t('other:notAccepted')}
+          </div>
+        );
+      case '1':
+        return (
+          <div className={styles['voting-info__decision-icon']}>
+            <VerifyIcon width={14} height={14} />
+            {t('other:pros')}
+          </div>
+        );
+      case '2':
+        return (
+          <div className={styles['voting-info__decision-icon']}>
+            <RejectIcon width={14} height={14} />
+            {t('other:cons')}
+          </div>
+        );
+      default:
+        return EMPTY_DATA_STRING;
+    }
+  }
+
+  /**
+   * Method for render user decision
+   *
+   * @returns {Node} user decision Node element
+   */
+  renderUserDecision = () => {
+    const { props } = this;
+    const { voting: { userVote }, t } = props;
+    switch (userVote) {
+      case userVotingStates.decisionFor:
+        return (
+          <div className={styles['voting-info__decision']}>
+            <div className={styles['voting-info__decision-text']}>
+              {t('other:youVoted')}
+            </div>
+            {this.renderDecisionIcon(userVotingStates.decisionFor)}
+          </div>
+        );
+      case userVotingStates.decisionAgainst:
+        return (
+          <div className={styles['voting-info__decision']}>
+            <div className={styles['voting-info__decision-text']}>
+              {t('other:youVoted')}
+            </div>
+            {this.renderDecisionIcon(userVotingStates.decisionAgainst)}
+          </div>
+        );
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * Method for render decision buttons
+   *
+   * @returns {Node} element with decision buttons
+   */
+  renderDecisionButtons = () => {
+    const { props } = this;
+    const {
+      onVerifyClick,
+      onRejectClick,
+      t,
+    } = props;
+    return (
+      <div
+        className={styles['voting-info__buttons']}
+      >
+        <button
+          type="button"
+          onClick={onVerifyClick}
+        >
+          <div
+            className={styles['voting-info__button-icon']}
+          >
+            <VerifyIcon />
+          </div>
+          {t('other:iAgree')}
+        </button>
+        <button
+          type="button"
+          onClick={onRejectClick}
+        >
+          <div
+            className={styles['voting-info__button-icon']}
+          >
+            <RejectIcon />
+          </div>
+          {t('other:iAmAgainst')}
+        </button>
+      </div>
+    );
+  }
+
+  /**
+   * Method for render complete vote button
+   *
+   * @returns {Node} button
+   */
+  renderCompleteVoteButton = () => {
+    const { props } = this;
+    const { t, onCompleteVoteClick } = props;
+    return (
+      <button
+        type="button"
+        onClick={onCompleteVoteClick}
+        className={styles['voting-info__button--close']}
+      >
+        {t('buttons:completeTheVote')}
+      </button>
+    );
+  }
+
+  renderResultDecision = () => {
+    const { props } = this;
+    const {
+      voting: { userVote, descision },
+      date,
+      t,
+    } = props;
+    const startDate = moment(date.start * 1000);
+    const endDate = moment(date.end * 1000);
+    return (
+      <div
+        className={styles['voting-info__result']}
+      >
+        <div
+          className={styles['voting-info__result-item']}
+        >
+          {t('other:decisionWasMade')}
+          <div>
+            {this.renderDecisionIcon(descision)}
+          </div>
+        </div>
+        <div
+          className={styles['voting-info__result-item']}
+        >
+          {t('other:yourDecision')}
+          <div>
+            {this.renderDecisionIcon(userVote)}
+          </div>
+        </div>
+        <div
+          className={styles['voting-info__result-item']}
+        >
+          {t('other:totalVoted')}
+          <div
+            className={styles['voting-info__result-item-value']}
+          >
+            {/* TODO add total from stats */}
+            {EMPTY_DATA_STRING}
+          </div>
+        </div>
+        <div
+          className={styles['voting-info__result-item']}
+        >
+          {t('other:theVoteLasted')}
+          <div
+            className={styles['voting-info__result-item-value']}
+          >
+            {endDate.from(startDate)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /**
+   * Method for render dynamic content
+   * based on voting status
+   *
+   * @returns {Node} user decision Node element
+   */
+  renderDynamicContent = () => {
+    const { props } = this;
+    const {
+      voting: { userVote, status, descision },
+      date,
+    } = props;
+    const progress = progressByDateRange(date);
+    switch (true) {
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote === userVotingStates.notAccepted
+        && progress < 100
+      ):
+        return this.renderDecisionButtons();
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote !== userVotingStates.notAccepted
+        && progress < 100
+      ):
+        return this.renderUserDecision();
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote === userVotingStates.notAccepted
+        && progress >= 100
+      ):
+        return this.renderCompleteVoteButton();
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote !== userVotingStates.notAccepted
+        && progress >= 100
+      ):
+        return this.renderUserDecision();
+      case (
+        status === statusStates.closed
+      ):
+        return this.renderResultDecision();
+      default:
+        return null;
+    }
+  }
+
   render() {
     const { isOpen } = this.state;
     const { props } = this;
@@ -90,10 +339,10 @@ class VotingInfo extends React.PureComponent {
       formula,
       params,
       voting,
-      onVerifyClick,
-      onRejectClick,
       onBarClick,
     } = props;
+    const progress = progressByDateRange(date);
+    console.log(voting);
     return (
       <div
         className={styles['voting-info']}
@@ -112,14 +361,21 @@ class VotingInfo extends React.PureComponent {
           className={styles['voting-info__date']}
         >
           {
-            voting.status === votingStates.default
+            voting.status === statusStates.active
+            && voting.descision === votingStates.default
+            && progress < 100
               ? (
                 <span className={styles['voting-info__progress-container']}>
-                  Идет голосование:
-                  <ProgressBar className={styles['voting-info__progress']} progress={progressByDateRange(date)} />
+                  {t('other:votingInProgress')}
+                  :
+                  <ProgressBar className={styles['voting-info__progress']} progress={progress} />
                 </span>
               )
-              : null
+              : (
+                <span className={styles['voting-info__progress-container']}>
+                  {t('other:votingDone')}
+                </span>
+              )
           }
           <span>
             {t('other:start')}
@@ -161,7 +417,9 @@ class VotingInfo extends React.PureComponent {
                 className={styles['voting-info__data']}
               >
                 {params.map((item) => (
-                  <div>
+                  <div
+                    key={uniqKey()}
+                  >
                     <div
                       className={styles['voting-info__data-title']}
                     >
@@ -182,32 +440,7 @@ class VotingInfo extends React.PureComponent {
               {`${t('other:votingFormula')}: ${formula}`}
             </div>
           </div>
-          <div
-            className={styles['voting-info__buttons']}
-          >
-            <button
-              type="button"
-              onClick={onVerifyClick}
-            >
-              <div
-                className={styles['voting-info__button-icon']}
-              >
-                <VerifyIcon />
-              </div>
-              {t('other:iAgree')}
-            </button>
-            <button
-              type="button"
-              onClick={onRejectClick}
-            >
-              <div
-                className={styles['voting-info__button-icon']}
-              >
-                <RejectIcon />
-              </div>
-              {t('other:iAmAgainst')}
-            </button>
-          </div>
+          {this.renderDynamicContent()}
         </div>
         <div
           className={styles['voting-info__stats']}

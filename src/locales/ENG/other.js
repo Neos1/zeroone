@@ -56,5 +56,12 @@ const other = {
   pros: 'Pros',
   cons: 'Cons',
   notAccepted: 'Not accepted',
+  votingInProgress: 'Voting in progress',
+  youVoted: 'You voted',
+  votingDone: 'Voting done',
+  decisionWasMade: 'The decision was made',
+  yourDecision: 'Your decision',
+  totalVoted: 'Total voted',
+  theVoteLasted: 'The vote lasted',
 };
 export default other;
