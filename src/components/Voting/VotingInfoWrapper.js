@@ -36,7 +36,6 @@ class VotingInfoWrapper extends React.PureComponent {
     }).isRequired,
   };
 
-
   // eslint-disable-next-line class-methods-use-this
   prepareParameters(voting, question) {
     const { projectStore: { rootStore: { Web3Service } } } = this.props;

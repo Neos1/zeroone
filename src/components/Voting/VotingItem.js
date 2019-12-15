@@ -115,7 +115,7 @@ class VotingItem extends React.PureComponent {
       date,
     } = props;
     return (
-      <Link to={`/votingInfo/${index}`}>
+      <Link to={`/votings/info/${index}`}>
         <div
           className={styles.voting__item}
         >
