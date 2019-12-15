@@ -69,8 +69,14 @@ class Voting extends React.Component {
     }).isRequired,
     projectStore: PropTypes.shape({
       votingData: PropTypes.string.isRequired,
-      votingQuestion: PropTypes.number.isRequired,
-      votingGroupId: PropTypes.number.isRequired,
+      votingQuestion: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
+      votingGroupId: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { computed } from 'mobx';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import VotingDecisionProgress from './VotingDecisionProgress';
-import { EMPTY_DATA_STRING, statusStates, votingStates } from '../../constants';
+import { statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
 import progressByDateRange from '../../utils/Date';
+import { getDateString } from './utils';
 
 import styles from './Voting.scss';
 
@@ -104,29 +105,6 @@ class VotingItem extends React.PureComponent {
     }
   }
 
-
-  /**
-   * Method for getting formatted date string
-   *
-   * @param {Date} date date for formatting
-   * @returns {string} formatted date
-   */
-  getDateString = (date) => {
-    if (
-      !date
-      || typeof date !== 'number'
-    ) return EMPTY_DATA_STRING;
-    return (
-      <Trans
-        i18nKey="other:dateInFormat"
-        values={{
-          date: moment(date * 1000).format('DD.MM.YYYY'),
-          time: moment(date * 1000).format('HH:mm'),
-        }}
-      />
-    );
-  }
-
   render() {
     const { props } = this;
     const {
@@ -171,7 +149,7 @@ class VotingItem extends React.PureComponent {
               >
                 {t('other:start')}
                 <br />
-                {this.getDateString(date.start)}
+                {getDateString(date.start)}
               </div>
             </div>
             <div
@@ -182,7 +160,7 @@ class VotingItem extends React.PureComponent {
               >
                 {t('other:end')}
                 <br />
-                {this.getDateString(date.end)}
+                {getDateString(date.end)}
               </div>
             </div>
           </div>

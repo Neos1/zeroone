@@ -49,8 +49,15 @@ const Decision = ({
 };
 
 Decision.propTypes = {
-  prosState: PropTypes.bool.isRequired,
+  prosState: PropTypes.oneOfType([
+    PropTypes.bool,
+    () => null,
+  ]),
   t: PropTypes.func.isRequired,
+};
+
+Decision.defaultProps = {
+  prosState: null,
 };
 
 const DecisionTranslated = withTranslation()(Decision);
@@ -85,8 +92,15 @@ const VotingDecision = ({
 );
 
 VotingDecision.propTypes = {
-  prosState: PropTypes.bool.isRequired,
+  prosState: PropTypes.oneOfType([
+    PropTypes.bool,
+    () => null,
+  ]),
   t: PropTypes.func.isRequired,
+};
+
+VotingDecision.defaultProps = {
+  prosState: null,
 };
 
 export default withTranslation()(VotingDecision);
