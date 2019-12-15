@@ -9,14 +9,12 @@ import VotingInfoWrapper from './VotingInfoWrapper';
 
 const VotingRoute = ({
   match,
-}) => {
-  return (
-    <>
-      <Route exact path={`${match.path}`} component={Voting} />
-      <Route path={`${match.path}/info/:id`} component={withRouter(VotingInfoWrapper)} />
-    </>
-  );
-};
+}) => (
+  <>
+    <Route exact path={`${match.path}`} component={Voting} />
+    <Route path={`${match.path}/info/:id`} component={withRouter(VotingInfoWrapper)} />
+  </>
+);
 
 VotingRoute.propTypes = {
   match: PropTypes.shape({
