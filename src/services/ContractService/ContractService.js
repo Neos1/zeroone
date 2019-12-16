@@ -106,7 +106,7 @@ class ContractService {
 
     const tx = {
       data: txData,
-      gasLimit: 8000000,
+      gasLimit: 7000000,
       gasPrice: maxGasPrice,
     };
 
@@ -168,7 +168,7 @@ class ContractService {
     const data = {
       // eslint-disable-next-line max-len
       data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
-      gasLimit: 8000000,
+      gasLimit: 7000000,
       from: userStore.address,
       value: '0x0',
       to: _contract.options.address,
@@ -212,7 +212,7 @@ class ContractService {
         const rawTx = {
           to: contractAddr,
           data: dataTx,
-          gasLimit: 8000000,
+          gasLimit: 7000000,
           value: '0x0',
         };
         return new Promise((resolve) => {
@@ -316,7 +316,7 @@ class ContractService {
             data: _contract.methods.sendVote(descision).encodeABI(),
             value: '0x0',
             to: _contract.options.address,
-            gasLimit: 8000000,
+            gasLimit: 7000000,
           };
           console.log('sending TX');
           return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
@@ -332,7 +332,7 @@ class ContractService {
         to: _contract.options.address,
         data: _contract.methods.sendVote(descision).encodeABI(),
         value: '0x0',
-        gasLimit: 8000000,
+        gasLimit: 7000000,
       };
       return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
         .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
@@ -361,7 +361,7 @@ class ContractService {
       data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
       from: userStore.address,
       to: _contract.options.address,
-      gasLimit: 8000000,
+      gasLimit: 7000000,
       value: '0x0',
     };
     console.log('appoving');
@@ -394,7 +394,7 @@ class ContractService {
       data: txData,
       from: userStore.address,
       value: '0x0',
-      gasLimit: 8000000,
+      gasLimit: 7000000,
     };
     return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
