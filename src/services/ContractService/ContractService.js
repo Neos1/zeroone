@@ -304,10 +304,7 @@ class ContractService {
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
-    console.log(groupContainsUser);
-    // TODO check work method
     const maxGasPrice = 30000000000;
-    console.log(groupContainsUser.groupType);
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
         .then(() => {
@@ -323,8 +320,14 @@ class ContractService {
             .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-            // TODO PASTE METHOD CALL TO HERE @PZ
-            .then((rec) => { console.log(rec); });
+            .then((rec) => {
+              historyStore.updateVotingById({
+                id: votingId,
+                newState: {
+                  userVote: descision,
+                },
+              });
+            });
         });
     } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
       const tx = {
@@ -338,8 +341,14 @@ class ContractService {
         .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-        // TODO PASTE METHOD CALL TO HERE @PZ
-        .then((rec) => { console.log(rec); });
+        .then((rec) => {
+          historyStore.updateVotingById({
+            id: votingId,
+            newState: {
+              userVote: descision,
+            },
+          });
+        });
     }
   }
 

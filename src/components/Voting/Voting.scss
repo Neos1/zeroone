@@ -153,6 +153,11 @@
         border-top: 1px solid #E1E4E8;
         outline: none;
         cursor: pointer;
+
+        &:disabled {
+          cursor: default;
+          opacity: 0.6;
+        }
       }
     }
 

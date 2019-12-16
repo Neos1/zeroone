@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
+import { action } from 'mobx';
 import VotingInfo from './VotingInfo';
 import Container from '../Container';
 import Dialog from '../Dialog/Dialog';
@@ -64,6 +65,7 @@ class VotingInfoWrapper extends React.PureComponent {
     projectStore: PropTypes.shape({
       historyStore: PropTypes.shape({
         getVotingById: PropTypes.func.isRequired,
+        fetchAndUpdateLastVoting: PropTypes.func.isRequired,
       }).isRequired,
       questionStore: PropTypes.shape({
         getQuestionById: PropTypes.func.isRequired,
@@ -71,6 +73,9 @@ class VotingInfoWrapper extends React.PureComponent {
       rootStore: PropTypes.shape({
         Web3Service: PropTypes.shape({
           web3: PropTypes.shape().isRequired,
+        }).isRequired,
+        contractService: PropTypes.shape({
+          sendVote: PropTypes.func.isRequired,
         }).isRequired,
       }).isRequired,
     }).isRequired,
@@ -103,6 +108,37 @@ class VotingInfoWrapper extends React.PureComponent {
       descision: 2,
     });
     dialogStore.toggle('decision_reject');
+  }
+
+  @action
+  closeVoting = () => {
+    const { props } = this;
+    const {
+      match: { params: { id } },
+      projectStore: {
+        historyStore,
+        rootStore: {
+          contractService,
+        },
+      },
+    } = props;
+    // The decision can be both positive and negative.
+    // It does not affect the outcome of the vote.
+    // TODO refactor after adding needed method
+    // in contractService
+    const [voting] = historyStore.getVotingById(Number(id));
+    voting.update({
+      closeVoteInProgress: true,
+    });
+    contractService.sendVote(Number(id), 1)
+      .then(() => {
+        historyStore.fetchAndUpdateLastVoting();
+      })
+      .finally(() => {
+        voting.update({
+          closeVoteInProgress: false,
+        });
+      });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -145,7 +181,7 @@ class VotingInfoWrapper extends React.PureComponent {
           params={params}
           onVerifyClick={() => { this.onVerifyClick(); }}
           onRejectClick={() => { this.onRejectClick(); }}
-          onCompleteVoteClick={() => { console.log('complete vote'); }}
+          onCompleteVoteClick={this.closeVoting}
           onBarClick={
             (name, data) => {
               console.log('name', name);
