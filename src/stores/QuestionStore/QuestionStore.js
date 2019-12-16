@@ -15,12 +15,16 @@ class QuestionStore {
   /** List models Question */
   @observable _questions;
 
+  @observable _questionGroups;
+
   /** List raw data questions (from contract) */
   @observable rawQuestions = [];
 
   constructor(rootStore) {
     this._questions = [];
+    this._questionGroups = [];
     this.rootStore = rootStore;
+    this.fetchQuestionGroups();
     this.getActualQuestions();
     this.dataManager = new DataManagerStore({
       list: this.questions,
@@ -28,6 +32,18 @@ class QuestionStore {
       itemsCountPerPage: 2,
     });
     this.pagination = this.dataManager.pagination;
+  }
+
+
+  @action
+  fetchQuestionGroups = async () => {
+    const { contractService } = this.rootStore;
+    const length = await contractService.callMethod('getQuestionGroupsLength');
+    for (let index = 1; index < length; index += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const element = await contractService.callMethod('getQuestionGroup', index);
+      this._questionGroups.push(element);
+    }
   }
 
   /**
@@ -178,6 +194,13 @@ class QuestionStore {
     return this._questions.map((question) => ({
       value: Number(question.id),
       label: `${Number(question.id)}. ${question.caption}`,
+    }));
+  }
+
+  @computed get questionGroups() {
+    return this._questionGroups.map((group) => ({
+      value: group.groupType,
+      label: group.name,
     }));
   }
 }

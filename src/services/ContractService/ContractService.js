@@ -304,8 +304,10 @@ class ContractService {
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
+    console.log(groupContainsUser);
     // TODO check work method
-    const maxGasPrice = 20000000000;
+    const maxGasPrice = 30000000000;
+    console.log(groupContainsUser.groupType);
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
         .then(() => {
@@ -313,10 +315,13 @@ class ContractService {
             from: userStore.address,
             data: _contract.methods.sendVote(descision).encodeABI(),
             value: '0x0',
+            to: _contract.options.address,
             gasLimit: 8000000,
           };
+          console.log('sending TX');
           return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
-            .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
+            .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
             // TODO PASTE METHOD CALL TO HERE @PZ
             .then((rec) => { console.log(rec); });
@@ -324,12 +329,14 @@ class ContractService {
     } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
       const tx = {
         from: userStore.address,
+        to: _contract.options.address,
         data: _contract.methods.sendVote(descision).encodeABI(),
         value: '0x0',
         gasLimit: 8000000,
       };
-      return Web3Service.createTxData(userStore.address, tx)
-        .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
+      return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+        .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
         // TODO PASTE METHOD CALL TO HERE @PZ
         .then((rec) => { console.log(rec); });
@@ -349,15 +356,17 @@ class ContractService {
     const parameters = question.getParameters();
     const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
     const votingData = (data).replace('0x', question.methodSelector);
+    const maxGasPrice = 30000000000;
     const tx = {
       data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
+      from: userStore.address,
       to: _contract.options.address,
       gasLimit: 8000000,
       value: '0x0',
     };
-
-    return Web3Service.createTxData(userStore.address, tx)
-      .then((formedTx) => userStore.singTransaction(formedTx))
+    console.log('appoving');
+    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
       .then((receipt) => { console.log(receipt); });

@@ -161,7 +161,8 @@ class MembersStore {
 
   @action
   isUserInGroup(groupId, address) {
-    const memberItem = this.groups[groupId].list.filter((user) => user.wallet === address);
+    // eslint-disable-next-line max-len
+    const memberItem = this.groups[groupId].list.filter((user) => (user.wallet).toUpperCase() === address.toUpperCase());
     return memberItem.length > 0 ? this.groups[groupId] : null;
   }
 
