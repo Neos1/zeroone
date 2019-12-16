@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { computed } from 'mobx';
+import { computed, observable, action } from 'mobx';
 import { withTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
@@ -13,8 +14,9 @@ import { getDateString } from './utils';
 import styles from './Voting.scss';
 
 @withTranslation()
+@observer
 class VotingItem extends React.PureComponent {
-  progress;
+  @observable progress;
 
   intervalProgress = 5000;
 
@@ -35,15 +37,20 @@ class VotingItem extends React.PureComponent {
     const { props } = this;
     const { date } = props;
     const initProgress = progressByDateRange(date);
-    this.progress = initProgress;
+    this.setProgress(initProgress);
     if (initProgress !== 100) {
       const intervalId = setInterval(() => {
-        this.progress = progressByDateRange(date);
+        this.setProgress(progressByDateRange(date));
         if (this.progress === 100) {
           clearInterval(intervalId);
         }
       }, this.intervalProgress);
     }
+  }
+
+  @action
+  setProgress = (progress) => {
+    this.progress = progress;
   }
 
   /**
