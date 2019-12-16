@@ -9,13 +9,58 @@ import DecisionAgree from '../Decision/DecisionAgree';
 import DecisionReject from '../Decision/DecisionReject';
 import VoterList from '../VoterList/VoterList';
 import Footer from '../Footer';
+import FinPassForm from '../../stores/FormsStore/FinPassForm';
+import { AgreedMessage, RejectMessage } from '../Message';
+import TransactionProgress from '../Message/TransactionProgress';
 
-@inject('dialogStore', 'projectStore')
+@inject('dialogStore', 'projectStore', 'userStore')
 @observer
 class VotingInfoWrapper extends React.PureComponent {
+  votingId = 0;
+
+  form = new FinPassForm({
+    hooks: {
+      onSuccess: (form) => {
+        const { votingId } = this;
+        const { descision } = this.state;
+        const {
+          userStore,
+          dialogStore,
+          userStore: {
+            rootStore: {
+              contractService,
+            },
+          },
+        } = this.props;
+        console.log(descision, votingId, form.values());
+        const { password } = form.values();
+        userStore.setPassword(password);
+        dialogStore.toggle('progress_modal');
+        contractService.sendVote(votingId, descision)
+          .then(() => {
+            switch (descision) {
+              case (1):
+                dialogStore.toggle('decision_agreed_message');
+                break;
+              case (2):
+                dialogStore.toggle('decision_reject_message');
+                break;
+              default:
+                break;
+            }
+          });
+      },
+      onError: (form) => {
+        console.log(form.error);
+      },
+    },
+  })
+
   static propTypes = {
     dialogStore: PropTypes.shape({
       show: PropTypes.func.isRequired,
+      hide: PropTypes.func.isRequired,
+      toggle: PropTypes.func.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape({
       historyStore: PropTypes.shape({
@@ -39,7 +84,31 @@ class VotingInfoWrapper extends React.PureComponent {
         id: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
+    userStore: PropTypes.shape().isRequired,
   };
+
+  constructor() {
+    super();
+    this.state = {
+      descision: 0,
+    };
+  }
+
+  onVerifyClick = () => {
+    const { dialogStore } = this.props;
+    this.setState({
+      descision: 1,
+    });
+    dialogStore.toggle('decision_agree');
+  }
+
+  onRejectClick = () => {
+    const { dialogStore } = this.props;
+    this.setState({
+      descision: 2,
+    });
+    dialogStore.toggle('decision_reject');
+  }
 
   @action
   closeVoting = () => {
@@ -91,6 +160,7 @@ class VotingInfoWrapper extends React.PureComponent {
       projectStore: { historyStore, questionStore },
       match: { params: { id } },
     } = props;
+    this.votingId = Number(id);
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(voting.questionId);
     const params = this.prepareParameters(voting, question);
@@ -109,8 +179,8 @@ class VotingInfoWrapper extends React.PureComponent {
           description={question.text}
           formula={question.getFormula()}
           params={params}
-          onVerifyClick={() => { dialogStore.show('decision_agree'); }}
-          onRejectClick={() => { dialogStore.show('decision_reject'); }}
+          onVerifyClick={() => { this.onVerifyClick(); }}
+          onRejectClick={() => { this.onRejectClick(); }}
           onCompleteVoteClick={this.closeVoting}
           onBarClick={
             (name, data) => {
@@ -127,16 +197,18 @@ class VotingInfoWrapper extends React.PureComponent {
           header={null}
           footer={null}
         >
-          <DecisionAgree />
+          <DecisionAgree form={this.form} />
         </Dialog>
+
         <Dialog
           name="decision_reject"
           size="md"
           header={null}
           footer={null}
         >
-          <DecisionReject />
+          <DecisionReject form={this.form} />
         </Dialog>
+
         <Dialog
           name="voter_list"
           size="lg"
@@ -144,6 +216,32 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
         >
           <VoterList />
+        </Dialog>
+
+        <Dialog
+          name="decision_agreed_message"
+          header={null}
+          footer={null}
+        >
+          <AgreedMessage onButtonClick={() => dialogStore.hide()} />
+        </Dialog>
+
+        <Dialog
+          name="decision_reject_message"
+          header={null}
+          footer={null}
+        >
+          <RejectMessage onButtonClick={() => dialogStore.hide()} />
+        </Dialog>
+
+        <Dialog
+          name="progress_modal"
+          size="md"
+          footer={null}
+          header="Отправка транзакции"
+          closable={false}
+        >
+          <TransactionProgress />
         </Dialog>
       </Container>
     );

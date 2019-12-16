@@ -16,6 +16,7 @@ import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
+import TransactionProgress from '../Message/TransactionProgress';
 
 import styles from './Voting.scss';
 
@@ -38,6 +39,7 @@ class Voting extends React.Component {
           },
           userStore,
         } = props;
+        dialogStore.toggle('progress_modal');
         const { password } = form.values();
         const maxGasPrice = 30000000000;
         userStore.setPassword(password);
@@ -62,10 +64,17 @@ class Voting extends React.Component {
     },
   });
 
+  voteStatus = {
+    inProgress: 0,
+    success: 1,
+    failed: 2,
+  }
+
   static propTypes = {
     dialogStore: PropTypes.shape({
       show: PropTypes.func.isRequired,
       hide: PropTypes.func.isRequired,
+      toggle: PropTypes.func.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape({
       votingData: PropTypes.string.isRequired,
@@ -88,6 +97,14 @@ class Voting extends React.Component {
     t: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      // eslint-disable-next-line react/no-unused-state
+      status: this.voteStatus.inProgress,
+    };
+  }
+
   componentDidMount() {
     const { projectStore } = this.props;
     const {
@@ -104,7 +121,8 @@ class Voting extends React.Component {
   }
 
   render() {
-    const { props } = this;
+    const { props, voteStatus, state } = this;
+    const { status } = state;
     const { t, dialogStore, projectStore: { historyStore: { pagination, dataManager } } } = props;
     const votings = dataManager.list();
     return (
@@ -163,6 +181,16 @@ class Voting extends React.Component {
           header={t('fields:enterPassword')}
         >
           <FinPassFormWrapper form={this.passwordForm} />
+        </Dialog>
+
+        <Dialog
+          name="progress_modal"
+          size="md"
+          footer={null}
+          header="Отправка транзакции"
+          closable={!(status === voteStatus.inProgress)}
+        >
+          <TransactionProgress />
         </Dialog>
       </Container>
     );

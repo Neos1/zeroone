@@ -47,7 +47,6 @@ class HistoryStore {
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
       const voting = await contractService.callMethod('voting', [length]);
-      this.rawVotings.push(voting);
       voting.descision = await contractService.callMethod('getVotingDescision', [length]);
       voting.userVote = await contractService.callMethod('getUserVote', [length]);
       voting.questionId = voting.id;
@@ -55,6 +54,7 @@ class HistoryStore {
       for (let j = 0; j < 7; j += 1) {
         delete voting[j];
       }
+      this.rawVotings.push(voting);
       this.votings.push(new Voting(voting));
     }
   }
@@ -71,8 +71,6 @@ class HistoryStore {
   }
 
   getVotingsFromFile = async (address) => {
-    const { contractService } = this.rootStore;
-
     const votings = readDataFromFile({
       name: 'votings',
       basicPath: `${PATH_TO_DATA}${address}`,
@@ -84,10 +82,6 @@ class HistoryStore {
       const voting = votings.data[i];
       // For correct work {getMissingQuestions} method
       this.rawVotings.push(voting);
-      voting.descision = await contractService.callMethod('getVotingDescision', [i]);
-      voting.userVote = await contractService.callMethod('getUserVote', [i]);
-      voting.questionId = voting.id;
-      voting.id = i;
       this.votings.push(new Voting(voting));
     }
     return votings;
