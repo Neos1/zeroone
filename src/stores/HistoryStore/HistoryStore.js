@@ -81,7 +81,7 @@ class HistoryStore {
     for (let i = votingsFromFileLength; i > 0; i -= 1) {
       const voting = votings.data[i];
       if (voting) {
-        // For correct work {getMissingQuestions} method
+        // For correct work {getMissingVotings} method
         this.rawVotings.push(voting);
         this.votings.push(new Voting(voting));
       }
