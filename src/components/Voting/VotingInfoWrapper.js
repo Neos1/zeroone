@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
+import { action, observable } from 'mobx';
 import VotingInfo from './VotingInfo';
 import Container from '../Container';
 import Dialog from '../Dialog/Dialog';
@@ -15,9 +16,16 @@ import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 
-@inject('dialogStore', 'projectStore', 'userStore')
+@inject(
+  'dialogStore',
+  'projectStore',
+  'userStore',
+  'membersStore',
+)
 @observer
 class VotingInfoWrapper extends React.PureComponent {
+  @observable dataStats;
+
   votingId = 0;
 
   votingForm = new FinPassForm({
@@ -104,6 +112,9 @@ class VotingInfoWrapper extends React.PureComponent {
       hide: PropTypes.func.isRequired,
       toggle: PropTypes.func.isRequired,
     }).isRequired,
+    membersStore: PropTypes.shape({
+      getMemberById: PropTypes.func.isRequired,
+    }).isRequired,
     projectStore: PropTypes.shape({
       historyStore: PropTypes.shape({
         getVotingById: PropTypes.func.isRequired,
@@ -119,8 +130,26 @@ class VotingInfoWrapper extends React.PureComponent {
         contractService: PropTypes.shape({
           sendVote: PropTypes.func.isRequired,
           closeVoting: PropTypes.func.isRequired,
+          _contract: PropTypes.shape({
+            methods: PropTypes.shape({
+              getVotes: PropTypes.func.isRequired,
+            }).isRequired,
+          }).isRequired,
         }).isRequired,
       }).isRequired,
+    }).isRequired,
+    voting: PropTypes.shape({
+      id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
+      status: PropTypes.string.isRequired,
+      descision: PropTypes.string.isRequired,
+      userVote: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
+      closeVoteInProgress: PropTypes.bool,
     }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -135,6 +164,10 @@ class VotingInfoWrapper extends React.PureComponent {
     this.state = {
       descision: 0,
     };
+  }
+
+  componentDidMount() {
+    this.getVotingStats();
   }
 
   onVerifyClick = () => {
@@ -163,6 +196,44 @@ class VotingInfoWrapper extends React.PureComponent {
     dialogStore.hide(name);
   }
 
+  @action
+  getVotingStats = async () => {
+    const { props } = this;
+    const {
+      match: { params: { id } },
+      membersStore,
+      projectStore: {
+        historyStore,
+        questionStore,
+        rootStore: {
+          contractService: {
+            _contract: {
+              methods,
+            },
+          },
+        },
+      },
+    } = props;
+    const [voting] = historyStore.getVotingById(Number(id));
+    const [question] = questionStore.getQuestionById(Number(voting.questionId));
+    const { groupId } = question;
+    const memberGroup = membersStore.getMemberById(groupId);
+    let [positive, negative, totalSupply] = await methods.getVotes(id).call();
+    positive = parseInt(positive, 10);
+    negative = parseInt(negative, 10);
+    totalSupply = parseInt(totalSupply, 10);
+    const decimalPercent = totalSupply / 100;
+    const abstained = (totalSupply - (positive + negative)) / decimalPercent;
+    this.dataStats = [
+      {
+        name: memberGroup.name,
+        pros: positive / decimalPercent,
+        cons: negative / decimalPercent,
+        abstained,
+      },
+    ];
+  }
+
   // eslint-disable-next-line class-methods-use-this
   prepareParameters(voting, question) {
     const { projectStore: { rootStore: { Web3Service } } } = this.props;
@@ -176,7 +247,7 @@ class VotingInfoWrapper extends React.PureComponent {
   }
 
   render() {
-    const { props } = this;
+    const { props, dataStats } = this;
     const {
       dialogStore,
       projectStore: { historyStore, questionStore },
@@ -189,6 +260,7 @@ class VotingInfoWrapper extends React.PureComponent {
     return (
       <Container className="container--small">
         <VotingInfo
+          dataStats={dataStats}
           date={{
             start: Number(voting.startTime),
             end: Number(voting.endTime),

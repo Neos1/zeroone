@@ -5,7 +5,7 @@ import uniqKey from 'react-id-generator';
 import { withTranslation } from 'react-i18next';
 import { Collapse } from 'react-collapse';
 import { observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, action, observable } from 'mobx';
 import {
   statusStates,
   votingStates,
@@ -28,6 +28,10 @@ import styles from './Voting.scss';
 @withTranslation()
 @observer
 class VotingInfo extends React.PureComponent {
+  @observable progress;
+
+  intervalProgress = 5000;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     /** Index voting in list */
@@ -47,6 +51,10 @@ class VotingInfo extends React.PureComponent {
       end: PropTypes.number.isRequired,
     }).isRequired,
     voting: PropTypes.shape({
+      id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
       status: PropTypes.string.isRequired,
       descision: PropTypes.string.isRequired,
       userVote: PropTypes.oneOfType([
@@ -56,6 +64,14 @@ class VotingInfo extends React.PureComponent {
       closeVoteInProgress: PropTypes.bool,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
+    dataStats: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        pros: PropTypes.number.isRequired,
+        cons: PropTypes.number.isRequired,
+        abstained: PropTypes.number.isRequired,
+      }).isRequired,
+    ).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
     onRejectClick: PropTypes.func.isRequired,
     onCompleteVoteClick: PropTypes.func.isRequired,
@@ -69,6 +85,26 @@ class VotingInfo extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    const { props } = this;
+    const { date } = props;
+    const initProgress = progressByDateRange(date);
+    this.setProgress(initProgress);
+    if (initProgress !== 100) {
+      const intervalId = setInterval(() => {
+        this.setProgress(progressByDateRange(date));
+        if (this.progress === 100) {
+          clearInterval(intervalId);
+        }
+      }, this.intervalProgress);
+    }
+  }
+
+  @action
+  setProgress = (progress) => {
+    this.progress = progress;
+  }
+
   /**
    * Method for render dynamic content
    * based on voting status
@@ -77,7 +113,7 @@ class VotingInfo extends React.PureComponent {
    */
   @computed
   get renderDynamicContent() {
-    const { props } = this;
+    const { props, progress } = this;
     const {
       voting,
       voting: {
@@ -92,7 +128,6 @@ class VotingInfo extends React.PureComponent {
       onCompleteVoteClick,
       t,
     } = props;
-    const progress = progressByDateRange(date);
     switch (true) {
       case (
         status === statusStates.active
@@ -169,7 +204,7 @@ class VotingInfo extends React.PureComponent {
 
   render() {
     const { isOpen } = this.state;
-    const { props } = this;
+    const { props, progress } = this;
     const {
       t,
       date,
@@ -180,8 +215,8 @@ class VotingInfo extends React.PureComponent {
       params,
       voting,
       onBarClick,
+      dataStats,
     } = props;
-    const progress = progressByDateRange(date);
     return (
       <div
         className={styles['voting-info']}
@@ -301,6 +336,7 @@ class VotingInfo extends React.PureComponent {
             >
               <VotingStats
                 onBarClick={onBarClick}
+                data={dataStats}
               />
             </div>
           </Collapse>
