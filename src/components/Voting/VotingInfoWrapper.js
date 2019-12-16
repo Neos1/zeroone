@@ -31,6 +31,7 @@ class VotingInfoWrapper extends React.PureComponent {
         const { votingId } = this;
         const { descision } = this.state;
         const {
+          match: { params: { id } },
           userStore,
           dialogStore,
           userStore: {
@@ -38,13 +39,19 @@ class VotingInfoWrapper extends React.PureComponent {
               contractService,
             },
           },
+          projectStore: {
+            historyStore,
+          },
         } = this.props;
+        const [voting] = historyStore.getVotingById(Number(id));
+        console.log('voting', voting);
         console.log(descision, votingId, form.values());
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal');
         contractService.sendVote(votingId, descision)
           .then(() => {
+            voting.update({ userVote: descision });
             switch (descision) {
               case (1):
                 dialogStore.toggle('decision_agreed_message');
