@@ -304,10 +304,7 @@ class ContractService {
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
-    console.log(groupContainsUser);
-    // TODO check work method
     const maxGasPrice = 30000000000;
-    console.log(groupContainsUser.groupType);
     if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
       this.approveErc(groupContainsUser)
         .then(() => {
@@ -324,11 +321,11 @@ class ContractService {
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
             .then((rec) => {
-              console.log('rec', rec);
               historyStore.updateVotingById({
                 id: votingId,
-                key: 'userVote',
-                value: descision,
+                newState: {
+                  userVote: descision,
+                },
               });
             });
         });
@@ -345,11 +342,11 @@ class ContractService {
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
         .then((rec) => {
-          console.log('rec', rec);
           historyStore.updateVotingById({
             id: votingId,
-            key: 'userVote',
-            value: descision,
+            newState: {
+              userVote: descision,
+            },
           });
         });
     }

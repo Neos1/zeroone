@@ -162,23 +162,43 @@ class HistoryStore {
    *
    * @param {object} param0 data
    * @param {string|number} param0.id id voting
-   * @param {string} param0.key key for data update
-   * @param {string} param0.value value for data update
+   * @param {object} param0.newState new state for data update
    */
   @action
   updateVotingById = ({
     id,
-    key,
-    value,
+    newState,
   }) => {
     const [voting] = this.getVotingById(id);
-    console.log('voting', voting);
-    if (voting && key && value !== undefined) {
-      voting.update({
-        key,
-        value,
-      });
+    voting.update(newState);
+  }
+
+  /**
+   * Method for update last voting from list.
+   * By default used for update voting after closed.
+   */
+  @action
+  fetchAndUpdateLastVoting = async () => {
+    const { contractService } = this.rootStore;
+    const { address } = contractService._contract.options;
+    const lastIndex = this.votingsList.length;
+    const voting = await contractService.callMethod('voting', [lastIndex]);
+    voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
+    voting.userVote = await contractService.callMethod('getUserVote', [lastIndex]);
+    voting.questionId = voting.id;
+    voting.id = lastIndex;
+    for (let j = 0; j < 7; j += 1) {
+      delete voting[j];
     }
+    this.rawVotings.splice(0, 1, voting);
+    this.votings[0].update(voting);
+    writeDataToFile({
+      name: 'votings',
+      data: {
+        data: this.rawVotings,
+      },
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
   }
 
   /**
@@ -188,27 +208,15 @@ class HistoryStore {
    * @param {number} id id of voting
    * @returns {Array} stats
    */
+  // TODO fix method
   @action getVotingStats = (id) => id
-
-  /**
-   * filtering voting by given parameters
-   *
-   * @function
-   * @param {object} params parameters for filtering
-   * @param {number} params.questionId filter votings by questionId
-   * @param {number} params.descision filter voting by descision
-   * @param {string} params.dateFrom filter voting by startTime
-   * @param {string} params.dateTo  filter voting by endTime
-   * @returns {Array} Filtered question
-   */
-  @action filterVotings = (params) => params
 
   /**
    * @function
    * @returns {bool} True if project have not ended voting
    */
   @computed get isVotingActive() {
-    return this.votings;
+    return this.votings[0] && this.votings[0].status === 0;
   }
 
   /**

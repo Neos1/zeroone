@@ -1,6 +1,14 @@
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 
 class Voting {
+  @observable userVote;
+
+  @observable status;
+
+  @observable descision;
+
+  @observable closeVoteInProgress;
+
   /**
    * @class
    * @param {object} data object contains info adout voting
@@ -21,18 +29,19 @@ class Voting {
     this.caption = caption;
     this.text = text;
     this.userVote = userVote;
+    this.closeVoteInProgress = false;
   }
 
   /**
-   * Method for update state for specific key
+   * Method for update state voting
+   *
+   * @param {object} newState new state for voting
    */
   @action
-  update = ({
-    key,
-    value,
-  }) => {
-    if (!key || value === undefined) return;
-    this[key] = value;
+  update = (newState) => {
+    Object.keys(newState).forEach((key) => {
+      this[key] = newState[key];
+    });
   }
 }
 

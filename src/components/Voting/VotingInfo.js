@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import uniqKey from 'react-id-generator';
 import { withTranslation } from 'react-i18next';
 import { Collapse } from 'react-collapse';
+import { observer } from 'mobx-react';
+import { computed } from 'mobx';
 import {
   statusStates,
   votingStates,
@@ -24,6 +26,7 @@ import VotingInfoUserDecision from './VotingInfoUserDecision';
 import styles from './Voting.scss';
 
 @withTranslation()
+@observer
 class VotingInfo extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -50,6 +53,7 @@ class VotingInfo extends React.PureComponent {
         PropTypes.string,
         PropTypes.number,
       ]).isRequired,
+      closeVoteInProgress: PropTypes.bool,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
@@ -66,25 +70,22 @@ class VotingInfo extends React.PureComponent {
   }
 
   /**
-   * Method for change isOpen state
-   */
-  toggleOpen = () => {
-    this.setState((prevState) => ({
-      isOpen: !prevState.isOpen,
-    }));
-  }
-
-  /**
    * Method for render dynamic content
    * based on voting status
    *
    * @returns {Node} user decision Node element
    */
-  renderDynamicContent = () => {
+  @computed
+  get renderDynamicContent() {
     const { props } = this;
     const {
       voting,
-      voting: { userVote, status, descision },
+      voting: {
+        userVote,
+        status,
+        descision,
+        closeVoteInProgress,
+      },
       date,
       onVerifyClick,
       onRejectClick,
@@ -127,6 +128,7 @@ class VotingInfo extends React.PureComponent {
             type="button"
             onClick={onCompleteVoteClick}
             className={styles['voting-info__button--close']}
+            disabled={closeVoteInProgress}
           >
             {t('buttons:completeTheVote')}
           </button>
@@ -154,6 +156,15 @@ class VotingInfo extends React.PureComponent {
       default:
         return null;
     }
+  }
+
+  /**
+   * Method for change isOpen state
+   */
+  toggleOpen = () => {
+    this.setState((prevState) => ({
+      isOpen: !prevState.isOpen,
+    }));
   }
 
   render() {
@@ -268,7 +279,7 @@ class VotingInfo extends React.PureComponent {
               {`${t('other:votingFormula')}: ${formula}`}
             </div>
           </div>
-          {this.renderDynamicContent()}
+          {this.renderDynamicContent}
         </div>
         <div
           className={styles['voting-info__stats']}
