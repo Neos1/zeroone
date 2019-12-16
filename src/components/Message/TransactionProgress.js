@@ -30,7 +30,7 @@ class TransactionProgress extends React.Component {
       },
     } = this;
     return (
-      <div className={styles['message--transfer-success']}>
+      <div className={styles['message--transfer-progress']}>
         <Loader />
       </div>
     );
