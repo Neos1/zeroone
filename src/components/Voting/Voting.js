@@ -17,10 +17,10 @@ import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
-
-import styles from './Voting.scss';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+
+import styles from './Voting.scss';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')

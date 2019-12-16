@@ -70,7 +70,7 @@ class HistoryStore {
     });
   }
 
-  getVotingsFromFile = async (address) => {
+  getVotingsFromFile = (address) => {
     const votings = readDataFromFile({
       name: 'votings',
       basicPath: `${PATH_TO_DATA}${address}`,
@@ -80,9 +80,11 @@ class HistoryStore {
       : 0;
     for (let i = votingsFromFileLength; i > 0; i -= 1) {
       const voting = votings.data[i];
-      // For correct work {getMissingQuestions} method
-      this.rawVotings.push(voting);
-      this.votings.push(new Voting(voting));
+      if (voting) {
+        // For correct work {getMissingVotings} method
+        this.rawVotings.push(voting);
+        this.votings.push(new Voting(voting));
+      }
     }
     return votings;
   }
@@ -96,11 +98,9 @@ class HistoryStore {
     const countOfVotings = await this.fetchVotingsCount();
     const votingsFromFileLength = votings.data.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
-    console.log(countVotingFromContract, votingsFromFileLength);
     if (countVotingFromContract > votingsFromFileLength) {
       for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        console.log(`index=${i}`);
         const voting = await contractService.callMethod('voting', [i]);
         voting.descision = await contractService.callMethod('getVotingDescision', [i]);
         voting.userVote = await contractService.callMethod('getUserVote', [i]);
