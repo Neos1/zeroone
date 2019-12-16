@@ -157,6 +157,31 @@ class HistoryStore {
   @action getVotingById = (id) => this.votings.filter((voting) => voting.id === id)
 
   /**
+   * Method for update specific data
+   * for voting by id
+   *
+   * @param {object} param0 data
+   * @param {string|number} param0.id id voting
+   * @param {string} param0.key key for data update
+   * @param {string} param0.value value for data update
+   */
+  @action
+  updateVotingById = ({
+    id,
+    key,
+    value,
+  }) => {
+    const [voting] = this.getVotingById(id);
+    console.log('voting', voting);
+    if (voting && key && value !== undefined) {
+      voting.update({
+        key,
+        value,
+      });
+    }
+  }
+
+  /**
    * Getting stats about votes in voting, selected by id
    *
    * @function

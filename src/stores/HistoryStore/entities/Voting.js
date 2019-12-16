@@ -1,3 +1,5 @@
+import { action } from 'mobx';
+
 class Voting {
   /**
    * @class
@@ -19,6 +21,18 @@ class Voting {
     this.caption = caption;
     this.text = text;
     this.userVote = userVote;
+  }
+
+  /**
+   * Method for update state for specific key
+   */
+  @action
+  update = ({
+    key,
+    value,
+  }) => {
+    if (!key || value === undefined) return;
+    this[key] = value;
   }
 }
 

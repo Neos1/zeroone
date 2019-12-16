@@ -39,10 +39,17 @@ const VotingInfoUserDecision = ({
 };
 
 VotingInfoUserDecision.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func,
   voting: PropTypes.shape({
-    userVote: PropTypes.string.isRequired,
+    userVote: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
   }).isRequired,
+};
+
+VotingInfoUserDecision.defaultProps = {
+  t: (k) => (k),
 };
 
 export default VotingInfoUserDecision;

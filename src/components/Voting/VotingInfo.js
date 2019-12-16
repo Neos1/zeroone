@@ -46,7 +46,10 @@ class VotingInfo extends React.PureComponent {
     voting: PropTypes.shape({
       status: PropTypes.string.isRequired,
       descision: PropTypes.string.isRequired,
-      userVote: PropTypes.string.isRequired,
+      userVote: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
     onVerifyClick: PropTypes.func.isRequired,

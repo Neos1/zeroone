@@ -323,8 +323,14 @@ class ContractService {
             .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-            // TODO PASTE METHOD CALL TO HERE @PZ
-            .then((rec) => { console.log(rec); });
+            .then((rec) => {
+              console.log('rec', rec);
+              historyStore.updateVotingById({
+                id: votingId,
+                key: 'userVote',
+                value: descision,
+              });
+            });
         });
     } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
       const tx = {
@@ -338,8 +344,14 @@ class ContractService {
         .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-        // TODO PASTE METHOD CALL TO HERE @PZ
-        .then((rec) => { console.log(rec); });
+        .then((rec) => {
+          console.log('rec', rec);
+          historyStore.updateVotingById({
+            id: votingId,
+            key: 'userVote',
+            value: descision,
+          });
+        });
     }
   }
 
