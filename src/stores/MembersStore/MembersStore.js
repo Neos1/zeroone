@@ -192,6 +192,8 @@ class MembersStore {
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
   }
 
+  @action getMemberById = (id) => this.list[Number(id)];
+
   @computed
   get transferStatus() {
     return this._transferStatus;

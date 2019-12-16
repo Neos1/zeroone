@@ -51,6 +51,10 @@ class VotingInfo extends React.PureComponent {
       end: PropTypes.number.isRequired,
     }).isRequired,
     voting: PropTypes.shape({
+      id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
       status: PropTypes.string.isRequired,
       descision: PropTypes.string.isRequired,
       userVote: PropTypes.oneOfType([
@@ -60,6 +64,14 @@ class VotingInfo extends React.PureComponent {
       closeVoteInProgress: PropTypes.bool,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
+    dataStats: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        pros: PropTypes.number.isRequired,
+        cons: PropTypes.number.isRequired,
+        abstained: PropTypes.number.isRequired,
+      }).isRequired,
+    ).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
     onRejectClick: PropTypes.func.isRequired,
     onCompleteVoteClick: PropTypes.func.isRequired,
@@ -203,6 +215,7 @@ class VotingInfo extends React.PureComponent {
       params,
       voting,
       onBarClick,
+      dataStats,
     } = props;
     return (
       <div
@@ -323,6 +336,7 @@ class VotingInfo extends React.PureComponent {
             >
               <VotingStats
                 onBarClick={onBarClick}
+                data={dataStats}
               />
             </div>
           </Collapse>
