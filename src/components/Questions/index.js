@@ -42,7 +42,7 @@ class Questions extends Component {
     projectStore: propTypes.shape({
       questionStore: propTypes.shape({
         questions: propTypes.arrayOf(propTypes.shape({})).isRequired,
-        options: propTypes.arrayOf(propTypes.shape({
+        questionGroups: propTypes.arrayOf(propTypes.shape({
           value: propTypes.number.isRequired,
           label: propTypes.string.isRequired,
         })).isRequired,
@@ -98,7 +98,7 @@ class Questions extends Component {
     const { t, projectStore, dialogStore } = this.props;
     const {
       questionStore: {
-        options, pagination, dataManager,
+        pagination, dataManager, questionGroups,
       },
     } = projectStore;
     const questions = dataManager.list();
@@ -124,7 +124,7 @@ class Questions extends Component {
             </div>
             <div className={styles['questions__head-filters']}>
               <SimpleDropdown
-                options={options}
+                options={questionGroups}
                 onSelect={this.handleSortSelect}
               />
             </div>

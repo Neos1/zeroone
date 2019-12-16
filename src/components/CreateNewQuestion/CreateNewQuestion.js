@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { inject, observer } from 'mobx-react';
 import Dropdown from '../Dropdown';
 import { QuestionUploadingIcon } from '../Icons';
 import CreateNewQuestionForm from './CreateNewQuestionForm';
@@ -13,9 +14,12 @@ import styles from './CreateNewQuestion.scss';
  * Component for creating a new question
  */
 @withTranslation()
+@inject('projectStore')
+@observer
 class CreateNewQuestion extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    projectStore: PropTypes.shape().isRequired,
   };
 
   constructor() {
@@ -42,7 +46,7 @@ class CreateNewQuestion extends React.Component {
   render() {
     const { isSelected, activeTab } = this.state;
     const { props } = this;
-    const { t } = props;
+    const { t, projectStore: { questionStore } } = props;
     return (
       <div className={styles['create-question']}>
         <div className={styles['create-question__top']}>
@@ -72,10 +76,7 @@ class CreateNewQuestion extends React.Component {
             <div className={styles['create-question__dropdown']}>
               {/* TODO make without field & with correct options */}
               <Dropdown
-                options={[{
-                  label: 'Вопросы дизайнеров',
-                  value: 'designers',
-                }]}
+                options={questionStore.questionGroups}
                 field={{ set: () => {} }}
                 onSelect={this.handleDropdownSelect}
               >

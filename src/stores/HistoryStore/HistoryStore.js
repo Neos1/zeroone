@@ -47,7 +47,6 @@ class HistoryStore {
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
       const voting = await contractService.callMethod('voting', [length]);
-      this.rawVotings.push(voting);
       voting.descision = await contractService.callMethod('getVotingDescision', [length]);
       voting.userVote = await contractService.callMethod('getUserVote', [length]);
       voting.questionId = voting.id;
@@ -55,6 +54,7 @@ class HistoryStore {
       for (let j = 0; j < 7; j += 1) {
         delete voting[j];
       }
+      this.rawVotings.push(voting);
       this.votings.push(new Voting(voting));
     }
   }
@@ -71,8 +71,6 @@ class HistoryStore {
   }
 
   getVotingsFromFile = async (address) => {
-    const { contractService } = this.rootStore;
-
     const votings = readDataFromFile({
       name: 'votings',
       basicPath: `${PATH_TO_DATA}${address}`,
@@ -84,10 +82,6 @@ class HistoryStore {
       const voting = votings.data[i];
       // For correct work {getMissingQuestions} method
       this.rawVotings.push(voting);
-      voting.descision = await contractService.callMethod('getVotingDescision', [i]);
-      voting.userVote = await contractService.callMethod('getUserVote', [i]);
-      voting.questionId = voting.id;
-      voting.id = i;
       this.votings.push(new Voting(voting));
     }
     return votings;
@@ -157,33 +151,66 @@ class HistoryStore {
   @action getVotingById = (id) => this.votings.filter((voting) => voting.id === id)
 
   /**
+   * Method for update specific data
+   * for voting by id
+   *
+   * @param {object} param0 data
+   * @param {string|number} param0.id id voting
+   * @param {object} param0.newState new state for data update
+   */
+  @action
+  updateVotingById = ({
+    id,
+    newState,
+  }) => {
+    const [voting] = this.getVotingById(id);
+    voting.update(newState);
+  }
+
+  /**
+   * Method for update last voting from list.
+   * By default used for update voting after closed.
+   */
+  @action
+  fetchAndUpdateLastVoting = async () => {
+    const { contractService } = this.rootStore;
+    const { address } = contractService._contract.options;
+    const lastIndex = this.votingsList.length;
+    const voting = await contractService.callMethod('voting', [lastIndex]);
+    voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
+    voting.userVote = await contractService.callMethod('getUserVote', [lastIndex]);
+    voting.questionId = voting.id;
+    voting.id = lastIndex;
+    for (let j = 0; j < 7; j += 1) {
+      delete voting[j];
+    }
+    this.rawVotings.splice(0, 1, voting);
+    this.votings[0].update(voting);
+    writeDataToFile({
+      name: 'votings',
+      data: {
+        data: this.rawVotings,
+      },
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
+  }
+
+  /**
    * Getting stats about votes in voting, selected by id
    *
    * @function
    * @param {number} id id of voting
    * @returns {Array} stats
    */
+  // TODO fix method
   @action getVotingStats = (id) => id
-
-  /**
-   * filtering voting by given parameters
-   *
-   * @function
-   * @param {object} params parameters for filtering
-   * @param {number} params.questionId filter votings by questionId
-   * @param {number} params.descision filter voting by descision
-   * @param {string} params.dateFrom filter voting by startTime
-   * @param {string} params.dateTo  filter voting by endTime
-   * @returns {Array} Filtered question
-   */
-  @action filterVotings = (params) => params
 
   /**
    * @function
    * @returns {bool} True if project have not ended voting
    */
   @computed get isVotingActive() {
-    return this.votings;
+    return this.votings[0] && this.votings[0].status === 0;
   }
 
   /**

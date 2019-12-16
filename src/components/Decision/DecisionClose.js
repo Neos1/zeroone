@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import Decision from './Decision';
-import { VerifyIcon } from '../Icons';
 
 @withTranslation()
 @inject('dialogStore')
 @observer
-class DecisionAgree extends React.Component {
+class DecisionClose extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     form: PropTypes.shape().isRequired,
@@ -16,12 +15,13 @@ class DecisionAgree extends React.Component {
 
   render() {
     const { props } = this;
+    // eslint-disable-next-line no-unused-vars
     const { t, form } = props;
     return (
       <>
         <Decision
-          title={t('dialogs:definetelyAgree')}
-          icon={(<VerifyIcon />)}
+          title="Завершение голосования"
+          icon={null}
           form={form}
         />
       </>
@@ -29,4 +29,4 @@ class DecisionAgree extends React.Component {
   }
 }
 
-export default DecisionAgree;
+export default DecisionClose;

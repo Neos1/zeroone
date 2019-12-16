@@ -5,20 +5,19 @@ import { Trans, withTranslation } from 'react-i18next';
 
 import styles from './Voting.scss';
 
-const data = [
-  {
-    name: 'Admins', pros: 20, cons: 40, abstained: 40,
-  },
-  {
-    name: 'Custom', pros: 85, cons: 15, abstained: 0,
-  },
-];
-
 @withTranslation()
 class VotingStats extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onBarClick: PropTypes.func.isRequired,
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        pros: PropTypes.number.isRequired,
+        cons: PropTypes.number.isRequired,
+        abstained: PropTypes.number.isRequired,
+      }).isRequired,
+    ).isRequired,
   };
 
   /**
@@ -72,7 +71,7 @@ class VotingStats extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const { t, onBarClick } = props;
+    const { t, onBarClick, data } = props;
     return (
       <div className={styles.voting__stats}>
         {
@@ -135,7 +134,7 @@ class VotingStats extends React.PureComponent {
                 </div>
               </div>
             ))
-            : null
+            : ('Empty state')
         }
       </div>
     );

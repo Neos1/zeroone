@@ -16,6 +16,9 @@ import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
+import TransactionProgress from '../Message/TransactionProgress';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 import styles from './Voting.scss';
 
@@ -38,6 +41,7 @@ class Voting extends React.Component {
           },
           userStore,
         } = props;
+        dialogStore.toggle('progress_modal');
         const { password } = form.values();
         const maxGasPrice = 30000000000;
         userStore.setPassword(password);
@@ -51,8 +55,11 @@ class Voting extends React.Component {
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
-          .then((receipt) => { console.log(receipt); })
+          .then(() => {
+            dialogStore.show('success_modal');
+          })
           .catch((error) => {
+            dialogStore.show('error_modal');
             console.error(error);
           });
       },
@@ -62,15 +69,28 @@ class Voting extends React.Component {
     },
   });
 
+  voteStatus = {
+    inProgress: 0,
+    success: 1,
+    failed: 2,
+  }
+
   static propTypes = {
     dialogStore: PropTypes.shape({
       show: PropTypes.func.isRequired,
       hide: PropTypes.func.isRequired,
+      toggle: PropTypes.func.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape({
       votingData: PropTypes.string.isRequired,
-      votingQuestion: PropTypes.number.isRequired,
-      votingGroupId: PropTypes.number.isRequired,
+      votingQuestion: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
+      votingGroupId: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -81,6 +101,14 @@ class Voting extends React.Component {
     userStore: PropTypes.shape().isRequired,
     t: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      // eslint-disable-next-line react/no-unused-state
+      status: this.voteStatus.inProgress,
+    };
+  }
 
   componentDidMount() {
     const { projectStore } = this.props;
@@ -97,8 +125,14 @@ class Voting extends React.Component {
     dataManager.reset();
   }
 
+  closeModal = (name) => {
+    const { dialogStore } = this.props;
+    dialogStore.hide(name);
+  }
+
   render() {
-    const { props } = this;
+    const { props, voteStatus, state } = this;
+    const { status } = state;
     const { t, dialogStore, projectStore: { historyStore: { pagination, dataManager } } } = props;
     const votings = dataManager.list();
     return (
@@ -157,6 +191,34 @@ class Voting extends React.Component {
           header={t('fields:enterPassword')}
         >
           <FinPassFormWrapper form={this.passwordForm} />
+        </Dialog>
+
+        <Dialog
+          name="progress_modal"
+          size="md"
+          footer={null}
+          header="Отправка транзакции"
+          closable={!(status === voteStatus.inProgress)}
+        >
+          <TransactionProgress />
+        </Dialog>
+
+        <Dialog
+          name="success_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+        </Dialog>
+
+        <Dialog
+          name="error_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
         </Dialog>
       </Container>
     );

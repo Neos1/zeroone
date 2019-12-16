@@ -161,7 +161,8 @@ class MembersStore {
 
   @action
   isUserInGroup(groupId, address) {
-    const memberItem = this.groups[groupId].list.filter((user) => user.wallet === address);
+    // eslint-disable-next-line max-len
+    const memberItem = this.groups[groupId].list.filter((user) => (user.wallet).toUpperCase() === address.toUpperCase());
     return memberItem.length > 0 ? this.groups[groupId] : null;
   }
 
@@ -180,7 +181,7 @@ class MembersStore {
       from,
       to: contract.options.address,
       data: contract.methods.transferFrom(from, to, Number(count)).encodeABI(),
-      gasLimit: 8000000,
+      gasLimit: 7000000,
       gasPrice: maxGasPrice,
       value: '0x0',
     };
@@ -190,6 +191,8 @@ class MembersStore {
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
   }
+
+  @action getMemberById = (id) => this.list[Number(id)];
 
   @computed
   get transferStatus() {

@@ -2,16 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { withTranslation, Trans } from 'react-i18next';
+import { computed, observable, action } from 'mobx';
+import { withTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 import VotingDecisionProgress from './VotingDecisionProgress';
-import { EMPTY_DATA_STRING, statusStates, votingStates } from '../../constants';
+import { statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
 import progressByDateRange from '../../utils/Date';
+import { getDateString } from './utils';
 
 import styles from './Voting.scss';
 
 @withTranslation()
+@observer
 class VotingItem extends React.PureComponent {
+  @observable progress;
+
+  intervalProgress = 5000;
+
   static propTypes = {
     index: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -25,16 +33,36 @@ class VotingItem extends React.PureComponent {
     }).isRequired,
   };
 
+  componentDidMount() {
+    const { props } = this;
+    const { date } = props;
+    const initProgress = progressByDateRange(date);
+    this.setProgress(initProgress);
+    if (initProgress !== 100) {
+      const intervalId = setInterval(() => {
+        this.setProgress(progressByDateRange(date));
+        if (this.progress === 100) {
+          clearInterval(intervalId);
+        }
+      }, this.intervalProgress);
+    }
+  }
+
+  @action
+  setProgress = (progress) => {
+    this.progress = progress;
+  }
+
   /**
    * Method for render decision state
    *
    * @returns {Node} element for actual
    * state
    */
-  renderDecisionState = () => {
-    const { props } = this;
+  @computed
+  get renderDecisionState() {
+    const { props, progress } = this;
     const { date } = props;
-    const progress = progressByDateRange(date);
     switch (true) {
       case (progress < 100):
         return (
@@ -84,29 +112,6 @@ class VotingItem extends React.PureComponent {
     }
   }
 
-
-  /**
-   * Method for getting formatted date string
-   *
-   * @param {Date} date date for formatting
-   * @returns {string} formatted date
-   */
-  getDateString = (date) => {
-    if (
-      !date
-      || typeof date !== 'number'
-    ) return EMPTY_DATA_STRING;
-    return (
-      <Trans
-        i18nKey="other:dateInFormat"
-        values={{
-          date: moment(date * 1000).format('DD.MM.YYYY'),
-          time: moment(date * 1000).format('HH:mm'),
-        }}
-      />
-    );
-  }
-
   render() {
     const { props } = this;
     const {
@@ -117,7 +122,7 @@ class VotingItem extends React.PureComponent {
       date,
     } = props;
     return (
-      <Link to={`/votingInfo/${index}`}>
+      <Link to={`/votings/info/${index}`}>
         <div
           className={styles.voting__item}
         >
@@ -151,7 +156,7 @@ class VotingItem extends React.PureComponent {
               >
                 {t('other:start')}
                 <br />
-                {this.getDateString(date.start)}
+                {getDateString(date.start)}
               </div>
             </div>
             <div
@@ -162,14 +167,14 @@ class VotingItem extends React.PureComponent {
               >
                 {t('other:end')}
                 <br />
-                {this.getDateString(date.end)}
+                {getDateString(date.end)}
               </div>
             </div>
           </div>
           <div
             className={styles['voting__item-progress']}
           >
-            {this.renderDecisionState()}
+            {this.renderDecisionState}
           </div>
         </div>
       </Link>

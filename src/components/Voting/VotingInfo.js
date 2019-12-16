@@ -2,30 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import uniqKey from 'react-id-generator';
-import { withTranslation, Trans } from 'react-i18next';
-import moment from 'moment';
+import { withTranslation } from 'react-i18next';
 import { Collapse } from 'react-collapse';
+import { observer } from 'mobx-react';
+import { computed, action, observable } from 'mobx';
 import {
-  EMPTY_DATA_STRING,
   statusStates,
   votingStates,
   userVotingStates,
 } from '../../constants';
 import {
-  VerifyIcon,
-  RejectIcon,
   Stats,
-  NoQuorum,
 } from '../Icons';
+import { getDateString } from './utils';
 import Button from '../Button/Button';
 import VotingStats from './VotingStats';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import progressByDateRange from '../../utils/Date';
+import VotingInfoButtons from './VotingInfoButtons';
+import VotingInfoResult from './VotingInfoResult';
+import VotingInfoUserDecision from './VotingInfoUserDecision';
 
 import styles from './Voting.scss';
 
 @withTranslation()
+@observer
 class VotingInfo extends React.PureComponent {
+  @observable progress;
+
+  intervalProgress = 5000;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     /** Index voting in list */
@@ -45,11 +51,27 @@ class VotingInfo extends React.PureComponent {
       end: PropTypes.number.isRequired,
     }).isRequired,
     voting: PropTypes.shape({
+      id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
       status: PropTypes.string.isRequired,
       descision: PropTypes.string.isRequired,
-      userVote: PropTypes.string.isRequired,
+      userVote: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
+      closeVoteInProgress: PropTypes.bool,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
+    dataStats: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        pros: PropTypes.number.isRequired,
+        cons: PropTypes.number.isRequired,
+        abstained: PropTypes.number.isRequired,
+      }).isRequired,
+    ).isRequired,
     onVerifyClick: PropTypes.func.isRequired,
     onRejectClick: PropTypes.func.isRequired,
     onCompleteVoteClick: PropTypes.func.isRequired,
@@ -63,6 +85,114 @@ class VotingInfo extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    const { props } = this;
+    const { date } = props;
+    const initProgress = progressByDateRange(date);
+    this.setProgress(initProgress);
+    if (initProgress !== 100) {
+      const intervalId = setInterval(() => {
+        this.setProgress(progressByDateRange(date));
+        if (this.progress === 100) {
+          clearInterval(intervalId);
+        }
+      }, this.intervalProgress);
+    }
+  }
+
+  @action
+  setProgress = (progress) => {
+    this.progress = progress;
+  }
+
+  /**
+   * Method for render dynamic content
+   * based on voting status
+   *
+   * @returns {Node} user decision Node element
+   */
+  @computed
+  get renderDynamicContent() {
+    const { props, progress } = this;
+    const {
+      voting,
+      voting: {
+        userVote,
+        status,
+        descision,
+        closeVoteInProgress,
+      },
+      date,
+      onVerifyClick,
+      onRejectClick,
+      onCompleteVoteClick,
+      t,
+    } = props;
+    switch (true) {
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote === userVotingStates.notAccepted
+        && progress < 100
+      ):
+        return (
+          <VotingInfoButtons
+            onVerifyClick={onVerifyClick}
+            onRejectClick={onRejectClick}
+          />
+        );
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote !== userVotingStates.notAccepted
+        && progress < 100
+      ):
+        return (
+          <VotingInfoUserDecision
+            voting={voting}
+          />
+        );
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote === userVotingStates.notAccepted
+        && progress >= 100
+      ):
+        return (
+          <button
+            type="button"
+            onClick={onCompleteVoteClick}
+            className={styles['voting-info__button--close']}
+            disabled={closeVoteInProgress}
+          >
+            {t('buttons:completeTheVote')}
+          </button>
+        );
+      case (
+        status === statusStates.active
+        && descision === votingStates.default
+        && userVote !== userVotingStates.notAccepted
+        && progress >= 100
+      ):
+        return (
+          <VotingInfoUserDecision
+            voting={voting}
+          />
+        );
+      case (
+        status === statusStates.closed
+      ):
+        return (
+          <VotingInfoResult
+            voting={voting}
+            date={date}
+          />
+        );
+      default:
+        return null;
+    }
+  }
+
   /**
    * Method for change isOpen state
    */
@@ -72,264 +202,9 @@ class VotingInfo extends React.PureComponent {
     }));
   }
 
-  /**
-   * Method for getting formatted date string
-   *
-   * @param {Date} date date for formatting
-   * @returns {string} formatted date
-   */
-  getDateString = (date) => {
-    if (
-      !date
-    ) return EMPTY_DATA_STRING;
-    return (
-      <Trans
-        i18nKey="other:dateInFormat"
-        values={{
-          date: moment(date * 1000).format('DD.MM.YYYY'),
-          time: moment(date * 1000).format('HH:mm'),
-        }}
-      />
-    );
-  }
-
-  /**
-   * Method for render icon with text
-   *
-   * @param {string} state state for icon
-   * @returns {Node} ready node element
-   */
-  renderDecisionIcon = (state) => {
-    const { props } = this;
-    const { t } = props;
-    switch (state) {
-      case '0':
-        return (
-          <div className={styles['voting-info__decision-icon']}>
-            <NoQuorum width={14} height={14} />
-            {t('other:notAccepted')}
-          </div>
-        );
-      case '1':
-        return (
-          <div className={styles['voting-info__decision-icon']}>
-            <VerifyIcon width={14} height={14} />
-            {t('other:pros')}
-          </div>
-        );
-      case '2':
-        return (
-          <div className={styles['voting-info__decision-icon']}>
-            <RejectIcon width={14} height={14} />
-            {t('other:cons')}
-          </div>
-        );
-      default:
-        return EMPTY_DATA_STRING;
-    }
-  }
-
-  /**
-   * Method for render user decision
-   *
-   * @returns {Node} user decision Node element
-   */
-  renderUserDecision = () => {
-    const { props } = this;
-    const { voting: { userVote }, t } = props;
-    switch (userVote) {
-      case userVotingStates.decisionFor:
-        return (
-          <div className={styles['voting-info__decision']}>
-            <div className={styles['voting-info__decision-text']}>
-              {t('other:youVoted')}
-            </div>
-            {this.renderDecisionIcon(userVotingStates.decisionFor)}
-          </div>
-        );
-      case userVotingStates.decisionAgainst:
-        return (
-          <div className={styles['voting-info__decision']}>
-            <div className={styles['voting-info__decision-text']}>
-              {t('other:youVoted')}
-            </div>
-            {this.renderDecisionIcon(userVotingStates.decisionAgainst)}
-          </div>
-        );
-      default:
-        return null;
-    }
-  }
-
-  /**
-   * Method for render decision buttons
-   *
-   * @returns {Node} element with decision buttons
-   */
-  renderDecisionButtons = () => {
-    const { props } = this;
-    const {
-      onVerifyClick,
-      onRejectClick,
-      t,
-    } = props;
-    return (
-      <div
-        className={styles['voting-info__buttons']}
-      >
-        <button
-          type="button"
-          onClick={onVerifyClick}
-        >
-          <div
-            className={styles['voting-info__button-icon']}
-          >
-            <VerifyIcon />
-          </div>
-          {t('other:iAgree')}
-        </button>
-        <button
-          type="button"
-          onClick={onRejectClick}
-        >
-          <div
-            className={styles['voting-info__button-icon']}
-          >
-            <RejectIcon />
-          </div>
-          {t('other:iAmAgainst')}
-        </button>
-      </div>
-    );
-  }
-
-  /**
-   * Method for render complete vote button
-   *
-   * @returns {Node} button
-   */
-  renderCompleteVoteButton = () => {
-    const { props } = this;
-    const { t, onCompleteVoteClick } = props;
-    return (
-      <button
-        type="button"
-        onClick={onCompleteVoteClick}
-        className={styles['voting-info__button--close']}
-      >
-        {t('buttons:completeTheVote')}
-      </button>
-    );
-  }
-
-  renderResultDecision = () => {
-    const { props } = this;
-    const {
-      voting: { userVote, descision },
-      date,
-      t,
-    } = props;
-    const startDate = moment(date.start * 1000);
-    const endDate = moment(date.end * 1000);
-    return (
-      <div
-        className={styles['voting-info__result']}
-      >
-        <div
-          className={styles['voting-info__result-item']}
-        >
-          {t('other:decisionWasMade')}
-          <div>
-            {this.renderDecisionIcon(descision)}
-          </div>
-        </div>
-        <div
-          className={styles['voting-info__result-item']}
-        >
-          {t('other:yourDecision')}
-          <div>
-            {this.renderDecisionIcon(userVote)}
-          </div>
-        </div>
-        <div
-          className={styles['voting-info__result-item']}
-        >
-          {t('other:totalVoted')}
-          <div
-            className={styles['voting-info__result-item-value']}
-          >
-            {/* TODO add total from stats */}
-            {EMPTY_DATA_STRING}
-          </div>
-        </div>
-        <div
-          className={styles['voting-info__result-item']}
-        >
-          {t('other:theVoteLasted')}
-          <div
-            className={styles['voting-info__result-item-value']}
-          >
-            {endDate.from(startDate)}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  /**
-   * Method for render dynamic content
-   * based on voting status
-   *
-   * @returns {Node} user decision Node element
-   */
-  renderDynamicContent = () => {
-    const { props } = this;
-    const {
-      voting: { userVote, status, descision },
-      date,
-    } = props;
-    const progress = progressByDateRange(date);
-    switch (true) {
-      case (
-        status === statusStates.active
-        && descision === votingStates.default
-        && userVote === userVotingStates.notAccepted
-        && progress < 100
-      ):
-        return this.renderDecisionButtons();
-      case (
-        status === statusStates.active
-        && descision === votingStates.default
-        && userVote !== userVotingStates.notAccepted
-        && progress < 100
-      ):
-        return this.renderUserDecision();
-      case (
-        status === statusStates.active
-        && descision === votingStates.default
-        && userVote === userVotingStates.notAccepted
-        && progress >= 100
-      ):
-        return this.renderCompleteVoteButton();
-      case (
-        status === statusStates.active
-        && descision === votingStates.default
-        && userVote !== userVotingStates.notAccepted
-        && progress >= 100
-      ):
-        return this.renderUserDecision();
-      case (
-        status === statusStates.closed
-      ):
-        return this.renderResultDecision();
-      default:
-        return null;
-    }
-  }
-
   render() {
     const { isOpen } = this.state;
-    const { props } = this;
+    const { props, progress } = this;
     const {
       t,
       date,
@@ -340,9 +215,8 @@ class VotingInfo extends React.PureComponent {
       params,
       voting,
       onBarClick,
+      dataStats,
     } = props;
-    const progress = progressByDateRange(date);
-    console.log(voting);
     return (
       <div
         className={styles['voting-info']}
@@ -380,12 +254,12 @@ class VotingInfo extends React.PureComponent {
           <span>
             {t('other:start')}
             :
-            {this.getDateString(date.start)}
+            {getDateString(date.start)}
           </span>
           <span>
             {t('other:end')}
             :
-            {this.getDateString(date.end)}
+            {getDateString(date.end)}
           </span>
         </div>
         <div
@@ -440,7 +314,7 @@ class VotingInfo extends React.PureComponent {
               {`${t('other:votingFormula')}: ${formula}`}
             </div>
           </div>
-          {this.renderDynamicContent()}
+          {this.renderDynamicContent}
         </div>
         <div
           className={styles['voting-info__stats']}
@@ -462,6 +336,7 @@ class VotingInfo extends React.PureComponent {
             >
               <VotingStats
                 onBarClick={onBarClick}
+                data={dataStats}
               />
             </div>
           </Collapse>
