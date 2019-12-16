@@ -6,12 +6,15 @@ import VotingInfo from './VotingInfo';
 import Container from '../Container';
 import Dialog from '../Dialog/Dialog';
 import DecisionAgree from '../Decision/DecisionAgree';
+import DecisionClose from '../Decision/DecisionClose';
 import DecisionReject from '../Decision/DecisionReject';
 import VoterList from '../VoterList/VoterList';
 import Footer from '../Footer';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import { AgreedMessage, RejectMessage } from '../Message';
 import TransactionProgress from '../Message/TransactionProgress';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 @inject(
   'dialogStore',
@@ -25,7 +28,7 @@ class VotingInfoWrapper extends React.PureComponent {
 
   votingId = 0;
 
-  form = new FinPassForm({
+  votingForm = new FinPassForm({
     hooks: {
       onSuccess: (form) => {
         const { votingId } = this;
@@ -49,7 +52,7 @@ class VotingInfoWrapper extends React.PureComponent {
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal');
-        contractService.sendVote(votingId, descision)
+        return contractService.sendVote(votingId, descision)
           .then(() => {
             voting.update({ userVote: descision });
             switch (descision) {
@@ -62,11 +65,51 @@ class VotingInfoWrapper extends React.PureComponent {
               default:
                 break;
             }
+          })
+          .catch(() => {
+            dialogStore.toggle('error_modal');
           });
       },
       onError: (form) => {
         console.log(form.error);
       },
+    },
+  })
+
+  closingForm = new FinPassForm({
+    hooks: {
+      onSuccess: () => {
+        const { props } = this;
+        const {
+          match: { params: { id } },
+          projectStore: {
+            historyStore,
+            rootStore: {
+              contractService,
+            },
+          },
+          dialogStore,
+        } = props;
+        dialogStore.toggle('progress_modal');
+        const [voting] = historyStore.getVotingById(Number(id));
+        voting.update({
+          closeVoteInProgress: true,
+        });
+        return contractService.closeVoting()
+          .then(() => {
+            dialogStore.toggle('success_modal');
+            historyStore.fetchAndUpdateLastVoting();
+          })
+          .catch(() => {
+            dialogStore.toggle('error_modal');
+          })
+          .finally(() => {
+            voting.update({
+              closeVoteInProgress: false,
+            });
+          });
+      },
+      onError: () => {},
     },
   })
 
@@ -93,6 +136,7 @@ class VotingInfoWrapper extends React.PureComponent {
         }).isRequired,
         contractService: PropTypes.shape({
           sendVote: PropTypes.func.isRequired,
+          closeVoting: PropTypes.func.isRequired,
           _contract: PropTypes.shape({
             methods: PropTypes.shape({
               getVotes: PropTypes.func.isRequired,
@@ -149,35 +193,14 @@ class VotingInfoWrapper extends React.PureComponent {
     dialogStore.toggle('decision_reject');
   }
 
-  @action
-  closeVoting = () => {
-    const { props } = this;
-    const {
-      match: { params: { id } },
-      projectStore: {
-        historyStore,
-        rootStore: {
-          contractService,
-        },
-      },
-    } = props;
-    // The decision can be both positive and negative.
-    // It does not affect the outcome of the vote.
-    // TODO refactor after adding needed method
-    // in contractService
-    const [voting] = historyStore.getVotingById(Number(id));
-    voting.update({
-      closeVoteInProgress: true,
-    });
-    contractService.sendVote(Number(id), 1)
-      .then(() => {
-        historyStore.fetchAndUpdateLastVoting();
-      })
-      .finally(() => {
-        voting.update({
-          closeVoteInProgress: false,
-        });
-      });
+  onClosingClick = () => {
+    const { dialogStore } = this.props;
+    dialogStore.toggle('descision_close');
+  }
+
+  closeModal = (name) => {
+    const { dialogStore } = this.props;
+    dialogStore.hide(name);
   }
 
   @action
@@ -259,7 +282,7 @@ class VotingInfoWrapper extends React.PureComponent {
           params={params}
           onVerifyClick={() => { this.onVerifyClick(); }}
           onRejectClick={() => { this.onRejectClick(); }}
-          onCompleteVoteClick={this.closeVoting}
+          onCompleteVoteClick={() => { this.onClosingClick(); }}
           onBarClick={
             (name, data) => {
               console.log('name', name);
@@ -269,13 +292,14 @@ class VotingInfoWrapper extends React.PureComponent {
           }
         />
         <Footer />
+
         <Dialog
           name="decision_agree"
           size="md"
           header={null}
           footer={null}
         >
-          <DecisionAgree form={this.form} />
+          <DecisionAgree form={this.votingForm} />
         </Dialog>
 
         <Dialog
@@ -284,7 +308,15 @@ class VotingInfoWrapper extends React.PureComponent {
           header={null}
           footer={null}
         >
-          <DecisionReject form={this.form} />
+          <DecisionReject form={this.votingForm} />
+        </Dialog>
+
+        <Dialog
+          name="descision_close"
+          header={null}
+          footer={null}
+        >
+          <DecisionClose form={this.closingForm} />
         </Dialog>
 
         <Dialog
@@ -321,6 +353,26 @@ class VotingInfoWrapper extends React.PureComponent {
         >
           <TransactionProgress />
         </Dialog>
+
+        <Dialog
+          name="success_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+        </Dialog>
+
+        <Dialog
+          name="error_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
+        </Dialog>
+
+
       </Container>
     );
   }

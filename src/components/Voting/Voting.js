@@ -19,6 +19,8 @@ import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
 
 import styles from './Voting.scss';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')
@@ -53,8 +55,11 @@ class Voting extends React.Component {
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
-          .then((receipt) => { console.log(receipt); })
+          .then(() => {
+            dialogStore.show('success_modal');
+          })
           .catch((error) => {
+            dialogStore.show('error_modal');
             console.error(error);
           });
       },
@@ -118,6 +123,11 @@ class Voting extends React.Component {
       value: 1,
     });
     dataManager.reset();
+  }
+
+  closeModal = (name) => {
+    const { dialogStore } = this.props;
+    dialogStore.hide(name);
   }
 
   render() {
@@ -191,6 +201,24 @@ class Voting extends React.Component {
           closable={!(status === voteStatus.inProgress)}
         >
           <TransactionProgress />
+        </Dialog>
+
+        <Dialog
+          name="success_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+        </Dialog>
+
+        <Dialog
+          name="error_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
         </Dialog>
       </Container>
     );

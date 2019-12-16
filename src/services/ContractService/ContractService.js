@@ -352,6 +352,32 @@ class ContractService {
     }
   }
 
+  closeVoting() {
+    const {
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+      },
+    } = this;
+
+    const tx = {
+      from: userStore.address,
+      data: _contract.methods.closeVoting().encodeABI(),
+      value: '0x0',
+      to: _contract.options.address,
+      gasLimit: 7000000,
+    };
+    const maxGasPrice = 30000000000;
+
+    console.log('sending TX');
+
+    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+  }
+
   startVoting(questionId, params) {
     const {
       _contract,
