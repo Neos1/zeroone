@@ -5,7 +5,7 @@ import uniqKey from 'react-id-generator';
 import { withTranslation } from 'react-i18next';
 import { Collapse } from 'react-collapse';
 import { observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, action, observable } from 'mobx';
 import {
   statusStates,
   votingStates,
@@ -28,6 +28,10 @@ import styles from './Voting.scss';
 @withTranslation()
 @observer
 class VotingInfo extends React.PureComponent {
+  @observable progress;
+
+  intervalProgress = 5000;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
     /** Index voting in list */
@@ -69,6 +73,26 @@ class VotingInfo extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    const { props } = this;
+    const { date } = props;
+    const initProgress = progressByDateRange(date);
+    this.setProgress(initProgress);
+    if (initProgress !== 100) {
+      const intervalId = setInterval(() => {
+        this.setProgress(progressByDateRange(date));
+        if (this.progress === 100) {
+          clearInterval(intervalId);
+        }
+      }, this.intervalProgress);
+    }
+  }
+
+  @action
+  setProgress = (progress) => {
+    this.progress = progress;
+  }
+
   /**
    * Method for render dynamic content
    * based on voting status
@@ -77,7 +101,7 @@ class VotingInfo extends React.PureComponent {
    */
   @computed
   get renderDynamicContent() {
-    const { props } = this;
+    const { props, progress } = this;
     const {
       voting,
       voting: {
@@ -92,7 +116,6 @@ class VotingInfo extends React.PureComponent {
       onCompleteVoteClick,
       t,
     } = props;
-    const progress = progressByDateRange(date);
     switch (true) {
       case (
         status === statusStates.active
@@ -169,7 +192,7 @@ class VotingInfo extends React.PureComponent {
 
   render() {
     const { isOpen } = this.state;
-    const { props } = this;
+    const { props, progress } = this;
     const {
       t,
       date,
@@ -181,7 +204,6 @@ class VotingInfo extends React.PureComponent {
       voting,
       onBarClick,
     } = props;
-    const progress = progressByDateRange(date);
     return (
       <div
         className={styles['voting-info']}
