@@ -24,7 +24,7 @@ import ErrorMessage from '../Message/ErrorMessage';
 )
 @observer
 class VotingInfoWrapper extends React.PureComponent {
-  @observable dataStats;
+  @observable dataStats = [];
 
   votingId = 0;
 
@@ -66,7 +66,8 @@ class VotingInfoWrapper extends React.PureComponent {
                 break;
             }
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error);
             dialogStore.toggle('error_modal');
           });
       },
@@ -145,19 +146,6 @@ class VotingInfoWrapper extends React.PureComponent {
         }).isRequired,
       }).isRequired,
     }).isRequired,
-    voting: PropTypes.shape({
-      id: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-      ]).isRequired,
-      status: PropTypes.string.isRequired,
-      descision: PropTypes.string.isRequired,
-      userVote: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-      ]).isRequired,
-      closeVoteInProgress: PropTypes.bool,
-    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -198,11 +186,6 @@ class VotingInfoWrapper extends React.PureComponent {
     dialogStore.toggle('descision_close');
   }
 
-  closeModal = (name) => {
-    const { dialogStore } = this.props;
-    dialogStore.hide(name);
-  }
-
   @action
   getVotingStats = async () => {
     const { props } = this;
@@ -225,6 +208,10 @@ class VotingInfoWrapper extends React.PureComponent {
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     const { groupId } = question;
     const memberGroup = membersStore.getMemberById(groupId);
+    if (!memberGroup) {
+      this.dataStats = [];
+      return;
+    }
     let [positive, negative, totalSupply] = await methods.getVotes(id).call();
     positive = parseInt(positive, 10);
     negative = parseInt(negative, 10);
@@ -360,7 +347,7 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
           closable
         >
-          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
 
         <Dialog
@@ -369,7 +356,7 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
           closable
         >
-          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
+          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
 
 

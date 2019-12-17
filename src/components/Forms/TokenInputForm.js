@@ -1,24 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
-import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 
-import styles from './Decision.scss';
+import styles from '../Decision/Decision.scss';
 
-@withTranslation()
-class Decision extends React.Component {
+
+class TokenInputForm extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     form: PropTypes.shape().isRequired,
-    icon: PropTypes.oneOfType([
-      () => null,
-      PropTypes.node,
-    ]),
+    icon: PropTypes.node.isRequired,
     title: PropTypes.string.isRequired,
   };
 
-  static defaultProps = {
-    icon: null,
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
 
   render() {
@@ -37,10 +33,10 @@ class Decision extends React.Component {
         <p className={styles.decision__subtext}>
           {t('other:enterPassForConfirm')}
         </p>
-        <FinPassFormWrapper form={form} />
+        {/**         <FinPassFormWrapper form={form} /> */}
       </div>
     );
   }
 }
 
-export default Decision;
+export default TokenInputForm;

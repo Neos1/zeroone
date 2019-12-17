@@ -16,7 +16,10 @@ const DropdownOption = ({
 );
 
 DropdownOption.propTypes = {
-  value: propTypes.string.isRequired,
+  value: propTypes.oneOfType([
+    propTypes.string,
+    propTypes.number,
+  ]).isRequired,
   label: propTypes.string.isRequired,
   select: propTypes.func.isRequired,
 };

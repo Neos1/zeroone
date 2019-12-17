@@ -12,6 +12,7 @@ import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-ma
 /**
  * Store for manage Members groups
  *
+ * @param id
  * @param group
  */
 class MembersStore {
@@ -181,7 +182,7 @@ class MembersStore {
       from,
       to: contract.options.address,
       data: contract.methods.transferFrom(from, to, Number(count)).encodeABI(),
-      gasLimit: 7000000,
+      gasLimit: 1000000,
       gasPrice: maxGasPrice,
       value: '0x0',
     };

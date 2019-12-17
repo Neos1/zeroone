@@ -11,7 +11,6 @@ import Pagination from '../Pagination';
 import Dialog from '../Dialog/Dialog';
 import StartNewVote from '../StartNewVote';
 import PaginationStore from '../../stores/PaginationStore';
-import DataManagerStore from '../../stores/DataManagerStore';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
@@ -34,6 +33,7 @@ class Voting extends React.Component {
           // eslint-disable-next-line no-unused-vars
           dialogStore,
           projectStore: {
+            historyStore,
             rootStore: { Web3Service, contractService },
             votingData,
             votingQuestion,
@@ -57,10 +57,11 @@ class Voting extends React.Component {
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
             dialogStore.show('success_modal');
+            historyStore.getMissingVotings();
           })
           .catch((error) => {
             dialogStore.show('error_modal');
-            console.error(error);
+            console.log(error);
           });
       },
       onError: (form) => {
@@ -93,9 +94,12 @@ class Voting extends React.Component {
       ]).isRequired,
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
-        votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+        getMissingVotings: PropTypes.func.isRequired,
+        paginatedList: PropTypes.arrayOf(
+          PropTypes.shape({}).isRequired,
+        ).isRequired,
         pagination: PropTypes.instanceOf(PaginationStore).isRequired,
-        dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,
+        getActualVotings: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     userStore: PropTypes.shape().isRequired,
@@ -110,21 +114,6 @@ class Voting extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { projectStore } = this.props;
-    const {
-      historyStore: {
-        pagination,
-        dataManager,
-      },
-    } = projectStore;
-    pagination.update({
-      key: 'activePage',
-      value: 1,
-    });
-    dataManager.reset();
-  }
-
   closeModal = (name) => {
     const { dialogStore } = this.props;
     dialogStore.hide(name);
@@ -133,8 +122,14 @@ class Voting extends React.Component {
   render() {
     const { props, voteStatus, state } = this;
     const { status } = state;
-    const { t, dialogStore, projectStore: { historyStore: { pagination, dataManager } } } = props;
-    const votings = dataManager.list();
+    const {
+      t,
+      dialogStore,
+      projectStore: {
+        historyStore: { pagination, paginatedList },
+      },
+    } = props;
+    const votings = paginatedList;
     return (
       <Container className="container--small">
         <div
@@ -209,7 +204,7 @@ class Voting extends React.Component {
           footer={null}
           closable
         >
-          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
 
         <Dialog
@@ -218,7 +213,7 @@ class Voting extends React.Component {
           footer={null}
           closable
         >
-          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
+          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
       </Container>
     );

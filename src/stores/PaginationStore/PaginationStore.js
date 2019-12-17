@@ -28,11 +28,10 @@ class PaginationStore {
   @observable pageRangeDisplayed;
 
   @action
-  update = ({
-    key,
-    value,
-  }) => {
-    this[key] = value;
+  update = (newState) => {
+    Object.keys(newState).forEach((key) => {
+      this[key] = newState[key];
+    });
   }
 
   @action
@@ -41,6 +40,21 @@ class PaginationStore {
     if (page > this.lastPage) activePage = this.lastPage;
     if (page < 1) activePage = 1;
     this.activePage = activePage;
+  }
+
+  /**
+   * Method for getting pagination range
+   *
+   * @returns {Array} [lowRange, highRange]
+   * lowRange is index first element for current activePage pagination
+   * highRange is index last element for current activePage pagination
+   */
+  @computed
+  get paginationRange() {
+    const { activePage, itemsCountPerPage } = this;
+    const lowRange = (activePage - 1) * itemsCountPerPage;
+    const highRange = (activePage) * itemsCountPerPage - 1;
+    return [lowRange, highRange];
   }
 }
 

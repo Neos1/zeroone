@@ -1,4 +1,4 @@
-import { computed, action } from 'mobx';
+import { computed, action, observable } from 'mobx';
 
 class MemberItem {
   /**
@@ -25,8 +25,8 @@ class MemberItem {
       || !balance
     ) throw new Error('Incorrect data provided for MemberItem!');
     this.wallet = wallet;
-    this.weight = weight.toFixed(2);
-    this.balance = balance;
+    this._weight = parseInt(weight, 10);
+    this.balance = parseInt(balance, 10);
     this.customTokenName = customTokenName;
     if (typeof isAdmin === 'boolean') this.isAdmin = isAdmin;
   }
@@ -35,11 +35,10 @@ class MemberItem {
   wallet = '';
 
   /** Weight member in vote */
-  // TODO fix calculating weight on correct
-  weight = 0;
+  @observable _weight = 0;
 
   /** Balance member */
-  balance = 0;
+  @observable balance = 0;
 
   /** Custom token name */
   customTokenName = '';
@@ -51,6 +50,16 @@ class MemberItem {
   /** Method for getting full balance text */
   get fullBalance() {
     return `${this.balance} ${this.customTokenName}`;
+  }
+
+  @computed
+  get weight() {
+    return this._weight.toFixed(2);
+  }
+
+  @action
+  setWeight(weight) {
+    this._weight = weight;
   }
 
   @action

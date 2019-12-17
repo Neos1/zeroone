@@ -1,4 +1,6 @@
 class Question {
+  raw;
+
   id;
 
   caption;
@@ -33,6 +35,9 @@ class Question {
     const {
       groupId, caption, text, target, time, status, methodSelector, _formula, _parameters,
     } = question;
+    this.raw = {
+      groupId, caption, text, target, status, methodSelector, _formula, _parameters,
+    };
     this.id = id;
     this.caption = caption;
     this.groupId = groupId;
