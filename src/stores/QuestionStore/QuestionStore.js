@@ -14,9 +14,6 @@ class QuestionStore {
   /** List models Question */
   @observable _questions;
 
-  /** List raw data questions (from contract) */
-  @observable rawQuestions = [];
-
   @observable filter;
 
   constructor(rootStore) {
@@ -39,6 +36,12 @@ class QuestionStore {
    */
   @computed get questions() {
     return this._questions;
+  }
+
+  get rawList() {
+    return this._questions.map((question) => ({
+      ...question.raw,
+    }));
   }
 
   /**
@@ -81,7 +84,6 @@ class QuestionStore {
     for (let i = 1; i < countOfUploaded; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const question = await contractService.fetchQuestion(i);
-      this.rawQuestions.push(question);
       this.addQuestion(i, question);
     }
   }
@@ -98,7 +100,7 @@ class QuestionStore {
     writeDataToFile({
       name: 'questions',
       data: {
-        data: this.rawQuestions,
+        data: this.rawList,
       },
       basicPath: `${PATH_TO_DATA}${address}`,
     });
@@ -122,7 +124,6 @@ class QuestionStore {
     for (let i = 0; i < questionsFromFileLength; i += 1) {
       const question = questions.data[i];
       // For correct work {getMissingQuestions} method
-      this.rawQuestions.push(question);
       this.addQuestion(i, question);
     }
     return questions;
@@ -149,13 +150,12 @@ class QuestionStore {
       for (let i = questionsFromFileLength + firstQuestionIndex; i < countOfUploaded; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const question = await contractService.fetchQuestion(i);
-        this.rawQuestions.push(question);
         this.addQuestion(i, question);
       }
       writeDataToFile({
         name: 'questions',
         data: {
-          data: this.rawQuestions,
+          data: this.rawList,
         },
         basicPath: `${PATH_TO_DATA}${address}`,
       });
