@@ -39,6 +39,7 @@ class Voting extends React.Component {
             votingData,
             votingQuestion,
             votingGroupId,
+            historyStore,
           },
           userStore,
         } = props;
@@ -57,12 +58,13 @@ class Voting extends React.Component {
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
+            historyStore.getActualVotings();
             dialogStore.show('success_modal');
             historyStore.getMissingVotings();
           })
           .catch((error) => {
             dialogStore.show('error_modal');
-            console.error(error);
+            console.log(error);
           });
       },
       onError: (form) => {
@@ -100,6 +102,7 @@ class Voting extends React.Component {
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         pagination: PropTypes.instanceOf(PaginationStore).isRequired,
         dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,
+        getActualVotings: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
     userStore: PropTypes.shape().isRequired,
@@ -213,7 +216,7 @@ class Voting extends React.Component {
           footer={null}
           closable
         >
-          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
 
         <Dialog
@@ -222,7 +225,7 @@ class Voting extends React.Component {
           footer={null}
           closable
         >
-          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
+          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
       </Container>
     );

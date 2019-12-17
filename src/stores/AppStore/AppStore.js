@@ -36,6 +36,7 @@ class AppStore {
 
   /**
    * Getting list of url's for sending this to wallet service
+   *
    * @function
    */
   @action readWalletList() {
@@ -55,6 +56,7 @@ class AppStore {
 
   /**
    * selecting encrypted wallet and pushing this to userStore
+   *
    * @param {string} address address of wallet
    */
   selectWallet = (address) => {
@@ -65,6 +67,7 @@ class AppStore {
 
   /**
    * Reading list of projects for displaing them in project list
+   *
    * @function
    */
   @action readProjectList() {
@@ -74,6 +77,7 @@ class AppStore {
 
   /**
    * compile contract by given type and arguments
+   *
    * @param {string} type type of contract - ERC20 for erc tokens, project - for project contract
    * @returns {Promise} Function which compiles contract and deploy contract to network on success
    */
@@ -90,6 +94,7 @@ class AppStore {
 
   /**
    * checks given address on ERC20 tokens
+   *
    * @param {string} address address of ERC20 contract
    * @returns {Promise} resolves on success checking and set information about ERC token
    */
@@ -109,6 +114,7 @@ class AppStore {
 
   /**
    * checks if given address is contract in network
+   *
    * @param {string} address address, which will be ckecked on contract instance
    */
   @action checkProject(address) {
@@ -122,8 +128,9 @@ class AppStore {
 
   /**
    * Upload questions to created project
+   *
    * @param {string} address address of smart contract, where will be uploaded questions
-   * @return Promise.resolve()
+   * @returns Promise.resolve()
    */
   @action async deployQuestions(address) {
     const { Web3Service, contractService } = this.rootStore;
@@ -145,6 +152,7 @@ class AppStore {
 
   /**
    * add project to config and update config saved in file
+   *
    * @param {object} data data about project {name, address}
    */
   // eslint-disable-next-line class-methods-use-this
@@ -156,6 +164,7 @@ class AppStore {
 
   /**
    * checks count of uploaded Questions
+   *
    * @param {string} address address of project
    * @returns {boolean} countOfUploaded > totalQuestionCount
    */
@@ -171,12 +180,20 @@ class AppStore {
 
   /**
    * Check transaction receipt
+   *
    * @param {string} hash Transaction hash
-   * @return {Promise} Promise with interval, which resolves on succesfull receipt recieving
+   * @returns {Promise} Promise with interval, which resolves on succesfull receipt recieving
    */
   @action checkReceipt(hash) {
     const { Web3Service } = this.rootStore;
     return Web3Service.subscribeTxReceipt(hash);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  nodeChange(url) {
+    const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8'));
+    config.host = url;
+    fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'), 'utf8');
   }
 
   /**

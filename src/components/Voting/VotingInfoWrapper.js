@@ -66,7 +66,8 @@ class VotingInfoWrapper extends React.PureComponent {
                 break;
             }
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error);
             dialogStore.toggle('error_modal');
           });
       },
@@ -196,11 +197,6 @@ class VotingInfoWrapper extends React.PureComponent {
   onClosingClick = () => {
     const { dialogStore } = this.props;
     dialogStore.toggle('descision_close');
-  }
-
-  closeModal = (name) => {
-    const { dialogStore } = this.props;
-    dialogStore.hide(name);
   }
 
   @action
@@ -360,7 +356,7 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
           closable
         >
-          <SuccessMessage onButtonClick={this.closeModal('success_modal')} />
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
 
         <Dialog
@@ -369,7 +365,7 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
           closable
         >
-          <ErrorMessage onButtonClick={this.closeModal('error_modal')} />
+          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
 
 
