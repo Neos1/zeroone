@@ -66,5 +66,7 @@ const other = {
   voting: 'Voting',
   questions: 'Questions',
   members: 'Members',
+  parameters: 'Parameters',
+  select: 'Select',
 };
 export default other;
