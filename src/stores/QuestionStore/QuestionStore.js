@@ -124,7 +124,7 @@ class QuestionStore {
     for (let i = 0; i < questionsFromFileLength; i += 1) {
       const question = questions.data[i];
       // For correct work {getMissingQuestions} method
-      this.addQuestion(i, question);
+      this.addQuestion(i + 1, question);
     }
     return questions;
   }
