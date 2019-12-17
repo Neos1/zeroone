@@ -304,8 +304,10 @@ class ContractService {
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(Number(groupId) - 1, userStore.address);
-    console.log(groupContainsUser);
+
     const maxGasPrice = 30000000000;
+    const data = _contract.methods.sendVote(descision).encodeABI();
+
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
       if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
@@ -313,13 +315,11 @@ class ContractService {
           .then(() => {
             const tx = {
               from: userStore.address,
-              data: _contract.methods.sendVote(descision).encodeABI(),
-              value: '0x0',
               to: _contract.options.address,
-              gasLimit: 1000000,
+              gasLimit: 8000000,
+              value: '0x0',
+              data,
             };
-            console.log(tx);
-            console.log('sending TX');
             return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
               .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
               .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
@@ -339,12 +339,10 @@ class ContractService {
         const tx = {
           from: userStore.address,
           to: _contract.options.address,
-          data: _contract.methods.sendVote(descision).encodeABI(),
+          gasLimit: 8000000,
           value: '0x0',
-          gasLimit: 1000000,
+          data,
         };
-        console.log(tx);
-
         return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
           .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
           .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
@@ -418,6 +416,31 @@ class ContractService {
       .then((receipt) => { console.log(receipt); });
   }
 
+  returnTokens(votingId) {
+    const {
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+      },
+    } = this;
+    const maxGasPrice = 30000000000;
+    const data = _contract.methods.returnTokens(votingId).encodeABI();
+    const tx = {
+      from: userStore.address,
+      to: _contract.options.address,
+      gasLimit: 8000000,
+      value: '0x0',
+      data,
+    };
+
+    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then((rec) => { console.log(rec); });
+  }
+
   /**
    * approve token transfer from user to Voter contract
    *
@@ -436,7 +459,6 @@ class ContractService {
     ercContract.options.address = group.wallet;
     // eslint-disable-next-line max-len
     const txData = ercContract.methods.approve(_contract.options.address, userStore.address).encodeABI();
-    console.log('hroolsadas');
     const maxGasPrice = 30000000000;
     const tx = {
       data: txData,

@@ -11,9 +11,9 @@ export const votingStates = {
 };
 
 export const userVotingStates = {
-  notAccepted: '0',
-  decisionFor: '1',
-  decisionAgainst: '2',
+  notAccepted: 0,
+  decisionFor: 1,
+  decisionAgainst: 2,
 };
 
 export const SOL_PATH_REGEXP = new RegExp(/(\"|\')((\.{1,2}\/){1,})(\w+\/){0,}?(\w+\.(?:sol))(\"|\')/g);
