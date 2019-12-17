@@ -34,11 +34,11 @@ class Voting extends React.Component {
           // eslint-disable-next-line no-unused-vars
           dialogStore,
           projectStore: {
+            historyStore,
             rootStore: { Web3Service, contractService },
             votingData,
             votingQuestion,
             votingGroupId,
-            historyStore,
           },
           userStore,
         } = props;
@@ -95,6 +95,8 @@ class Voting extends React.Component {
       ]).isRequired,
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
+        getMissingVotings: PropTypes.func.isRequired,
+        rawVotings: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         pagination: PropTypes.instanceOf(PaginationStore).isRequired,
         dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,

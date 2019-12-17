@@ -1,43 +1,13 @@
-import { observable, computed, action } from 'mobx';
-import PaginationStore from '../PaginationStore';
+import { action, observable } from 'mobx';
 
-/**
- * Class for easy manage list data
- */
-class DataManagerStore {
-  constructor({
-    list,
-    itemsCountPerPage,
-  }) {
-    this.rawList = list;
-    this.pagination = new PaginationStore({
-      totalItemsCount: this.rawList.length,
-      itemsCountPerPage,
-    });
-  }
-
-  /**
-   * Method for getting pagination range
-   *
-   * @returns {Array} [lowRange, highRange]
-   * lowRange is index first element for current activePage pagination
-   * highRange is index last element for current activePage pagination
-   */
-  @computed
-  get paginationRange() {
-    const { activePage, itemsCountPerPage } = this.pagination;
-    const lowRange = (activePage - 1) * itemsCountPerPage;
-    const highRange = (activePage) * itemsCountPerPage - 1;
-    return [lowRange, highRange];
-  }
-
+class FilterStore {
   /**
    * Method for filter by date
    *
+   * @param {Array} rawList raw data
    * @returns {Array} list from date range
    */
-  @computed
-  get filteredByDateList() {
+  filteredByDateList(rawList) {
     let resultList = [];
     const rulesKeys = Object.keys(this.rules);
     if (rulesKeys.length) {
@@ -45,7 +15,7 @@ class DataManagerStore {
         if (key === 'date') {
           const { start, end } = this.rules[key];
           // Filter list with startTime by start & end date rule
-          const filtered = this.rawList.filter(
+          const filtered = rawList.filter(
             (item) => (
               parseInt(item.startTime, 10) >= start
               && parseInt(item.startTime, 10) <= end
@@ -55,11 +25,11 @@ class DataManagerStore {
           // If result by date not found
           // return rawList
         } else if (resultList.length === 0) {
-          resultList = this.rawList;
+          resultList = rawList;
         }
       });
     } else {
-      resultList = this.rawList;
+      resultList = rawList;
     }
     return resultList;
   }
@@ -68,17 +38,16 @@ class DataManagerStore {
    * Method for getting list filtered
    * by filter rules
    *
+   * @param {Array} data raw data
    * @returns {Array} correct list
    */
-  filteredList() {
+  filteredList(data) {
+    const rawList = data;
     let resultList = [];
-    const listByDate = this.filteredByDateList;
+    const listByDate = this.filteredByDateList(rawList);
     const rulesKeys = Object.keys(this.rules);
     // If rules not exist return list by date
     if (!rulesKeys.length) {
-      this.pagination.update({
-        totalItemsCount: listByDate.length,
-      });
       return listByDate;
     }
     rulesKeys.forEach((key) => {
@@ -96,25 +65,8 @@ class DataManagerStore {
         resultList = listByDate;
       }
     });
-    this.pagination.update({
-      totalItemsCount: resultList.length,
-    });
     return resultList;
   }
-
-  /**
-   * Method for getting list filtered
-   * by filter rules & pagination
-   *
-   * @returns {Array} actual list
-   */
-  list() {
-    const range = this.paginationRange;
-    return this.filteredList().slice(range[0], range[1] + 1);
-  }
-
-  /** List with all the data */
-  @observable rawList;
 
   /** List of rules for filtering data */
   @observable rules = {};
@@ -124,15 +76,14 @@ class DataManagerStore {
    * a list filter rule
    *
    * @param {object} rule filter rule
+   * @param {Function} cb callback
    */
   @action
-  addFilterRule = (rule) => {
-    this.pagination.update({
-      activePage: 1,
-    });
+  addFilterRule = (rule, cb) => {
     Object.keys(rule).forEach((key) => {
       this.rules[key] = rule[key];
     });
+    if (cb) cb();
   }
 
   /**
@@ -144,4 +95,4 @@ class DataManagerStore {
   }
 }
 
-export default DataManagerStore;
+export default FilterStore;

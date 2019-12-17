@@ -78,7 +78,7 @@ class HistoryStore {
     const votingsFromFileLength = votings.data && votings.data.length
       ? votings.data.length
       : 0;
-    for (let i = votingsFromFileLength; i > 0; i -= 1) {
+    for (let i = 0; i < votingsFromFileLength; i += 1) {
       const voting = votings.data[i];
       if (voting) {
         // For correct work {getMissingVotings} method
@@ -89,13 +89,15 @@ class HistoryStore {
     return votings;
   }
 
-  getMissingVotings = async ({
-    votings,
-    address,
-  }) => {
+  getMissingVotings = async () => {
     const firstVotingIndex = 1;
     const { contractService } = this.rootStore;
+    const { address } = contractService._contract.options;
     const countOfVotings = await this.fetchVotingsCount();
+    const votings = readDataFromFile({
+      name: 'votings',
+      basicPath: `${PATH_TO_DATA}${address}`,
+    });
     const votingsFromFileLength = votings.data.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
     if (countVotingFromContract > votingsFromFileLength) {
@@ -135,10 +137,7 @@ class HistoryStore {
       await this.getVotingsFromContract(address);
       return;
     }
-    this.getMissingVotings({
-      votings,
-      address,
-    });
+    this.getMissingVotings();
   }
 
   /**
