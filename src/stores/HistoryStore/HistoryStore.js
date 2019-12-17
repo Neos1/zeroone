@@ -58,6 +58,12 @@ class HistoryStore {
     return this.list.slice(range[0], range[1] + 1);
   }
 
+  get rawList() {
+    return this._votings.map((voting) => ({
+      ...voting.raw,
+    }));
+  }
+
   /**
    * recieving voting length for fetching them from contract
    *
@@ -245,7 +251,7 @@ class HistoryStore {
     writeDataToFile({
       name: 'votings',
       data: {
-        data: this._votings,
+        data: this.rawList,
       },
       basicPath: `${PATH_TO_DATA}${address}`,
     });
