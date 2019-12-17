@@ -1,5 +1,6 @@
 import React from 'react';
 import { DateRangePicker } from 'react-dates';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { DateIcon } from '../Icons';
@@ -14,20 +15,35 @@ class DatePicker extends React.PureComponent {
     t: PropTypes.func.isRequired,
     onDatesSet: PropTypes.func,
     id: PropTypes.string.isRequired,
+    init: PropTypes.shape({
+      startDate: PropTypes.instanceOf(moment),
+      endDate: PropTypes.instanceOf(moment),
+    }),
   };
 
   static defaultProps = {
     onDatesSet: () => {},
+    init: {
+      startDate: null,
+      endDate: null,
+    },
   }
 
-  constructor() {
+  constructor(props) {
     super();
+    const {
+      init: {
+        startDate,
+        endDate,
+      },
+    } = props;
     this.state = {
-      start: null,
-      end: null,
+      start: startDate,
+      end: endDate,
       focusedInput: null,
     };
   }
+
 
   handleDatesChange = ({ startDate, endDate }) => {
     const { props } = this;

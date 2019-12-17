@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import uniqKey from 'react-id-generator';
 import SimpleDropdown from '../SimpleDropdown';
 import { QuestionIcon } from '../Icons';
@@ -15,6 +16,24 @@ class VotingFilter extends React.PureComponent {
   static propTypes = {
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
   };
+
+  dateInit = () => {
+    const {
+      projectStore: {
+        historyStore: { filter: { rules } },
+      },
+    } = this.props;
+    if (!rules.date) {
+      return {
+        startDate: null,
+        endDate: null,
+      };
+    }
+    return {
+      startDate: moment(rules.date.start * 1000),
+      endDate: moment(rules.date.end * 1000),
+    };
+  }
 
   /**
    * Method for handle sort
@@ -50,10 +69,10 @@ class VotingFilter extends React.PureComponent {
     const {
       projectStore: {
         questionStore: { options },
-        historyStore: { filter },
+        historyStore: { filter: { rules } },
       },
     } = this.props;
-    const { rules } = filter;
+    const { dateInit } = this;
     return (
       <>
         <div className={styles['voting__filter-dropdown']}>
@@ -69,6 +88,7 @@ class VotingFilter extends React.PureComponent {
           <DatePicker
             id={uniqKey()}
             onDatesSet={this.handleDateSelect}
+            init={dateInit()}
           />
         </div>
       </>
