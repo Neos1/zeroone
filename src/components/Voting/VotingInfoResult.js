@@ -23,7 +23,7 @@ const VotingInfoResult = ({
       >
         {t('other:decisionWasMade')}
         <div>
-          {renderDecisionIcon({ state: descision })}
+          {renderDecisionIcon({ state: Number(descision) })}
         </div>
       </div>
       <div
@@ -31,7 +31,7 @@ const VotingInfoResult = ({
       >
         {t('other:yourDecision')}
         <div>
-          {renderDecisionIcon({ state: userVote })}
+          {renderDecisionIcon({ state: Number(userVote) })}
         </div>
       </div>
       <div
@@ -67,7 +67,7 @@ VotingInfoResult.propTypes = {
   }).isRequired,
   voting: PropTypes.shape({
     descision: PropTypes.string.isRequired,
-    userVote: PropTypes.string.isRequired,
+    userVote: PropTypes.number.isRequired,
   }).isRequired,
 };
 

@@ -25,6 +25,7 @@ class Web3Service {
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
         transaction = { ...tx, nonce };
+        console.log(transaction, eth.estimateGas(tx));
         return eth.estimateGas(tx);
       })
       .then((gas) => {
