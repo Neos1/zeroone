@@ -13,20 +13,39 @@ class SimpleDropdown extends Component {
     ]),
     options: propTypes.arrayOf(propTypes.shape({})).isRequired,
     onSelect: propTypes.func,
-    field: propTypes.shape().isRequired,
+    field: propTypes.shape({
+      set: propTypes.func,
+    }),
+    initValue: propTypes.oneOfType([
+      propTypes.string,
+      propTypes.number,
+    ]),
+    initLabel: propTypes.oneOfType([
+      propTypes.string,
+      propTypes.number,
+    ]),
   };
 
   static defaultProps = {
     children: '',
     onSelect: () => false,
+    field: {
+      set: () => {},
+    },
+    initValue: '',
+    initLabel: '',
   }
 
   constructor(props) {
     super(props);
+    const {
+      initValue,
+      initLabel,
+    } = props;
     this.state = {
       opened: false,
-      selectedValue: '',
-      selectedLabel: '',
+      selectedValue: initValue,
+      selectedLabel: initLabel,
     };
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);

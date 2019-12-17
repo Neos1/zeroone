@@ -19,13 +19,14 @@ class VotingFilter extends React.PureComponent {
   /**
    * Method for handle sort
    *
-   * @param {string} selected new sort value
+   * @param {object} selected new sort data
+   * @param {string|number} selected.value new sort value
+   * @param {string|number} selected.label new sort label
    */
   handleQuestionSelect = (selected) => {
-    // TODO change after refactor SimpleDropdown to value & rule by questionId
-    const question = selected.split('. ')[1];
-    const { projectStore: { historyStore: { dataManager } } } = this.props;
-    dataManager.addFilterRule({ caption: question });
+    const question = selected.label;
+    const { projectStore: { historyStore: { addFilterRule } } } = this.props;
+    addFilterRule({ caption: question });
   }
 
   /**
@@ -35,9 +36,8 @@ class VotingFilter extends React.PureComponent {
     startDate,
     endDate,
   }) => {
-    const { projectStore: { historyStore: { dataManager } } } = this.props;
-    dataManager.addFilterRule({
-      // TODO not work
+    const { projectStore: { historyStore: { addFilterRule } } } = this.props;
+    addFilterRule({
       date: {
         // Convert to vote time format
         start: startDate.valueOf() / 1000,
@@ -47,13 +47,20 @@ class VotingFilter extends React.PureComponent {
   }
 
   render() {
-    const { projectStore: { questionStore: { options } } } = this.props;
+    const {
+      projectStore: {
+        questionStore: { options },
+        historyStore: { filter },
+      },
+    } = this.props;
+    const { rules } = filter;
     return (
       <>
         <div className={styles['voting__filter-dropdown']}>
           <SimpleDropdown
             options={options}
             onSelect={this.handleQuestionSelect}
+            initLabel={rules.caption}
           >
             <QuestionIcon />
           </SimpleDropdown>
