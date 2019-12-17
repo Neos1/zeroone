@@ -11,7 +11,6 @@ import Pagination from '../Pagination';
 import Dialog from '../Dialog/Dialog';
 import StartNewVote from '../StartNewVote';
 import PaginationStore from '../../stores/PaginationStore';
-import DataManagerStore from '../../stores/DataManagerStore';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
@@ -57,8 +56,8 @@ class Voting extends React.Component {
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
-            historyStore.getActualVotings();
             dialogStore.show('success_modal');
+            historyStore.getMissingVotings();
           })
           .catch((error) => {
             dialogStore.show('error_modal');
@@ -96,10 +95,11 @@ class Voting extends React.Component {
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
         getMissingVotings: PropTypes.func.isRequired,
-        rawVotings: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-        votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+        resetFilter: PropTypes.func.isRequired,
+        paginatedList: PropTypes.arrayOf(
+          PropTypes.shape({}).isRequired,
+        ).isRequired,
         pagination: PropTypes.instanceOf(PaginationStore).isRequired,
-        dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,
         getActualVotings: PropTypes.func.isRequired,
       }).isRequired,
     }).isRequired,
@@ -119,15 +119,10 @@ class Voting extends React.Component {
     const { projectStore } = this.props;
     const {
       historyStore: {
-        pagination,
-        dataManager,
+        resetFilter,
       },
     } = projectStore;
-    pagination.update({
-      key: 'activePage',
-      value: 1,
-    });
-    dataManager.reset();
+    resetFilter();
   }
 
   closeModal = (name) => {
@@ -138,8 +133,14 @@ class Voting extends React.Component {
   render() {
     const { props, voteStatus, state } = this;
     const { status } = state;
-    const { t, dialogStore, projectStore: { historyStore: { pagination, dataManager } } } = props;
-    const votings = dataManager.list();
+    const {
+      t,
+      dialogStore,
+      projectStore: {
+        historyStore: { pagination, paginatedList },
+      },
+    } = props;
+    const votings = paginatedList;
     return (
       <Container className="container--small">
         <div
