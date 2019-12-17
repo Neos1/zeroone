@@ -22,3 +22,4 @@ export const SOL_VERSION_REGEXP = new RegExp(/(pragma).(solidity).((\^)?)([0-9](
 
 export const EMPTY_DATA_STRING = '-/-';
 export const walletHdPath = "m/44'/60'/0'/0/0";
+export const GAS_LIMIT = 8000000;
