@@ -63,5 +63,8 @@ const other = {
   yourDecision: 'Ваш голос',
   totalVoted: 'Проголосовало',
   theVoteLasted: 'Голосование длилось',
+  voting: 'Голосования',
+  questions: 'Вопросы',
+  members: 'Участники',
 };
 export default other;

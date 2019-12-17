@@ -63,5 +63,8 @@ const other = {
   yourDecision: 'Your decision',
   totalVoted: 'Total voted',
   theVoteLasted: 'The vote lasted',
+  voting: 'Voting',
+  questions: 'Questions',
+  members: 'Members',
 };
 export default other;
