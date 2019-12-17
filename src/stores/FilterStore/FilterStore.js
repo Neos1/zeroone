@@ -1,4 +1,10 @@
-import { action, observable } from 'mobx';
+import {
+  action,
+  set,
+  entries,
+  computed,
+  observable,
+} from 'mobx';
 
 class FilterStore {
   /**
@@ -13,7 +19,7 @@ class FilterStore {
     if (rulesKeys.length) {
       rulesKeys.forEach((key) => {
         if (key === 'date') {
-          const { start, end } = this.rules[key];
+          const { start, end } = this.rules.date;
           // Filter list with startTime by start & end date rule
           const filtered = rawList.filter(
             (item) => (
@@ -22,8 +28,6 @@ class FilterStore {
             ),
           );
           resultList = resultList.concat(filtered);
-          // If result by date not found
-          // return rawList
         } else if (resultList.length === 0) {
           resultList = rawList;
         }
@@ -46,7 +50,7 @@ class FilterStore {
     let resultList = [];
     const listByDate = this.filteredByDateList(rawList);
     const rulesKeys = Object.keys(this.rules);
-    // If rules not exist return list by date
+    // If _rules not exist return list by date
     if (!rulesKeys.length) {
       return listByDate;
     }
@@ -68,8 +72,20 @@ class FilterStore {
     return resultList;
   }
 
-  /** List of rules for filtering data */
-  @observable rules = {};
+  /** List of _rules for filtering data */
+  @observable _rules = {};
+
+  @computed
+  get rules() {
+    const result = {};
+    const ruleEntries = entries(this._rules);
+    ruleEntries.forEach((key) => {
+      const ruleKey = key[0];
+      const ruleValue = key[1];
+      result[ruleKey] = ruleValue;
+    });
+    return result;
+  }
 
   /**
    * Method for adding (or rewrite)
@@ -81,7 +97,7 @@ class FilterStore {
   @action
   addFilterRule = (rule, cb) => {
     Object.keys(rule).forEach((key) => {
-      this.rules[key] = rule[key];
+      set(this._rules, key, rule[key]);
     });
     if (cb) cb();
   }
@@ -91,7 +107,7 @@ class FilterStore {
    */
   @action
   reset = () => {
-    this.rules = {};
+    this._rules = {};
   }
 }
 
