@@ -48,12 +48,9 @@ class ContractService {
       window.BrowserSolc.getVersions((sources, releases) => {
         const version = releases['0.4.24'];
         const contract = this.combineContract(type);
-        const contractName = type === 'ERC20'
-          ? ':ERC20'
-          : ':Voter';
         window.BrowserSolc.loadVersion(version, (compiler) => {
           const compiledContract = compiler.compile(contract);
-          const contractData = compiledContract.contracts[contractName];
+          const contractData = compiledContract.contracts[`:${type}`];
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
             const { output: { abi } } = JSON.parse(metadata);
@@ -72,11 +69,18 @@ class ContractService {
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
-    const dir = type === 'ERC20' ? './' : './Voter/';
+    let dir;
     const compiler = 'pragma solidity ^0.4.24;';
-    const pathToMainFile = type === 'ERC20'
-      ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
-      : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
+    switch (type) {
+      case ('ERC20'): case ('MERC20'):
+        dir = './';
+        break;
+      case ('Voter'):
+        dir = './Voter/';
+        break;
+      default:
+    }
+    const pathToMainFile = path.join(PATH_TO_CONTRACTS, `${dir}${type}.sol`);
 
     const importedFiles = {};
 
@@ -115,11 +119,12 @@ class ContractService {
       gasPrice: maxGasPrice,
     };
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Web3Service.createTxData(address, tx, maxGasPrice)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash));
+        .then((txHash) => resolve(txHash))
+        .catch((err) => reject(err));
     });
   }
 
@@ -344,7 +349,7 @@ class ContractService {
         const tx = {
           from: userStore.address,
           to: _contract.options.address,
-          gasLimit: 8000000,
+          gasLimit: GAS_LIMIT,
           value: '0x0',
           data,
         };
