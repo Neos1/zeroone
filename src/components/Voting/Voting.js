@@ -95,7 +95,6 @@ class Voting extends React.Component {
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
         getMissingVotings: PropTypes.func.isRequired,
-        resetFilter: PropTypes.func.isRequired,
         paginatedList: PropTypes.arrayOf(
           PropTypes.shape({}).isRequired,
         ).isRequired,
@@ -113,16 +112,6 @@ class Voting extends React.Component {
       // eslint-disable-next-line react/no-unused-state
       status: this.voteStatus.inProgress,
     };
-  }
-
-  componentDidMount() {
-    const { projectStore } = this.props;
-    const {
-      historyStore: {
-        resetFilter,
-      },
-    } = projectStore;
-    resetFilter();
   }
 
   closeModal = (name) => {
