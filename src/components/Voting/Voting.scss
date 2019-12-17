@@ -3,6 +3,12 @@
 .voting {
   &-page {
     margin-bottom: 40px;
+    &__list {
+      text-align: center;
+      .loader {
+        margin-top: 50px;
+      };
+    }
   }
 
   &-info {
@@ -360,6 +366,7 @@
 
     &-info {
       width: 54%;
+      text-align: left;
     }
 
     &-date {

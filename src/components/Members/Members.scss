@@ -1,6 +1,11 @@
 .members {
   &__page {
     margin-bottom: 40px;
+    text-align: center;
+    .loader {
+      margin-top: 50px;
+
+    }
   }
 
   &__top {

@@ -11,6 +11,8 @@ class HistoryStore {
 
   @observable _votings = [];
 
+  @observable loading = true;
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.getActualVotings();
@@ -108,7 +110,8 @@ class HistoryStore {
       await this.getVotingsFromContract();
       return;
     }
-    this.getMissingVotings();
+    await this.getMissingVotings();
+    this.loading = false;
   }
 
   /**

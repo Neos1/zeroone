@@ -18,6 +18,7 @@ import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import Pagination from '../Pagination';
 import PaginationStore from '../../stores/PaginationStore';
 import FilterStore from '../../stores/FilterStore/FilterStore';
+import Loader from '../Loader';
 
 @withRouter
 @withTranslation()
@@ -41,6 +42,7 @@ class Questions extends Component {
     t: propTypes.func.isRequired,
     projectStore: propTypes.shape({
       questionStore: propTypes.shape({
+        loading: propTypes.bool.isRequired,
         questions: propTypes.arrayOf(propTypes.shape({})).isRequired,
         questionGroups: propTypes.arrayOf(propTypes.shape({
           value: propTypes.number.isRequired,
@@ -91,6 +93,7 @@ class Questions extends Component {
     const { t, projectStore, dialogStore } = this.props;
     const {
       questionStore: {
+        loading,
         pagination,
         questionGroups,
         paginatedList,
@@ -100,49 +103,64 @@ class Questions extends Component {
     return (
       <Container className="container--small">
         <div className={styles.questions}>
-          <div className={styles.questions__head}>
-            <div className={styles['questions__head-create']}>
-              <Button
-                theme="white"
-                icon={<CreateToken />}
-                onClick={() => { dialogStore.show('create_group_question'); }}
-              >
-                {t('buttons:createQuestionGroup')}
-              </Button>
-              <Button
-                theme="white"
-                icon={<CreateToken />}
-                onClick={() => { dialogStore.show('create_question'); }}
-              >
-                {t('buttons:createQuestion')}
-              </Button>
-            </div>
-            <div className={styles['questions__head-filters']}>
-              <SimpleDropdown
-                options={questionGroups}
-                onSelect={this.handleSortSelect}
-              />
-            </div>
-          </div>
+          {
+              !loading
+                ? (
+                  <div className={styles.questions__head}>
+                    <div className={styles['questions__head-create']}>
+                      <Button
+                        theme="white"
+                        icon={<CreateToken />}
+                        onClick={() => { dialogStore.show('create_group_question'); }}
+                      >
+                        {t('buttons:createQuestionGroup')}
+                      </Button>
+                      <Button
+                        theme="white"
+                        icon={<CreateToken />}
+                        onClick={() => { dialogStore.show('create_question'); }}
+                      >
+                        {t('buttons:createQuestion')}
+                      </Button>
+                    </div>
+                    <div className={styles['questions__head-filters']}>
+                      <SimpleDropdown
+                        options={questionGroups}
+                        onSelect={this.handleSortSelect}
+                      />
+                    </div>
+                  </div>
+                )
+                : null
+            }
+
           <div className={styles.questions__wrapper}>
             {
-              questions.map((question) => (
-                <Question
+              !loading
+                ? questions.map((question) => (
+                  <Question
                   // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...question}
-                  key={`question__item--${question.id}`}
-                />
-              ))
+                    {...question}
+                    key={`question__item--${question.id}`}
+                  />
+                ))
+                : <Loader />
             }
           </div>
-          <Pagination
-            activePage={pagination.activePage}
-            lastPage={pagination.lastPage}
-            handlePageChange={pagination.handleChange}
-            itemsCountPerPage={pagination.itemsCountPerPage}
-            totalItemsCount={pagination.totalItemsCount}
-            pageRangeDisplayed={pagination.pageRangeDisplayed}
-          />
+          {
+            !loading
+              ? (
+                <Pagination
+                  activePage={pagination.activePage}
+                  lastPage={pagination.lastPage}
+                  handlePageChange={pagination.handleChange}
+                  itemsCountPerPage={pagination.itemsCountPerPage}
+                  totalItemsCount={pagination.totalItemsCount}
+                  pageRangeDisplayed={pagination.pageRangeDisplayed}
+                />
+              )
+              : null
+          }
         </div>
         <Dialog name="create_group_question" size="md" footer={null}>
           <CreateGroupQuestions />

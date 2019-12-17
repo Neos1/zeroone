@@ -38,6 +38,8 @@ class MembersStore {
 
   @observable _transferStatus = 0;
 
+  @observable loading = true;
+
   @action init() {
     this.groups = [];
     this.fetchUserGroups();
@@ -57,6 +59,7 @@ class MembersStore {
         groups.forEach((group) => {
           this.addToGroups(group);
         });
+        this.loading = false;
       });
   }
 
