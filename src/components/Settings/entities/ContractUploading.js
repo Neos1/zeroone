@@ -5,10 +5,10 @@ import { withTranslation } from 'react-i18next';
 import { observer, inject } from 'mobx-react';
 import Button from '../../Button/Button';
 import CreateTokenForm from '../../../stores/FormsStore/CreateToken';
-import { AgreedMessage } from '../../Message';
 
 import styles from '../Settings.scss';
 import Dialog from '../../Dialog/Dialog';
+import TokenInputForm from '../../Forms/TokenInputForm';
 
 @withTranslation()
 @inject('appStore', 'dialogStore')
@@ -16,8 +16,8 @@ import Dialog from '../../Dialog/Dialog';
 class ContractUploading extends Component {
   form = new CreateTokenForm({
     hooks: {
-      onSuccess: () => {
-
+      onSuccess: (form) => {
+        console.log(form.values());
       },
       onError: () => {
 
@@ -58,7 +58,7 @@ class ContractUploading extends Component {
           name="token_modal"
           size="md"
         >
-          <AgreedMessage />
+          <TokenInputForm form={this.form} />
         </Dialog>
       </div>
     );

@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { withTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 import styles from '../Decision/Decision.scss';
+import Input from '../Input';
+import {
+  TokenName, TokenSymbol, TokenCount, Password,
+} from '../Icons';
+import Button from '../Button/Button';
 
-
+@withTranslation
+@observer
 class TokenInputForm extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -33,7 +41,32 @@ class TokenInputForm extends Component {
         <p className={styles.decision__subtext}>
           {t('other:enterPassForConfirm')}
         </p>
-        {/**         <FinPassFormWrapper form={form} /> */}
+        <form form={form} onSubmit={form.onSubmit}>
+          <Input field={form.$('name')}>
+            <TokenName />
+          </Input>
+          <div className={styles.form__group}>
+            <Input field={form.$('symbol')}>
+              <TokenSymbol />
+            </Input>
+            <Input field={form.$('count')}>
+              <TokenCount />
+            </Input>
+          </div>
+          <Input field={form.$('password')}>
+            <Password />
+          </Input>
+          <div className={styles.form__submit}>
+            <Button
+              theme="black"
+              size="310"
+              type="submit"
+              disabled={form.loading}
+            >
+              {t('buttons:create')}
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
