@@ -83,12 +83,13 @@ class AppStore {
    */
   @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       contractService.compileContract(type)
         .then(({ bytecode, abi }) => contractService.deployContract({
           type, deployArgs, bytecode, abi, password,
         }))
-        .then((txhash) => resolve(txhash));
+        .then((txhash) => resolve(txhash))
+        .catch((err) => reject(err));
     });
   }
 

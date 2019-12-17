@@ -43,12 +43,9 @@ class ContractService {
       window.BrowserSolc.getVersions((sources, releases) => {
         const version = releases['0.4.24'];
         const contract = this.combineContract(type);
-        const contractName = type === 'ERC20'
-          ? ':ERC20'
-          : ':Voter';
         window.BrowserSolc.loadVersion(version, (compiler) => {
           const compiledContract = compiler.compile(contract);
-          const contractData = compiledContract.contracts[contractName];
+          const contractData = compiledContract.contracts[`:${type}`];
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
             const { output: { abi } } = JSON.parse(metadata);
@@ -67,11 +64,18 @@ class ContractService {
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
-    const dir = type === 'ERC20' ? './' : './Voter/';
+    let dir;
     const compiler = 'pragma solidity ^0.4.24;';
-    const pathToMainFile = type === 'ERC20'
-      ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
-      : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
+    switch (type) {
+      case ('ERC20'): case ('MERC20'):
+        dir = './';
+        break;
+      case ('Voter'):
+        dir = './Voter/';
+        break;
+      default:
+    }
+    const pathToMainFile = path.join(PATH_TO_CONTRACTS, `${dir}${type}.sol`);
 
     const importedFiles = {};
 
@@ -106,15 +110,16 @@ class ContractService {
 
     const tx = {
       data: txData,
-      gasLimit: 1000000,
+      gasLimit: 8000000,
       gasPrice: maxGasPrice,
     };
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Web3Service.createTxData(address, tx, maxGasPrice)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash));
+        .then((txHash) => resolve(txHash))
+        .catch((err) => reject(err));
     });
   }
 
@@ -168,7 +173,7 @@ class ContractService {
     const data = {
       // eslint-disable-next-line max-len
       data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
-      gasLimit: 1000000,
+      gasLimit: 8000000,
       from: userStore.address,
       value: '0x0',
       to: _contract.options.address,
@@ -212,7 +217,7 @@ class ContractService {
         const rawTx = {
           to: contractAddr,
           data: dataTx,
-          gasLimit: 1000000,
+          gasLimit: 8000000,
           value: '0x0',
         };
         return new Promise((resolve) => {
@@ -316,7 +321,7 @@ class ContractService {
               data: _contract.methods.sendVote(descision).encodeABI(),
               value: '0x0',
               to: _contract.options.address,
-              gasLimit: 1000000,
+              gasLimit: 8000000,
             };
             console.log(tx);
             console.log('sending TX');
@@ -341,7 +346,7 @@ class ContractService {
           to: _contract.options.address,
           data: _contract.methods.sendVote(descision).encodeABI(),
           value: '0x0',
-          gasLimit: 1000000,
+          gasLimit: 8000000,
         };
         console.log(tx);
 
@@ -377,7 +382,7 @@ class ContractService {
       data: _contract.methods.closeVoting().encodeABI(),
       value: '0x0',
       to: _contract.options.address,
-      gasLimit: 1000000,
+      gasLimit: 8000000,
     };
     const maxGasPrice = 30000000000;
 
@@ -407,7 +412,7 @@ class ContractService {
       data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
       from: userStore.address,
       to: _contract.options.address,
-      gasLimit: 1000000,
+      gasLimit: 8000000,
       value: '0x0',
     };
     console.log('appoving');
@@ -442,7 +447,7 @@ class ContractService {
       data: txData,
       from: userStore.address,
       value: '0x0',
-      gasLimit: 1000000,
+      gasLimit: 8000000,
       to: group.wallet,
     };
     return Web3Service.createTxData(userStore.address, tx, maxGasPrice)

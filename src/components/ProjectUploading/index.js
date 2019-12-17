@@ -66,7 +66,7 @@ class ProjectUploading extends Component {
     const { steps } = this;
     const { appStore, appStore: { name }, t } = this.props;
 
-    appStore.deployContract('project', deployArgs, password)
+    appStore.deployContract('Voter', deployArgs, password)
       .then((txHash) => {
         this.setState({
           step: steps.receipt,
