@@ -10,10 +10,16 @@ class Decision extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     form: PropTypes.shape().isRequired,
-    icon: PropTypes.node.isRequired,
+    icon: PropTypes.oneOfType([
+      () => null,
+      PropTypes.node,
+    ]),
     title: PropTypes.string.isRequired,
   };
 
+  static defaultProps = {
+    icon: null,
+  }
 
   render() {
     const { props } = this;
