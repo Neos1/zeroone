@@ -10,6 +10,8 @@ import MembersGroupComponent from './MembersGroupComponent';
 
 
 import styles from './Members.scss';
+import Loader from '../Loader';
+import Footer from '../Footer';
 
 /**
  * Component for page with members
@@ -22,6 +24,7 @@ class MembersPage extends React.Component {
     membersStore: PropTypes.shape({
       addToGroups: PropTypes.func.isRequired,
       list: MobxPropTypes.observableArrayOf(PropTypes.instanceOf(MembersGroup)),
+      loading: PropTypes.bool.isRequired,
     }).isRequired,
   }
 
@@ -30,33 +33,42 @@ class MembersPage extends React.Component {
   }
 
   render() {
-    const { membersStore: { list } } = this.props;
+    const { membersStore: { list, loading } } = this.props;
     const groups = list.toJS();
     return (
       <Container className="container--small">
-        <MembersTop
-          projectName="project test"
-          onClick={() => {
-            console.log('click');
-          }}
-        />
+        {
+          !loading
+            ? (
+              <MembersTop
+                projectName="project test"
+                onClick={() => {
+                  console.log('click');
+                }}
+              />
+            )
+            : null
+        }
         <div className={styles.members__page}>
           {
-            groups.map((group, index) => (
-              <MembersGroupComponent
-                id={index}
-                name={group.name}
-                fullBalance={group.fullBalance}
-                key={`memberGroup--${index + 1}`}
-                description={group.description}
-                wallet={group.wallet}
-                token={group.tokenName}
-                list={group.list}
-                textForEmptyState={group.textForEmptyState}
-              />
-            ))
+            !loading
+              ? groups.map((group, index) => (
+                <MembersGroupComponent
+                  id={index}
+                  name={group.name}
+                  fullBalance={group.fullBalance}
+                  key={`memberGroup--${index + 1}`}
+                  description={group.description}
+                  wallet={group.wallet}
+                  token={group.tokenName}
+                  list={group.list}
+                  textForEmptyState={group.textForEmptyState}
+                />
+              ))
+              : <Loader />
           }
         </div>
+        <Footer />
       </Container>
     );
   }

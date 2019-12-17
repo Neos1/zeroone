@@ -54,7 +54,8 @@ class VotingInfoWrapper extends React.PureComponent {
         dialogStore.toggle('progress_modal');
         return contractService.sendVote(votingId, descision)
           .then(() => {
-            voting.update({ userVote: descision });
+            voting.update({ userVote: Number(descision) });
+            historyStore.writeVotingsToFile();
             switch (descision) {
               case (1):
                 dialogStore.toggle('decision_agreed_message');
@@ -127,6 +128,7 @@ class VotingInfoWrapper extends React.PureComponent {
       historyStore: PropTypes.shape({
         getVotingById: PropTypes.func.isRequired,
         fetchAndUpdateLastVoting: PropTypes.func.isRequired,
+        writeVotingsToFile: PropTypes.func.isRequired,
       }).isRequired,
       questionStore: PropTypes.shape({
         getQuestionById: PropTypes.func.isRequired,

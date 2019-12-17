@@ -33,7 +33,7 @@ class Voting {
     this.status = status;
     this.caption = caption;
     this.text = text;
-    this.userVote = userVote;
+    this.userVote = Number(userVote);
     this.closeVoteInProgress = false;
   }
 
@@ -46,6 +46,7 @@ class Voting {
   update = (newState) => {
     Object.keys(newState).forEach((key) => {
       this[key] = newState[key];
+      this.raw[key] = newState[key];
     });
   }
 }

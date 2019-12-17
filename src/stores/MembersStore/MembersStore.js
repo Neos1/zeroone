@@ -8,6 +8,7 @@ import {
   PATH_TO_DATA,
 } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
+import { GAS_LIMIT } from '../../constants';
 
 /**
  * Store for manage Members groups
@@ -38,6 +39,8 @@ class MembersStore {
 
   @observable _transferStatus = 0;
 
+  @observable loading = true;
+
   @action init() {
     this.groups = [];
     this.fetchUserGroups();
@@ -57,6 +60,7 @@ class MembersStore {
         groups.forEach((group) => {
           this.addToGroups(group);
         });
+        this.loading = false;
       });
   }
 
@@ -182,7 +186,7 @@ class MembersStore {
       from,
       to: contract.options.address,
       data: contract.methods.transferFrom(from, to, Number(count)).encodeABI(),
-      gasLimit: 1000000,
+      gasLimit: GAS_LIMIT,
       gasPrice: maxGasPrice,
       value: '0x0',
     };
