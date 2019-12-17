@@ -60,7 +60,7 @@ const Question = ({
   params,
 }) => (
   <div className={`${styles.question} ${extended ? styles['question--extended'] : ''}`}>
-    <NavLink className={styles.question__left} to={`/question/${id}`}>
+    <NavLink className={styles.question__left} to={`/questions/${id}`}>
       <div>
         <p className={styles.question__id}>{`#${id}`}</p>
         <p className={styles.question__caption}>{caption}</p>

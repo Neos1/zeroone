@@ -72,16 +72,6 @@ class Questions extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    const { projectStore } = this.props;
-    const {
-      questionStore: {
-        resetFilter,
-      },
-    } = projectStore;
-    resetFilter();
-  }
-
   /**
    * Method for handle sort
    *
