@@ -130,7 +130,7 @@ class MembersStore {
     const { Web3Service, userStore: { address, password }, userStore } = this.rootStore;
     const maxGasPrice = 30000000000;
     const txData = {
-      from,
+      from: userStore.address,
       to: contract.options.address,
       data: contract.methods.transferFrom(from, to, Number(count)).encodeABI(),
       gasLimit: 8000000,
