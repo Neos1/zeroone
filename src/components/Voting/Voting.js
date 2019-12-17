@@ -39,7 +39,6 @@ class Voting extends React.Component {
             votingData,
             votingQuestion,
             votingGroupId,
-            historyStore,
           },
           userStore,
         } = props;
@@ -60,7 +59,6 @@ class Voting extends React.Component {
           .then(() => {
             historyStore.getActualVotings();
             dialogStore.show('success_modal');
-            historyStore.getMissingVotings();
           })
           .catch((error) => {
             dialogStore.show('error_modal');
