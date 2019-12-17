@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
 import { AdminIcon, BorderArrowIcon } from '../Icons';
 
@@ -11,6 +12,7 @@ import styles from './Members.scss';
  * Component for displaying table with members
  */
 @withTranslation('other')
+@observer
 class MembersGroupTable extends React.PureComponent {
   static propTypes = {
     /** List members */
@@ -60,7 +62,6 @@ class MembersGroupTable extends React.PureComponent {
             list.map((item, index) => (
               <tr
                 key={`membersGroupTableTr--${index + 1}`}
-                onClick={() => { onRowClick(item.wallet); }}
                 className={`
                   ${styles['members__group-table-tr']}
                 `}
@@ -107,10 +108,15 @@ class MembersGroupTable extends React.PureComponent {
                     ${styles['members__group-table-td--balance']}
                   `}
                 >
-                  {item.fullBalance}
-                  <span>
-                    <BorderArrowIcon />
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => { onRowClick(item.wallet); }}
+                  >
+                    {item.fullBalance}
+                    <span>
+                      <BorderArrowIcon />
+                    </span>
+                  </button>
                 </td>
               </tr>
             ))

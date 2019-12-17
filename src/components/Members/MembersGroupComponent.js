@@ -1,18 +1,23 @@
 /* eslint-disable react/static-property-placement */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { computed } from 'mobx';
 import { Collapse } from 'react-collapse';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
+import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
 import TokenTransfer from '../TokenTransfer/TokenTransfer';
-import TokenInProgressMessage from '../Message/TokenInProgressMessage';
+import {
+  TokenInProgressMessage,
+  TransferSuccessMessage,
+  TransferErrorMessage,
+} from '../Message';
 
 import styles from './Members.scss';
-import TransferSuccessMessage from '../Message/TransferSuccessMessage';
 
 /**
  * Group members component
@@ -52,10 +57,14 @@ class MembersGroupComponent extends React.Component {
     t: PropTypes.func.isRequired,
     dialogStore: PropTypes.shape({
       show: PropTypes.func.isRequired,
+      hide: PropTypes.func.isRequired,
     }).isRequired,
     membersStore: PropTypes.shape({
       transferStatus: PropTypes.number.isRequired,
       setTransferStatus: PropTypes.func.isRequired,
+      list: PropTypes.arrayOf(
+        PropTypes.instanceOf(MembersGroup),
+      ).isRequired,
     }).isRequired,
   }
 
@@ -66,6 +75,59 @@ class MembersGroupComponent extends React.Component {
       isOpen: false,
       selectedWallet: '',
     };
+  }
+
+  /**
+   * Return actual modal props state
+   *
+   * @returns {object} actual modal props
+   */
+  @computed
+  get modalPropsSwitch() {
+    const {
+      membersStore: { transferStatus },
+    } = this.props;
+    const { transferSteps } = this;
+    switch (transferStatus) {
+      case (transferSteps.input):
+        return { header: null, footer: null };
+      case (transferSteps.transfering):
+        return { header: null, footer: null, closeable: false };
+      case (transferSteps.success):
+        return { header: null, footer: null };
+      case (transferSteps.error):
+        return { header: null, footer: null };
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * Method for return actual modal content
+   *
+   * @returns {Node} actual modal content
+   */
+  modalContentSwitch = () => {
+    const {
+      id,
+      membersStore,
+      dialogStore,
+    } = this.props;
+    const { transferStatus } = membersStore;
+    const { selectedWallet } = this.state;
+    const { transferSteps } = this;
+    switch (transferStatus) {
+      case (transferSteps.input):
+        return <TokenTransfer wallet={selectedWallet} groupId={id} />;
+      case (transferSteps.transfering):
+        return <TokenInProgressMessage />;
+      case (transferSteps.success):
+        return <TransferSuccessMessage onButtonClick={() => dialogStore.hide()} />;
+      case (transferSteps.error):
+        return <TransferErrorMessage onButtonClick={() => dialogStore.hide()} />;
+      default:
+        return null;
+    }
   }
 
   /**
@@ -80,28 +142,11 @@ class MembersGroupComponent extends React.Component {
   }
 
   handleClick = (selectedWallet) => {
+    const { membersStore } = this.props;
+    membersStore.setTransferStatus('input');
     const { dialogStore, id } = this.props;
     this.setState({ selectedWallet });
     dialogStore.show(`transfer-token-${id}`);
-  }
-
-  // eslint-disable-next-line consistent-return
-  modalContentSwitch(step) {
-    const { id } = this.props;
-    const { selectedWallet } = this.state;
-    const { transferSteps } = this;
-    switch (step) {
-      case (transferSteps.input):
-        return <TokenTransfer wallet={selectedWallet} groupId={id} />;
-      case (transferSteps.transfering):
-        return <TokenInProgressMessage />;
-      case (transferSteps.success):
-        return <TransferSuccessMessage />;
-      case (transferSteps.error):
-        return null;
-      default:
-        return null;
-    }
   }
 
   render() {
@@ -115,7 +160,6 @@ class MembersGroupComponent extends React.Component {
       list,
       textForEmptyState,
       t,
-      membersStore: { transferStatus },
     } = this.props;
     const { isOpen } = this.state;
     return (
@@ -171,9 +215,10 @@ class MembersGroupComponent extends React.Component {
         <Dialog
           name={`transfer-token-${id}`}
           size="md"
-          footer={null}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...this.modalPropsSwitch}
         >
-          {this.modalContentSwitch(transferStatus)}
+          {this.modalContentSwitch()}
         </Dialog>
       </div>
     );

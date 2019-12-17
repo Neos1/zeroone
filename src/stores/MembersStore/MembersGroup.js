@@ -61,8 +61,7 @@ class MembersGroup {
   tokenName = '';
 
   /** Balance group */
-  // TODO fix on correct realization
-  balance = 0;
+  balance;
 
   /** Text for state when list is empty */
   textForEmptyState = 'other:noData';
@@ -82,10 +81,26 @@ class MembersGroup {
    * @param {object} member all data about member
    */
   addToList = (members) => {
-    // TODO maybe fix for duplicate wallets
     members.forEach((member) => {
-      this.list.push(new MemberItem(member));
+      if (!this.list.find((item) => item.wallet === member.wallet)) {
+        this.list.push(new MemberItem(member));
+      }
     });
+  }
+
+  /**
+   * Method for updating a member’s balance
+   *
+   * @param {number} address address wallet member
+   */
+  @action
+  updateMemberBalanceAndWeight = async (address) => {
+    const userBalance = await this.contract.methods.balanceOf(address).call();
+    const user = this.list.find((member) => member.wallet === address);
+    if (!user || !user.setTokenBalance || !user.setWeight) return;
+    const weight = (userBalance / Number(this.balance)) * 100;
+    user.setTokenBalance(userBalance);
+    user.setWeight(weight);
   }
 }
 
