@@ -83,7 +83,12 @@ class MembersGroup {
   addToList = (members) => {
     members.forEach((member) => {
       if (!this.list.find((item) => item.wallet === member.wallet)) {
-        this.list.push(new MemberItem(member));
+        this.list.push(
+          new MemberItem({
+            ...member,
+            weight: member.weight.toString(),
+          }),
+        );
       }
     });
   }
