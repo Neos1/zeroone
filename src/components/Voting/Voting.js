@@ -34,6 +34,7 @@ class Voting extends React.Component {
           // eslint-disable-next-line no-unused-vars
           dialogStore,
           projectStore: {
+            historyStore,
             rootStore: { Web3Service, contractService },
             votingData,
             votingQuestion,
@@ -57,6 +58,7 @@ class Voting extends React.Component {
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
             dialogStore.show('success_modal');
+            historyStore.getMissingVotings();
           })
           .catch((error) => {
             dialogStore.show('error_modal');
@@ -93,6 +95,8 @@ class Voting extends React.Component {
       ]).isRequired,
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
+        getMissingVotings: PropTypes.func.isRequired,
+        rawVotings: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         votingsList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
         pagination: PropTypes.instanceOf(PaginationStore).isRequired,
         dataManager: PropTypes.instanceOf(DataManagerStore).isRequired,
