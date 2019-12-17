@@ -2,14 +2,13 @@ import { observable, action, computed } from 'mobx';
 import Question from './entities/Question';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import { PATH_TO_DATA } from '../../constants/windowModules';
-import DataManagerStore from '../DataManagerStore/DataManagerStore';
+import FilterStore from '../FilterStore/FilterStore';
+import PaginationStore from '../PaginationStore';
 
 /**
  * Contains methods for working
  */
 class QuestionStore {
-  @observable dataManager;
-
   @observable pagination;
 
   /** List models Question */
@@ -18,16 +17,57 @@ class QuestionStore {
   /** List raw data questions (from contract) */
   @observable rawQuestions = [];
 
+  @observable filter;
+
   constructor(rootStore) {
     this._questions = [];
     this.rootStore = rootStore;
     this.getActualQuestions();
-    this.dataManager = new DataManagerStore({
-      list: this.questions,
+    this.filter = new FilterStore();
+    this.pagination = new PaginationStore({
+      totalItemsCount: this.list.length,
       // TODO remove after full realization
       itemsCountPerPage: 2,
     });
-    this.pagination = this.dataManager.pagination;
+  }
+
+  /**
+   * Getting list of questions for displaying
+   *
+   * @function
+   * @returns {Array} list of all questions
+   */
+  @computed get questions() {
+    return this._questions;
+  }
+
+  /**
+   * Get list questions
+   *
+   * @returns {Array} filtered by rules
+   * questions list
+   */
+  @computed
+  get list() {
+    return this.filter.filteredList(this.questions);
+  }
+
+  /**
+   * Get paginated list quesiotns
+   *
+   * @returns {Array} paginated questions list
+   */
+  @computed
+  get paginatedList() {
+    const range = this.pagination.paginationRange;
+    return this.list.slice(range[0], range[1] + 1);
+  }
+
+  @computed get options() {
+    return this._questions.map((question) => ({
+      value: question.id,
+      label: question.caption,
+    }));
   }
 
   /**
@@ -126,7 +166,7 @@ class QuestionStore {
    * Method for getting actual question
    * from the contract & file
    */
-  @action getActualQuestions = async () => {
+  getActualQuestions = async () => {
     const { contractService } = this.rootStore;
     const { address } = contractService._contract.options;
     const questions = this.getQuestionsFromFile(address);
@@ -137,6 +177,31 @@ class QuestionStore {
     this.getMissingQuestions({
       questions,
       address,
+    });
+  }
+
+  /**
+   * Add new filter rule
+   *
+   * @param {object} rule object with rules
+   */
+  addFilterRule = (rule) => {
+    this.filter.addFilterRule(rule);
+    this.pagination.update({
+      activePage: 1,
+      totalItemsCount: this.list.length,
+    });
+  }
+
+  /**
+   * Method for reset filter
+   * & update pagination
+   */
+  resetFilter = () => {
+    this.filter.reset();
+    this.pagination.update({
+      activePage: 1,
+      totalItemsCount: this.list.length,
     });
   }
 
@@ -160,23 +225,6 @@ class QuestionStore {
    * @returns {Array} array with lenght == 1, contains question matched by id
    */
   @action getQuestionById = (id) => this._questions.filter((question) => question.id === Number(id))
-
-  /**
-   * Getting list of questions for displaying
-   *
-   * @function
-   * @returns {Array} list of all questions
-   */
-  @computed get questions() {
-    return this._questions;
-  }
-
-  @computed get options() {
-    return this._questions.map((question) => ({
-      value: question.id,
-      label: question.caption,
-    }));
-  }
 }
 
 export default QuestionStore;

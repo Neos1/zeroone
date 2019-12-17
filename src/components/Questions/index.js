@@ -6,18 +6,18 @@ import { withRouter } from 'react-router-dom';
 import Container from '../Container';
 import Button from '../Button/Button';
 import { CreateToken } from '../Icons';
-import Question from './Question';
 import styles from './Questions.scss';
 import SimpleDropdown from '../SimpleDropdown';
 import Footer from '../Footer';
 import Dialog from '../Dialog/Dialog';
+import Question from './Question';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import Pagination from '../Pagination';
 import PaginationStore from '../../stores/PaginationStore';
-import DataManagerStore from '../../stores/DataManagerStore';
+import FilterStore from '../../stores/FilterStore/FilterStore';
 
 @withRouter
 @withTranslation()
@@ -47,7 +47,15 @@ class Questions extends Component {
           label: propTypes.string.isRequired,
         })).isRequired,
         pagination: propTypes.instanceOf(PaginationStore).isRequired,
-        dataManager: propTypes.instanceOf(DataManagerStore).isRequired,
+        addFilterRule: propTypes.func.isRequired,
+        resetFilter: propTypes.func.isRequired,
+        filter: propTypes.instanceOf(FilterStore).isRequired,
+        list: propTypes.arrayOf(
+          propTypes.shape(),
+        ).isRequired,
+        paginatedList: propTypes.arrayOf(
+          propTypes.shape(),
+        ).isRequired,
       }),
     }).isRequired,
     dialogStore: propTypes.shape({
@@ -68,15 +76,10 @@ class Questions extends Component {
     const { projectStore } = this.props;
     const {
       questionStore: {
-        pagination,
-        dataManager,
+        resetFilter,
       },
     } = projectStore;
-    pagination.update({
-      key: 'activePage',
-      value: 1,
-    });
-    dataManager.reset();
+    resetFilter();
   }
 
   /**
@@ -88,20 +91,20 @@ class Questions extends Component {
     const { projectStore } = this.props;
     const {
       questionStore: {
-        dataManager,
+        addFilterRule,
       },
     } = projectStore;
-    dataManager.addFilterRule({ caption: selected });
+    addFilterRule({ caption: selected });
   }
 
   render() {
     const { t, projectStore, dialogStore } = this.props;
     const {
       questionStore: {
-        options, pagination, dataManager,
+        options, pagination, paginatedList,
       },
     } = projectStore;
-    const questions = dataManager.list();
+    const questions = paginatedList;
     return (
       <Container className="container--small">
         <div className={styles.questions}>
