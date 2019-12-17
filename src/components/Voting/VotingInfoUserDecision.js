@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import { userVotingStates } from '../../constants';
 import renderDecisionIcon from './utils';
 
@@ -39,17 +40,10 @@ const VotingInfoUserDecision = ({
 };
 
 VotingInfoUserDecision.propTypes = {
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
   voting: PropTypes.shape({
-    userVote: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
+    userVote: PropTypes.number.isRequired,
   }).isRequired,
 };
 
-VotingInfoUserDecision.defaultProps = {
-  t: (k) => (k),
-};
-
-export default VotingInfoUserDecision;
+export default withTranslation()(VotingInfoUserDecision);

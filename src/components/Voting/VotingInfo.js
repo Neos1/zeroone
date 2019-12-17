@@ -57,10 +57,7 @@ class VotingInfo extends React.PureComponent {
       ]).isRequired,
       status: PropTypes.string.isRequired,
       descision: PropTypes.string.isRequired,
-      userVote: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-      ]).isRequired,
+      userVote: PropTypes.number.isRequired,
       closeVoteInProgress: PropTypes.bool,
     }).isRequired,
     params: PropTypes.arrayOf(PropTypes.array).isRequired,
@@ -128,6 +125,7 @@ class VotingInfo extends React.PureComponent {
       onCompleteVoteClick,
       t,
     } = props;
+    // TODO refactor this switch
     switch (true) {
       case (
         status === statusStates.active

@@ -328,7 +328,7 @@ class ContractService {
                 historyStore.updateVotingById({
                   id: votingId,
                   newState: {
-                    userVote: descision,
+                    userVote: Number(descision),
                   },
                 });
                 resolve(rec);
@@ -351,7 +351,7 @@ class ContractService {
             historyStore.updateVotingById({
               id: votingId,
               newState: {
-                userVote: descision,
+                userVote: Number(descision),
               },
             });
             resolve(rec);

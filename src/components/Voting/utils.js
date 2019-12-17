@@ -17,21 +17,21 @@ const renderDecisionIcon = ({
   t,
 }) => {
   switch (state) {
-    case '0':
+    case 0:
       return (
         <div className={styles['voting-info__decision-icon']}>
           <NoQuorum width={14} height={14} />
           {t('other:notAccepted')}
         </div>
       );
-    case '1':
+    case 1:
       return (
         <div className={styles['voting-info__decision-icon']}>
           <VerifyIcon width={14} height={14} />
           {t('other:pros')}
         </div>
       );
-    case '2':
+    case 2:
       return (
         <div className={styles['voting-info__decision-icon']}>
           <RejectIcon width={14} height={14} />
