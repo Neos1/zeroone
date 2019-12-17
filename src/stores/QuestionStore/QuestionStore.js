@@ -196,6 +196,7 @@ class QuestionStore {
     const questions = this.getQuestionsFromFile(address);
     if (!questions || !questions.data) {
       await this.getQuestionsFromContract(address);
+      this.loading = false;
       return;
     }
     await this.getMissingQuestions({

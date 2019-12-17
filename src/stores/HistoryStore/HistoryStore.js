@@ -108,6 +108,7 @@ class HistoryStore {
     const votings = this.getVotingsFromFile();
     if (!votings || !votings.data) {
       await this.getVotingsFromContract();
+      this.loading = false;
       return;
     }
     await this.getMissingVotings();
