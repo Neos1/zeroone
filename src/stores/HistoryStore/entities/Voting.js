@@ -46,6 +46,7 @@ class Voting {
   update = (newState) => {
     Object.keys(newState).forEach((key) => {
       this[key] = newState[key];
+      this.raw[key] = newState[key];
     });
   }
 }
