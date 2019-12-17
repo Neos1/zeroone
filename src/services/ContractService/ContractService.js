@@ -303,55 +303,64 @@ class ContractService {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
-    const groupContainsUser = membersStore.isUserInGroup(groupId, userStore.address);
+    const groupContainsUser = membersStore.isUserInGroup(Number(groupId) - 1, userStore.address);
     console.log(groupContainsUser);
     const maxGasPrice = 30000000000;
-    if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
-      this.approveErc(groupContainsUser)
-        .then(() => {
-          const tx = {
-            from: userStore.address,
-            data: _contract.methods.sendVote(descision).encodeABI(),
-            value: '0x0',
-            to: _contract.options.address,
-            gasLimit: 1000000,
-          };
-          console.log('sending TX');
-          return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
-            .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-            .then((rec) => {
-              historyStore.updateVotingById({
-                id: votingId,
-                newState: {
-                  userVote: descision,
-                },
+    // eslint-disable-next-line consistent-return
+    return new Promise((resolve, reject) => {
+      if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
+        this.approveErc(groupContainsUser)
+          .then(() => {
+            const tx = {
+              from: userStore.address,
+              data: _contract.methods.sendVote(descision).encodeABI(),
+              value: '0x0',
+              to: _contract.options.address,
+              gasLimit: 1000000,
+            };
+            console.log(tx);
+            console.log('sending TX');
+            return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+              .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+              .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+              .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+              .then((rec) => {
+                historyStore.updateVotingById({
+                  id: votingId,
+                  newState: {
+                    userVote: descision,
+                  },
+                });
+                resolve(rec);
               });
+          })
+          .catch((err) => reject(err));
+      } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
+        const tx = {
+          from: userStore.address,
+          to: _contract.options.address,
+          data: _contract.methods.sendVote(descision).encodeABI(),
+          value: '0x0',
+          gasLimit: 1000000,
+        };
+        console.log(tx);
+
+        return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+          .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+          .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+          .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+          .then((rec) => {
+            historyStore.updateVotingById({
+              id: votingId,
+              newState: {
+                userVote: descision,
+              },
             });
-        });
-    } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
-      const tx = {
-        from: userStore.address,
-        to: _contract.options.address,
-        data: _contract.methods.sendVote(descision).encodeABI(),
-        value: '0x0',
-        gasLimit: 1000000,
-      };
-      console.log(userStore.address, tx, maxGasPrice);
-      return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
-        .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-        .then((rec) => {
-          historyStore.updateVotingById({
-            id: votingId,
-            newState: {
-              userVote: descision,
-            },
-          });
-        });
-    }
+            resolve(rec);
+          })
+          .catch((err) => reject(err));
+      }
+    });
   }
 
   closeVoting() {
@@ -427,14 +436,18 @@ class ContractService {
     ercContract.options.address = group.wallet;
     // eslint-disable-next-line max-len
     const txData = ercContract.methods.approve(_contract.options.address, userStore.address).encodeABI();
+    console.log('hroolsadas');
+    const maxGasPrice = 30000000000;
     const tx = {
       data: txData,
       from: userStore.address,
       value: '0x0',
       gasLimit: 1000000,
+      to: group.wallet,
     };
-    return Web3Service.createTxData(userStore.address, tx)
-      .then((formedTx) => userStore.sendSignedTransaction(`0x${formedTx}`))
+    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+      .then((createdTx) => userStore.singTransaction(createdTx, userStore.password))
+      .then((formedTx) => Web3Service.sendSignedTransaction(`0x${formedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
   }
 
