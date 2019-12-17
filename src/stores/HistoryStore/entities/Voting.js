@@ -1,6 +1,8 @@
 import { action, observable } from 'mobx';
 
 class Voting {
+  raw;
+
   @observable userVote;
 
   @observable status;
@@ -19,6 +21,9 @@ class Voting {
   constructor({
     id, descision, questionId, data, status, startTime, endTime, caption, text, userVote,
   }) {
+    this.raw = {
+      id, descision, questionId, data, status, startTime, endTime, caption, text, userVote,
+    };
     this.id = id;
     this.questionId = questionId;
     this.descision = descision;
