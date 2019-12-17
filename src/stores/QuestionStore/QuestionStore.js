@@ -16,6 +16,8 @@ class QuestionStore {
 
   @observable _questionGroups;
 
+  @observable loading = true;
+
   @observable filter;
 
   constructor(rootStore) {
@@ -196,10 +198,11 @@ class QuestionStore {
       await this.getQuestionsFromContract(address);
       return;
     }
-    this.getMissingQuestions({
+    await this.getMissingQuestions({
       questions,
       address,
     });
+    this.loading = false;
   }
 
   /**

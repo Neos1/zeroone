@@ -20,6 +20,7 @@ import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 
 import styles from './Voting.scss';
+import Loader from '../Loader';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')
@@ -94,6 +95,7 @@ class Voting extends React.Component {
       ]).isRequired,
       rootStore: PropTypes.shape().isRequired,
       historyStore: PropTypes.shape({
+        loading: PropTypes.bool.isRequired,
         getMissingVotings: PropTypes.func.isRequired,
         paginatedList: PropTypes.arrayOf(
           PropTypes.shape({}).isRequired,
@@ -126,7 +128,7 @@ class Voting extends React.Component {
       t,
       dialogStore,
       projectStore: {
-        historyStore: { pagination, paginatedList },
+        historyStore: { loading, pagination, paginatedList },
       },
     } = props;
     const votings = paginatedList;
@@ -135,12 +137,20 @@ class Voting extends React.Component {
         <div
           className={styles['voting-page']}
         >
-          <VotingFilter />
+          {
+            !loading
+              ? <VotingFilter />
+              : null
+          }
           {/* eslint-disable-next-line */}
-          <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
-          <div>
+          {
+            !loading
+              ? <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
+              : null
+          }
+          <div className={styles['voting-page__list']}>
             {
-              votings && votings.length
+              !loading
                 ? votings.map((item, index) => (
                   <VotingItem
                     key={`voting__item--${index + 1}`}
@@ -152,17 +162,21 @@ class Voting extends React.Component {
                     date={{ start: Number(item.startTime), end: Number(item.endTime) }}
                   />
                 ))
-                : null
+                : <Loader />
             }
           </div>
-          <Pagination
-            activePage={pagination.activePage}
-            lastPage={pagination.lastPage}
-            handlePageChange={pagination.handleChange}
-            itemsCountPerPage={pagination.itemsCountPerPage}
-            totalItemsCount={pagination.totalItemsCount}
-            pageRangeDisplayed={pagination.pageRangeDisplayed}
-          />
+          {!loading
+            ? (
+              <Pagination
+                activePage={pagination.activePage}
+                lastPage={pagination.lastPage}
+                handlePageChange={pagination.handleChange}
+                itemsCountPerPage={pagination.itemsCountPerPage}
+                totalItemsCount={pagination.totalItemsCount}
+                pageRangeDisplayed={pagination.pageRangeDisplayed}
+              />
+            )
+            : null}
         </div>
         <Footer />
         <Dialog
