@@ -17,6 +17,7 @@ class FilterStore {
     let resultList = [];
     const rulesKeys = Object.keys(this.rules);
     if (rulesKeys.length) {
+      if (!this.rules.date) return rawList;
       rulesKeys.forEach((key) => {
         if (key === 'date') {
           const { start, end } = this.rules.date;
@@ -28,8 +29,6 @@ class FilterStore {
             ),
           );
           resultList = resultList.concat(filtered);
-        } else if (resultList.length === 0) {
-          resultList = rawList;
         }
       });
     } else {
