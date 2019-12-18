@@ -182,7 +182,7 @@ class MembersStore {
       from,
       to: contract.options.address,
       data: contract.methods.transferFrom(from, to, Number(count)).encodeABI(),
-      gasLimit: 8000000,
+      gasLimit: 7900000,
       gasPrice: maxGasPrice,
       value: '0x0',
     };

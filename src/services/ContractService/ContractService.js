@@ -110,7 +110,7 @@ class ContractService {
 
     const tx = {
       data: txData,
-      gasLimit: 8000000,
+      gasLimit: 7900000,
       gasPrice: maxGasPrice,
     };
 
@@ -173,7 +173,7 @@ class ContractService {
     const data = {
       // eslint-disable-next-line max-len
       data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
-      gasLimit: 8000000,
+      gasLimit: 7900000,
       from: userStore.address,
       value: '0x0',
       to: _contract.options.address,
@@ -217,7 +217,7 @@ class ContractService {
         const rawTx = {
           to: contractAddr,
           data: dataTx,
-          gasLimit: 8000000,
+          gasLimit: 7900000,
           value: '0x0',
         };
         return new Promise((resolve) => {
@@ -321,7 +321,7 @@ class ContractService {
               data: _contract.methods.sendVote(descision).encodeABI(),
               value: '0x0',
               to: _contract.options.address,
-              gasLimit: 8000000,
+              gasLimit: 7900000,
             };
             console.log(tx);
             console.log('sending TX');
@@ -346,7 +346,7 @@ class ContractService {
           to: _contract.options.address,
           data: _contract.methods.sendVote(descision).encodeABI(),
           value: '0x0',
-          gasLimit: 8000000,
+          gasLimit: 7900000,
         };
         console.log(tx);
 
@@ -382,7 +382,7 @@ class ContractService {
       data: _contract.methods.closeVoting().encodeABI(),
       value: '0x0',
       to: _contract.options.address,
-      gasLimit: 8000000,
+      gasLimit: 7900000,
     };
     const maxGasPrice = 30000000000;
 
@@ -412,7 +412,7 @@ class ContractService {
       data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
       from: userStore.address,
       to: _contract.options.address,
-      gasLimit: 8000000,
+      gasLimit: 7900000,
       value: '0x0',
     };
     console.log('appoving');
@@ -447,7 +447,7 @@ class ContractService {
       data: txData,
       from: userStore.address,
       value: '0x0',
-      gasLimit: 8000000,
+      gasLimit: 7900000,
       to: group.wallet,
     };
     return Web3Service.createTxData(userStore.address, tx, maxGasPrice)

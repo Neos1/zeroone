@@ -213,6 +213,7 @@ class VotingInfoWrapper extends React.PureComponent {
       return;
     }
     let [positive, negative, totalSupply] = await methods.getVotes(id).call();
+    console.log(positive, negative, totalSupply);
     positive = parseInt(positive, 10);
     negative = parseInt(negative, 10);
     totalSupply = parseInt(totalSupply, 10);
