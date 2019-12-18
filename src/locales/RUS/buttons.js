@@ -29,5 +29,7 @@ const buttons = {
   addParameter: '+ Добавить параметр',
   apply: 'Применить',
   completeTheVote: 'Завершить голосование',
+  pickUpTokens: 'заберите токены',
+  pickUpTokensCapital: 'Заберите токены',
 };
 export default buttons;

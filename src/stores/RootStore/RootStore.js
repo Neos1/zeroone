@@ -44,7 +44,7 @@ class RootStore {
     this.contractService = new ContractService(this);
     this.dialogStore = new DialogStore();
     this.membersStore = new MembersStore(this);
-    this.notificationStore = new NotificationStore();
+    this.notificationStore = new NotificationStore(this);
   }
 
   /**

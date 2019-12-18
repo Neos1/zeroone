@@ -63,5 +63,7 @@ const other = {
   yourDecision: 'Ваш голос',
   totalVoted: 'Проголосовало',
   theVoteLasted: 'Голосование длилось',
+  votingCompletedButTokensInContract: 'Голосование завершено, но ваши токены все еще находятся в контракте.',
+  youVotedAndTokensInContract: 'Вы проголосовали и ваши токены находятся в контракте. Для отмены голоса',
 };
 export default other;

@@ -29,16 +29,36 @@
       cursor: pointer;
     }
 
+    .btn {
+      &__text {
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 14px;
+      }
+    }
+
     &--info {
       color: #000;
       background: #fff;
       border: 1px solid #000;
+
+      .btn {
+        margin-left: 5px;
+        color: #000;
+        border-bottom-color: #000;
+      }
     }
 
     &--important {
       color: #fff;
       background: #000;
       border: 1px solid #000;
+
+      .btn {
+        margin-left: 5px;
+        color: #fff;
+        border-bottom-color: #fff;
+      }
     }
   }
 }

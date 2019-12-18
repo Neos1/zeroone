@@ -1,9 +1,12 @@
+import React from 'react';
 import { observable, action } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
 import HistoryStore from '../HistoryStore';
 import { votingStates } from '../../constants';
 import { fs, path, PATH_TO_CONTRACTS } from '../../constants/windowModules';
+import TokensWithActiveVoting from '../../components/Notifications/TokensWithActiveVoting';
+import TokensWithoutActiveVoting from '../../components/Notifications/TokensWithoutActiveVoting';
 
 /**
  * Class implements whole project
@@ -38,6 +41,7 @@ class ProjectStore {
     contractService.setContract(contract);
     this.questionStore = new QuestionStore(this.rootStore);
     this.historyStore = new HistoryStore(this.rootStore);
+    this.addReturnTokensNotification();
     // this.userGrops = this.fetchUserGroups(projectAddress);
   }
 
@@ -88,6 +92,30 @@ class ProjectStore {
     this.fetchUserGroupsLength(projectAddress);
     const data = {};
     this.userGrops.push(new UsergroupStore(data));
+  }
+
+  addReturnTokensNotification = async () => {
+    const {
+      historyStore,
+      rootStore: {
+        notificationStore,
+      },
+    } = this;
+    const hasActiveVoting = await historyStore.hasActiveVoting();
+    const userTokenReturns = await historyStore.isUserReturnTokens();
+    if (hasActiveVoting === true && userTokenReturns === false) {
+      notificationStore.add({
+        isOpen: true,
+        content: <TokensWithActiveVoting />,
+        status: 'important',
+      });
+    }
+    if (hasActiveVoting === false && userTokenReturns === false) {
+      notificationStore.add({
+        isOpen: true,
+        content: <TokensWithoutActiveVoting />,
+      });
+    }
   }
 }
 

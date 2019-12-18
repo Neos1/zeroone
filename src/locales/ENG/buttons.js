@@ -29,5 +29,7 @@ const buttons = {
   addParameter: '+ Add parameter',
   apply: 'Apply',
   completeTheVote: 'Complete the vote',
+  pickUpTokens: 'pick up tokens',
+  pickUpTokensCapital: 'Pick up tokens',
 };
 export default buttons;
