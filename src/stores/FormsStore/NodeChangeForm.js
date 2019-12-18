@@ -2,6 +2,9 @@
 /* eslint-disable no-unused-vars */
 import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
+import { fs, ROOT_DIR, path } from '../../constants/windowModules';
+
+const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json')), 'utf8');
 
 class NodeChangeForm extends ExtendedForm {
   setup() {
@@ -12,6 +15,7 @@ class NodeChangeForm extends ExtendedForm {
         label: 'Token Address',
         placeholder: 'URL ноды',
         rules: 'required|string|url',
+        value: config.host,
       }],
     };
   }

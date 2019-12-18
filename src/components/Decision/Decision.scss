@@ -22,4 +22,25 @@
       margin-top: 47px;
     }
   }
+
+  &__token-form {
+    width: 100%;
+    padding: 0 40px; 
+    .field {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    &__group{
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      .field{
+        width: 45%;
+        &__input{
+          width: 60%;
+        }
+      }
+    }
+  }
 }
