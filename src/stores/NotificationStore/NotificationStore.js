@@ -1,31 +1,46 @@
 import { observable, action } from 'mobx';
+import uniqKey from 'react-id-generator';
+import NotificationItem from './NotificationItem';
 
 /** Class for manage notifications */
 class NotificationStore {
-  /** Notification is open state */
-  @observable isOpen = false;
-
-  /** Notification content */
-  @observable content = null;
+  /** Notification list */
+  @observable list = [];
 
   /**
-   * Set new is open state
+   * Method for adding new notification
    *
-   * @param {boolean} newState new is open state
+   * @param {object} newNotification new notification data
+   * @param {boolean} newNotification.isOpen open state notification
+   * @param {string|Node} newNotification.content content notification
    */
   @action
-  setIsOpen(newState) {
-    this.isOpen = Boolean(newState);
+  add(newNotification) {
+    this.list.push(
+      new NotificationItem({
+        ...newNotification,
+        id: uniqKey(),
+      }),
+    );
+  }
+
+  getNotification(id) {
+    return [this.list.filter((notification) => (
+      notification.id === id
+    ))];
   }
 
   /**
-   * Method for setting new content
+   * Method fore removing notification from list
    *
-   * @param {string|Node} newContent content
+   * @param {string} id id notification
    */
   @action
-  setContent(newContent) {
-    this.content = newContent;
+  remove(id) {
+    const filtered = this.list.filter((value) => (
+      value.id !== id
+    ));
+    this.list = filtered;
   }
 }
 

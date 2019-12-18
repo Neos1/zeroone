@@ -1,4 +1,3 @@
-import React from 'react';
 import NotificationStore from '.';
 
 describe('NotificationStore', () => {
@@ -9,35 +8,48 @@ describe('NotificationStore', () => {
   });
 
   it('should have correct init state', () => {
-    expect(notificationStore.isOpen).toEqual(false);
-    expect(notificationStore.content).toEqual(null);
+    expect(notificationStore.list).toEqual([]);
   });
 
-  it('setIsOpen should work correct', () => {
-    expect(notificationStore.isOpen).toEqual(false);
-    notificationStore.setIsOpen(true);
-    expect(notificationStore.isOpen).toEqual(true);
-    notificationStore.setIsOpen(false);
-    expect(notificationStore.isOpen).toEqual(false);
+  it('add method should work correct', () => {
+    notificationStore.add({
+      content: 'Content',
+      isOpen: true,
+    });
+    expect(notificationStore.list.length).toEqual(1);
+    notificationStore.add({
+      content: 'Content',
+      isOpen: true,
+    });
+    expect(notificationStore.list.length).toEqual(2);
   });
 
-  it('setIsOpen should work correct with incorrect input data', () => {
-    expect(notificationStore.isOpen).toEqual(false);
-    notificationStore.setIsOpen(null);
-    expect(notificationStore.isOpen).toEqual(false);
-    notificationStore.setIsOpen(1);
-    expect(notificationStore.isOpen).toEqual(true);
-    notificationStore.setIsOpen(undefined);
-    expect(notificationStore.isOpen).toEqual(false);
-    notificationStore.setIsOpen('true');
-    expect(notificationStore.isOpen).toEqual(true);
+  it('remove method should work correct', () => {
+    notificationStore.add({
+      content: 'Content',
+      isOpen: true,
+    });
+    notificationStore.add({
+      content: 'Content',
+      isOpen: true,
+    });
+    expect(notificationStore.list.length).toEqual(2);
+    const { id } = notificationStore.list[0];
+    notificationStore.remove(id);
+    expect(notificationStore.list.length).toEqual(1);
   });
 
-  it('setContent should work correct', () => {
-    expect(notificationStore.content).toEqual(null);
-    notificationStore.setContent('Information notification');
-    expect(notificationStore.content).toEqual('Information notification');
-    notificationStore.setContent(<span>Notification content</span>);
-    expect(notificationStore.content).toEqual(<span>Notification content</span>);
+  it('remove for non-exist notification should work correct', () => {
+    notificationStore.add({
+      content: 'Content',
+      isOpen: true,
+    });
+    notificationStore.add({
+      content: 'Content',
+      isOpen: true,
+    });
+    expect(notificationStore.list.length).toEqual(2);
+    notificationStore.remove('random_identificator_1');
+    expect(notificationStore.list.length).toEqual(2);
   });
 });

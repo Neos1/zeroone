@@ -2,8 +2,7 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import NotificationStore from '../../stores/NotificationStore';
-
-import styles from './Notification.scss';
+import NotificationItem from '../../stores/NotificationStore/NotificationItem';
 
 /**
  * Class for render notification
@@ -18,18 +17,21 @@ class Notification extends React.Component {
     const { props } = this;
     const {
       notificationStore: {
-        isOpen,
-        content,
+        list,
       },
     } = props;
     return (
       <>
         {
-          isOpen
+          list && list.length
             ? (
-              <div className={styles.notification}>
-                {content}
-              </div>
+              list.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  isOpen={notification.isOpen}
+                  content={notification.content}
+                />
+              ))
             )
             : null
         }
