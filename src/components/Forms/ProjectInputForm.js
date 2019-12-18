@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Input from '../Input';
 import {
-  TokenName, TokenSymbol, TokenCount, Password,
+  TokenName, Password, Address,
 } from '../Icons';
 import Button from '../Button/Button';
 
@@ -12,7 +12,7 @@ import styles from '../Decision/Decision.scss';
 
 @withTranslation()
 @observer
-class TokenInputForm extends Component {
+class ProjectInputForm extends Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     form: PropTypes.shape().isRequired,
@@ -34,14 +34,9 @@ class TokenInputForm extends Component {
           <Input field={form.$('name')}>
             <TokenName />
           </Input>
-          <div className={styles['decision__token-form__group']}>
-            <Input field={form.$('symbol')}>
-              <TokenSymbol />
-            </Input>
-            <Input field={form.$('count')}>
-              <TokenCount />
-            </Input>
-          </div>
+          <Input field={form.$('address')}>
+            <Address />
+          </Input>
           <Input field={form.$('password')}>
             <Password />
           </Input>
@@ -61,4 +56,4 @@ class TokenInputForm extends Component {
   }
 }
 
-export default TokenInputForm;
+export default ProjectInputForm;

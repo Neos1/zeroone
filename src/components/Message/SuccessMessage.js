@@ -14,15 +14,18 @@ class SuccessMessage extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onButtonClick: PropTypes.func.isRequired,
+    children: PropTypes.func.isRequired,
   }
 
   render() {
-    const { props: { t, onButtonClick } } = this;
+    const { props: { t, onButtonClick, children } } = this;
     return (
       <div className={styles['message--transfer-success']}>
         <DefaultMessage
           title={t('headings:successfullTransaction')}
-        />
+        >
+          {children}
+        </DefaultMessage>
         <div className={styles.footer}>
           <Button
             onClick={onButtonClick}
