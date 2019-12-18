@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CloseIcon } from '../Icons';
 
 import styles from './Notification.scss';
 
@@ -13,7 +14,11 @@ class NotificationItem extends React.PureComponent {
       PropTypes.string,
       PropTypes.node,
     ]).isRequired,
-    status: PropTypes.string.isRequired,
+    status: PropTypes.oneOf([
+      'info',
+      'important',
+    ]).isRequired,
+    handleRemove: PropTypes.func.isRequired,
   };
 
   render() {
@@ -22,6 +27,7 @@ class NotificationItem extends React.PureComponent {
       isOpen,
       content,
       status,
+      handleRemove,
     } = props;
     return (
       <>
@@ -35,6 +41,17 @@ class NotificationItem extends React.PureComponent {
                 `}
               >
                 {content}
+                <button
+                  className={styles['notification__item-close']}
+                  onClick={handleRemove}
+                  type="button"
+                >
+                  <CloseIcon
+                    width={16}
+                    height={16}
+                    fill="currentColor"
+                  />
+                </button>
               </div>
             )
             : null

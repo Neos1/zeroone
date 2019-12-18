@@ -16,7 +16,7 @@ class NotificationItem {
     this.id = id;
     if (!content) throw Error('Incorrect NotificationItem "content" provided');
     this.content = content;
-    this.status = status;
+    this.status = status || defaultStatus;
     this.setIsOpen(isOpen || defaultOpenState);
   }
 
@@ -32,7 +32,7 @@ class NotificationItem {
   @observable content;
 
   /** Notification status. [info, important] */
-  @observable status = defaultStatus;
+  @observable status;
 
   /**
    * Set new is open state

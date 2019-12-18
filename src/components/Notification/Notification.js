@@ -1,17 +1,33 @@
 import React from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import NotificationStore from '../../stores/NotificationStore';
-import NotificationItem from '../../stores/NotificationStore/NotificationItem';
+import NotificationItem from './NotificationItem';
+
+import styles from './Notification.scss';
 
 /**
  * Class for render notification
  */
 @inject('notificationStore')
+@observer
 class Notification extends React.Component {
   static propTypes = {
     notificationStore: PropTypes.instanceOf(NotificationStore).isRequired,
   };
+
+  /**
+   * Method for remove notification
+   *
+   * @param {string} id id notification
+   */
+  removeNotification = (id) => {
+    const { props } = this;
+    const {
+      notificationStore,
+    } = props;
+    notificationStore.remove(id);
+  }
 
   render() {
     const { props } = this;
@@ -21,7 +37,7 @@ class Notification extends React.Component {
       },
     } = props;
     return (
-      <>
+      <div className={styles.notification__container}>
         {
           list && list.length
             ? (
@@ -30,12 +46,14 @@ class Notification extends React.Component {
                   key={notification.id}
                   isOpen={notification.isOpen}
                   content={notification.content}
+                  status={notification.status}
+                  handleRemove={() => this.removeNotification(notification.id)}
                 />
               ))
             )
             : null
         }
-      </>
+      </div>
     );
   }
 }
