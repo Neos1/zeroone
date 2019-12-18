@@ -9,7 +9,7 @@ class FinPassForm extends ExtendedForm {
         name: 'password',
         type: 'password',
         label: 'Password',
-        placeholder: i18n.t('fields:password'),
+        placeholder: i18n.t('fields:enterPassword'),
         rules: 'required|password',
       }],
     };

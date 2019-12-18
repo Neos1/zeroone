@@ -9,7 +9,7 @@ import styles from './Message.scss';
 /**
  * Dialog with message about success token transfer
  */
-@withTranslation(['dialogs', 'other'])
+@withTranslation(['dialogs', 'other', 'headings'])
 class ErrorMessage extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -21,9 +21,9 @@ class ErrorMessage extends React.Component {
     return (
       <div className={styles['message--transfer-error']}>
         <DefaultMessage
-          title="Ошибка отправки транзакции"
+          title={t('headings:transactionFailed.heading')}
         >
-          <p className={styles.subtext}>Пожалуйста, повторите попытку</p>
+          <p className={styles.subtext}>{t('headings:transactionFailed.subheading')}</p>
         </DefaultMessage>
         <div className={styles.footer}>
           <Button

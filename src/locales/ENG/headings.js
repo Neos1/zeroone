@@ -25,5 +25,8 @@ const headings = {
   nodeConnection: 'Node connection',
   creatingAndUpload: 'Create and upload contract',
   interfaceLanguage: 'Interface language',
+  sendingTransaction: 'Sending transaction',
+  successfullTransaction: 'Transaction sended succesfull',
+  failedTransaction: { heading: 'Transaction sending failed', subheading: 'Please, try again' },
 };
 export default headings;

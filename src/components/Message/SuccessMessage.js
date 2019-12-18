@@ -9,7 +9,7 @@ import styles from './Message.scss';
 /**
  * Dialog with message about success token transfer
  */
-@withTranslation(['dialogs', 'other'])
+@withTranslation(['dialogs', 'other', 'headings'])
 class SuccessMessage extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -21,7 +21,7 @@ class SuccessMessage extends React.Component {
     return (
       <div className={styles['message--transfer-success']}>
         <DefaultMessage
-          title="Транзакция успешно отправлена"
+          title={t('headings:successfullTransaction')}
         />
         <div className={styles.footer}>
           <Button
