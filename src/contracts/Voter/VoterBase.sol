@@ -452,7 +452,7 @@ contract VoterBase is VoterInterface {
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         return (
             votings.voting[_voteId].votes[address(group)][msg.sender],
-            votings.voting[_voteId].voteWeigths[address(group)][msg.sender],
+            votings.voting[_voteId].voteWeigths[address(group)][msg.sender]
             );
     }
 

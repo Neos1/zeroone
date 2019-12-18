@@ -361,6 +361,10 @@
 			{
 				"name": "vote",
 				"type": "uint256"
+			},
+			{
+				"name": "tokenCount",
+				"type": "uint256"
 			}
 		],
 		"payable": false,

@@ -16,6 +16,7 @@ class Question {
 
   /**
    * convert simple formula of system question for contract
+   *
    * @param {string} formula text implimentation of formula
    * @returns {array} numeric implimentation of formula for smart contract
    */
@@ -36,6 +37,7 @@ class Question {
 
   /**
    * getting formed parameters for contract
+   *
    * @param {string} contractAddr address of target contract
    * @returns {array} formed data for encoding transaction
    */
