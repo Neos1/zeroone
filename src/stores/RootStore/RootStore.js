@@ -3,6 +3,7 @@ import AppStore from '../AppStore';
 import UserStore from '../UserStore';
 import ProjectStore from '../ProjectStore';
 import DialogStore from '../DialogStore';
+import NotificationStore from '../NotificationStore';
 import Web3Service from '../../services/Web3Service';
 import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
@@ -19,6 +20,8 @@ class RootStore {
   userStore;
 
   dialogStore;
+
+  notificationStore;
 
   // services
   walletService;
@@ -41,6 +44,7 @@ class RootStore {
     this.contractService = new ContractService(this);
     this.dialogStore = new DialogStore();
     this.membersStore = new MembersStore(this);
+    this.notificationStore = new NotificationStore();
   }
 
   /**
