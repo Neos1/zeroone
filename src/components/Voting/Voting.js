@@ -18,10 +18,10 @@ import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+import Loader from '../Loader';
 
 import styles from './Voting.scss';
-import Loader from '../Loader';
-import headings from '../../locales/ENG/headings';
+
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')

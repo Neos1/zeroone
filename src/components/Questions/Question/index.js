@@ -6,7 +6,7 @@ import { StartIcon } from '../../Icons';
 
 import styles from './Question.scss';
 
-const startBlock = () => (
+const startBlock = (t) => (
   <div className={styles.question__right}>
     <NavLink
       className={styles.question__start}
@@ -16,7 +16,7 @@ const startBlock = () => (
         <StartIcon />
       </p>
       <p className={styles['question__start-label']}>
-        Начать новое голосование
+        {t('buttons:startNewVote')}
       </p>
     </NavLink>
   </div>
@@ -83,7 +83,7 @@ const Question = withTranslation()(({
           </div>
         )
     }
-    {extended ? ParametersBlock(params, t) : startBlock()}
+    {extended ? ParametersBlock(params, t) : startBlock(t)}
     {extended ? FormulaBlock(formula, t) : null}
   </div>
 ));

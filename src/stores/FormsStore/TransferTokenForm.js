@@ -11,14 +11,14 @@ class TransferTokenForm extends ExtendedForm {
           type: 'text',
           label: 'Address',
           placeholder: i18n.t('fields:address'),
-          rules: 'required|string',
+          rules: 'required|string|address',
         },
         {
           name: 'count',
           type: 'text',
           label: 'Count tokens',
           placeholder: i18n.t('fields:countTokens'),
-          rules: 'required|numeric|min:1|max:2147483647 ',
+          rules: 'required|numeric',
         },
         {
           name: 'password',

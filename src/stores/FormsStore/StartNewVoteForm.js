@@ -12,7 +12,7 @@ class StartNewVoteForm extends ExtendedForm {
           type: 'text',
           label: 'Question',
           placeholder: 'Выберите вопрос',
-          rules: 'required|numeric',
+          rules: 'required|integer|min:1',
         },
       ],
     };
