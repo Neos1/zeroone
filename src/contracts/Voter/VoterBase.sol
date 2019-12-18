@@ -446,11 +446,14 @@ contract VoterBase is VoterInterface {
         return ERC20.symbol();
     }
 
-    function getUserVote(uint _voteId) external view returns (uint vote) {
+    function getUserVote(uint _voteId) external view returns (uint vote, uint256 tokenCount) {
         uint questionId = votings.voting[_voteId].questionId;
         uint groupId = questions.question[questionId].groupId;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
-        return votings.voting[_voteId].votes[address(group)][msg.sender];
+        return (
+            votings.voting[_voteId].votes[address(group)][msg.sender],
+            votings.voting[_voteId].voteWeigths[address(group)][msg.sender],
+            );
     }
 
     function getUserWeight() external view returns (uint256 weight) {
