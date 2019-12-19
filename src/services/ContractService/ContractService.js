@@ -55,6 +55,7 @@ class ContractService {
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
             const { output: { abi } } = JSON.parse(metadata);
+            fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
             resolve({ type, bytecode, abi });
           } else reject(new Error('Something went wrong on contract compiling'));
         });
