@@ -48,12 +48,10 @@ class ContractService {
       window.BrowserSolc.getVersions((sources, releases) => {
         const version = releases['0.4.24'];
         const contract = this.combineContract(type);
-        const contractName = type === 'ERC20'
-          ? ':ERC20'
-          : ':Voter';
         window.BrowserSolc.loadVersion(version, (compiler) => {
           const compiledContract = compiler.compile(contract);
-          const contractData = compiledContract.contracts[contractName];
+          console.log(compiledContract);
+          const contractData = compiledContract.contracts[`:${type}`];
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
             const { output: { abi } } = JSON.parse(metadata);
@@ -72,11 +70,18 @@ class ContractService {
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
-    const dir = type === 'ERC20' ? './' : './Voter/';
+    let dir;
     const compiler = 'pragma solidity ^0.4.24;';
-    const pathToMainFile = type === 'ERC20'
-      ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
-      : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
+    switch (type) {
+      case ('ERC20'): case ('MERC20'):
+        dir = './';
+        break;
+      case ('Voter'):
+        dir = './Voter/';
+        break;
+      default:
+    }
+    const pathToMainFile = path.join(PATH_TO_CONTRACTS, `${dir}${type}.sol`);
 
     const importedFiles = {};
 
@@ -111,15 +116,17 @@ class ContractService {
 
     const tx = {
       data: txData,
+      from: userStore.address,
       gasLimit: GAS_LIMIT,
-      gasPrice: maxGasPrice,
+      value: '0x0',
     };
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Web3Service.createTxData(address, tx, maxGasPrice)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash));
+        .then((txHash) => resolve(txHash))
+        .catch((err) => reject(err));
     });
   }
 
@@ -200,9 +207,10 @@ class ContractService {
    * @returns {Promise} Promise, which resolves on transaction hash
    */
   async sendQuestion(idx) {
+    const { _contract, rootStore } = this;
     const {
       Web3Service, userStore,
-    } = this.rootStore;
+    } = rootStore;
     const sysQuestion = this.sysQuestions[idx];
     await this.fetchQuestion(idx).then((result) => {
       if (result.caption === '') {
@@ -211,8 +219,7 @@ class ContractService {
         const contractAddr = this._contract.options.address;
         const params = question.getUploadingParams(contractAddr);
 
-        const dataTx = this._contract.methods.saveNewQuestion(...params).encodeABI();
-
+        const dataTx = _contract.methods.saveNewQuestion(...params).encodeABI();
         const maxGasPrice = 30000000000;
         const rawTx = {
           to: contractAddr,

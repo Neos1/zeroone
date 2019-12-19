@@ -73,17 +73,29 @@ class QuestionStore {
   }
 
   @computed get options() {
-    return this._questions.map((question) => ({
-      value: question.id,
-      label: question.caption,
-    }));
+    return this._questions.reduce((acc, question) => ([
+      ...acc,
+      {
+        value: question.id,
+        label: question.caption,
+      },
+    ]), [{
+      value: '*',
+      label: 'All',
+    }]);
   }
 
   @computed get questionGroups() {
-    return this._questionGroups.map((group) => ({
-      value: group.groupType,
-      label: group.name,
-    }));
+    return this._questionGroups.reduce((acc, group) => ([
+      ...acc,
+      {
+        value: group.groupType,
+        label: group.name,
+      },
+    ]), [{
+      value: '*',
+      label: 'All',
+    }]);
   }
 
   @action
@@ -196,6 +208,7 @@ class QuestionStore {
     const questions = this.getQuestionsFromFile(address);
     if (!questions || !questions.data) {
       await this.getQuestionsFromContract(address);
+      this.loading = false;
       return;
     }
     await this.getMissingQuestions({

@@ -78,7 +78,9 @@ class Questions extends Component {
   /**
    * Method for handle sort
    *
-   * @param {string} selected new sort value
+   * @param {object} selected new sort data
+   * @param {string|number} selected.value new sort value
+   * @param {string} selected.label new sort label
    */
   handleSortSelect = (selected) => {
     const { projectStore } = this.props;
@@ -87,7 +89,7 @@ class Questions extends Component {
         addFilterRule,
       },
     } = projectStore;
-    addFilterRule({ caption: selected });
+    addFilterRule({ groupId: selected.value });
   }
 
   render() {

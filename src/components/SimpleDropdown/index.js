@@ -11,19 +11,18 @@ class SimpleDropdown extends Component {
       propTypes.element,
       propTypes.string,
     ]),
-    options: propTypes.arrayOf(propTypes.shape({})).isRequired,
+    options: propTypes.arrayOf(propTypes.shape({
+      value: propTypes.oneOfType([
+        propTypes.string,
+        propTypes.number,
+      ]),
+      label: propTypes.string,
+    })).isRequired,
     onSelect: propTypes.func,
     field: propTypes.shape({
       set: propTypes.func,
     }),
-    initValue: propTypes.oneOfType([
-      propTypes.string,
-      propTypes.number,
-    ]),
-    initLabel: propTypes.oneOfType([
-      propTypes.string,
-      propTypes.number,
-    ]),
+    initIndex: propTypes.number,
   };
 
   static defaultProps = {
@@ -32,20 +31,20 @@ class SimpleDropdown extends Component {
     field: {
       set: () => {},
     },
-    initValue: '',
-    initLabel: '',
+    initIndex: 0,
   }
 
   constructor(props) {
     super(props);
     const {
-      initValue,
-      initLabel,
+      initIndex,
+      options,
     } = props;
+    const initOption = options[initIndex] || {};
     this.state = {
       opened: false,
-      selectedValue: initValue,
-      selectedLabel: initLabel,
+      selectedValue: initOption.value || '',
+      selectedLabel: initOption.label || '',
     };
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -98,7 +97,6 @@ class SimpleDropdown extends Component {
       children, options,
     } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
-
     const getOptions = options.map((option) => (
       <DropdownOption
         key={`dropdown-${option.label}`}
@@ -107,7 +105,6 @@ class SimpleDropdown extends Component {
         select={this.handleSelect}
       />
     ));
-
     return (
       <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
         <input type="hidden" />
