@@ -18,9 +18,10 @@ import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+import Loader from '../Loader';
+import Notification from '../Notification/Notification';
 
 import styles from './Voting.scss';
-import Loader from '../Loader';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')
@@ -137,6 +138,7 @@ class Voting extends React.Component {
         <div
           className={styles['voting-page']}
         >
+          <Notification />
           {
             !loading
               ? <VotingFilter />

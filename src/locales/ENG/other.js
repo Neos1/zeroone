@@ -63,5 +63,9 @@ const other = {
   yourDecision: 'Your decision',
   totalVoted: 'Total voted',
   theVoteLasted: 'The vote lasted',
+  votingCompletedButTokensInContract: 'Voting is completed, but your tokens are still in contract.',
+  youVotedAndTokensInContract: 'You voted and your tokens are in the contract. To cancel the voice',
+  pickUpTokens: 'Pick up tokens',
+  sendingTransaction: 'Sending transaction',
 };
 export default other;

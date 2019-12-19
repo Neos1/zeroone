@@ -19,6 +19,7 @@ import Pagination from '../Pagination';
 import PaginationStore from '../../stores/PaginationStore';
 import FilterStore from '../../stores/FilterStore/FilterStore';
 import Loader from '../Loader';
+import Notification from '../Notification/Notification';
 
 @withRouter
 @withTranslation()
@@ -104,6 +105,7 @@ class Questions extends Component {
     const questions = paginatedList;
     return (
       <Container className="container--small">
+        <Notification />
         <div className={styles.questions}>
           {
               !loading

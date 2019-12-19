@@ -7,11 +7,11 @@ import Container from '../Container';
 import MembersTop from './MembersTop';
 import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import MembersGroupComponent from './MembersGroupComponent';
-
-
-import styles from './Members.scss';
 import Loader from '../Loader';
 import Footer from '../Footer';
+import Notification from '../Notification/Notification';
+
+import styles from './Members.scss';
 
 /**
  * Component for page with members
@@ -37,6 +37,7 @@ class MembersPage extends React.Component {
     const groups = list.toJS();
     return (
       <Container className="container--small">
+        <Notification />
         {
           !loading
             ? (

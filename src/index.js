@@ -14,6 +14,7 @@ const {
   dialogStore,
   membersStore,
   projectStore,
+  notificationStore,
 } = rootStore;
 
 render(
@@ -23,6 +24,7 @@ render(
     dialogStore={dialogStore}
     membersStore={membersStore}
     projectStore={projectStore}
+    notificationStore={notificationStore}
   >
     <SimpleRouter />
     <Alert />

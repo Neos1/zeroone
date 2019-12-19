@@ -5,6 +5,7 @@ import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
+import { statusStates } from '../../constants';
 
 class HistoryStore {
   @observable pagination;
@@ -259,6 +260,26 @@ class HistoryStore {
       },
       basicPath: `${PATH_TO_DATA}${address}`,
     });
+  }
+
+  /**
+   * Method for check active voting state
+   *
+   * @returns {boolean} has active voting state
+   */
+  async hasActiveVoting() {
+    const { contractService } = this.rootStore;
+    const countOfVotings = await this.fetchVotingsCount();
+    const lastVote = countOfVotings - 1;
+    const voting = await contractService.callMethod('voting', [lastVote]);
+    return voting.status === statusStates.active;
+  }
+
+  async isUserReturnTokens() {
+    const { contractService, userStore } = this.rootStore;
+    const countOfVotings = await this.fetchVotingsCount();
+    const votingId = countOfVotings - 1;
+    return contractService._contract.methods.isUserReturnTokens(votingId, userStore.address).call();
   }
 }
 export default HistoryStore;
