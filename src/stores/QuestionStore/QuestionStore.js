@@ -80,10 +80,18 @@ class QuestionStore {
   }
 
   @computed get questionGroups() {
-    return this._questionGroups.map((group) => ({
-      value: group.groupType,
-      label: group.name,
-    }));
+    return this._questionGroups.reduce((acc, group) => (
+      [
+        ...acc,
+        {
+          value: group.groupType,
+          label: group.name,
+        },
+      ]
+    ), [{
+      value: '*',
+      label: 'All',
+    }]);
   }
 
   @action

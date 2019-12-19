@@ -63,6 +63,7 @@ class FilterStore {
           ),
         );
         resultList = resultList.concat(filtered);
+        if (this.rules[key] === '*') resultList = listByDate;
         // If exist only date rule result is list by date
       } else if (rulesKeys.length === 1) {
         resultList = listByDate;

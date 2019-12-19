@@ -339,5 +339,96 @@ describe('FilterStore', () => {
         },
       ]);
     });
+
+    it('* key rules should work correct', () => {
+      expect(filter.rules).toEqual({});
+      filter.addFilterRule({ data: '*' });
+      expect(filter.filteredByDateList(dataList)).toEqual([
+        {
+          data: 1,
+          test: 1,
+          startTime: '1566383552',
+          endTime: '1566383852',
+        },
+        {
+          data: 2,
+          test: 2,
+          startTime: '1566384552',
+          endTime: '1566384852',
+        },
+        {
+          data: 3,
+          test: 3,
+          startTime: '1566385552',
+          endTime: '1566385852',
+        },
+        {
+          data: 4,
+          test: 4,
+          startTime: '1566386552',
+          endTime: '1566386852',
+        },
+      ]);
+      expect(filter.filteredList(dataList)).toEqual([
+        {
+          data: 1,
+          test: 1,
+          startTime: '1566383552',
+          endTime: '1566383852',
+        },
+        {
+          data: 2,
+          test: 2,
+          startTime: '1566384552',
+          endTime: '1566384852',
+        },
+        {
+          data: 3,
+          test: 3,
+          startTime: '1566385552',
+          endTime: '1566385852',
+        },
+        {
+          data: 4,
+          test: 4,
+          startTime: '1566386552',
+          endTime: '1566386852',
+        },
+      ]);
+      filter.addFilterRule({
+        date: {
+          start: 1566383552,
+          end: 1566384552,
+        },
+      });
+      expect(filter.filteredByDateList(dataList)).toEqual([
+        {
+          data: 1,
+          test: 1,
+          startTime: '1566383552',
+          endTime: '1566383852',
+        },
+        {
+          data: 2,
+          test: 2,
+          startTime: '1566384552',
+          endTime: '1566384852',
+        },
+      ]);
+      expect(filter.filteredList(dataList)).toEqual([
+        {
+          data: 1,
+          test: 1,
+          startTime: '1566383552',
+          endTime: '1566383852',
+        },
+        {
+          data: 2,
+          test: 2,
+          startTime: '1566384552',
+          endTime: '1566384852',
+        },
+      ]);
+    });
   });
 });
