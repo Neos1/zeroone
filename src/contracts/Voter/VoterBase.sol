@@ -384,7 +384,7 @@ contract VoterBase is VoterInterface {
         string memory groupType = userGroups.group[groupId].groupType;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         uint256 returnedTokens = votings.voting[votingId].tokenReturns[address(group)][user];
-        return returnedTokens >= 0;
+        return returnedTokens > 0;
     }
 
 
