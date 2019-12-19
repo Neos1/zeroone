@@ -13,12 +13,17 @@ class SimpleDropdown extends Component {
     ]),
     options: propTypes.arrayOf(propTypes.shape({})).isRequired,
     onSelect: propTypes.func,
-    field: propTypes.shape().isRequired,
+    field: propTypes.shape({
+      set: propTypes.func,
+    }),
   };
 
   static defaultProps = {
     children: '',
     onSelect: () => false,
+    field: {
+      set: () => {},
+    },
   }
 
   constructor(props) {
