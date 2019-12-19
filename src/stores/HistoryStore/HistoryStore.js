@@ -277,9 +277,12 @@ class HistoryStore {
 
   async isUserReturnTokens() {
     const { contractService, userStore } = this.rootStore;
-    const countOfVotings = await this.fetchVotingsCount();
-    const votingId = countOfVotings - 1;
-    return contractService._contract.methods.isUserReturnTokens(votingId, userStore.address).call();
+    return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
+  }
+
+  async lastUserVoting() {
+    const { contractService, userStore } = this.rootStore;
+    return contractService._contract.methods.findLastUserVoting(userStore.address).call();
   }
 }
 export default HistoryStore;

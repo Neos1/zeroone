@@ -103,6 +103,8 @@ class ProjectStore {
     } = this;
     const hasActiveVoting = await historyStore.hasActiveVoting();
     const userTokenReturns = await historyStore.isUserReturnTokens();
+    const lastUserVoting = await historyStore.lastUserVoting();
+    if (Number(lastUserVoting) === 0 && userTokenReturns === false) return;
     if (hasActiveVoting === true && userTokenReturns === false) {
       notificationStore.add({
         isOpen: true,
