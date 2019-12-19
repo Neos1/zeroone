@@ -1,54 +1,97 @@
 import React from 'react';
-import { observer } from 'mobx-react';
-import VotingFilterForm from '../../stores/FormsStore/VotingFilterForm';
-import Dropdown from '../Dropdown';
-import { QuestionIcon, Stats } from '../Icons';
+import { observer, inject } from 'mobx-react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import uniqKey from 'react-id-generator';
+import SimpleDropdown from '../SimpleDropdown';
+import { QuestionIcon } from '../Icons';
 import DatePicker from '../DatePicker/DatePicker';
+import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
 import styles from './Voting.scss';
 
+@inject('projectStore')
 @observer
 class VotingFilter extends React.PureComponent {
-  form = new VotingFilterForm({
-    hooks: {
-      onSuccess: () => Promise.resolve(),
-      onError() {
-        /* eslint-disable-next-line */
-        console.error('error');
+  static propTypes = {
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
+  };
+
+  dateInit = () => {
+    const {
+      projectStore: {
+        historyStore: { filter: { rules } },
       },
-    },
-  });
+    } = this.props;
+    if (!rules.date) {
+      return {
+        startDate: null,
+        endDate: null,
+      };
+    }
+    return {
+      startDate: moment(rules.date.start * 1000),
+      endDate: moment(rules.date.end * 1000),
+    };
+  }
+
+  /**
+   * Method for handle sort
+   *
+   * @param {object} selected new sort data
+   * @param {string|number} selected.value new sort value
+   * @param {string|number} selected.label new sort label
+   */
+  handleQuestionSelect = (selected) => {
+    const question = selected.label;
+    const { projectStore: { historyStore: { addFilterRule } } } = this.props;
+    addFilterRule({ caption: question });
+  }
+
+  /**
+   * Method for handle date change
+   */
+  handleDateSelect = ({
+    startDate,
+    endDate,
+  }) => {
+    const { projectStore: { historyStore: { addFilterRule } } } = this.props;
+    addFilterRule({
+      date: {
+        // Convert to vote time format
+        start: startDate.valueOf() / 1000,
+        end: endDate.valueOf() / 1000,
+      },
+    });
+  }
 
   render() {
-    const { form } = this;
+    const {
+      projectStore: {
+        questionStore: { options },
+        historyStore: { filter: { rules } },
+      },
+    } = this.props;
+    const { dateInit } = this;
     return (
-      <form form={form} onSubmit={form.onSubmit}>
+      <>
         <div className={styles['voting__filter-dropdown']}>
-          <Dropdown
-            options={[{ label: '1. Первый вопрос' }]}
-            field={form.$('question')}
-            onSelect={() => {}}
+          <SimpleDropdown
+            options={options}
+            onSelect={this.handleQuestionSelect}
+            initLabel={rules.caption}
           >
             <QuestionIcon />
-          </Dropdown>
-        </div>
-        <div className={styles['voting__filter-dropdown']}>
-          <Dropdown
-            options={[{ label: 'На голосовании' }]}
-            field={form.$('status')}
-            onSelect={() => {}}
-          >
-            <Stats />
-          </Dropdown>
+          </SimpleDropdown>
         </div>
         <div className={styles['voting__filter-date']}>
           <DatePicker
-            fieldBefore={form.$('date_before')}
-            fieldAfter={form.$('date_after')}
-            onDatesSet={() => {}}
+            id={uniqKey()}
+            onDatesSet={this.handleDateSelect}
+            init={dateInit()}
           />
         </div>
-      </form>
+      </>
     );
   }
 }
