@@ -73,22 +73,26 @@ class QuestionStore {
   }
 
   @computed get options() {
-    return this._questions.map((question) => ({
-      value: question.id,
-      label: question.caption,
-    }));
+    return this._questions.reduce((acc, question) => ([
+      ...acc,
+      {
+        value: question.id,
+        label: question.caption,
+      },
+    ]), [{
+      value: '*',
+      label: 'All',
+    }]);
   }
 
   @computed get questionGroups() {
-    return this._questionGroups.reduce((acc, group) => (
-      [
-        ...acc,
-        {
-          value: group.groupType,
-          label: group.name,
-        },
-      ]
-    ), [{
+    return this._questionGroups.reduce((acc, group) => ([
+      ...acc,
+      {
+        value: group.groupType,
+        label: group.name,
+      },
+    ]), [{
       value: '*',
       label: 'All',
     }]);

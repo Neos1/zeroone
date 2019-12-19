@@ -43,9 +43,8 @@ class VotingFilter extends React.PureComponent {
    * @param {string|number} selected.label new sort label
    */
   handleQuestionSelect = (selected) => {
-    const question = selected.label;
     const { projectStore: { historyStore: { addFilterRule } } } = this.props;
-    addFilterRule({ caption: question });
+    addFilterRule({ questionId: selected.value.toString() });
   }
 
   /**
