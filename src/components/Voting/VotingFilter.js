@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import uniqKey from 'react-id-generator';
+import { computed } from 'mobx';
 import SimpleDropdown from '../SimpleDropdown';
 import { QuestionIcon } from '../Icons';
 import DatePicker from '../DatePicker/DatePicker';
@@ -17,7 +18,8 @@ class VotingFilter extends React.PureComponent {
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
   };
 
-  dateInit = () => {
+  @computed
+  get dateInit() {
     const {
       projectStore: {
         historyStore: { filter: { rules } },
@@ -71,23 +73,26 @@ class VotingFilter extends React.PureComponent {
         historyStore: { filter: { rules } },
       },
     } = this.props;
-    const { dateInit } = this;
     return (
       <>
         <div className={styles['voting__filter-dropdown']}>
+          {/* Is not work correctly without key */}
           <SimpleDropdown
             options={options}
             onSelect={this.handleQuestionSelect}
-            initLabel={rules.caption}
+            initIndex={Number(rules.questionId)}
+            key={uniqKey()}
           >
             <QuestionIcon />
           </SimpleDropdown>
         </div>
         <div className={styles['voting__filter-date']}>
+          {/* Is not work correctly without key */}
           <DatePicker
             id={uniqKey()}
             onDatesSet={this.handleDateSelect}
-            init={dateInit()}
+            init={this.dateInit}
+            key={uniqKey()}
           />
         </div>
       </>
