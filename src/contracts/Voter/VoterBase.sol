@@ -357,13 +357,14 @@ contract VoterBase is VoterInterface {
         return votes;
     }
 
-    function returnTokens(uint votingId) public returns (bool status){
+    function returnTokens() public returns (bool status){
+        uint votingId = this.findLastUserVoting(msg.sender);
 		uint questionId =  votings.voting[votingId].questionId;
 		uint groupId = questions.question[questionId].groupId;
         string memory groupType = userGroups.group[groupId].groupType;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         uint256 weight = votings.voting[votingId].voteWeigths[address(group)][msg.sender];
-        bool isReturned = this.isUserReturnTokens(votingId, msg.sender);
+        bool isReturned = this.isUserReturnTokens(msg.sender);
 
         if (!isReturned) {
             if( bytes4(keccak256(groupType)) == bytes4(keccak256("ERC20"))) {
@@ -376,13 +377,14 @@ contract VoterBase is VoterInterface {
         return true;
     }
 
-    function isUserReturnTokens(uint votingId, address user) returns (bool result) {
+    function isUserReturnTokens(address user) external view returns (bool result) {
+        uint votingId = this.findLastUserVoting(user);
         uint questionId =  votings.voting[votingId].questionId;
 		uint groupId = questions.question[questionId].groupId;
         string memory groupType = userGroups.group[groupId].groupType;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         uint256 returnedTokens = votings.voting[votingId].tokenReturns[address(group)][user];
-        return returnedTokens > 0;
+        return returnedTokens >= 0;
     }
 
 
@@ -446,15 +448,34 @@ contract VoterBase is VoterInterface {
         return ERC20.symbol();
     }
 
-    function getUserVote(uint _voteId) external view returns (uint vote, uint256 tokenCount) {
+    function getUserVote(uint _voteId) external view returns (uint vote) {
         uint questionId = votings.voting[_voteId].questionId;
         uint groupId = questions.question[questionId].groupId;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
-        return (
-            votings.voting[_voteId].votes[address(group)][msg.sender],
-            votings.voting[_voteId].voteWeigths[address(group)][msg.sender]
-            );
+        return votings.voting[_voteId].votes[address(group)][msg.sender];
     }
+
+    function getUserVoteWeight(uint _voteId) external view returns (uint tokenCount) {
+        uint questionId = votings.voting[_voteId].questionId;
+        uint groupId = questions.question[questionId].groupId;
+		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
+        return votings.voting[_voteId].voteWeigths[address(group)][msg.sender];
+    }
+
+    function findLastUserVoting(address _address) external view returns (uint votingId){
+        uint maxVoteId  = votings.votingIdIndex - 1;
+        uint questionId = votings.voting[maxVoteId].questionId;
+        uint groupId = questions.question[questionId].groupId;
+		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
+        while((votings.voting[maxVoteId].votes[address(group)][_address] == 0) && (maxVoteId >= 1)) {
+            maxVoteId--;
+            questionId = votings.voting[maxVoteId].questionId;
+            groupId = questions.question[questionId].groupId;
+            group = IERC20(userGroups.group[groupId].groupAddr);
+        }
+        return maxVoteId;
+    }
+
 
     function getUserWeight() external view returns (uint256 weight) {
         uint _voteId = votings.votingIdIndex - 1;
