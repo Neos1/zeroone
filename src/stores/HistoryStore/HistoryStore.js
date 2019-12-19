@@ -284,5 +284,10 @@ class HistoryStore {
     const { contractService, userStore } = this.rootStore;
     return contractService._contract.methods.findLastUserVoting(userStore.address).call();
   }
+
+  async returnTokens() {
+    const { contractService } = this.rootStore;
+    return contractService._contract.methods.returnTokens().call();
+  }
 }
 export default HistoryStore;
