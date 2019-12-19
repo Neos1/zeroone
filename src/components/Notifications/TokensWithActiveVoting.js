@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import Button from '../Button/Button';
+import DialogStore from '../../stores/DialogStore';
+import ReturnTokens from '../ReturnTokens/ReturnTokens';
 
 @withTranslation()
+@inject('dialogStore')
 class TokensWithActiveVoting extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
   };
 
   handleClick = () => {
-    console.log('return tokens');
+    const { props } = this;
+    const { dialogStore } = props;
+    dialogStore.show('return_tokens');
   }
 
   render() {
@@ -25,6 +32,7 @@ class TokensWithActiveVoting extends React.Component {
         >
           {t('buttons:pickUpTokens')}
         </Button>
+        <ReturnTokens />
       </>
     );
   }
