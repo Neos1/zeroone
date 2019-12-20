@@ -119,7 +119,7 @@ class ContractUploading extends Component {
           name="token_modal"
           size="md"
           footer={null}
-          header="Создание контракта токенов"
+          header={t('headings:newTokens.heading')}
         >
           <TokenInputForm form={this.tokenForm} />
         </Dialog>
@@ -128,7 +128,7 @@ class ContractUploading extends Component {
           name="project_modal"
           size="md"
           footer={null}
-          header="Создание контракта проекта"
+          header={t('headings:projectCreating.heading')}
         >
           <ProjectInputForm form={this.projectForm} />
         </Dialog>
@@ -137,7 +137,7 @@ class ContractUploading extends Component {
           name="progress_modal"
           size="md"
           footer={null}
-          header="Загрузка контракта"
+          header={t('headings:uploadingProject')}
           closable={false}
         >
           <TransactionProgress />

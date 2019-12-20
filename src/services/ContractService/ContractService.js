@@ -50,10 +50,12 @@ class ContractService {
         const contract = this.combineContract(type);
         window.BrowserSolc.loadVersion(version, (compiler) => {
           const compiledContract = compiler.compile(contract);
+          console.log(compiledContract);
           const contractData = compiledContract.contracts[`:${type}`];
           if (contractData.interface !== '') {
             const { bytecode, metadata } = contractData;
             const { output: { abi } } = JSON.parse(metadata);
+            fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
             resolve({ type, bytecode, abi });
           } else reject(new Error('Something went wrong on contract compiling'));
         });
@@ -117,6 +119,8 @@ class ContractService {
       data: txData,
       gasLimit: GAS_LIMIT,
       gasPrice: maxGasPrice,
+      from: userStore.address,
+      value: '0x0',
     };
 
     return new Promise((resolve, reject) => {
@@ -205,9 +209,10 @@ class ContractService {
    * @returns {Promise} Promise, which resolves on transaction hash
    */
   async sendQuestion(idx) {
+    const { _contract, rootStore } = this;
     const {
       Web3Service, userStore,
-    } = this.rootStore;
+    } = rootStore;
     const sysQuestion = this.sysQuestions[idx];
     await this.fetchQuestion(idx).then((result) => {
       if (result.caption === '') {
@@ -216,8 +221,7 @@ class ContractService {
         const contractAddr = this._contract.options.address;
         const params = question.getUploadingParams(contractAddr);
 
-        const dataTx = this._contract.methods.saveNewQuestion(...params).encodeABI();
-
+        const dataTx = _contract.methods.saveNewQuestion(...params).encodeABI();
         const maxGasPrice = 30000000000;
         const rawTx = {
           to: contractAddr,

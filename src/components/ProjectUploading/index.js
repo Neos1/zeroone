@@ -31,6 +31,7 @@ class ProjectUploading extends Component {
     this.state = {
       step: this.steps.compiling,
       uploading: true,
+      contractAddress: '',
     };
   }
 
@@ -83,6 +84,7 @@ class ProjectUploading extends Component {
           appStore.deployQuestions(receipt.contractAddress).then(() => {
             this.setState({
               uploading: false,
+              contractAddress: receipt.contractAddress,
             });
           });
         }
@@ -90,12 +92,12 @@ class ProjectUploading extends Component {
   }
 
   render() {
-    const { step, uploading } = this.state;
+    const { step, uploading, contractAddress } = this.state;
     return (
       <Container>
         <div className={`${styles.form} ${uploading ? styles['form--ultrawide'] : ''}`}>
           {
-            uploading ? <Progress step={step} /> : <AlertBlock />
+            uploading ? <Progress step={step} /> : <AlertBlock address={contractAddress} />
           }
         </div>
       </Container>
@@ -140,7 +142,7 @@ const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, s
   );
 })));
 
-const AlertBlock = withTranslation()(({ t }) => (
+const AlertBlock = withTranslation()(inject('appStore')(observer(({ t, appStore, address }) => (
   <FormBlock>
     <Heading>
       {t('headings:projectCreated.heading')}
@@ -156,12 +158,12 @@ const AlertBlock = withTranslation()(({ t }) => (
       </Button>
     </NavLink>
     <NavLink to="/projects">
-      <Button theme="link" type="submit">
+      <Button theme="link" type="submit" onClick={() => { appStore.gotoProject(address); }}>
         {t('buttons:otherProject')}
       </Button>
     </NavLink>
   </FormBlock>
-));
+))));
 
 ProjectUploading.propTypes = {
   appStore: propTypes.shape({

@@ -7,6 +7,44 @@ import {
 } from 'mobx';
 
 class FilterStore {
+  /** List of _rules for filtering data */
+  @observable _rules = {};
+
+  @computed
+  get rules() {
+    const result = {};
+    const ruleEntries = entries(this._rules);
+    ruleEntries.forEach((key) => {
+      const ruleKey = key[0];
+      const ruleValue = key[1];
+      result[ruleKey] = ruleValue;
+    });
+    return result;
+  }
+
+  /**
+   * Method for adding (or rewrite)
+   * a list filter rule
+   *
+   * @param {object} rule filter rule
+   * @param {Function} cb callback
+   */
+  @action
+  addFilterRule(rule, cb) {
+    Object.keys(rule).forEach((key) => {
+      set(this._rules, key, rule[key]);
+    });
+    if (cb) cb();
+  }
+
+  /**
+   * Method for reset state this store
+   */
+  @action
+  reset() {
+    this._rules = {};
+  }
+
   /**
    * Method for filter by date
    *
@@ -17,6 +55,7 @@ class FilterStore {
     let resultList = [];
     const rulesKeys = Object.keys(this.rules);
     if (rulesKeys.length) {
+      if (!this.rules.date) return rawList;
       rulesKeys.forEach((key) => {
         if (key === 'date') {
           const { start, end } = this.rules.date;
@@ -28,8 +67,6 @@ class FilterStore {
             ),
           );
           resultList = resultList.concat(filtered);
-        } else if (resultList.length === 0) {
-          resultList = rawList;
         }
       });
     } else {
@@ -64,50 +101,13 @@ class FilterStore {
           ),
         );
         resultList = resultList.concat(filtered);
+        if (this.rules[key] === '*') resultList = listByDate;
         // If exist only date rule result is list by date
       } else if (rulesKeys.length === 1) {
         resultList = listByDate;
       }
     });
     return resultList;
-  }
-
-  /** List of _rules for filtering data */
-  @observable _rules = {};
-
-  @computed
-  get rules() {
-    const result = {};
-    const ruleEntries = entries(this._rules);
-    ruleEntries.forEach((key) => {
-      const ruleKey = key[0];
-      const ruleValue = key[1];
-      result[ruleKey] = ruleValue;
-    });
-    return result;
-  }
-
-  /**
-   * Method for adding (or rewrite)
-   * a list filter rule
-   *
-   * @param {object} rule filter rule
-   * @param {Function} cb callback
-   */
-  @action
-  addFilterRule = (rule, cb) => {
-    Object.keys(rule).forEach((key) => {
-      set(this._rules, key, rule[key]);
-    });
-    if (cb) cb();
-  }
-
-  /**
-   * Method for reset state this store
-   */
-  @action
-  reset = () => {
-    this._rules = {};
   }
 }
 
