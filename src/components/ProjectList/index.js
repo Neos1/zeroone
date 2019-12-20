@@ -66,7 +66,6 @@ class ProjectList extends Component {
   render() {
     const { appStore: { projectList }, t } = this.props;
     const { redirectToProject, redirectToUploading } = this.state;
-    console.log('projectList', projectList);
     const projects = projectList.map((project, index) => (
       <Button
         theme="project"
