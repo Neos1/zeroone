@@ -67,7 +67,10 @@ VotingInfoResult.propTypes = {
   }).isRequired,
   voting: PropTypes.shape({
     descision: PropTypes.string.isRequired,
-    userVote: PropTypes.number.isRequired,
+    userVote: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]).isRequired,
   }).isRequired,
 };
 

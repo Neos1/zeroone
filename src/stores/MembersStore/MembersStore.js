@@ -190,7 +190,6 @@ class MembersStore {
       gasPrice: maxGasPrice,
       value: '0x0',
     };
-
     return Web3Service.createTxData(address, txData, maxGasPrice)
       .then((formedTx) => userStore.singTransaction(formedTx, password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))

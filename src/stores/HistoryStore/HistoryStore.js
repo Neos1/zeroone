@@ -5,7 +5,7 @@ import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
-import { statusStates } from '../../constants';
+import { statusStates, GAS_LIMIT } from '../../constants';
 
 class HistoryStore {
   @observable pagination;
@@ -86,12 +86,13 @@ class HistoryStore {
    * @function
    */
   @action fetchVotings = async () => {
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
       const voting = await contractService.callMethod('voting', [length]);
       voting.descision = await contractService.callMethod('getVotingDescision', [length]);
-      voting.userVote = await contractService.callMethod('getUserVote', [length]);
+      voting.userVote = await contractService
+        ._contract.methods.getUserVote(length, userStore.address).call();
       voting.questionId = voting.id;
       voting.id = length;
       for (let j = 0; j < 7; j += 1) {
@@ -148,11 +149,12 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const lastIndex = this._votings.length;
     const voting = await contractService.callMethod('voting', [lastIndex]);
     voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
-    voting.userVote = await contractService.callMethod('getUserVote', [lastIndex]);
+    voting.userVote = await contractService
+      ._contract.methods.getUserVote(lastIndex, userStore.address).call();
     voting.questionId = voting.id;
     voting.id = lastIndex;
     for (let j = 0; j < 7; j += 1) {
@@ -199,7 +201,7 @@ class HistoryStore {
 
   getMissingVotings = async () => {
     const firstVotingIndex = 1;
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const { address } = contractService._contract.options;
     const countOfVotings = await this.fetchVotingsCount();
     const votings = readDataFromFile({
@@ -213,7 +215,8 @@ class HistoryStore {
         // eslint-disable-next-line no-await-in-loop
         const voting = await contractService.callMethod('voting', [i]);
         voting.descision = await contractService.callMethod('getVotingDescision', [i]);
-        voting.userVote = await contractService.callMethod('getUserVote', [i]);
+        voting.userVote = await contractService
+          ._contract.methods.getUserVote(i, userStore.address).call();
         voting.questionId = voting.id;
         voting.id = i;
         for (let j = 0; j < 7; j += 1) {
@@ -277,9 +280,31 @@ class HistoryStore {
 
   async isUserReturnTokens() {
     const { contractService, userStore } = this.rootStore;
-    const countOfVotings = await this.fetchVotingsCount();
-    const votingId = countOfVotings - 1;
-    return contractService._contract.methods.isUserReturnTokens(votingId, userStore.address).call();
+    return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
+  }
+
+  async lastUserVoting() {
+    const { contractService, userStore } = this.rootStore;
+    return contractService._contract.methods.findLastUserVoting(userStore.address).call();
+  }
+
+  async returnTokens() {
+    const { contractService, Web3Service, userStore } = this.rootStore;
+    const { _contract } = contractService;
+    const { address, password } = userStore;
+    const tx = {
+      data: contractService._contract.methods.returnTokens().encodeABI(),
+      gasLimit: GAS_LIMIT,
+      value: '0x0',
+      from: address,
+      to: _contract.options.address,
+    };
+
+    const maxGasPrice = 30000000000;
+    return Web3Service.createTxData(address, tx, maxGasPrice)
+      .then((createdTx) => userStore.singTransaction(createdTx, password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
   }
 }
 export default HistoryStore;
