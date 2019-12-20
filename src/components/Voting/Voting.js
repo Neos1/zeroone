@@ -65,7 +65,7 @@ class Voting extends React.Component {
           })
           .catch((error) => {
             dialogStore.show('error_modal');
-            console.log(error);
+            console.error(error);
           });
       },
       onError: (form) => {
@@ -100,11 +100,23 @@ class Voting extends React.Component {
 
   componentDidMount() {
     const { props } = this;
-    const { location, dialogStore } = props;
+    const {
+      location,
+      dialogStore,
+      projectStore: {
+        rootStore: {
+          eventEmitterService,
+        },
+        questionStore: {
+          options,
+        },
+      },
+    } = props;
     const parsed = queryString.parse(location.search);
     if (parsed.modal && parsed.option) {
       dialogStore.show(parsed.modal);
-      console.log(parsed);
+      const targetOption = options[Number(parsed.option)];
+      eventEmitterService.emit('new_vote:toggle', targetOption);
     }
   }
 
