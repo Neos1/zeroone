@@ -7,7 +7,7 @@ const readSolFile = (src, importedFiles) => {
   if (!fs.existsSync(src)) throw new Error(`${src} - file not exist`);
   mainImport = fs.readFileSync(src, 'utf8');
   const importList = getImports(mainImport);
-  const currentFolder = src.replace(/(((\.\/|\.\.\/)).{1,})*([a-zA-z0-9])*(\.sol)/g, '');
+  const currentFolder = src.replace(/(((\.\/|\.\.\/)).{1,})*([a-zA-Z0-9])*(\.sol)/g, '');
   importList.forEach((file) => {
     const pathToFile = path.join(currentFolder, file);
     if (!importedFiles[pathToFile] && (pathToFile !== src)) {
