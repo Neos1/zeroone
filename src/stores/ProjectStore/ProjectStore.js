@@ -107,7 +107,7 @@ class ProjectStore {
     const countOfVotings = await historyStore.fetchVotingsCount();
     const lastVoteIndex = countOfVotings - 1;
     if (Number(lastUserVoting) === 0 && userTokenReturns === false) return;
-    if (Number(lastVoteIndex) === Number(lastUserVoting)) {
+    if (Number(lastVoteIndex) === Number(lastUserVoting) && userTokenReturns === false) {
       notificationStore.add({
         isOpen: true,
         content: <TokensWithoutActiveVoting />,
