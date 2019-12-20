@@ -177,15 +177,19 @@ class MembersStore {
 
   @action
   transferTokens(groupId, from, to, count) {
-    const { contract } = this.list[groupId];
+    const { contract, groupType } = this.list[groupId];
     window.contract = contract;
     // eslint-disable-next-line no-unused-vars
     const { Web3Service, userStore: { address, password }, userStore } = this.rootStore;
     const maxGasPrice = 30000000000;
+    const data = groupType === 'ERC20'
+      ? contract.methods.transfer(to, Number(count)).encodeABI()
+      : contract.methods.transferFrom(from, to, Number(count)).encodeABI();
+
     const txData = {
+      data,
       from: userStore.address,
       to: contract.options.address,
-      data: contract.methods.transferFrom(from, to, Number(count)).encodeABI(),
       gasLimit: GAS_LIMIT,
       gasPrice: maxGasPrice,
       value: '0x0',
