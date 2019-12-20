@@ -265,6 +265,50 @@ class HistoryStore {
     });
   }
 
+  async getVoterList(votingId) {
+    const {
+      rootStore: {
+        projectStore: {
+          questionStore,
+        },
+        contractService: {
+          _contract,
+        },
+        membersStore,
+      },
+    } = this;
+    const [voting] = this.getVotingById(votingId);
+    const { questionId } = voting;
+    const [question] = questionStore.getQuestionById(questionId);
+    const { groupId } = question;
+    const { list, balance } = membersStore.list[Number(groupId) - 1];
+    const result = {
+      positive: [],
+      negative: [],
+    };
+    for (let i = 0; i < list.length; i += 1) {
+      let info = {};
+      const { wallet } = list[i];
+      const vote = await _contract.methods.getUserVote(votingId, wallet).call();
+      const tokenCount = await _contract.methods.getUserVoteWeight(votingId, wallet).call();
+      const weight = ((tokenCount / Number(balance)) * 100).toFixed(2);
+      switch (vote) {
+        case ('1'):
+          info = { wallet, weight };
+          result.positive.push(info);
+          break;
+        case ('2'):
+          info = { wallet, weight };
+          result.negative.push(info);
+          break;
+        default:
+          break;
+      }
+    }
+    console.log(result);
+    return result;
+  }
+
   /**
    * Method for check active voting state
    *
