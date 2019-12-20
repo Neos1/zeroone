@@ -17,11 +17,15 @@ import styles from './VoterList.scss';
 class VoterList extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
+    data: PropTypes.shape({
+      positive: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+      negative: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    }).isRequired,
   };
 
   render() {
     const { props } = this;
-    const { t } = props;
+    const { t, data } = props;
     return (
       <div className={styles['voter-list']}>
         <Tabs>
@@ -47,54 +51,12 @@ class VoterList extends React.PureComponent {
           <div className={styles['voter-list__content']}>
             <TabPanel>
               <VoterListTable
-                list={[
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                    isAdmin: true,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                  {
-                    wallet: '0xD490af05Bf82eF6C6BA034B22D18c39B5D52Cc54',
-                    weight: 2,
-                  },
-                ]}
+                list={data.positive}
               />
             </TabPanel>
             <TabPanel>
               <VoterListTable
-                list={[]}
+                list={data.negative}
               />
             </TabPanel>
           </div>

@@ -86,12 +86,13 @@ class HistoryStore {
    * @function
    */
   @action fetchVotings = async () => {
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
       const voting = await contractService.callMethod('voting', [length]);
       voting.descision = await contractService.callMethod('getVotingDescision', [length]);
-      voting.userVote = await contractService.callMethod('getUserVote', [length]);
+      voting.userVote = await contractService._contract
+        .methods.getUserVote(length, userStore.address).call();
       voting.questionId = voting.id;
       voting.id = length;
       for (let j = 0; j < 7; j += 1) {
@@ -148,11 +149,12 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const lastIndex = this._votings.length;
     const voting = await contractService.callMethod('voting', [lastIndex]);
     voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
-    voting.userVote = await contractService.callMethod('getUserVote', [lastIndex]);
+    voting.userVote = await contractService._contract
+      .methods.getUserVote(lastIndex, userStore.address).call();
     voting.questionId = voting.id;
     voting.id = lastIndex;
     for (let j = 0; j < 7; j += 1) {
@@ -199,7 +201,7 @@ class HistoryStore {
 
   getMissingVotings = async () => {
     const firstVotingIndex = 1;
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const { address } = contractService._contract.options;
     const countOfVotings = await this.fetchVotingsCount();
     const votings = readDataFromFile({
@@ -213,7 +215,8 @@ class HistoryStore {
         // eslint-disable-next-line no-await-in-loop
         const voting = await contractService.callMethod('voting', [i]);
         voting.descision = await contractService.callMethod('getVotingDescision', [i]);
-        voting.userVote = await contractService.callMethod('getUserVote', [i]);
+        voting.userVote = await contractService._contract
+          .methods.getUserVote(i, userStore.address).call();
         voting.questionId = voting.id;
         voting.id = i;
         for (let j = 0; j < 7; j += 1) {
@@ -260,6 +263,50 @@ class HistoryStore {
       },
       basicPath: `${PATH_TO_DATA}${address}`,
     });
+  }
+
+  async getVoterList(votingId) {
+    const {
+      rootStore: {
+        projectStore: {
+          questionStore,
+        },
+        contractService: {
+          _contract,
+        },
+        membersStore,
+      },
+    } = this;
+    const [voting] = this.getVotingById(votingId);
+    const { questionId } = voting;
+    const [question] = questionStore.getQuestionById(questionId);
+    const { groupId } = question;
+    const { list, balance } = membersStore.list[Number(groupId) - 1];
+    const result = {
+      positive: [],
+      negative: [],
+    };
+    for (let i = 0; i < list.length; i += 1) {
+      let info = {};
+      const { wallet } = list[i];
+      const vote = await _contract.methods.getUserVote(votingId, wallet).call();
+      const tokenCount = await _contract.methods.getUserVoteWeight(votingId, wallet).call();
+      const weight = ((tokenCount / Number(balance)) * 100).toFixed(2);
+      switch (vote) {
+        case ('1'):
+          info = { wallet, weight };
+          result.positive.push(info);
+          break;
+        case ('2'):
+          info = { wallet, weight };
+          result.negative.push(info);
+          break;
+        default:
+          break;
+      }
+    }
+    console.log(result);
+    return result;
   }
 
   /**

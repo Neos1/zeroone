@@ -27,6 +27,11 @@ import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 class VotingInfoWrapper extends React.PureComponent {
   @observable dataStats = [];
 
+  @observable dataVotes = {
+    positive: [],
+    negative: [],
+  };
+
   votingId = 0;
 
   votingForm = new FinPassForm({
@@ -145,6 +150,7 @@ class VotingInfoWrapper extends React.PureComponent {
 
   componentDidMount() {
     this.getVotingStats();
+    this.getVotes();
   }
 
   onVerifyClick = () => {
@@ -166,6 +172,17 @@ class VotingInfoWrapper extends React.PureComponent {
   onClosingClick = () => {
     const { dialogStore } = this.props;
     dialogStore.toggle('descision_close');
+  }
+
+  @action getVotes = async () => {
+    const { props } = this;
+    const {
+      match: { params: { id } },
+      projectStore: {
+        historyStore,
+      },
+    } = props;
+    this.dataVotes = await historyStore.getVoterList(Number(id));
   }
 
   @action
@@ -294,7 +311,7 @@ class VotingInfoWrapper extends React.PureComponent {
           header={null}
           footer={null}
         >
-          <VoterList />
+          <VoterList data={this.dataVotes} />
         </Dialog>
 
         <Dialog
