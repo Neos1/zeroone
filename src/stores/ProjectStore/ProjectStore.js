@@ -104,7 +104,16 @@ class ProjectStore {
     const hasActiveVoting = await historyStore.hasActiveVoting();
     const userTokenReturns = await historyStore.isUserReturnTokens();
     const lastUserVoting = await historyStore.lastUserVoting();
+    const countOfVotings = await historyStore.fetchVotingsCount();
+    const lastVoteIndex = countOfVotings - 1;
     if (Number(lastUserVoting) === 0 && userTokenReturns === false) return;
+    if (Number(lastVoteIndex) === Number(lastUserVoting)) {
+      notificationStore.add({
+        isOpen: true,
+        content: <TokensWithoutActiveVoting />,
+      });
+      return;
+    }
     if (hasActiveVoting === true && userTokenReturns === false) {
       notificationStore.add({
         isOpen: true,
