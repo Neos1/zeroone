@@ -5,7 +5,7 @@ import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
-import { statusStates } from '../../constants';
+import { statusStates, GAS_LIMIT } from '../../constants';
 
 class HistoryStore {
   @observable pagination;
@@ -286,8 +286,22 @@ class HistoryStore {
   }
 
   async returnTokens() {
-    const { contractService } = this.rootStore;
-    return contractService._contract.methods.returnTokens().call();
+    const { contractService, Web3Service, userStore } = this.rootStore;
+    const { _contract } = contractService;
+    const { address, password } = userStore;
+    const tx = {
+      data: contractService._contract.methods.returnTokens().encodeABI(),
+      gasLimit: GAS_LIMIT,
+      value: '0x0',
+      from: address,
+      to: _contract.options.address,
+    };
+
+    const maxGasPrice = 30000000000;
+    return Web3Service.createTxData(address, tx, maxGasPrice)
+      .then((createdTx) => userStore.singTransaction(createdTx, password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
   }
 }
 export default HistoryStore;
