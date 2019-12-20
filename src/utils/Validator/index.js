@@ -39,12 +39,14 @@ const plugins = {
         same: 'Fields must be same',
         password: 'Field value not valid',
         address: 'Enter valid address',
+        numeric: 'Value is not numeric',
       });
       validator.setMessages('ru', {
         required: 'Обязательное поле',
         same: 'Поля должны содержать одинаковые значения',
         password: 'Пароль не соответствует требованиям',
         address: 'Введите валидный адрес',
+        numeric: 'Значение не является числом',
       });
       validator.stopOnError(true);
     },

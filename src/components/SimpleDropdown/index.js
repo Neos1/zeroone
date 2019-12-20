@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import { DropdownArrowIcon } from '../Icons';
 import DropdownOption from '../SimpleDropdownOption';
 
 import styles from '../Dropdown/Dropdown.scss';
 
+@withTranslation()
 class SimpleDropdown extends Component {
   static propTypes = {
     children: propTypes.oneOfType([
@@ -23,6 +25,7 @@ class SimpleDropdown extends Component {
       set: propTypes.func,
     }),
     initIndex: propTypes.number,
+    t: propTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -94,7 +97,7 @@ class SimpleDropdown extends Component {
 
   render() {
     const {
-      children, options,
+      children, options, t,
     } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option) => (
@@ -111,7 +114,7 @@ class SimpleDropdown extends Component {
         <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}
           <span className="dropdown__selected" data-value={selectedValue}>
-            {selectedLabel || 'Выберите' }
+            {selectedLabel || t('other:select') }
             <span className="dropdown__arrow">
               <DropdownArrowIcon />
             </span>

@@ -70,5 +70,7 @@ const other = {
   youVotedAndTokensInContract: 'Вы проголосовали и ваши токены находятся в контракте. Для отмены голоса',
   pickUpTokens: 'Забрать токены',
   sendingTransaction: 'Отправка транзакции',
+  parameters: 'Параметры',
+  select: 'Выберите',
 };
 export default other;

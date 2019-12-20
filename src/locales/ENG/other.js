@@ -70,5 +70,7 @@ const other = {
   youVotedAndTokensInContract: 'You voted and your tokens are in the contract. To cancel the voice',
   pickUpTokens: 'Pick up tokens',
   sendingTransaction: 'Sending transaction',
+  parameters: 'Parameters',
+  select: 'Select',
 };
 export default other;

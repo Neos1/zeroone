@@ -38,7 +38,7 @@ class FinPassFormWrapper extends React.Component {
               className="btn--default btn--black"
               type="submit"
             >
-              {t('buttons:vote')}
+              {t('buttons:startNewVoting')}
             </Button>
           </div>
         </form>

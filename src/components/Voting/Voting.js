@@ -189,12 +189,15 @@ class Voting extends React.Component {
         >
           <StartNewVote />
         </Dialog>
+
         <Dialog name="create_group_question" size="md" footer={null}>
           <CreateGroupQuestions />
         </Dialog>
+
         <Dialog name="create_question" size="xlg" footer={null}>
           <CreateNewQuestion />
         </Dialog>
+
         <Dialog
           name="password_form"
           size="md"
@@ -208,7 +211,7 @@ class Voting extends React.Component {
           name="progress_modal"
           size="md"
           footer={null}
-          header="Отправка транзакции"
+          header={t('headings:sendingTransaction')}
           closable={!(status === voteStatus.inProgress)}
         >
           <TransactionProgress />
