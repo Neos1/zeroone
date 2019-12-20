@@ -3,6 +3,29 @@
 		"constant": true,
 		"inputs": [
 			{
+				"name": "_voteId",
+				"type": "uint256"
+			},
+			{
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserVote",
+		"outputs": [
+			{
+				"name": "vote",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
 				"name": "_id",
 				"type": "uint256"
 			}
@@ -167,6 +190,29 @@
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "_voteId",
+				"type": "uint256"
+			},
+			{
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserVoteWeight",
+		"outputs": [
+			{
+				"name": "tokenCount",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "getERCTotal",
 		"outputs": [
@@ -311,25 +357,6 @@
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_voteId",
-				"type": "uint256"
-			}
-		],
-		"name": "getUserVote",
-		"outputs": [
-			{
-				"name": "vote",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -391,25 +418,6 @@
 		"outputs": [
 			{
 				"name": "balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_voteId",
-				"type": "uint256"
-			}
-		],
-		"name": "getUserVoteWeight",
-		"outputs": [
-			{
-				"name": "tokenCount",
 				"type": "uint256"
 			}
 		],
