@@ -104,10 +104,11 @@ class ProjectStore {
     const hasActiveVoting = await historyStore.hasActiveVoting();
     const userTokenReturns = await historyStore.isUserReturnTokens();
     const lastUserVoting = await historyStore.lastUserVoting();
-    const countOfVotings = await historyStore.fetchVotingsCount();
-    const lastVoteIndex = countOfVotings - 1;
+    const countOfVoting = await historyStore.fetchVotingsCount();
+    const lastVoteIndex = countOfVoting - 1;
     if (Number(lastUserVoting) === 0 && userTokenReturns === false) return;
-    if (Number(lastVoteIndex) === Number(lastUserVoting) && userTokenReturns === false) {
+    if (Number(lastVoteIndex) !== Number(lastUserVoting) && userTokenReturns === false) {
+      // TODO maybe make other notification description?
       notificationStore.add({
         isOpen: true,
         content: <TokensWithoutActiveVoting />,

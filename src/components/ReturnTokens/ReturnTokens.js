@@ -13,7 +13,7 @@ import NotificationStore from '../../stores/NotificationStore';
 import ErrorMessage from '../Message/ErrorMessage';
 
 @withTranslation()
-@inject('userStore', 'dialogStore', 'projectStore')
+@inject('userStore', 'dialogStore', 'projectStore', 'notificationStore')
 class ReturnTokens extends React.Component {
   form = new FinPassForm({
     hooks: {

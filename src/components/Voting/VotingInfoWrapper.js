@@ -15,6 +15,7 @@ import { AgreedMessage, RejectMessage } from '../Message';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
 @inject(
   'dialogStore',
@@ -44,6 +45,7 @@ class VotingInfoWrapper extends React.PureComponent {
           },
           projectStore: {
             historyStore,
+            addReturnTokensNotification,
           },
         } = this.props;
         const [voting] = historyStore.getVotingById(Number(id));
@@ -56,6 +58,7 @@ class VotingInfoWrapper extends React.PureComponent {
           .then(() => {
             voting.update({ userVote: Number(descision) });
             historyStore.writeVotingsToFile();
+            addReturnTokensNotification();
             switch (descision) {
               case (1):
                 dialogStore.toggle('decision_agreed_message');
@@ -124,30 +127,7 @@ class VotingInfoWrapper extends React.PureComponent {
     membersStore: PropTypes.shape({
       getMemberById: PropTypes.func.isRequired,
     }).isRequired,
-    projectStore: PropTypes.shape({
-      historyStore: PropTypes.shape({
-        getVotingById: PropTypes.func.isRequired,
-        fetchAndUpdateLastVoting: PropTypes.func.isRequired,
-        writeVotingsToFile: PropTypes.func.isRequired,
-      }).isRequired,
-      questionStore: PropTypes.shape({
-        getQuestionById: PropTypes.func.isRequired,
-      }).isRequired,
-      rootStore: PropTypes.shape({
-        Web3Service: PropTypes.shape({
-          web3: PropTypes.shape().isRequired,
-        }).isRequired,
-        contractService: PropTypes.shape({
-          sendVote: PropTypes.func.isRequired,
-          closeVoting: PropTypes.func.isRequired,
-          _contract: PropTypes.shape({
-            methods: PropTypes.shape({
-              getVotes: PropTypes.func.isRequired,
-            }).isRequired,
-          }).isRequired,
-        }).isRequired,
-      }).isRequired,
-    }).isRequired,
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,
