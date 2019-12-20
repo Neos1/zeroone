@@ -3,6 +3,7 @@ import propTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+import uniqKey from 'react-id-generator';
 import Container from '../Container';
 import Button from '../Button/Button';
 import { CreateToken } from '../Icons';
@@ -76,6 +77,29 @@ class Questions extends Component {
   }
 
   /**
+   * Method for getting init index
+   * for dropdown sort option
+   *
+   * @returns {number} index number
+   */
+  get initIndex() {
+    const { projectStore } = this.props;
+    const {
+      questionStore: {
+        questionGroups,
+        filter: { rules },
+      },
+    } = projectStore;
+    let initIndex = 0;
+    questionGroups.forEach((option, index) => {
+      if (option.value === rules.groupId) {
+        initIndex = index;
+      }
+    });
+    return initIndex;
+  }
+
+  /**
    * Method for handle sort
    *
    * @param {object} selected new sort data
@@ -131,6 +155,8 @@ class Questions extends Component {
                       <SimpleDropdown
                         options={questionGroups}
                         onSelect={this.handleSortSelect}
+                        initIndex={this.initIndex}
+                        key={uniqKey()}
                       />
                     </div>
                   </div>
