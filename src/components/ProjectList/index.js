@@ -39,9 +39,9 @@ class ProjectList extends Component {
     appStore.readProjectList();
   }
 
-  gotoProject = (address) => {
+  gotoProject = ({ address, name }) => {
     const { appStore } = this.props;
-    appStore.gotoProject(address);
+    appStore.gotoProject({ address, name });
     this.setState({ redirectToProject: true });
   }
 
@@ -51,23 +51,32 @@ class ProjectList extends Component {
     this.setState({ redirectToUploading: true });
   }
 
-  checkProject = async (address) => {
+  checkProject = async ({
+    address,
+    name,
+  }) => {
     const { appStore } = this.props;
     const isQuestionsUploaded = await appStore.checkIsQuestionsUploaded(address);
     // eslint-disable-next-line no-unused-expressions
     isQuestionsUploaded
-      ? this.gotoProject(address)
+      ? this.gotoProject({ address, name })
       : this.startUploading(address);
   }
 
   render() {
     const { appStore: { projectList }, t } = this.props;
     const { redirectToProject, redirectToUploading } = this.state;
+    console.log('projectList', projectList);
     const projects = projectList.map((project, index) => (
       <Button
         theme="project"
         key={`Button-${index + 1}`}
-        onClick={() => { this.checkProject(project.address); }}
+        onClick={() => {
+          this.checkProject({
+            address: project.address,
+            name: project.name,
+          });
+        }}
       >
         {project.name.replace(/([!@#$%^&*()_+\-=])+/g, ' ')}
       </Button>

@@ -10,6 +10,7 @@ import MembersGroupComponent from './MembersGroupComponent';
 import Loader from '../Loader';
 import Footer from '../Footer';
 import Notification from '../Notification/Notification';
+import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
 import styles from './Members.scss';
 
@@ -17,7 +18,7 @@ import styles from './Members.scss';
  * Component for page with members
  */
 @withTranslation()
-@inject('membersStore')
+@inject('membersStore', 'projectStore')
 @observer
 class MembersPage extends React.Component {
   static propTypes = {
@@ -26,6 +27,7 @@ class MembersPage extends React.Component {
       list: MobxPropTypes.observableArrayOf(PropTypes.instanceOf(MembersGroup)),
       loading: PropTypes.bool.isRequired,
     }).isRequired,
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
   }
 
   componentDidMount() {
@@ -33,8 +35,9 @@ class MembersPage extends React.Component {
   }
 
   render() {
-    const { membersStore: { list, loading } } = this.props;
+    const { membersStore: { list, loading }, projectStore } = this.props;
     const groups = list.toJS();
+    console.log(projectStore);
     return (
       <Container className="container--small">
         <Notification />
@@ -42,10 +45,7 @@ class MembersPage extends React.Component {
           !loading
             ? (
               <MembersTop
-                projectName="project test"
-                onClick={() => {
-                  console.log('click');
-                }}
+                projectName={projectStore.name}
               />
             )
             : null

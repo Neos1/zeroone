@@ -3,6 +3,8 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { observable } from 'mobx';
+import uniqKey from 'react-id-generator';
 import SimpleDropdown from '../SimpleDropdown';
 import { Address, QuestionIcon } from '../Icons';
 import Input from '../Input';
@@ -15,6 +17,8 @@ import styles from './StartNewVote.scss';
 @inject('projectStore', 'dialogStore')
 @observer
 class StartNewVote extends React.Component {
+  @observable initIndex = 0;
+
   votingData = '';
 
   form = new StarNewVoteForm({
@@ -63,6 +67,15 @@ class StartNewVote extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { props } = this;
+    const { projectStore: { rootStore: { eventEmitterService } } } = props;
+    eventEmitterService.subscribe('new_vote:toggle', (selected) => {
+      this.handleSelect(selected);
+      this.initIndex = Number(selected.value);
+    });
+  }
+
   // eslint-disable-next-line consistent-return
   handleSelect = (selected) => {
     const { form } = this;
@@ -78,7 +91,7 @@ class StartNewVote extends React.Component {
       form.del(field.name);
     });
 
-    // @ If Question have dedicaated modal, then toggle them, else create fields
+    // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
       case 1:
         dialogStore.toggle('create_question');
@@ -107,7 +120,7 @@ class StartNewVote extends React.Component {
   }
 
   render() {
-    const { form } = this;
+    const { form, initIndex } = this;
     const { isSelected } = this.state;
     const { props } = this;
     const { t, projectStore } = props;
@@ -131,6 +144,8 @@ class StartNewVote extends React.Component {
               options={options}
               field={form.$('question')}
               onSelect={this.handleSelect}
+              initIndex={initIndex}
+              key={uniqKey()}
             >
               <QuestionIcon />
             </SimpleDropdown>
@@ -138,7 +153,8 @@ class StartNewVote extends React.Component {
               isSelected
                 ? (
                   <div className={styles['new-vote__description']}>
-                    Решаем вводить ли новую охренительную методологию разработки или да
+                    {/* TODO add correct description text */}
+                    New vote description text
                   </div>
                 )
                 : null
