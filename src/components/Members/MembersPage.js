@@ -46,9 +46,6 @@ class MembersPage extends React.Component {
             ? (
               <MembersTop
                 projectName={projectStore.name}
-                onClick={() => {
-                  console.log('click');
-                }}
               />
             )
             : null

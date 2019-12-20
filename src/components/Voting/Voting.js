@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import queryString from 'query-string';
 import VotingTop from './VotingTop';
 import VotingItem from './VotingItem';
 import VotingFilter from './VotingFilter';
@@ -10,7 +11,6 @@ import Footer from '../Footer';
 import Pagination from '../Pagination';
 import Dialog from '../Dialog/Dialog';
 import StartNewVote from '../StartNewVote';
-import PaginationStore from '../../stores/PaginationStore';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
@@ -20,6 +20,8 @@ import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import Loader from '../Loader';
 import Notification from '../Notification/Notification';
+import ProjectStore from '../../stores/ProjectStore';
+import DialogStore from '../../stores/DialogStore';
 
 import styles from './Voting.scss';
 
@@ -79,34 +81,13 @@ class Voting extends React.Component {
   }
 
   static propTypes = {
-    dialogStore: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-      hide: PropTypes.func.isRequired,
-      toggle: PropTypes.func.isRequired,
-    }).isRequired,
-    projectStore: PropTypes.shape({
-      votingData: PropTypes.string.isRequired,
-      votingQuestion: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string,
-      ]).isRequired,
-      votingGroupId: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string,
-      ]).isRequired,
-      rootStore: PropTypes.shape().isRequired,
-      historyStore: PropTypes.shape({
-        loading: PropTypes.bool.isRequired,
-        getMissingVotings: PropTypes.func.isRequired,
-        paginatedList: PropTypes.arrayOf(
-          PropTypes.shape({}).isRequired,
-        ).isRequired,
-        pagination: PropTypes.instanceOf(PaginationStore).isRequired,
-        getActualVotings: PropTypes.func.isRequired,
-      }).isRequired,
-    }).isRequired,
+    dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     userStore: PropTypes.shape().isRequired,
     t: PropTypes.func.isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
@@ -115,6 +96,16 @@ class Voting extends React.Component {
       // eslint-disable-next-line react/no-unused-state
       status: this.voteStatus.inProgress,
     };
+  }
+
+  componentDidMount() {
+    const { props } = this;
+    const { location, dialogStore } = props;
+    const parsed = queryString.parse(location.search);
+    if (parsed.modal && parsed.option) {
+      dialogStore.show(parsed.modal);
+      console.log(parsed);
+    }
   }
 
   closeModal = (name) => {

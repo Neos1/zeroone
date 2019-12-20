@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import { PlayCircleIcon } from '../Icons';
 
@@ -11,14 +12,12 @@ import styles from './Members.scss';
  * @returns {Node} component
  */
 const MembersTop = ({
-  onClick,
   projectName,
 }) => (
   <div className={styles.members__top}>
-    <button
-      type="button"
+    <Link
       className={styles['members__top-button']}
-      onClick={onClick}
+      to="/votings?modal=start_new_vote&option=2"
     >
       <span className={styles['members__top-button-icon']}>
         <PlayCircleIcon />
@@ -31,17 +30,12 @@ const MembersTop = ({
           }}
         />
       </span>
-    </button>
+    </Link>
   </div>
 );
 
 MembersTop.propTypes = {
-  onClick: PropTypes.func,
   projectName: PropTypes.string.isRequired,
-};
-
-MembersTop.defaultProps = {
-  onClick: () => {},
 };
 
 export default withTranslation('other')(MembersTop);
