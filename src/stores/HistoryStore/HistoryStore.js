@@ -210,7 +210,6 @@ class HistoryStore {
     });
     const votingsFromFileLength = votings.data.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
-    console.log('userStore.address', userStore.address);
     if (countVotingFromContract > votingsFromFileLength) {
       for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop

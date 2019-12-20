@@ -11,6 +11,7 @@ import TransactionProgress from '../Message/TransactionProgress';
 import HistoryStore from '../../stores/HistoryStore';
 import NotificationStore from '../../stores/NotificationStore';
 import ErrorMessage from '../Message/ErrorMessage';
+import SuccessMessage from '../Message/SuccessMessage';
 
 @withTranslation()
 @inject('userStore', 'dialogStore', 'projectStore', 'notificationStore')
@@ -33,8 +34,8 @@ class ReturnTokens extends React.Component {
           .then(() => {
             const notificationId = notificationStore.list[0].id;
             notificationStore.remove(notificationId);
+            dialogStore.toggle('success_modal');
             historyStore.fetchAndUpdateLastVoting();
-            dialogStore.hide();
           })
           .catch((error) => {
             console.error(error);
@@ -85,6 +86,14 @@ class ReturnTokens extends React.Component {
           footer={null}
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+        </Dialog>
+        <Dialog
+          name="success_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
       </>
     );
