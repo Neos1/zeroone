@@ -33,6 +33,8 @@ class ReturnTokens extends React.Component {
           .then(() => {
             const notificationId = notificationStore.list[0].id;
             notificationStore.remove(notificationId);
+            historyStore.fetchAndUpdateLastVoting();
+            dialogStore.hide();
           })
           .catch((error) => {
             console.error(error);
