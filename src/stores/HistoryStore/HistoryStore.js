@@ -86,12 +86,13 @@ class HistoryStore {
    * @function
    */
   @action fetchVotings = async () => {
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
       const voting = await contractService.callMethod('voting', [length]);
       voting.descision = await contractService.callMethod('getVotingDescision', [length]);
-      voting.userVote = await contractService.callMethod('getUserVote', [length]);
+      voting.userVote = await contractService
+        ._contract.methods.getUserVote(length, userStore.address).call();
       voting.questionId = voting.id;
       voting.id = length;
       for (let j = 0; j < 7; j += 1) {
@@ -148,11 +149,12 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const lastIndex = this._votings.length;
     const voting = await contractService.callMethod('voting', [lastIndex]);
     voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
-    voting.userVote = await contractService.callMethod('getUserVote', [lastIndex]);
+    voting.userVote = await contractService
+      ._contract.methods.getUserVote(lastIndex, userStore.address).call();
     voting.questionId = voting.id;
     voting.id = lastIndex;
     for (let j = 0; j < 7; j += 1) {
@@ -199,7 +201,7 @@ class HistoryStore {
 
   getMissingVotings = async () => {
     const firstVotingIndex = 1;
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const { address } = contractService._contract.options;
     const countOfVotings = await this.fetchVotingsCount();
     const votings = readDataFromFile({
@@ -208,12 +210,14 @@ class HistoryStore {
     });
     const votingsFromFileLength = votings.data.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
+    console.log('userStore.address', userStore.address);
     if (countVotingFromContract > votingsFromFileLength) {
       for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const voting = await contractService.callMethod('voting', [i]);
         voting.descision = await contractService.callMethod('getVotingDescision', [i]);
-        voting.userVote = await contractService.callMethod('getUserVote', [i]);
+        voting.userVote = await contractService
+          ._contract.methods.getUserVote(i, userStore.address).call();
         voting.questionId = voting.id;
         voting.id = i;
         for (let j = 0; j < 7; j += 1) {
