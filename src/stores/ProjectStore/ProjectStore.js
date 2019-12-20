@@ -12,7 +12,9 @@ import TokensWithoutActiveVoting from '../../components/Notifications/TokensWith
  * Class implements whole project
  */
 class ProjectStore {
-  @observable projectAddress = ''
+  @observable projectAddress = '';
+
+  @observable name = '';
 
   @observable prepared = 0;
 
@@ -34,10 +36,11 @@ class ProjectStore {
     this.projectAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
   }
 
-  @action init(projectAddress) {
+  @action init({ address, name }) {
     const { contractService, Web3Service } = this.rootStore;
     const contract = Web3Service.createContractInstance(this.projectAbi);
-    contract.options.address = projectAddress;
+    this.name = name;
+    contract.options.address = address;
     contractService.setContract(contract);
     this.questionStore = new QuestionStore(this.rootStore);
     this.historyStore = new HistoryStore(this.rootStore);

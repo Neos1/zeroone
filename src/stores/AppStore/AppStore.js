@@ -233,10 +233,10 @@ class AppStore {
     this.deployArgs = value;
   }
 
-  @action gotoProject(address) {
+  @action gotoProject({ address, name }) {
     const { rootStore } = this;
     this.setProjectAddress(address);
-    rootStore.initProject(address);
+    rootStore.initProject({ address, name });
     this.userInProject = true;
   }
 

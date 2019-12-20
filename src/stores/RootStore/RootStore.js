@@ -52,8 +52,8 @@ class RootStore {
    *
    * @param {string} address adress of project
    */
-  @action async initProject(address) {
-    this.projectStore.init(address);
+  @action async initProject({ address, name }) {
+    this.projectStore.init({ address, name });
     this.membersStore.init();
   }
 }
