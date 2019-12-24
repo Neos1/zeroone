@@ -9,10 +9,8 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "webpack-dev-server --hot --config webpack.dev.js",
     "build": "webpack --mode=production --config webpack.dev.js && electron-builder",
-    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron  ./src/electron.js\"",
-    "electron-build": "electron-builder",
+    "electron-dev": "concurrently \"webpack-dev-server --hot --config webpack.dev.js\" \"wait-on http://localhost:3000 && electron  ./src/electron.js\"",
     "storybook": "start-storybook",
     "docs": "jsdoc -c ./jsdoc.json"
   },

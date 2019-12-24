@@ -99,5 +99,9 @@ contract MERC20 {
   function setAdmin(address _newAdmin) external {
     admin = _newAdmin;
   }
+  
+  function getAdmin() external returns (address adminitstrator) {
+    return admin;
+  }
 
 }
