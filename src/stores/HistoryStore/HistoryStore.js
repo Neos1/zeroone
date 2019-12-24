@@ -180,11 +180,12 @@ class HistoryStore {
   }
 
   getVotingsFromFile = () => {
-    const { contractService } = this.rootStore;
-    const { address } = contractService._contract.options;
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     const votings = readDataFromFile({
       name: 'votings',
-      basicPath: `${PATH_TO_DATA}${address}`,
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
     });
     const votingsFromFileLength = votings.data && votings.data.length
       ? votings.data.length
@@ -202,11 +203,12 @@ class HistoryStore {
   getMissingVotings = async () => {
     const firstVotingIndex = 1;
     const { contractService, userStore } = this.rootStore;
-    const { address } = contractService._contract.options;
     const countOfVotings = await this.fetchVotingsCount();
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     const votings = readDataFromFile({
       name: 'votings',
-      basicPath: `${PATH_TO_DATA}${address}`,
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
     });
     const votingsFromFileLength = votings.data.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
@@ -254,14 +256,15 @@ class HistoryStore {
   }
 
   writeVotingsToFile = () => {
-    const { contractService } = this.rootStore;
-    const { address } = contractService._contract.options;
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     writeDataToFile({
       name: 'votings',
       data: {
         data: this.rawList,
       },
-      basicPath: `${PATH_TO_DATA}${address}`,
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
     });
   }
 

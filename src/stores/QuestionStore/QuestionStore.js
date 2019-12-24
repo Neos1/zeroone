@@ -128,17 +128,19 @@ class QuestionStore {
    * Method for getting questions from contract
    * & save then to json file
    *
-   * @param {string} address address project for
    * uniq folder
    */
-  getQuestionsFromContract = async (address) => {
+  getQuestionsFromContract = async () => {
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     await this.fetchQuestions();
     writeDataToFile({
       name: 'questions',
       data: {
         data: this.rawList,
       },
-      basicPath: `${PATH_TO_DATA}${address}`,
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
     });
   }
 
@@ -146,13 +148,15 @@ class QuestionStore {
    * Method for getting & adding questions
    * from file
    *
-   * @param {string} address address project
    * @returns {object} questions object
    */
-  getQuestionsFromFile = (address) => {
+  getQuestionsFromFile = () => {
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     const questions = readDataFromFile({
       name: 'questions',
-      basicPath: `${PATH_TO_DATA}${address}`,
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
     });
     const questionsFromFileLength = questions.data && questions.data.length
       ? questions.data.length
@@ -171,15 +175,15 @@ class QuestionStore {
    *
    * @param {object} param0 data for method
    * @param {object} param0.questions question object data
-   * @param {string} param0.address address project
    */
   getMissingQuestions = async ({
     questions,
-    address,
   }) => {
     const firstQuestionIndex = 1;
-    const { contractService } = this.rootStore;
+    const { contractService, userStore } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     const questionsFromFileLength = questions.data.length;
     const countQuestionFromContract = countOfUploaded - firstQuestionIndex;
     if (countQuestionFromContract > questionsFromFileLength) {
@@ -193,7 +197,7 @@ class QuestionStore {
         data: {
           data: this.rawList,
         },
-        basicPath: `${PATH_TO_DATA}${address}`,
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
       });
     }
   }
@@ -203,17 +207,14 @@ class QuestionStore {
    * from the contract & file
    */
   getActualQuestions = async () => {
-    const { contractService } = this.rootStore;
-    const { address } = contractService._contract.options;
-    const questions = this.getQuestionsFromFile(address);
+    const questions = this.getQuestionsFromFile();
     if (!questions || !questions.data) {
-      await this.getQuestionsFromContract(address);
+      await this.getQuestionsFromContract();
       this.loading = false;
       return;
     }
     await this.getMissingQuestions({
       questions,
-      address,
     });
     this.loading = false;
   }

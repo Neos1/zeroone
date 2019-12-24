@@ -86,12 +86,13 @@ class MembersStore {
    * @returns {Array} actual groups data
    */
   async getActualUserGroups(length) {
-    const { contractService } = this.rootStore;
-    const { address } = contractService._contract.options;
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     // Groups FROM FILE
     let groups = readDataFromFile({
       name: 'groups',
-      basicPath: `${PATH_TO_DATA}${address}`,
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
     });
     // Groups FROM CONTRACT
     if (
@@ -106,7 +107,7 @@ class MembersStore {
         data: {
           data: groups,
         },
-        basicPath: `${PATH_TO_DATA}${address}`,
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
       });
       return groups;
     }
