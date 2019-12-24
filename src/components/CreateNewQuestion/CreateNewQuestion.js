@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
-import Dropdown from '../Dropdown';
+import SimpleDropdown from '../SimpleDropdown';
 import { QuestionUploadingIcon } from '../Icons';
 import CreateNewQuestionForm from './CreateNewQuestionForm';
 import StepIndicator from '../StepIndicator';
@@ -74,21 +74,19 @@ class CreateNewQuestion extends React.Component {
           </div>
           <div className={styles['create-question__top-right']}>
             <div className={styles['create-question__dropdown']}>
-              {/* TODO make without field & with correct options */}
-              <Dropdown
+              <SimpleDropdown
                 options={questionStore.questionGroups}
-                field={{ set: () => {} }}
                 onSelect={this.handleDropdownSelect}
               >
                 <QuestionUploadingIcon />
-              </Dropdown>
+              </SimpleDropdown>
             </div>
             {
               isSelected
                 ? (
                   <div className={styles['create-question__description']}>
                     {/* TODO change to description for selected group questions */}
-                    Все что связано с дизайном. Вопросы по верстке решаем в отдельной группе.
+                    Description text
                   </div>
                 )
                 : null
