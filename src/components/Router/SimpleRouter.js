@@ -20,10 +20,12 @@ import Members from '../Members';
 import Settings from '../Settings';
 import VotingRoute from '../Voting/VotingRoute';
 import QuestionsRoute from '../Questions/QuestionsRoute';
+import ReturnTokens from '../ReturnTokens/ReturnTokens';
 
 const SimpleRouter = () => (
   <MemoryRouter>
     <Header />
+    <ReturnTokens />
     <Switch>
       <Route path="/" exact component={Login} />
       <Route path="/create" exact component={CreateWallet} />

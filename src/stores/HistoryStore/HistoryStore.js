@@ -152,9 +152,11 @@ class HistoryStore {
     const { contractService, userStore } = this.rootStore;
     const lastIndex = this._votings.length;
     const voting = await contractService.callMethod('voting', [lastIndex]);
+    const userVote = await Number(
+      contractService._contract.methods.getUserVote(lastIndex, userStore.address).call(),
+    );
     voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
-    voting.userVote = await contractService
-      ._contract.methods.getUserVote(lastIndex, userStore.address).call();
+    voting.userVote = userVote;
     voting.questionId = voting.id;
     voting.id = lastIndex;
     for (let j = 0; j < 7; j += 1) {
