@@ -108,13 +108,13 @@ class StartNewVote extends React.Component {
   // eslint-disable-next-line class-methods-use-this
   createFields(params) {
     // eslint-disable-next-line array-callback-return
-    params.map(([name]) => {
+    params.map(([name, type]) => {
       this.form.add({
         name,
         type: 'text',
         label: 'parameter',
         placeholder: name,
-        rules: 'required',
+        rules: `required|${type}`,
       });
     });
   }
@@ -124,7 +124,10 @@ class StartNewVote extends React.Component {
     const { isSelected } = this.state;
     const { props } = this;
     const { t, projectStore } = props;
-    const { questionStore: { options } } = projectStore;
+    const {
+      questionStore: { options },
+      questionStore: { rootStore: { membersStore: { nonERC } } },
+    } = projectStore;
     return (
       <div
         className={styles['new-vote']}
@@ -174,11 +177,24 @@ class StartNewVote extends React.Component {
                   <div className={styles['new-vote__form-row']}>
                     {form.map((field) => {
                       if (field.name === 'question') return null;
-                      return (
-                        <div className={styles['new-vote__form-col']}>
-                          <Input field={field}><Address /></Input>
-                        </div>
-                      );
+                      return (field.placeholder === 'Group' || field.placeholder === 'Group Address')
+                        ? (
+                          <div className={styles['new-vote__form-col']}>
+                            <SimpleDropdown
+                              options={nonERC}
+                              field={field}
+                              initIndex={null}
+                            >
+                              <Address />
+                            </SimpleDropdown>
+                          </div>
+
+                        )
+                        : (
+                          <div className={styles['new-vote__form-col']}>
+                            <Input field={field}><Address /></Input>
+                          </div>
+                        );
                     })}
                   </div>
                   <div className={styles['new-vote__form-row']}>

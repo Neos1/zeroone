@@ -34,7 +34,7 @@ class SimpleDropdown extends Component {
     field: {
       set: () => {},
     },
-    initIndex: 0,
+    initIndex: null,
   }
 
   constructor(props) {
@@ -42,6 +42,7 @@ class SimpleDropdown extends Component {
     const {
       initIndex,
       options,
+      field,
     } = props;
     const initOption = options[initIndex] || {};
     this.state = {
@@ -49,6 +50,7 @@ class SimpleDropdown extends Component {
       selectedValue: initOption.value || '',
       selectedLabel: initOption.label || '',
     };
+    field.set(initOption.value);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }

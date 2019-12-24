@@ -109,7 +109,7 @@
     "method": "0x3cc0a953",
     "formula": "(group (Owners) => condition (positive >= 20% of all))",
     "parameters": [
-      "Group",
+      "Group address",
       "address",
       "Admin address",
       "address"

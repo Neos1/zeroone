@@ -214,6 +214,12 @@ class MembersStore {
   }
 
   @computed
+  get nonERC() {
+    return this.groups.filter((group) => group.groupType !== 'ERC20')
+      .map((group) => ({ label: group.name, value: group.wallet }));
+  }
+
+  @computed
   get list() {
     return this.groups;
   }
