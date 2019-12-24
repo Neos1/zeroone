@@ -90,6 +90,39 @@ class CreateNewQuestionForm extends React.PureComponent {
   }
 
   /**
+   * Method for getting uniq key for
+   * similar fields (input & select)
+   *
+   * @param {string} key name field
+   * @returns {string} uniq key for
+   * select & input
+   */
+  getUniqKey = (key) => {
+    if (!key || !key.split) return '';
+    return key.split('--')[1] || '';
+  }
+
+  /**
+   * Method for getting parameters array
+   * from form with dynamic fields
+   *
+   * @param {object} form form
+   * @returns {Array} array parameters
+   */
+  getParametersFromForm = (form) => {
+    const values = form.values();
+    const parameters = [];
+    Object.keys(values).forEach((key, index) => {
+      if (Number.isInteger(index / 2) === false) return;
+      const uniqKey = this.getUniqKey(key);
+      const selectValue = values[`select--${uniqKey}`];
+      const inputValue = values[`input--${uniqKey}`];
+      parameters.push(inputValue, selectValue);
+    });
+    return parameters;
+  }
+
+  /**
    * Action on dynamic form submit
    *
    * @param form
@@ -102,18 +135,8 @@ class CreateNewQuestionForm extends React.PureComponent {
       projectStore: { questionStore, rootStore: { contractService } },
       projectStore,
     } = this.props;
-    const values = form.values();
-    const length = Object.keys(values).length / 2;
-    const selectId = 'select--id';
-    const inputId = 'input--id';
-    const parameters = [];
-    for (let i = 0; i < length; i += 1) {
-      const selectValue = values[`${selectId}${i}`];
-      const inputValue = values[`${inputId}${i}`];
-      parameters.push(inputValue, selectValue);
-    }
     const futureQuestionId = questionStore.questions.length + 1;
-
+    const parameters = this.getParametersFromForm(form);
     const question = new Question({
       id: futureQuestionId,
       group: data.groupId,
