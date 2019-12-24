@@ -141,8 +141,8 @@ class UserStore {
         } else {
           reject();
         }
-      }).catch(() => {
-        reject();
+      }).catch((err) => {
+        reject(err);
       });
     });
   }
@@ -174,7 +174,7 @@ class UserStore {
    * @return Signed TX data
    */
   @action singTransaction(data, password) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       // eslint-disable-next-line consistent-return
       this.readWallet(password).then((info) => {
         if (info instanceof Error) return false;
@@ -186,7 +186,10 @@ class UserStore {
         tx.sign(privateKey);
         const serialized = tx.serialize().toString('hex');
         resolve(serialized);
-      });
+      })
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
 

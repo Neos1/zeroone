@@ -195,10 +195,15 @@ class MembersStore {
       gasPrice: maxGasPrice,
       value: '0x0',
     };
-    return Web3Service.createTxData(address, txData, maxGasPrice)
-      .then((formedTx) => userStore.singTransaction(formedTx, password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+    return new Promise((resolve, reject) => {
+      Web3Service.createTxData(address, txData, maxGasPrice)
+        .then((formedTx) => userStore.singTransaction(formedTx, password))
+        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+        .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 
   @action getMemberById = (id) => this.list[Number(id)];

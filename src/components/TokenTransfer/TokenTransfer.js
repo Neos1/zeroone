@@ -33,7 +33,9 @@ class TokenTransfer extends React.Component {
             membersStore.list[groupId].updateMemberBalanceAndWeight(wallet);
             membersStore.list[groupId].updateMemberBalanceAndWeight(address);
           })
-          .catch(() => { membersStore.setTransferStatus('error'); });
+          .catch(() => {
+            membersStore.setTransferStatus('error');
+          });
       },
       onError: () => {
         /* eslint-disable-next-line */
