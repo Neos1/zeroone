@@ -41,6 +41,8 @@ class MembersGroupComponent extends React.Component {
     id: PropTypes.number.isRequired,
     /** name group */
     name: PropTypes.string.isRequired,
+    /** group token type */
+    groupType: PropTypes.string.isRequired,
     /** balance with token */
     fullBalance: PropTypes.string.isRequired,
     /** info about group */
@@ -110,6 +112,8 @@ class MembersGroupComponent extends React.Component {
   modalContentSwitch = () => {
     const {
       id,
+      wallet,
+      groupType,
       membersStore,
       dialogStore,
     } = this.props;
@@ -118,7 +122,14 @@ class MembersGroupComponent extends React.Component {
     const { transferSteps } = this;
     switch (transferStatus) {
       case (transferSteps.input):
-        return <TokenTransfer wallet={selectedWallet} groupId={id} />;
+        return (
+          <TokenTransfer
+            wallet={selectedWallet}
+            groupType={groupType}
+            groupAddress={wallet}
+            groupId={id}
+          />
+        );
       case (transferSteps.transfering):
         return <TokenInProgressMessage />;
       case (transferSteps.success):
