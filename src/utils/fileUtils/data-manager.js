@@ -60,7 +60,6 @@ const writeDataToFile = async ({
   basicPath,
 }) => {
   const dataPath = path.join(basicPath || PATH_TO_DATA);
-  console.log('basicPath', basicPath);
   if (!fs.existsSync(path.join(PATH_TO_DATA))) {
     await mkDirByPathSync(path.join(PATH_TO_DATA), { recursive: true });
   }
