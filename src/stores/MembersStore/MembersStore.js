@@ -137,8 +137,12 @@ class MembersStore {
   async getUsersBalances(groups) {
     for (let i = 0; i < groups.length; i += 1) {
       const group = groups[i];
-      const { contract } = group;
+      const { contract, groupType } = group;
       group.members = [];
+      const admin = groupType === 'Custom'
+        ? await contract.methods.getAdmin().call()
+        : null;
+
       for (let j = 0; j < group.users.length; j += 1) {
         const user = group.users[j];
         const balance = await contract.methods.balanceOf(user).call();
@@ -147,7 +151,9 @@ class MembersStore {
           balance,
           weight: (balance / Number(group.totalSupply)) * 100,
           customTokenName: group.tokenSymbol,
-          isAdmin: false,
+          isAdmin: admin !== null
+            ? user === admin
+            : false,
         });
       }
     }
@@ -212,6 +218,12 @@ class MembersStore {
   @computed
   get transferStatus() {
     return this._transferStatus;
+  }
+
+  @computed
+  get nonERC() {
+    return this.groups.filter((group) => group.groupType !== 'ERC20')
+      .map((group) => ({ label: group.name, value: group.wallet }));
   }
 
   @computed

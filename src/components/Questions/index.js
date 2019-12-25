@@ -21,20 +21,54 @@ import PaginationStore from '../../stores/PaginationStore';
 import FilterStore from '../../stores/FilterStore/FilterStore';
 import Loader from '../Loader';
 import Notification from '../Notification/Notification';
+import TransactionProgress from '../Message/TransactionProgress';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 @withRouter
 @withTranslation()
-@inject('projectStore', 'dialogStore')
+@inject('projectStore', 'dialogStore', 'userStore')
 @observer
 class Questions extends Component {
   passwordForm = new FinPassForm({
     hooks: {
-      onSuccess: () => {
+      onSuccess: (form) => {
         const { props } = this;
-        const { history, dialogStore } = props;
-        dialogStore.hide();
-        history.push('/votings');
-        return Promise.resolve();
+        const {
+          history,
+          dialogStore,
+          projectStore: {
+            historyStore,
+            rootStore: { Web3Service, contractService },
+            votingData,
+            votingQuestion,
+            votingGroupId,
+          },
+          userStore,
+        } = props;
+        dialogStore.show('progress_modal');
+        const { password } = form.values();
+        const maxGasPrice = 30000000000;
+        userStore.setPassword(password);
+        return userStore.readWallet(password)
+          .then(() => {
+            // eslint-disable-next-line max-len
+            const transaction = contractService.createVotingData(Number(votingQuestion), 0, Number(votingGroupId), votingData);
+            return transaction;
+          })
+          .then((tx) => Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+            .then((formedTx) => userStore.singTransaction(formedTx, password))
+            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
+          .then(() => {
+            dialogStore.hide();
+            history.push('/votings');
+            historyStore.getMissingVotings();
+          })
+          .catch((error) => {
+            dialogStore.show('error_modal');
+            console.error(error);
+          });
       },
       onError: () => Promise.reject(),
     },
@@ -61,11 +95,17 @@ class Questions extends Component {
           propTypes.shape(),
         ).isRequired,
       }),
+      rootStore: propTypes.shape().isRequired,
+      historyStore: propTypes.shape().isRequired,
+      votingData: propTypes.string.isRequired,
+      votingGroupId: propTypes.string.isRequired,
+      votingQuestion: propTypes.string.isRequired,
     }).isRequired,
     dialogStore: propTypes.shape({
       show: propTypes.func.isRequired,
       hide: propTypes.func.isRequired,
     }).isRequired,
+    userStore: propTypes.shape().isRequired,
     history: propTypes.shape({
       push: propTypes.func.isRequired,
     }).isRequired,
@@ -205,6 +245,33 @@ class Questions extends Component {
           header={t('fields:enterPassword')}
         >
           <FinPasswordFormWrapper form={this.passwordForm} />
+        </Dialog>
+        <Dialog
+          name="progress_modal"
+          size="md"
+          footer={null}
+          header={t('headings:sendingTransaction')}
+          closable={false}
+        >
+          <TransactionProgress />
+        </Dialog>
+
+        <Dialog
+          name="success_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+        </Dialog>
+
+        <Dialog
+          name="error_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
         <Footer />
       </Container>

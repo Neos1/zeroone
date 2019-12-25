@@ -19,6 +19,14 @@ const rules = {
   address: {
     function: (value) => value.match(/(0x)+([0-9 a-f A-F]){40}/g),
   },
+  uint: {
+    // eslint-disable-next-line no-restricted-globals
+    function: (value) => !isNaN(Number(value)),
+
+  },
+  bytes4: {
+    function: (value) => value.match(/(0x)+([0-9 a-f A-F]){8}/g),
+  },
 };
 
 const plugins = {
@@ -40,6 +48,8 @@ const plugins = {
         password: 'Field value not valid',
         address: 'Enter valid address',
         numeric: 'Value is not numeric',
+        uint: 'Value is not numeric',
+        bytes4: 'Value is not bytes4 string',
       });
       validator.setMessages('ru', {
         required: 'Обязательное поле',
@@ -47,6 +57,8 @@ const plugins = {
         password: 'Пароль не соответствует требованиям',
         address: 'Введите валидный адрес',
         numeric: 'Значение не является числом',
+        uint: 'Значение не является числом',
+        bytes4: 'Значение не байтовая строка',
       });
       validator.stopOnError(true);
     },

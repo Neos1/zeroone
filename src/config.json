@@ -5,6 +5,10 @@
 		{
 			"name": "voter",
 			"address": "0x459F809432Fc50Ef6136cC2fC262f19A00562B7e"
+		},
+		{
+			"name": "voter2",
+			"address": "0x661345ADc2c5eC0fdbEd3009803c5926070C3f1e"
 		}
 	]
 }

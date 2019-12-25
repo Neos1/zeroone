@@ -7,10 +7,14 @@ import Container from '../Container';
 import MembersTop from './MembersTop';
 import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import MembersGroupComponent from './MembersGroupComponent';
+import Dialog from '../Dialog/Dialog';
 import Loader from '../Loader';
 import Footer from '../Footer';
 import Notification from '../Notification/Notification';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
+import TransactionProgress from '../Message/TransactionProgress';
+import SuccessMessage from '../Message/SuccessMessage';
+import ErrorMessage from '../Message/ErrorMessage';
 
 import styles from './Members.scss';
 
@@ -18,7 +22,7 @@ import styles from './Members.scss';
  * Component for page with members
  */
 @withTranslation()
-@inject('membersStore', 'projectStore')
+@inject('membersStore', 'projectStore', 'dialogStore')
 @observer
 class MembersPage extends React.Component {
   static propTypes = {
@@ -27,7 +31,11 @@ class MembersPage extends React.Component {
       list: MobxPropTypes.observableArrayOf(PropTypes.instanceOf(MembersGroup)),
       loading: PropTypes.bool.isRequired,
     }).isRequired,
+    dialogStore: PropTypes.shape({
+      hide: PropTypes.func.isRequired,
+    }).isRequired,
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
+    t: PropTypes.func.isRequired,
   }
 
   componentDidMount() {
@@ -35,7 +43,9 @@ class MembersPage extends React.Component {
   }
 
   render() {
-    const { membersStore: { list, loading }, projectStore } = this.props;
+    const {
+      membersStore: { list, loading }, projectStore, dialogStore, t,
+    } = this.props;
     const groups = list.toJS();
     console.log(projectStore);
     return (
@@ -62,6 +72,7 @@ class MembersPage extends React.Component {
                   description={group.description}
                   wallet={group.wallet}
                   token={group.tokenName}
+                  groupType={group.groupType}
                   list={group.list}
                   textForEmptyState={group.textForEmptyState}
                 />
@@ -69,6 +80,33 @@ class MembersPage extends React.Component {
               : <Loader />
           }
         </div>
+        <Dialog
+          name="progress_modal"
+          size="md"
+          footer={null}
+          header={t('headings:sendingTransaction')}
+          closable={false}
+        >
+          <TransactionProgress />
+        </Dialog>
+
+        <Dialog
+          name="success_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+        </Dialog>
+
+        <Dialog
+          name="error_modal"
+          size="md"
+          footer={null}
+          closable
+        >
+          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+        </Dialog>
         <Footer />
       </Container>
     );
