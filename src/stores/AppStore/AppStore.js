@@ -79,6 +79,8 @@ class AppStore {
    * compile contract by given type and arguments
    *
    * @param {string} type type of contract - ERC20 for erc tokens, project - for project contract
+   * @param deployArgs
+   * @param password
    * @returns {Promise} Function which compiles contract and deploy contract to network on success
    */
   @action deployContract(type, deployArgs, password) {
@@ -177,6 +179,27 @@ class AppStore {
     contractService.setContract(contract);
     const { countOfUploaded, totalCount } = await contractService.checkQuestions();
     return countOfUploaded > totalCount;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  parseFormula(rawFormula) {
+    const f = rawFormula.map((text) => Number(text));
+    const r = [];
+    let ready = '( )';
+    r.push(f[0] === 0 ? 'group( ' : 'user(0x298e231fcf67b4aa9f41f902a5c5e05983e1d5f8) => condition(');
+    r.push(f[1] === 1 ? 'Owner) => condition(' : 'Custom) => condition(');
+    r.push(f[2] === 0 ? 'quorum ' : 'positive');
+    r.push(f[3] === 0 ? ' <= ' : ' >= ');
+
+    if (f.length === 6) {
+      r.push(`${f[4]} %`);
+      r.push(f[5] === 0 ? ' of quorum)' : ' of all)');
+    } else {
+      r.push(`${f[4]} % )`);
+    }
+    const formula = r.join('');
+    ready = ready.replace(' ', formula);
+    return ready;
   }
 
   /**

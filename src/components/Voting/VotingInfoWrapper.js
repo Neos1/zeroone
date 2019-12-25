@@ -22,6 +22,7 @@ import ProjectStore from '../../stores/ProjectStore/ProjectStore';
   'projectStore',
   'userStore',
   'membersStore',
+  'appStore',
 )
 @observer
 class VotingInfoWrapper extends React.PureComponent {
@@ -139,6 +140,9 @@ class VotingInfoWrapper extends React.PureComponent {
       }).isRequired,
     }).isRequired,
     userStore: PropTypes.shape().isRequired,
+    appStore: PropTypes.shape({
+      parseFormula: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor() {
@@ -229,16 +233,32 @@ class VotingInfoWrapper extends React.PureComponent {
 
   // eslint-disable-next-line class-methods-use-this
   prepareParameters(voting, question) {
-    const { projectStore: { rootStore: { Web3Service } } } = this.props;
+    const { projectStore: { rootStore: { Web3Service } }, appStore: { parseFormula } } = this.props;
     const { data } = voting;
     const { methodSelector, params, id } = question;
     const votingData = data.replace(methodSelector, '0x');
-    const parameters = id !== 1
-      ? params.map((param) => param[1])
-      : ['uint[]', 'uint8', 'string', 'string', 'address', 'bytes4', 'uint[]', 'bytes32[]'];
-    console.log(parameters, votingData);
-    const decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, votingData);
-    const decodedParams = params.map((param, index) => [param[0], decodedRawParams[index]]);
+    let parameters;
+    let decodedRawParams;
+    let decodedParams;
+    if (id !== 1) {
+      parameters = params.map((param) => param[1]);
+      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, votingData);
+      decodedParams = params.map((param, index) => [param[0], decodedRawParams[index]]);
+    } else {
+      parameters = ['uint[]', 'uint8', 'string', 'string', 'address', 'bytes4', 'uint[]', 'bytes32[]'];
+      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, votingData);
+      // PARAMETERS FOR FIRST QUESTION
+      const FQP = ['Group ID', 'Status', 'Name', 'Text', 'Target', 'MethodSelector', 'Formula', 'parameters'];
+      decodedParams = [
+        [FQP[0], decodedRawParams[0][1]],
+        [FQP[1], decodedRawParams[1] === '0' ? 'Active' : 'Disabled'],
+        [FQP[2], decodedRawParams[2]],
+        [FQP[3], decodedRawParams[3]],
+        [FQP[4], decodedRawParams[4]],
+        [FQP[5], decodedRawParams[5]],
+        [FQP[6], parseFormula(decodedRawParams[6])],
+      ];
+    }
     return decodedParams;
   }
 
