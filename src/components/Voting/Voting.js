@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import uniqKey from 'react-id-generator';
 import queryString from 'query-string';
 import VotingTop from './VotingTop';
 import VotingItem from './VotingItem';
@@ -156,9 +157,9 @@ class Voting extends React.Component {
           <div className={styles['voting-page__list']}>
             {
               !loading
-                ? votings.map((item, index) => (
+                ? votings.map((item) => (
                   <VotingItem
-                    key={`voting__item--${index + 1}`}
+                    key={uniqKey()}
                     index={item.id}
                     title={item.caption}
                     description={item.text}
