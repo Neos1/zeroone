@@ -86,20 +86,27 @@ class HistoryStore {
    * @function
    */
   @action fetchVotings = async () => {
-    const { contractService, userStore } = this.rootStore;
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
-      const voting = await contractService.callMethod('voting', [length]);
-      voting.descision = await contractService.callMethod('getVotingDescision', [length]);
-      voting.userVote = await contractService
-        ._contract.methods.getUserVote(length, userStore.address).call();
-      voting.questionId = voting.id;
-      voting.id = length;
-      for (let j = 0; j < 7; j += 1) {
-        delete voting[j];
-      }
+      const voting = await this.getVotingFromContractById(length);
       this._votings.push(new Voting(voting));
     }
+  }
+
+  /**
+   * Method for update voting with active
+   * status state
+   */
+  @action
+  async updateVotingWithActiveState() {
+    const { votings } = this;
+    votings.forEach(async (votingItem) => {
+      if (votingItem.status === statusStates.active) {
+        const { id } = votingItem;
+        const voting = await this.getVotingFromContractById(id);
+        votingItem.update(voting);
+      }
+    });
   }
 
   /**
@@ -114,6 +121,7 @@ class HistoryStore {
       return;
     }
     await this.getMissingVotings();
+    await this.updateVotingWithActiveState();
     this.loading = false;
   }
 
@@ -149,19 +157,8 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const { contractService, userStore } = this.rootStore;
     const lastIndex = this._votings.length;
-    const voting = await contractService.callMethod('voting', [lastIndex]);
-    const userVoteFromContract = await contractService
-      ._contract.methods.getUserVote(lastIndex, userStore.address).call();
-    const userVote = Number(userVoteFromContract);
-    voting.descision = await contractService.callMethod('getVotingDescision', [lastIndex]);
-    voting.userVote = userVote;
-    voting.questionId = voting.id;
-    voting.id = lastIndex;
-    for (let j = 0; j < 7; j += 1) {
-      delete voting[j];
-    }
+    const voting = await this.getVotingFromContractById(lastIndex);
     this._votings[0].update(voting);
     this.writeVotingsToFile();
   }
@@ -217,15 +214,7 @@ class HistoryStore {
     if (countVotingFromContract > votingsFromFileLength) {
       for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const voting = await contractService.callMethod('voting', [i]);
-        voting.descision = await contractService.callMethod('getVotingDescision', [i]);
-        voting.userVote = await contractService
-          ._contract.methods.getUserVote(i, userStore.address).call();
-        voting.questionId = voting.id;
-        voting.id = i;
-        for (let j = 0; j < 7; j += 1) {
-          delete voting[j];
-        }
+        const voting = await this.getVotingFromContractById(i);
         this._votings.unshift(new Voting(voting));
       }
       this.writeVotingsToFile();
@@ -315,15 +304,37 @@ class HistoryStore {
   }
 
   /**
+   * Method for getting actual voting
+   * from contract by id
+   *
+   * @param {string|number} id id voting
+   * @returns {object} actual voting form contract
+   */
+  async getVotingFromContractById(id) {
+    const { contractService, userStore } = this.rootStore;
+    const voting = await contractService.callMethod('voting', [id]);
+    const userVoteFromContract = await contractService
+      ._contract.methods.getUserVote(id, userStore.address).call();
+    const userVote = Number(userVoteFromContract);
+    voting.descision = await contractService.callMethod('getVotingDescision', [id]);
+    voting.userVote = userVote;
+    voting.questionId = voting.id;
+    voting.id = id;
+    for (let j = 0; j < 7; j += 1) {
+      delete voting[j];
+    }
+    return voting;
+  }
+
+  /**
    * Method for check active voting state
    *
    * @returns {boolean} has active voting state
    */
   async hasActiveVoting() {
-    const { contractService } = this.rootStore;
     const countOfVotings = await this.fetchVotingsCount();
     const lastVote = countOfVotings - 1;
-    const voting = await contractService.callMethod('voting', [lastVote]);
+    const voting = await this.getVotingFromContractById(lastVote);
     return voting.status === statusStates.active;
   }
 
