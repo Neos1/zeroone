@@ -41,7 +41,6 @@ class VotingInfoWrapper extends React.PureComponent {
         const { votingId } = this;
         const { descision } = this.state;
         const {
-          match: { params: { id } },
           userStore,
           dialogStore,
           userStore: {
@@ -54,14 +53,12 @@ class VotingInfoWrapper extends React.PureComponent {
             addReturnTokensNotification,
           },
         } = this.props;
-        const [voting] = historyStore.getVotingById(Number(id));
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal');
         return contractService.sendVote(votingId, descision)
-          .then(() => {
-            voting.update({ userVote: Number(descision) });
-            historyStore.writeVotingsToFile();
+          .then(async () => {
+            await historyStore.fetchAndUpdateLastVoting();
             addReturnTokensNotification();
             switch (descision) {
               case (1):

@@ -157,9 +157,10 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const lastIndex = this._votings.length;
-    const voting = await this.getVotingFromContractById(lastIndex);
-    this._votings[0].update(voting);
+    const lastIndex = await this.fetchVotingsCount() - 1;
+    const votingFromContract = await this.getVotingFromContractById(lastIndex);
+    const [voting] = this.getVotingById(lastIndex);
+    voting.update(votingFromContract);
     this.writeVotingsToFile();
   }
 
