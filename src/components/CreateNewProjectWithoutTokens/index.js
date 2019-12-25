@@ -42,6 +42,7 @@ class CreateNewProjectWithoutTokens extends Component {
     creation: 2,
     tokenCreated: 3,
     projectInfo: 4,
+    uploading: 5,
   }
 
   constructor(props) {
@@ -180,8 +181,9 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   render() {
+    const { steps } = this;
     const { currentStep, indicatorStep } = this.state;
-    if (currentStep === 'uploading') return <Redirect to="/uploadProject" />;
+    if (currentStep === steps.uploading) return <Redirect to="/uploadProject" />;
     return (
       <Container>
         <div className={styles.form}>

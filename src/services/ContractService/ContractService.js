@@ -231,12 +231,10 @@ class ContractService {
         };
         return new Promise((resolve) => {
           Web3Service.createTxData(address, rawTx, maxGasPrice)
-            // eslint-disable-next-line max-len
             .then((formedTx) => userStore.singTransaction(formedTx, password))
-            // eslint-disable-next-line no-console
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            // eslint-disable-next-line no-console
-            .then((txHash) => resolve(txHash));
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+            .then((receipt) => resolve(receipt));
         });
       // eslint-disable-next-line prefer-promise-reject-errors
       } return Promise.reject('WATAFAk');
