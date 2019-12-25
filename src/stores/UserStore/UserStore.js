@@ -86,10 +86,10 @@ class UserStore {
    * @param {string} password
    * @returns {Promise} resolves with {v3wallet, privateKey}
    */
-  @action recoverWallet() {
+  @action recoverWallet(password = undefined) {
     const seed = this._mnemonicRepeat.join(' ');
     return new Promise((resolve, reject) => {
-      this.rootStore.walletService.createWallet(undefined, seed).then((data) => {
+      this.rootStore.walletService.createWallet(password, seed).then((data) => {
         if (data.v3wallet) {
           const {
             v3wallet, mnemonic, privateKey, walletName,
