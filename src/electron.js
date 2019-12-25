@@ -1,10 +1,13 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const electronLocalshortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
 let mainWindow;
 
+/**
+ *
+ */
 function createWindow() {
   mainWindow = new BrowserWindow({
     useContentSize: true,
@@ -16,12 +19,20 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
+
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   // eslint-disable-next-line no-unused-expressions
   isDev
     ? process.env.NODE_ENV = 'production'
     : process.env.NODE_ENV = 'development';
+
   mainWindow.on('closed', () => mainWindow = null);
+
+  mainWindow.webContents.on('new-window', (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
+  });
+
   electronLocalshortcut.register(mainWindow, 'F12', () => {
     mainWindow.webContents.toggleDevTools();
   });
