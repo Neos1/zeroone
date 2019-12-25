@@ -87,6 +87,22 @@ class FormDynamic extends React.Component {
   render() {
     const { props } = this;
     const { formDynamic, t, onToggle } = props;
+    const options = [{
+      label: 'uint',
+      value: 'uint',
+    }, {
+      label: 'String',
+      value: 'string',
+    }, {
+      label: 'Address',
+      value: 'address',
+    }, {
+      label: 'bytes4',
+      value: 'bytes4',
+    }, {
+      label: 'bytes32',
+      value: 'bytes32',
+    }];
     return (
       <form
         form={formDynamic}
@@ -110,7 +126,7 @@ class FormDynamic extends React.Component {
                 </div>
                 <div className={styles['create-question__form-col']}>
                   <SimpleDropdown
-                    options={[{ label: 'String', value: 'string' }]}
+                    options={options}
                     field={formDynamic.$(`select--${key}`)}
                     onSelect={() => {}}
                   >

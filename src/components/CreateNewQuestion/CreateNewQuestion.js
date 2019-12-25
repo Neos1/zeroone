@@ -12,6 +12,8 @@ import styles from './CreateNewQuestion.scss';
 
 /**
  * Component for creating a new question
+ *
+ * @param selected
  */
 @withTranslation()
 @inject('projectStore')
@@ -27,11 +29,12 @@ class CreateNewQuestion extends React.Component {
     this.state = {
       isSelected: false,
       activeTab: 0,
+      selectedGroup: 0,
     };
   }
 
-  handleDropdownSelect = () => {
-    this.setState({ isSelected: true });
+  handleDropdownSelect = (selected) => {
+    this.setState({ isSelected: true, selectedGroup: selected.value });
   }
 
   /**
@@ -44,7 +47,7 @@ class CreateNewQuestion extends React.Component {
   }
 
   render() {
-    const { isSelected, activeTab } = this.state;
+    const { isSelected, activeTab, selectedGroup } = this.state;
     const { props } = this;
     const { t, projectStore: { questionStore } } = props;
     return (
@@ -99,6 +102,7 @@ class CreateNewQuestion extends React.Component {
               ? (
                 <CreateNewQuestionForm
                   activeTab={activeTab}
+                  selectedGroup={Number(selectedGroup) + 1}
                   onToggle={this.toggleActiveTab}
                 />
               )

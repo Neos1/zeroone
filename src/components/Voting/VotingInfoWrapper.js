@@ -293,9 +293,7 @@ class VotingInfoWrapper extends React.PureComponent {
           onRejectClick={() => { this.onRejectClick(); }}
           onCompleteVoteClick={() => { this.onClosingClick(); }}
           onBarClick={
-            (name, data) => {
-              console.log('name', name);
-              console.log('data', data);
+            () => {
               dialogStore.show('voter_list');
             }
           }

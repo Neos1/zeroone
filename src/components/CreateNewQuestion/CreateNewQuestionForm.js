@@ -17,20 +17,13 @@ import styles from './CreateNewQuestion.scss';
 @observer
 class CreateNewQuestionForm extends React.PureComponent {
   /** Form with basic info for new question */
-  data = {
-    name: '',
-    description: '',
-    groupId: 0,
-    time: 0,
-    formula: '',
-    target: '',
-    methodSelector: '',
-  }
 
   formBasic = new CreateQuestionBasicForm({
     hooks: {
       onSuccess: (form) => {
         this.onBasicSubmit(form);
+        const { data: { groupId } } = this;
+        console.log(groupId);
         return Promise.resolve();
       },
       onError: () => {
@@ -61,7 +54,22 @@ class CreateNewQuestionForm extends React.PureComponent {
       toggle: PropTypes.func.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape().isRequired,
+    selectedGroup: PropTypes.number.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    const { selectedGroup } = props;
+    this.data = {
+      name: '',
+      description: '',
+      groupId: selectedGroup,
+      time: 0,
+      formula: '',
+      target: '',
+      methodSelector: '',
+    };
+  }
 
   /**
    * Action on basic form submit
@@ -119,6 +127,7 @@ class CreateNewQuestionForm extends React.PureComponent {
       const inputValue = values[`input--${uniqKey}`];
       parameters.push(inputValue, selectValue);
     });
+    console.log(parameters);
     return parameters;
   }
 
