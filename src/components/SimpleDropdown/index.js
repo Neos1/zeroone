@@ -42,7 +42,6 @@ class SimpleDropdown extends Component {
     const {
       initIndex,
       options,
-      field,
     } = props;
     const initOption = options[initIndex] || {};
     this.state = {
@@ -50,7 +49,6 @@ class SimpleDropdown extends Component {
       selectedValue: initOption.value || '',
       selectedLabel: initOption.label || '',
     };
-    field.set(initOption.value);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
@@ -78,14 +76,15 @@ class SimpleDropdown extends Component {
   }
 
 
-  handleSelect = (selected) => {
+  handleSelect = async (selected) => {
     const { onSelect, field } = this.props;
     field.set(selected.value);
-    this.setState({
+    onSelect(selected);
+
+    await this.setState({
       selectedLabel: selected.label,
       selectedValue: selected.value,
     });
-    onSelect(selected);
     this.toggleOptions();
   }
 
@@ -116,7 +115,7 @@ class SimpleDropdown extends Component {
         <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}
           <span className="dropdown__selected" data-value={selectedValue}>
-            {selectedLabel || t('other:select') }
+            {selectedLabel !== '' ? selectedLabel : t('other:select') }
             <span className="dropdown__arrow">
               <DropdownArrowIcon />
             </span>

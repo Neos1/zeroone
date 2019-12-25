@@ -71,8 +71,8 @@ class StartNewVote extends React.Component {
     const { props } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.handleSelect(selected);
       this.initIndex = Number(selected.value);
+      this.handleSelect(selected);
     });
   }
 
@@ -83,7 +83,7 @@ class StartNewVote extends React.Component {
     const { questionStore } = projectStore;
     const [question] = questionStore.getQuestionById(selected.value);
     const { params } = question;
-
+    this.initIndex = Number(selected.value);
     // @ Clearing fields, except question selection dropdown
     // eslint-disable-next-line array-callback-return
     form.map((field) => {
