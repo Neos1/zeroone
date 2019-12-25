@@ -50,6 +50,7 @@ const plugins = {
         numeric: 'Value is not numeric',
         uint: 'Value is not numeric',
         bytes4: 'Value is not bytes4 string',
+        between: 'Between :min and :max signs',
       });
       validator.setMessages('ru', {
         required: 'Обязательное поле',
@@ -59,6 +60,7 @@ const plugins = {
         numeric: 'Значение не является числом',
         uint: 'Значение не является числом',
         bytes4: 'Значение не байтовая строка',
+        between: 'Между :min и :max знаками',
       });
       validator.stopOnError(true);
     },
