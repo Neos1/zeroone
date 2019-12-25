@@ -29,7 +29,7 @@ class ReturnTokens extends React.Component {
         } = this.props;
         const { password } = form.values();
         userStore.setPassword(password);
-        dialogStore.show('progress_modal');
+        dialogStore.toggle('progress_modal');
         return historyStore.returnTokens()
           .then(() => {
             const notificationId = notificationStore.list[0].id;

@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import Button from '../Button/Button';
 import DialogStore from '../../stores/DialogStore';
-import ReturnTokens from '../ReturnTokens/ReturnTokens';
 
 @withTranslation()
 @inject('dialogStore')
@@ -32,7 +31,6 @@ class TokensWithActiveVoting extends React.Component {
         >
           {t('buttons:pickUpTokens')}
         </Button>
-        <ReturnTokens />
       </>
     );
   }
