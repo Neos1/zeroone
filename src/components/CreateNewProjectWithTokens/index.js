@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
@@ -10,14 +11,14 @@ import Container from '../Container';
 import LoadingBlock from '../LoadingBlock';
 import Input from '../Input';
 import StepIndicator from '../StepIndicator';
-import Explanation from '../Explanation';
 import {
-  BackIcon, Address, TokenName, Password,
+  BackIcon, Address,
 } from '../Icons';
 import ConnectTokenForm from '../../stores/FormsStore/ConnectToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
 
 import styles from '../Login/Login.scss';
+import InputProjectData from './InputProjectData';
 
 @withTranslation()
 @inject('userStore', 'appStore')
@@ -30,7 +31,7 @@ class CreateNewProjectWithTokens extends Component {
     },
   });
 
-  createProject = new CreateProjectForm({
+  @observable createProject = new CreateProjectForm({
     hooks: {
       onSuccess: (form) => this.gotoUploading(form),
       onError: () => {},
@@ -120,6 +121,7 @@ class CreateNewProjectWithTokens extends Component {
   renderSwitch(step) {
     const { t } = this.props;
     const { steps } = this;
+    console.log('this.createProject', this.createProject);
     switch (step) {
       case steps.token:
         return <InputTokenAddress form={this.connectToken} onSubmit={this.checkToken} />;
@@ -209,44 +211,6 @@ const ContractConfirmation = inject('appStore')(observer(withTranslation()(({ t,
   </FormBlock>
 ))));
 
-const InputProjectData = withTranslation()(({
-  t, form, onClick,
-}) => (
-  <FormBlock>
-    <Heading>
-      {t('headings:projectCreating.heading')}
-      <span>
-        {t('headings:projectCreating.subheading.0')}
-        <br />
-        {t('headings:projectCreating.subheading.1')}
-      </span>
-    </Heading>
-    <form form={form} onSubmit={form.onSubmit}>
-      <Input field={form.$('name')}>
-        <TokenName />
-      </Input>
-      <Input field={form.$('password')}>
-        <Password />
-      </Input>
-      <div className={styles.form__submit}>
-        <Button theme="black" size="310" disabled={form.loading} type="submit">
-          {t('buttons:continue')}
-        </Button>
-      </div>
-      <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
-        <Explanation>
-          <p>
-            {t('explanations:project.name')}
-          </p>
-        </Explanation>
-      </div>
-      <Button theme="back" icon={<BackIcon />} onClick={onClick}>
-        {t('buttons:back')}
-      </Button>
-    </form>
-  </FormBlock>
-));
-
 CreateNewProjectWithTokens.propTypes = {
   appStore: propTypes.shape({
     checkErc: propTypes.func.isRequired,
@@ -274,13 +238,6 @@ InputTokenAddress.propTypes = {
 };
 ContractConfirmation.propTypes = {
   onSubmit: propTypes.func.isRequired,
-};
-InputProjectData.propTypes = {
-  form: propTypes.shape({
-    $: propTypes.func.isRequired,
-    onSubmit: propTypes.func.isRequired,
-  }).isRequired,
-  onClick: propTypes.func.isRequired,
 };
 
 export default CreateNewProjectWithTokens;
