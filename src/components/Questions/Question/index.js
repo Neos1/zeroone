@@ -6,11 +6,18 @@ import { StartIcon } from '../../Icons';
 
 import styles from './Question.scss';
 
-const startBlock = (t) => (
+/**
+ * Component for render start button
+ *
+ * @param {Function} t method for translate text
+ * @param {*} id id question
+ * @returns {Node} component start button
+ */
+const startBlock = (t, id) => (
   <div className={styles.question__right}>
     <NavLink
       className={styles.question__start}
-      to="/votings"
+      to={`/votings?modal=start_new_vote&option=${id}`}
     >
       <p className={styles['question__start-icon']}>
         <StartIcon />
@@ -83,7 +90,7 @@ const Question = withTranslation()(({
           </div>
         )
     }
-    {extended ? ParametersBlock(params, t) : startBlock(t)}
+    {extended ? ParametersBlock(params, t) : startBlock(t, id)}
     {extended ? FormulaBlock(formula, t) : null}
   </div>
 ));
