@@ -17,7 +17,7 @@ import styles from './StartNewVote.scss';
 @inject('projectStore', 'dialogStore')
 @observer
 class StartNewVote extends React.Component {
-  @observable initIndex = 0;
+  @observable initIndex = null;
 
   votingData = '';
 
@@ -71,7 +71,7 @@ class StartNewVote extends React.Component {
     const { props } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.initIndex = Number(selected.value);
+      this.initIndex = Number(selected.value) - 1;
       this.handleSelect(selected);
     });
   }
@@ -90,7 +90,6 @@ class StartNewVote extends React.Component {
       if (field.name === 'question') return;
       form.del(field.name);
     });
-
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
       case 1:
@@ -125,7 +124,7 @@ class StartNewVote extends React.Component {
     const { props } = this;
     const { t, projectStore } = props;
     const {
-      questionStore: { options },
+      questionStore: { newVotingOptions },
       questionStore: { rootStore: { membersStore: { nonERC } } },
     } = projectStore;
     return (
@@ -144,10 +143,10 @@ class StartNewVote extends React.Component {
             className={styles['new-vote__dropdown']}
           >
             <SimpleDropdown
-              options={options}
+              options={newVotingOptions}
               field={form.$('question')}
               onSelect={this.handleSelect}
-              initIndex={initIndex}
+              initIndex={initIndex - 1}
               key={uniqKey()}
             >
               <QuestionIcon />

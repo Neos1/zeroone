@@ -85,6 +85,15 @@ class QuestionStore {
     }]);
   }
 
+  @computed get newVotingOptions() {
+    return this._questions.map((question) => (
+      {
+        value: question.id,
+        label: question.caption,
+      }
+    ));
+  }
+
   @computed get questionGroups() {
     return this._questionGroups.reduce((acc, group) => ([
       ...acc,
