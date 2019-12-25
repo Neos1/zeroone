@@ -26,7 +26,6 @@ class InputProjectData extends React.Component {
     const { onClick, form, t } = props;
     return (
       <FormBlock>
-        {`loading: ${form.loading}`}
         <Heading>
           {t('headings:projectCreating.heading')}
           <span>
