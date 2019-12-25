@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { computed } from 'mobx';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import uniqKey from 'react-id-generator';
@@ -121,22 +122,37 @@ class Voting extends React.Component {
     }
   }
 
+  @computed
+  get votings() {
+    const { props } = this;
+    const {
+      projectStore: {
+        historyStore,
+      },
+    } = props;
+    return historyStore.paginatedList;
+  }
+
   closeModal = (name) => {
     const { dialogStore } = this.props;
     dialogStore.hide(name);
   }
 
   render() {
-    const { props, voteStatus, state } = this;
+    const {
+      props,
+      voteStatus,
+      state,
+      votings,
+    } = this;
     const { status } = state;
     const {
       t,
       dialogStore,
       projectStore: {
-        historyStore: { loading, pagination, paginatedList },
+        historyStore: { loading, pagination },
       },
     } = props;
-    const votings = paginatedList;
     return (
       <Container className="container--small">
         <div
