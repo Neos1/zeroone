@@ -54,8 +54,6 @@ class VotingInfoWrapper extends React.PureComponent {
           },
         } = this.props;
         const [voting] = historyStore.getVotingById(Number(id));
-        console.log('voting', voting);
-        console.log(descision, votingId, form.values());
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal');
@@ -88,10 +86,11 @@ class VotingInfoWrapper extends React.PureComponent {
 
   closingForm = new FinPassForm({
     hooks: {
-      onSuccess: () => {
+      onSuccess: (form) => {
         const { props } = this;
         const {
           match: { params: { id } },
+          userStore,
           projectStore: {
             historyStore,
             rootStore: {
@@ -100,6 +99,8 @@ class VotingInfoWrapper extends React.PureComponent {
           },
           dialogStore,
         } = props;
+        const { password } = form.values();
+        userStore.setPassword(password);
         dialogStore.toggle('progress_modal');
         const [voting] = historyStore.getVotingById(Number(id));
         voting.update({
