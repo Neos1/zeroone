@@ -16,7 +16,7 @@ import styles from './Voting.scss';
 @withTranslation()
 @observer
 class VotingItem extends React.PureComponent {
-  @observable progress;
+  @observable progress = 0;
 
   intervalProgress = 5000;
 
