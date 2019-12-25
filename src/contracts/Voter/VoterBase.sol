@@ -366,6 +366,7 @@ contract VoterBase is VoterInterface {
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         uint256 weight = votings.voting[votingId].voteWeigths[address(group)][msg.sender];
         bool isReturned = this.isUserReturnTokens(msg.sender);
+        uint userVote = this.getUserVote(votingId, msg.sender); 
 
         if (!isReturned) {
             if( bytes4(keccak256(groupType)) == bytes4(keccak256("ERC20"))) {
@@ -376,7 +377,7 @@ contract VoterBase is VoterInterface {
             if (votings.voting[votingId].status != Votings.Status.ENDED) {
                 votings.voting[votingId].votes[address(group)][msg.sender] = 0;
                 votings.voting[votingId].voteWeigths[address(group)][msg.sender] = 0;
-                votings.voting[votingId].descisionWeights[0][groupName] -= weight;
+                votings.voting[votingId].descisionWeights[userVote][groupName] -= weight;
             }
             votings.voting[votingId].tokenReturns[address(group)][msg.sender] = weight;
         }
@@ -431,7 +432,7 @@ contract VoterBase is VoterInterface {
             this.closeVoting();
         }
         return (
-            votings.voting[_voteId].votes[address(group)][msg.sender] = _choice,
+            votings.voting[_voteId].votes[address(group)][msg.sender],
             votings.voting[_voteId].descisionWeights[1][groupName],
             votings.voting[_voteId].descisionWeights[2][groupName]
         );
