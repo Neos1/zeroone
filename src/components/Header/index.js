@@ -17,9 +17,15 @@ const Header = inject('userStore', 'appStore')(observer(({ appStore: { inProject
     <div className={styles.header__right}>
       <LangSwitcher />
       {authorized ? <User>{address}</User> : ''}
-      <NavLink className={styles.header__settings} to="/settings">
-        <SettingsIcon />
-      </NavLink>
+      {
+      authorized
+        ? (
+          <NavLink className={styles.header__settings} to="/settings">
+            <SettingsIcon />
+          </NavLink>
+        )
+        : null
+      }
     </div>
   </header>
 )));

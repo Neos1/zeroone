@@ -32,6 +32,7 @@ class ProjectUploading extends Component {
       step: this.steps.compiling,
       uploading: true,
       contractAddress: '',
+      projectName: '',
     };
   }
 
@@ -85,6 +86,7 @@ class ProjectUploading extends Component {
             this.setState({
               uploading: false,
               contractAddress: receipt.contractAddress,
+              projectName: name,
             });
           });
         }
@@ -92,12 +94,16 @@ class ProjectUploading extends Component {
   }
 
   render() {
-    const { step, uploading, contractAddress } = this.state;
+    const {
+      step, uploading, contractAddress, projectName,
+    } = this.state;
     return (
       <Container>
         <div className={`${styles.form} ${uploading ? styles['form--ultrawide'] : ''}`}>
           {
-            uploading ? <Progress step={step} /> : <AlertBlock address={contractAddress} />
+            uploading
+              ? <Progress step={step} />
+              : <AlertBlock address={contractAddress} name={projectName} />
           }
         </div>
       </Container>
@@ -142,7 +148,9 @@ const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, s
   );
 })));
 
-const AlertBlock = withTranslation()(inject('appStore')(observer(({ t, appStore, address }) => (
+const AlertBlock = withTranslation()(inject('appStore')(observer(({
+  t, appStore, address, name,
+}) => (
   <FormBlock>
     <Heading>
       {t('headings:projectCreated.heading')}
@@ -153,12 +161,18 @@ const AlertBlock = withTranslation()(inject('appStore')(observer(({ t, appStore,
       </span>
     </Heading>
     <NavLink to="/questions">
-      <Button theme="black" width="310" icon={<Login />} type="submit">
+      <Button
+        theme="black"
+        width="310"
+        icon={<Login />}
+        type="button"
+        onClick={() => { appStore.gotoProject({ address, name }); }}
+      >
         {t('buttons:toCreatedProject')}
       </Button>
     </NavLink>
     <NavLink to="/projects">
-      <Button theme="link" type="submit" onClick={() => { appStore.gotoProject(address); }}>
+      <Button theme="link" type="button">
         {t('buttons:otherProject')}
       </Button>
     </NavLink>

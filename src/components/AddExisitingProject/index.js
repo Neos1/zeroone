@@ -52,6 +52,8 @@ class AddExistingProject extends Component {
     super(props);
     this.state = {
       currentStep: this.steps.default,
+      projectName: '',
+      projectAddress: '',
     };
   }
 
@@ -65,7 +67,11 @@ class AddExistingProject extends Component {
     return new Promise((resolve, reject) => {
       appStore.checkProject(address)
         .then(() => {
-          this.setState({ currentStep: steps.success });
+          this.setState({
+            currentStep: steps.success,
+            projectAddress: address,
+            projectName: name,
+          });
           appStore.addProjectToList({ name, address });
           resolve();
         })
@@ -86,6 +92,7 @@ class AddExistingProject extends Component {
 
   renderSwitch(step) {
     const { steps } = this;
+    const { projectAddress, projectName } = this.state;
     const { t } = this.props;
     switch (step) {
       case steps.default:
@@ -100,7 +107,7 @@ class AddExistingProject extends Component {
           </LoadingBlock>
         );
       case steps.success:
-        return <MessageBlock />;
+        return <MessageBlock address={projectAddress} name={projectName} />;
       default:
         return '';
     }
@@ -157,22 +164,26 @@ const InputBlock = withTranslation()(({ t, form }) => (
   </FormBlock>
 ));
 
-const MessageBlock = withTranslation()(({ t }) => (
+const MessageBlock = withTranslation()(inject('appStore')(observer(({
+  t, appStore, address, name,
+}) => (
   <FormBlock>
     <Heading>
       {t('headings:projectConnected.heading')}
       {t('headings:projectConnected.subheading')}
     </Heading>
-    <Button theme="black" size="240" icon={<Login />} type="submit">
-      {t('buttons:toConnectedProject')}
-    </Button>
+    <NavLink to="/questions">
+      <Button theme="black" size="240" icon={<Login />} onClick={() => { appStore.gotoProject({ address, name }); }}>
+        {t('buttons:toConnectedProject')}
+      </Button>
+    </NavLink>
     <NavLink to="/projects">
       <Button theme="link">
         {t('buttons:otherProject')}
       </Button>
     </NavLink>
   </FormBlock>
-));
+))));
 
 InputBlock.propTypes = {
   form: propTypes.shape({
