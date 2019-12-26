@@ -137,6 +137,17 @@ class Voting extends React.Component {
     return historyStore.loading;
   }
 
+  @computed
+  get votings() {
+    const { props } = this;
+    const {
+      projectStore: {
+        historyStore,
+      },
+    } = props;
+    return historyStore.paginatedList;
+  }
+
   closeModal = (name) => {
     const { dialogStore } = this.props;
     dialogStore.hide(name);
@@ -149,6 +160,7 @@ class Voting extends React.Component {
       state,
       votingIsActive,
       loading,
+      votings,
     } = this;
     const { status } = state;
     const {
@@ -157,11 +169,9 @@ class Voting extends React.Component {
       projectStore: {
         historyStore: {
           pagination,
-          paginatedList,
         },
       },
     } = props;
-    const votings = paginatedList;
     return (
       <Container className="container--small">
         <div
