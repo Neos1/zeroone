@@ -18,6 +18,7 @@
     left: 0;
     z-index: 999;
     text-align: left;
+    visibility: hidden;
     opacity: 0;
     transition: opacity 0.5s;
 
@@ -38,6 +39,7 @@
   &--with-hint {
     &:hover {
       .btn__hint {
+        visibility: visible;
         opacity: 1;
       }
     }
