@@ -2,9 +2,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 import propTypes from 'prop-types';
 import i18n from '../../i18n';
 import styles from './LangSwitcher.scss';
+import { getCorrectMomentLocale } from '../../utils/Date';
 
 @withTranslation()
 class LangSwitcher extends Component {
@@ -41,6 +43,7 @@ class LangSwitcher extends Component {
     const value = e.target.getAttribute('data-value');
     this.toggleOptions();
     i18n.changeLanguage(value);
+    moment.locale(getCorrectMomentLocale(i18n.language));
   }
 
   closeOptions = () => {
