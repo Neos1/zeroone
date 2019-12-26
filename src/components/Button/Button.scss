@@ -1,6 +1,7 @@
 @import "../../assets/styles/partials/variables";
 
 .btn {
+  position: relative;
   padding: 14px 10px;
   text-align: center;
   text-decoration: none;
@@ -9,6 +10,45 @@
   outline: none;
   cursor: pointer;
   transition: 0.2s linear;
+
+  &__hint {
+    position: absolute;
+    right: -100%;
+    bottom: calc(100% + 10px);
+    left: 0;
+    z-index: 999;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 0.5s;
+
+    &-content {
+      display: inline-block;
+      padding: 14px 16px 16px;
+      color: #4d4d4d;
+      font-size: 11px;
+      line-height: 13px;
+      white-space: pre-line;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 2px;
+    }
+  }
+
+  &--with-hint {
+    &:hover {
+      .btn__hint {
+        opacity: 1;
+      }
+    }
+
+    &:active,
+    &:focus {
+      .btn__hint {
+        color: #000;
+      }
+    }
+  }
 
   svg,
   &__icon,
@@ -38,7 +78,10 @@
 
   &[disabled]{
     cursor: default;
-    opacity: .5;
+
+    .btn__content {
+      opacity: .5;
+    }
   }
 
   &--black {
