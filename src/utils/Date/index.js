@@ -18,4 +18,27 @@ const progressByDateRange = (date) => {
   return progressValue;
 };
 
+/**
+ * Method for getting correct moment
+ * locale name
+ *
+ * @param {string} locale locale for convert
+ * @returns {string} correct moment locale
+ */
+const getCorrectMomentLocale = (locale) => {
+  switch (locale) {
+    case 'RUS':
+      return 'ru';
+    case 'ENG':
+      return 'en-gb';
+    default:
+      return 'en-gb';
+  }
+};
+
 export default progressByDateRange;
+
+export {
+  progressByDateRange,
+  getCorrectMomentLocale,
+};
