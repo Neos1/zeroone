@@ -14,6 +14,7 @@ class DatePicker extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onDatesSet: PropTypes.func,
+    onDatesClear: PropTypes.func,
     id: PropTypes.string.isRequired,
     init: PropTypes.shape({
       startDate: PropTypes.instanceOf(moment),
@@ -23,6 +24,7 @@ class DatePicker extends React.PureComponent {
 
   static defaultProps = {
     onDatesSet: () => {},
+    onDatesClear: () => {},
     init: {
       startDate: null,
       endDate: null,
@@ -47,8 +49,9 @@ class DatePicker extends React.PureComponent {
 
   handleDatesChange = ({ startDate, endDate }) => {
     const { props } = this;
-    const { onDatesSet } = props;
+    const { onDatesSet, onDatesClear } = props;
     this.setState({ start: startDate, end: endDate });
+    if (!startDate || !endDate) onDatesClear();
     if (startDate && endDate) onDatesSet({ startDate, endDate });
   }
 
