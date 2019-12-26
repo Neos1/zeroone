@@ -101,7 +101,7 @@ class MembersPage extends React.Component {
           size="md"
           footer={null}
           header={t('headings:sendingTransaction')}
-          closable={false}
+          closeable={false}
         >
           <TransactionProgress />
         </Dialog>
@@ -110,7 +110,7 @@ class MembersPage extends React.Component {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
@@ -119,7 +119,7 @@ class MembersPage extends React.Component {
           name="error_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>

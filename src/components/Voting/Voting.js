@@ -256,7 +256,7 @@ class Voting extends React.Component {
           size="md"
           footer={null}
           header={t('headings:sendingTransaction')}
-          closable={!(status === voteStatus.inProgress)}
+          closeable={!(status === voteStatus.inProgress)}
         >
           <TransactionProgress />
         </Dialog>
@@ -265,7 +265,7 @@ class Voting extends React.Component {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
@@ -274,7 +274,7 @@ class Voting extends React.Component {
           name="error_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>

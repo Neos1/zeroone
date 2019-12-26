@@ -354,7 +354,7 @@ class VotingInfoWrapper extends React.PureComponent {
           size="md"
           footer={null}
           header="Отправка транзакции"
-          closable={false}
+          closeable={false}
         >
           <TransactionProgress />
         </Dialog>
@@ -363,7 +363,7 @@ class VotingInfoWrapper extends React.PureComponent {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
@@ -372,7 +372,7 @@ class VotingInfoWrapper extends React.PureComponent {
           name="error_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
