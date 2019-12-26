@@ -1,6 +1,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-console */
 /* eslint-disable class-methods-use-this */
+import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
 
 class StartNewVoteForm extends ExtendedForm {
@@ -11,7 +12,7 @@ class StartNewVoteForm extends ExtendedForm {
           name: 'question',
           type: 'text',
           label: 'Question',
-          placeholder: 'Выберите вопрос',
+          placeholder: i18n.t('fields:chooseTheQuestion'),
           rules: 'required|integer|min:1',
         },
       ],

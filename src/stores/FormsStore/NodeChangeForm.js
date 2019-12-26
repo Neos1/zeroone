@@ -13,7 +13,7 @@ class NodeChangeForm extends ExtendedForm {
         name: 'url',
         type: 'text',
         label: 'Token Address',
-        placeholder: 'URL ноды',
+        placeholder: i18n.t('fields:nodeUrl'),
         rules: 'required|string|url',
         value: config.host,
       }],

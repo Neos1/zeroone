@@ -25,6 +25,11 @@ const placeholders = {
   descriptionOrComment: 'Описание или комментарий',
   dateFrom: 'Дата с',
   dateTo: 'Дата по',
+  questionGroup: 'Группа вопросов',
+  targetContractAddress: 'Адрес целевого контракта',
+  functionSelector: 'Function selector',
+  nodeUrl: 'URL ноды',
+  chooseTheQuestion: 'Выберите вопрос',
 };
 
 export default placeholders;

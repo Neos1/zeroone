@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
+import { withTranslation } from 'react-i18next';
 import VotingInfo from './VotingInfo';
 import Container from '../Container';
 import Dialog from '../Dialog/Dialog';
@@ -17,6 +18,7 @@ import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
+@withTranslation()
 @inject(
   'dialogStore',
   'projectStore',
@@ -141,6 +143,7 @@ class VotingInfoWrapper extends React.PureComponent {
     appStore: PropTypes.shape({
       parseFormula: PropTypes.func.isRequired,
     }).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -266,6 +269,7 @@ class VotingInfoWrapper extends React.PureComponent {
       dialogStore,
       projectStore: { historyStore, questionStore },
       match: { params: { id } },
+      t,
     } = props;
     this.votingId = Number(id);
     const [voting] = historyStore.getVotingById(Number(id));
@@ -353,7 +357,7 @@ class VotingInfoWrapper extends React.PureComponent {
           name="progress_modal"
           size="md"
           footer={null}
-          header="Отправка транзакции"
+          header={t('other:sendingTransaction')}
           closeable={false}
         >
           <TransactionProgress />

@@ -73,5 +73,6 @@ const other = {
   parameters: 'Parameters',
   select: 'Select',
   hintFunctionalityNotAvailable: 'During active voting, this <1/> functionality is not available.',
+  outOf: 'out of',
 };
 export default other;

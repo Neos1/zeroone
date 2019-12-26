@@ -9,21 +9,21 @@ class CreateQuestionBasicForm extends ExtendedForm {
         {
           name: 'GroupId',
           type: 'text',
-          label: 'Question title',
-          placeholder: 'Группа вопросов',
+          label: i18n.t('fields:questionGroup'),
+          placeholder: i18n.t('fields:questionGroup'),
           rules: '',
         },
         {
           name: 'question_title',
           type: 'text',
-          label: 'Question title',
+          label: i18n.t('fields:questionTitle'),
           placeholder: i18n.t('fields:questionTitle'),
           rules: 'required',
         },
         {
           name: 'question_life_time',
           type: 'text',
-          label: 'Question lifetime',
+          label: i18n.t('fields:questionLifeTime'),
           placeholder: i18n.t('fields:questionLifeTime'),
           rules: 'required',
 
@@ -31,21 +31,20 @@ class CreateQuestionBasicForm extends ExtendedForm {
         {
           name: 'target',
           type: 'text',
-          label: 'Parameter question',
-          placeholder: 'Адрес целевого контракта',
+          label: i18n.t('fields:targetContractAddress'),
+          placeholder: i18n.t('fields:targetContractAddress'),
 
         },
         {
           name: 'methodSelector',
           type: 'text',
-          label: 'Parameter question',
-          placeholder: 'Селектор функции',
-
+          label: i18n.t('fields:functionSelector'),
+          placeholder: i18n.t('fields:functionSelector'),
         },
         {
           name: 'voting_formula',
           type: 'text',
-          label: 'Voting formula',
+          label: i18n.t('fields:votingFormula'),
           placeholder: i18n.t('fields:votingFormula'),
           rules: 'required',
 

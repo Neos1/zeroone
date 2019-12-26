@@ -42,7 +42,7 @@ class Pagination extends React.Component {
     } = this.props;
     const minPage = 1;
     let newValue = parseInt(event.target.value, 10) || 0;
-    // не даём ввести значение больше максимального
+    // do not let us enter a value greater than the maximum
     if (newValue >= lastPage) newValue = lastPage;
     if (newValue <= minPage) newValue = minPage;
     this.setState({ value: newValue });
@@ -130,7 +130,7 @@ class Pagination extends React.Component {
             onChange={this.handleChange}
             onFocus={this.handleFocus}
           />
-          <span>{`из ${lastPage}`}</span>
+          <span>{`${t('other:outOf')} ${lastPage}`}</span>
           <button
             type="button"
             onClick={() => this.handleButtonClick(value)}
