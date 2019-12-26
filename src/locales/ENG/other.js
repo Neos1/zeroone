@@ -72,5 +72,6 @@ const other = {
   sendingTransaction: 'Sending transaction',
   parameters: 'Parameters',
   select: 'Select',
+  hintFunctionalityNotAvailable: 'During active voting, this\nfunctionality is not available.',
 };
 export default other;

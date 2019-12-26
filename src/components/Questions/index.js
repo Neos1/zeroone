@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
+import { observable, computed } from 'mobx';
 import { withRouter } from 'react-router-dom';
 import uniqKey from 'react-id-generator';
 import Container from '../Container';
@@ -30,6 +31,10 @@ import ErrorMessage from '../Message/ErrorMessage';
 @inject('projectStore', 'dialogStore', 'userStore')
 @observer
 class Questions extends Component {
+  @observable votingIsActive = false;
+
+  @observable _loading = false;
+
   passwordForm = new FinPassForm({
     hooks: {
       onSuccess: (form) => {
@@ -116,6 +121,20 @@ class Questions extends Component {
     this.state = {};
   }
 
+  async componentDidMount() {
+    const { projectStore: { historyStore } } = this.props;
+    this._loading = true;
+    this.votingIsActive = await historyStore.hasActiveVoting();
+    this._loading = false;
+  }
+
+  @computed
+  get loading() {
+    const { projectStore: { questionStore } } = this.props;
+    if (this._loading === true) return true;
+    return questionStore.loading;
+  }
+
   /**
    * Method for getting init index
    * for dropdown sort option
@@ -157,10 +176,10 @@ class Questions extends Component {
   }
 
   render() {
+    const { loading, votingIsActive } = this;
     const { t, projectStore, dialogStore } = this.props;
     const {
       questionStore: {
-        loading,
         pagination,
         questionGroups,
         paginatedList,
@@ -180,6 +199,8 @@ class Questions extends Component {
                         theme="white"
                         icon={<CreateToken />}
                         onClick={() => { dialogStore.show('create_group_question'); }}
+                        disabled={votingIsActive}
+                        hint={votingIsActive ? t('other:hintFunctionalityNotAvailable') : ''}
                       >
                         {t('buttons:createQuestionGroup')}
                       </Button>
@@ -187,6 +208,8 @@ class Questions extends Component {
                         theme="white"
                         icon={<CreateToken />}
                         onClick={() => { dialogStore.show('create_question'); }}
+                        disabled={votingIsActive}
+                        hint={votingIsActive ? t('other:hintFunctionalityNotAvailable') : ''}
                       >
                         {t('buttons:createQuestion')}
                       </Button>
