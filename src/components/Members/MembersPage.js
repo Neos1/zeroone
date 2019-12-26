@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer, PropTypes as MobxPropTypes } from 'mobx-react';
+import { observable, computed } from 'mobx';
 import Container from '../Container';
 import MembersTop from './MembersTop';
 import MembersGroup from '../../stores/MembersStore/MembersGroup';
@@ -25,6 +26,10 @@ import styles from './Members.scss';
 @inject('membersStore', 'projectStore', 'dialogStore')
 @observer
 class MembersPage extends React.Component {
+  @observable votingIsActive = false;
+
+  @observable _loading = false;
+
   static propTypes = {
     membersStore: PropTypes.shape({
       addToGroups: PropTypes.func.isRequired,
@@ -38,16 +43,26 @@ class MembersPage extends React.Component {
     t: PropTypes.func.isRequired,
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { projectStore: { historyStore } } = this.props;
+    this._loading = true;
+    this.votingIsActive = await historyStore.hasActiveVoting();
+    this._loading = false;
+  }
 
+  @computed
+  get loading() {
+    const { membersStore } = this.props;
+    if (this._loading === true) return true;
+    return membersStore.loading;
   }
 
   render() {
+    const { loading, votingIsActive } = this;
     const {
-      membersStore: { list, loading }, projectStore, dialogStore, t,
+      membersStore: { list }, projectStore, dialogStore, t,
     } = this.props;
     const groups = list.toJS();
-    console.log(projectStore);
     return (
       <Container className="container--small">
         <Notification />
@@ -56,6 +71,7 @@ class MembersPage extends React.Component {
             ? (
               <MembersTop
                 projectName={projectStore.name}
+                votingIsActive={votingIsActive}
               />
             )
             : null
