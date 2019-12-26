@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation, Trans } from 'react-i18next';
 import { PlayCircleIcon } from '../Icons';
+import Button from '../Button/Button';
 
 import styles from './Voting.scss';
 
@@ -14,20 +15,15 @@ const VotingTop = ({
   onClick,
 }) => (
   <div className={styles.voting__top}>
-    <button
-      type="button"
-      className={styles['voting__top-button']}
+    <Button
+      icon={(<PlayCircleIcon />)}
+      theme="with-play-icon"
       onClick={onClick}
     >
-      <span className={styles['voting__top-button-icon']}>
-        <PlayCircleIcon />
-      </span>
-      <span className={styles['voting__top-button-text']}>
-        <Trans
-          i18nKey="buttons:startNewVote"
-        />
-      </span>
-    </button>
+      <Trans
+        i18nKey="buttons:startNewVote"
+      />
+    </Button>
   </div>
 );
 

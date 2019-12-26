@@ -151,7 +151,11 @@ class Voting extends React.Component {
           {/* eslint-disable-next-line */}
           {
             !loading
-              ? <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
+              ? (
+                <>
+                  <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
+                </>
+              )
               : null
           }
           <div className={styles['voting-page__list']}>

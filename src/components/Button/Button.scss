@@ -237,5 +237,25 @@
   &--310 {
     width: 310px;
   }
+
+  &--with-play-icon {
+    width: 100%;
+    padding: 26px 96px 26px 100px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+
+    .btn__text {
+      color: #000;
+      font-weight: 300;
+      font-size: 18px;
+      font-family: "Grotesk";
+      line-height: 21px;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+    }
+  }
 }
 
