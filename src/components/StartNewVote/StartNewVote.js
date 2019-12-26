@@ -64,6 +64,7 @@ class StartNewVote extends React.Component {
     super();
     this.state = {
       isSelected: false,
+      description: '',
     };
   }
 
@@ -82,8 +83,9 @@ class StartNewVote extends React.Component {
     const { projectStore, dialogStore } = this.props;
     const { questionStore } = projectStore;
     const [question] = questionStore.getQuestionById(selected.value);
-    const { params } = question;
+    const { params, text: description } = question;
     this.initIndex = Number(selected.value);
+    this.setState({ description });
     // @ Clearing fields, except question selection dropdown
     // eslint-disable-next-line array-callback-return
     form.map((field) => {
@@ -120,7 +122,7 @@ class StartNewVote extends React.Component {
 
   render() {
     const { form, initIndex } = this;
-    const { isSelected } = this.state;
+    const { isSelected, description } = this.state;
     const { props } = this;
     const { t, projectStore } = props;
     const {
@@ -156,7 +158,7 @@ class StartNewVote extends React.Component {
                 ? (
                   <div className={styles['new-vote__description']}>
                     {/* TODO add correct description text */}
-                    New vote description text
+                    {description.length > 150 ? description.substr(0, 130) : description}
                   </div>
                 )
                 : null
