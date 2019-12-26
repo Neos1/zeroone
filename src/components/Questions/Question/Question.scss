@@ -45,22 +45,6 @@
     max-width: 70%;
     font-size: 11px;
   }
-  &__start {
-    width: 50%;
-    margin: 0 auto;
-    &-icon {
-      cursor: pointer;
-      svg {
-        width: 30px;
-        height: 30px;
-      }
-    }
-    &-label {
-      margin-top: 10px;
-      color: $primary;
-      font-size: 11px;
-    }
-  }
   &__parameter {
     margin: 10px 0;
     text-align: left;
@@ -84,4 +68,4 @@
     color: $border;
     font-size: 11px;
   }
-} 
+}

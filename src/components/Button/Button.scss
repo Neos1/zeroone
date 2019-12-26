@@ -257,5 +257,21 @@
       height: auto;
     }
   }
+
+  &--question-start {
+    display: inline-block;
+    background: #fff;
+
+    .btn__text {
+      margin-top: 10px;
+      color: $primary;
+      font-size: 11px;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
 }
 

@@ -256,6 +256,7 @@ class Questions extends Component {
               !loading
                 ? questions.map((question) => (
                   <Question
+                    votingIsActive={votingIsActive}
                   // eslint-disable-next-line react/jsx-props-no-spreading
                     {...question}
                     key={`question__item--${question.id}`}
