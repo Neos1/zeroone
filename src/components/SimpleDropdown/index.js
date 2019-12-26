@@ -23,6 +23,7 @@ class SimpleDropdown extends Component {
     onSelect: propTypes.func,
     field: propTypes.shape({
       set: propTypes.func,
+      error: propTypes.string,
     }),
     initIndex: propTypes.number,
     t: propTypes.func.isRequired,
@@ -33,6 +34,7 @@ class SimpleDropdown extends Component {
     onSelect: () => false,
     field: {
       set: () => {},
+      error: null,
     },
     initIndex: null,
   }
@@ -58,7 +60,7 @@ class SimpleDropdown extends Component {
   }
 
   componentWillUnmount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
   setWrapperRef(node) {
@@ -75,7 +77,6 @@ class SimpleDropdown extends Component {
     this.setState({ opened: false });
   }
 
-
   handleSelect = async (selected) => {
     const { onSelect, field } = this.props;
     field.set(selected.value);
@@ -88,17 +89,18 @@ class SimpleDropdown extends Component {
     this.toggleOptions();
   }
 
-
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.closeOptions();
     }
   }
 
-
   render() {
     const {
-      children, options, t,
+      children,
+      options,
+      t,
+      field,
     } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option) => (
@@ -110,7 +112,14 @@ class SimpleDropdown extends Component {
       />
     ));
     return (
-      <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
+      <div
+        className={`
+          ${styles.dropdown}
+          ${opened ? 'dropdown--opened' : ''}
+          ${field && field.error ? styles['dropdown--error'] : ''}
+        `}
+        ref={this.setWrapperRef}
+      >
         <input type="hidden" />
         <button type="button" className="dropdown__head" onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className="dropdown__icon">{children}</span> : ''}
@@ -125,6 +134,9 @@ class SimpleDropdown extends Component {
         <div className="dropdown__options">
           {getOptions}
         </div>
+        <p className={styles['dropdown__error-text']}>
+          {field.error}
+        </p>
       </div>
     );
   }
