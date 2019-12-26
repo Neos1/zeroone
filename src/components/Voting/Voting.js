@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { computed, observable } from 'mobx';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import uniqKey from 'react-id-generator';
@@ -30,6 +31,10 @@ import styles from './Voting.scss';
 @inject('dialogStore', 'projectStore', 'userStore')
 @observer
 class Voting extends React.Component {
+  @observable votingIsActive = false;
+
+  @observable _loading = false;
+
   passwordForm = new FinPassForm({
     hooks: {
       onSuccess: (form) => {
@@ -99,12 +104,13 @@ class Voting extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { props } = this;
     const {
       location,
       dialogStore,
       projectStore: {
+        historyStore,
         rootStore: {
           eventEmitterService,
         },
@@ -119,6 +125,16 @@ class Voting extends React.Component {
       const targetOption = options[Number(parsed.option)];
       eventEmitterService.emit('new_vote:toggle', targetOption);
     }
+    this._loading = true;
+    this.votingIsActive = await historyStore.hasActiveVoting();
+    this._loading = false;
+  }
+
+  @computed
+  get loading() {
+    const { projectStore: { historyStore } } = this.props;
+    if (this._loading === true) return true;
+    return historyStore.loading;
   }
 
   closeModal = (name) => {
@@ -127,13 +143,22 @@ class Voting extends React.Component {
   }
 
   render() {
-    const { props, voteStatus, state } = this;
+    const {
+      props,
+      voteStatus,
+      state,
+      votingIsActive,
+      loading,
+    } = this;
     const { status } = state;
     const {
       t,
       dialogStore,
       projectStore: {
-        historyStore: { loading, pagination, paginatedList },
+        historyStore: {
+          pagination,
+          paginatedList,
+        },
       },
     } = props;
     const votings = paginatedList;
@@ -152,9 +177,10 @@ class Voting extends React.Component {
           {
             !loading
               ? (
-                <>
-                  <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
-                </>
+                <VotingTop
+                  onClick={() => { dialogStore.show('start_new_vote'); }}
+                  votingIsActive={votingIsActive}
+                />
               )
               : null
           }

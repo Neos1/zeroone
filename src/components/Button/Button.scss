@@ -1,7 +1,6 @@
 @import "../../assets/styles/partials/variables";
 
 .btn {
-  position: relative;
   padding: 14px 10px;
   text-align: center;
   text-decoration: none;
@@ -13,7 +12,6 @@
 
   &__hint {
     position: absolute;
-    right: -100%;
     bottom: calc(100% + 10px);
     left: 0;
     z-index: 999;
@@ -28,7 +26,7 @@
       color: #4d4d4d;
       font-size: 11px;
       line-height: 13px;
-      white-space: pre-line;
+      white-space: nowrap;
       text-align: left;
       background: #fff;
       border: 1px solid #000;
@@ -37,6 +35,8 @@
   }
 
   &--with-hint {
+    position: relative;
+
     &:hover {
       .btn__hint {
         visibility: visible;

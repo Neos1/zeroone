@@ -13,22 +13,38 @@ import styles from './Voting.scss';
  */
 const VotingTop = ({
   onClick,
+  votingIsActive,
+  t,
 }) => (
   <div className={styles.voting__top}>
     <Button
       icon={(<PlayCircleIcon />)}
       theme="with-play-icon"
       onClick={onClick}
+      disabled={votingIsActive}
+      hint={
+        votingIsActive
+          ? (
+            <Trans
+              i18nKey="other:hintFunctionalityNotAvailable"
+            >
+              During active voting, this
+              <br />
+              functionality is not available.
+            </Trans>
+          )
+          : null
+      }
     >
-      <Trans
-        i18nKey="buttons:startNewVote"
-      />
+      {t('buttons:startNewVote')}
     </Button>
   </div>
 );
 
 VotingTop.propTypes = {
   onClick: PropTypes.func,
+  t: PropTypes.func.isRequired,
+  votingIsActive: PropTypes.bool.isRequired,
 };
 
 VotingTop.defaultProps = {

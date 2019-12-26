@@ -22,12 +22,12 @@ const Button = ({
       ${styles.btn}
       ${styles[`btn--${theme}`]}
       ${size ? styles[`btn--${size}`] : ''}
-      ${hint && hint.length ? styles['btn--with-hint'] : ''}
+      ${hint ? styles['btn--with-hint'] : ''}
     `}
     onClick={onClick}
   >
     {
-      hint && hint.length
+      hint
         ? (
           <div className={styles.btn__hint}>
             <div className={styles['btn__hint-content']}>
@@ -60,7 +60,10 @@ Button.propTypes = {
   onClick: propTypes.func,
   theme: propTypes.string,
   size: propTypes.string,
-  hint: propTypes.string,
+  hint: propTypes.oneOfType([
+    propTypes.string,
+    propTypes.shape({}),
+  ]),
 };
 
 Button.defaultProps = {

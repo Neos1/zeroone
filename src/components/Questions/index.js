@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import { withRouter } from 'react-router-dom';
@@ -200,7 +200,19 @@ class Questions extends Component {
                         icon={<CreateToken />}
                         onClick={() => { dialogStore.show('create_group_question'); }}
                         disabled={votingIsActive}
-                        hint={votingIsActive ? t('other:hintFunctionalityNotAvailable') : ''}
+                        hint={
+                          votingIsActive
+                            ? (
+                              <Trans
+                                i18nKey="other:hintFunctionalityNotAvailable"
+                              >
+                                During active voting, this
+                                <br />
+                                functionality is not available.
+                              </Trans>
+                            )
+                            : null
+                        }
                       >
                         {t('buttons:createQuestionGroup')}
                       </Button>
@@ -209,7 +221,19 @@ class Questions extends Component {
                         icon={<CreateToken />}
                         onClick={() => { dialogStore.show('create_question'); }}
                         disabled={votingIsActive}
-                        hint={votingIsActive ? t('other:hintFunctionalityNotAvailable') : ''}
+                        hint={
+                          votingIsActive
+                            ? (
+                              <Trans
+                                i18nKey="other:hintFunctionalityNotAvailable"
+                              >
+                                During active voting, this
+                                <br />
+                                functionality is not available.
+                              </Trans>
+                            )
+                            : null
+                        }
                       >
                         {t('buttons:createQuestion')}
                       </Button>
