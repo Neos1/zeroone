@@ -60,6 +60,7 @@ class VotingInfoWrapper extends React.PureComponent {
           .then(async () => {
             await historyStore.fetchAndUpdateLastVoting();
             addReturnTokensNotification();
+            this.getVotingStats();
             switch (descision) {
               case (1):
                 dialogStore.toggle('decision_agreed_message');
@@ -108,6 +109,7 @@ class VotingInfoWrapper extends React.PureComponent {
           .then(() => {
             dialogStore.toggle('success_modal');
             historyStore.fetchAndUpdateLastVoting();
+            this.getVotingStats();
           })
           .catch(() => {
             dialogStore.toggle('error_modal');
