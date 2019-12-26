@@ -29,14 +29,17 @@ class UserStore {
 
   /**
    * saves password to store for decoding wallet and transaction signing
-   *@param {string} value password from form
-  */
+param {string} value password from form
+   *
+   * @param value
+   */
   @action setPassword(value) {
     this.password = value;
   }
 
   /**
    * saves v3 keystore and wallet address to store
+   *
    * @param {object} wallet JSON Keystore V3
    */
   @action setEncryptedWallet(wallet) {
@@ -45,6 +48,7 @@ class UserStore {
 
   /**
    * checking Ethereum balance for given address
+   *
    * @param {string} address wallet adddress
    * @returns {Promise} resolves with balance rounded to 5 decimal places
    */
@@ -59,8 +63,9 @@ class UserStore {
 
   /**
    * create wallet by given password
+   *
    * @param {string} password password which will be used for wallet decrypting
-   * @return {Promise} resolves on success with {v3wallet, mnemonic, privateKey, walletName}
+   * @returns {Promise} resolves on success with {v3wallet, mnemonic, privateKey, walletName}
    */
   @action createWallet(password) {
     return new Promise((resolve, reject) => {
@@ -83,6 +88,7 @@ class UserStore {
 
   /**
    * recovering wallet by mnemonic
+   *
    * @param {string} password
    * @returns {Promise} resolves with {v3wallet, privateKey}
    */
@@ -108,6 +114,7 @@ class UserStore {
 
   /**
    * method for authorize wallet for working with projects
+   *
    * @param {string} password password for wallet
    * @returns {Promise} resolve on success authorization
    */
@@ -128,6 +135,7 @@ class UserStore {
 
   /**
    * read wallet for any operations with it
+   *
    * @param {string} password password for wallet
    * @returns {Promise} resolves with object {v3wallet, privateKey}
    */
@@ -158,6 +166,7 @@ class UserStore {
 
   /**
    * checks is seed valid with walletService
+   *
    * @param {string} mnemonic mnemonic
    * @returns {bool} is valid
    */
@@ -168,12 +177,15 @@ class UserStore {
 
   /**
    * Signing transactions with private key
+   *
    * @function
    * @param {string} data rawTx
    * @param {string} password password which was used to encode Keystore V3
-   * @return Signed TX data
+   * @returns Signed TX data
    */
-  @action singTransaction(data, password) {
+  @action async singTransaction(data, password) {
+    const { rootStore: { Web3Service: { web3: { eth } } } } = this;
+    const chainId = await eth.net.getId();
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line consistent-return
       this.readWallet(password).then((info) => {
@@ -182,7 +194,7 @@ class UserStore {
           info.privateKey,
           'hex',
         );
-        const tx = new Tx(data, { chain: 'ropsten' });
+        const tx = new Tx(data, { chain: chainId });
         tx.sign(privateKey);
         const serialized = tx.serialize().toString('hex');
         resolve(serialized);
@@ -195,6 +207,7 @@ class UserStore {
 
   /**
    * Sending transaction from user
+   *
    * @function
    * @param {string} txData Raw transaction
    */
@@ -204,7 +217,8 @@ class UserStore {
 
   /**
    * Getting user Ethereum balance
-   * @return {number} balance in ETH
+   *
+   * @returns {number} balance in ETH
    */
   @action async getEthBalance() {
     const { Web3Service: { web3 } } = this.rootStore;
