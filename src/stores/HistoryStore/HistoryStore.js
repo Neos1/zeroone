@@ -236,6 +236,20 @@ class HistoryStore {
   }
 
   /**
+   * Method for remove filter rule
+   * by name
+   *
+   * @param {string} rule name rule
+   */
+  removeFilterRule = (rule) => {
+    this.filter.removeFilterRule(rule);
+    this.pagination.update({
+      activePage: 1,
+      totalItemsCount: this.list.length,
+    });
+  }
+
+  /**
    * Method for reset filter
    * & update pagination
    */
