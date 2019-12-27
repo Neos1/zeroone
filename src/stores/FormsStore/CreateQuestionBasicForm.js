@@ -25,15 +25,14 @@ class CreateQuestionBasicForm extends ExtendedForm {
           type: 'text',
           label: i18n.t('fields:questionLifeTime'),
           placeholder: i18n.t('fields:questionLifeTime'),
-          rules: 'required',
-
+          rules: 'required|numeric',
         },
         {
           name: 'target',
           type: 'text',
           label: i18n.t('fields:targetContractAddress'),
           placeholder: i18n.t('fields:targetContractAddress'),
-
+          rules: 'required|string|address',
         },
         {
           name: 'methodSelector',
@@ -47,7 +46,6 @@ class CreateQuestionBasicForm extends ExtendedForm {
           label: i18n.t('fields:votingFormula'),
           placeholder: i18n.t('fields:votingFormula'),
           rules: 'required',
-
         },
         {
           name: 'description',
