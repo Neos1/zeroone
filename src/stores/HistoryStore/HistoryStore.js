@@ -26,7 +26,6 @@ class HistoryStore {
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
-      itemsCountPerPage: 5,
     });
     setInterval(() => {
       this.getActualVotings();

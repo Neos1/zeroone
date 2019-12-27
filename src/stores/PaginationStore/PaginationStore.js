@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-const DEFAULT_ITEMS_PER_PAGE = 10;
+const DEFAULT_ITEMS_PER_PAGE = 5;
 const DEFAULT_PAGE_RANGE = 5;
 
 class PaginationStore {

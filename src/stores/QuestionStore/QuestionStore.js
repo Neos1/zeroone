@@ -29,8 +29,6 @@ class QuestionStore {
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
-      // TODO remove after full realization
-      itemsCountPerPage: 2,
     });
   }
 
