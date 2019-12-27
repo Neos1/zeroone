@@ -363,6 +363,7 @@ class HistoryStore {
   async hasActiveVoting() {
     const countOfVotings = await this.fetchVotingsCount();
     const lastVote = countOfVotings - 1;
+    if (lastVote === 0) return false;
     const voting = await this.getVotingFromContractById(lastVote);
     return voting.status === statusStates.active;
   }
