@@ -1,4 +1,4 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5;
 
 import "../libs/QuestionGroups.sol";
 import "../libs/Questions.sol";
@@ -53,14 +53,14 @@ interface VoterInterface {
      * return new question id
      */
     function saveNewQuestion(
-        uint[] calldata _idsAndTime,
+        uint[] _idsAndTime,
         Questions.Status _status,
-        string calldata _caption,
-        string calldata _text,
+        string _caption,
+        string _text,
         address _target,
         bytes4 _methodSelector,
-        uint[] calldata _formula,
-        bytes32[] calldata _parameters
+        uint[] _formula,
+        bytes32[] _parameters
     ) external returns (bool _saved);
 
     /**
@@ -69,7 +69,7 @@ interface VoterInterface {
      * @return new question id
      */
     function saveNewGroup(
-        string calldata _name
+        string _name
     ) external returns (uint id);
 
     /**
@@ -97,7 +97,7 @@ interface VoterInterface {
         uint questionId,
         Votings.Status status,
         uint starterGroup,
-        bytes calldata data
+        bytes data
     ) external returns (bool);
 
     function voting(uint id) external view returns (
@@ -107,7 +107,7 @@ interface VoterInterface {
         string memory text,
         uint startTime,
         uint endTime,
-        bytes memory data
+        bytes data
     );
     function getVotingsCount() external view returns (uint length);
 }

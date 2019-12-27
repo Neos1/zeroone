@@ -7,6 +7,8 @@ import { BN } from 'ethereumjs-util';
 class Web3Service {
   /**
    * @class
+   * @param url
+   * @param rootStore
    * @param {string} provider - provider for this.web3
    */
   constructor(url, rootStore) {
@@ -25,8 +27,8 @@ class Web3Service {
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
         transaction = { ...tx, nonce };
-        console.log(transaction, eth.estimateGas(tx));
-        return eth.estimateGas(tx);
+        console.log(transaction, eth.estimateGas(transaction));
+        return eth.estimateGas(transaction);
       })
       .then((gas) => {
         if (!maxGasPrice) return (Promise.resolve(gas));

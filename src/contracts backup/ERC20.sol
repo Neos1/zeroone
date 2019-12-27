@@ -1,4 +1,4 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5;
 
 import "./IERC20.sol";
 import "./SafeMath.sol";
@@ -39,7 +39,7 @@ contract ERC20 is IERC20 {
     
     string private _symbol;
 
-    constructor (string memory name, string memory symbol, uint256 totalSupply) public {
+    constructor (string name, string symbol, uint256 totalSupply) public {
         _name = name;
         _symbol = symbol;
         _totalSupply = totalSupply;
@@ -63,13 +63,13 @@ contract ERC20 is IERC20 {
     /**
      * @dev Get the symbol of token.
      */
-    function symbol() public view returns (string memory) {
+    function symbol() public view returns (string) {
         return _symbol;
     }
     /**
      * @dev Get the name of token.
      */
-    function name() public view returns (string memory) {
+    function name() public view returns (string) {
         return _name;
     }
 

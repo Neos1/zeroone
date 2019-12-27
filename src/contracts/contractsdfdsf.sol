@@ -1,12 +1,430 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5;
 
-import "../libs/QuestionGroups.sol";
-import "../libs/UserGroups.sol";
-import "../libs/Questions.sol";
-import "../libs/Votings.sol";
-import "./VoterInterface.sol";
-import "./ExternalInterface.sol";
-import "../IERC20.sol";
+
+
+
+
+
+library QuestionGroups {
+    
+    enum GroupType {
+        // system group
+        SYSTEM,
+        // user group
+        CUSTOM
+    }
+
+    struct Group {
+        // group type
+        GroupType groupType;
+        // group name
+        string name;
+    }
+
+    struct List {
+        uint groupIdIndex;
+        mapping (bytes32 => uint) uniqNames;
+        mapping (uint => Group) group;
+    }
+
+    function init(List storage _self) internal {
+        _self.groupIdIndex = 1;
+         Group memory systemGroup = Group({
+            name: 'Системные',
+            groupType: GroupType.SYSTEM
+        });
+        save(_self, systemGroup);
+         Group memory otherGroup = Group({
+            name: "Другие",
+            groupType: GroupType.CUSTOM
+        });
+        save(_self, otherGroup);
+    }
+
+    function save(List storage _self, Group memory _group) internal returns (uint id) {
+        bytes32 name = keccak256(abi.encodePacked(_group.name));
+        uint groupId = _self.groupIdIndex;
+        require(!exists(_self, name), "provided group already exists");
+        _self.group[groupId] = _group;
+        _self.uniqNames[name] = groupId;
+        _self.groupIdIndex++;
+        return groupId;
+    }
+
+    function exists(List storage _self, bytes32 _name) internal view returns (bool) {
+        return _self.uniqNames[_name] != 0;
+    }
+
+}
+
+
+
+
+library UserGroups {
+
+    enum GroupStatus {
+        // deleted or inactive question
+        INACTIVE,
+        // active question
+        ACTIVE
+    }
+
+    struct UserGroup {
+        string name;
+        string groupType;
+        GroupStatus status;
+        address groupAddr;
+    }
+
+    struct List {
+        uint groupIdIndex;
+        mapping (bytes32 => uint) uniqNames;
+        mapping (uint => string) names;
+        mapping (uint => UserGroup) group;
+    }
+
+    function init(List storage _self, address _ERC20) internal {
+        _self.groupIdIndex = 1;
+        UserGroup memory group = UserGroup({
+            name: "Owner",
+            groupType: "ERC20",
+            status: GroupStatus.ACTIVE,
+            groupAddr: _ERC20
+        });
+        save(_self, group);
+    }
+
+    function save(List storage _self, UserGroup memory _group) internal returns (uint id) {
+        bytes32 key = keccak256(abi.encodePacked(_group.name));
+        string memory name = _group.name;
+        uint groupId = _self.groupIdIndex;
+        require(!exists(_self, key), "provided group already exists");
+        _self.names[groupId] = name;
+        _self.group[groupId] = _group;
+        _self.uniqNames[key] = groupId;
+        _self.groupIdIndex++;
+        return groupId;
+    }
+
+    function exists(List storage _self, bytes32 _name) internal view returns (bool) {
+        return _self.uniqNames[_name] != 0;
+    }
+
+}
+
+
+
+
+library Questions {
+
+    enum Status {
+        // deleted or inactive question
+        INACTIVE,
+        // active question
+        ACTIVE
+    }
+
+    struct Question {
+        // question group id
+        uint groupId;
+        // question status
+        Status status;
+        // question name
+        string caption;
+        // question description
+        string text;
+        // question length in minutes
+        uint time;
+        // target address
+        address target;
+        // method to be called
+        bytes4 methodSelector;
+        uint[] formula;
+        bytes32[] parameters;
+    }
+
+    struct List {
+        uint questionIdIndex;
+        mapping (bytes32 => uint) uniqNames;
+        mapping (uint => Question) question;
+    }
+
+    function init(List storage _self) internal {
+        _self.questionIdIndex = 1;
+    }
+
+    function save(List storage _self, Question memory _question, uint _id) internal returns (uint id) {
+        bytes32 name = keccak256(abi.encodePacked(_question.caption));
+        uint questionId = _self.questionIdIndex;
+        require(!exists(_self, name), "provided group already exists");
+        _self.question[_id] = _question;
+        _self.uniqNames[name] = questionId;
+        _self.questionIdIndex++;
+        return questionId;
+    }
+
+    function exists(List storage _self, bytes32 _name) internal view returns (bool) {
+        return _self.uniqNames[_name] != 0;
+    }
+
+}
+
+
+
+library Votings {
+
+  enum Status {ACTIVE, ENDED}
+
+  struct Voting {
+    // ? question id used for vote
+    uint questionId;
+    // ? vote status
+    Status status;
+    // ? group of users, who started vote
+    uint starterGroup;
+    // ? user, who started the voting
+    address starterAddress;
+    // ? block when voting was started
+    uint startTime;
+    uint endTime;
+    // ? contains pairs of (address => vote) for every user
+    mapping (address=> mapping(address => uint)) votes;
+
+    // contains total weights for voting variants
+    mapping (address=> mapping(address => uint256)) voteWeigths;
+    mapping (uint=> mapping(string => uint256)) descisionWeights;
+    mapping (address=> mapping (address=>uint256)) tokenReturns;
+    
+    bytes data;
+  }
+
+  struct List {
+    uint votingIdIndex;
+    mapping (uint => Voting) voting;
+    mapping (uint => uint) descision;
+  }
+
+  function init(List storage _self) internal {
+    _self.votingIdIndex = 1;
+  }
+
+
+  function save(List storage _self, Voting memory _voting) internal returns (uint id) {
+    uint votingId = _self.votingIdIndex;
+    _self.voting[votingId] = _voting;
+    _self.votingIdIndex++;
+    return votingId;
+  }
+
+  function close(List storage _self) internal {
+    uint votingId = _self.votingIdIndex - 1;
+    _self.voting[votingId].status = Status.ENDED;
+  }
+
+}
+
+
+
+
+
+
+
+/**
+ * @title VoterInterface
+ * @dev an interface for voter
+ */
+interface VoterInterface {
+    // LIBRARIES
+    using QuestionGroups for QuestionGroups.List;
+    using Questions for Questions.List;
+    using Votings for Votings.List;
+    using UserGroups for UserGroups.List;
+
+    
+    // DIFINTIONS
+    // new question added event
+    event NewQuestion(
+        uint groupId,
+        Questions.Status status,
+        string caption,
+        string text,
+        uint time,
+        address target,
+        bytes4 methodSelector
+    );
+    // new Votings added event
+    event NewVoting(
+        uint id,
+        uint questionId,
+        Votings.Status status,
+        uint starterGroup,
+        address starterAddress,
+        uint startblock
+    );
+
+    // METHODS
+    /*
+     * @notice adds new question to question library
+     * @param _ids question group id
+     * @param _status question status
+     * @param _caption question name
+     * @param _text question description
+     * @param _time question length
+     * @param _target target address to call
+     * @param _methodSelector method to call
+     * @param _formula voting formula
+     * @param _parameters parameters of inputs
+     * return new question id
+     */
+    function saveNewQuestion(
+        uint[] calldata _idsAndTime,
+        Questions.Status _status,
+        string calldata _caption,
+        string calldata _text,
+        address _target,
+        bytes4 _methodSelector,
+        uint[] calldata _formula,
+        bytes32[] calldata _parameters
+    ) external returns (bool _saved);
+
+    /**
+     * @notice adds new question to question library
+     * @param _name question group name
+     * @return new question id
+     */
+    function saveNewGroup(
+        string calldata _name
+    ) external returns (uint id);
+
+    /**
+     * @notice gets question data
+     * @param _id question id
+     * @return question data
+     */
+    function question(
+        uint _id
+    ) external view returns (
+        uint groupId,
+        Questions.Status status,
+        string memory caption,
+        string memory text,
+        uint time,
+        address target,
+        bytes4 methodSelector,
+        uint[] memory _formula,
+        bytes32[] memory _parameters
+    );
+
+    function getCount() external returns (uint length);
+
+    function startNewVoting( 
+        uint questionId,
+        Votings.Status status,
+        uint starterGroup,
+        bytes calldata data
+    ) external returns (bool);
+
+    function voting(uint id) external view returns (
+        uint questionId,
+        Votings.Status status,
+        string memory caption,
+        string memory text,
+        uint startTime,
+        uint endTime,
+        bytes memory data
+    );
+    function getVotingsCount() external view returns (uint length);
+}
+
+
+
+interface ExternalContract {
+  function applyVotingData(uint votingId, uint questionId, bytes calldata data) external returns (bool);
+}
+
+
+/**
+ * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
+ * the optional functions; to access them see `ERC20Detailed`.
+ */
+interface IERC20 {
+    /**
+     * @dev Returns the amount of tokens in existence.
+     */
+    function totalSupply() external view returns (uint256);
+    /**
+     * @dev Returns the amount of tokens in existence.
+     */
+    function name() external view returns (string memory);
+    /**
+     * @dev Returns the amount of tokens in existence.
+     */
+    function symbol() external view returns (string memory);
+
+    /**
+     * @dev Returns the amount of tokens owned by `account`.
+     */
+    function balanceOf(address account) external view returns (uint256);
+
+    /**
+     * @dev Moves `amount` tokens from the caller's account to `recipient`.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a `Transfer` event.
+     */
+    function transfer(address recipient, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through `transferFrom`. This is
+     * zero by default.
+     *
+     * This value changes when `approve` or `transferFrom` are called.
+     */
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    /**
+     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * > Beware that changing an allowance with this method brings the risk
+     * that someone may use both the old and the new allowance by unfortunate
+     * transaction ordering. One possible solution to mitigate this race
+     * condition is to first reduce the spender's allowance to 0 and set the
+     * desired value afterwards:
+     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+     *
+     * Emits an `Approval` event.
+     */
+    function approve(address spender, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Moves `amount` tokens from `sender` to `recipient` using the
+     * allowance mechanism. `amount` is then deducted from the caller's
+     * allowance.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a `Transfer` event.
+     */
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Emitted when `value` tokens are moved from one account (`from`) to
+     * another (`to`).
+     *
+     * Note that `value` may be zero.
+     */
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    /**
+     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
+     * a call to `approve`. `value` is the new allowance.
+     */
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+}
 
 
 
@@ -529,4 +947,19 @@ contract VoterBase is VoterInterface {
         group.call(abi.encodeWithSignature("setAdmin(address)", admin));
         return true;
     }
+}
+
+
+
+contract Voter is VoterBase {
+    
+    IERC20 public ERC20;
+
+    constructor(address _address) public {
+        // implement contract deploy
+        // set erc20 token here        
+        setERC20(_address); 
+    }
+
+
 }

@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'mobx-react';
@@ -7,6 +9,17 @@ import Alert from './components/Alert';
 import './i18n';
 
 import './assets/styles/style.scss';
+
+const { ipcRenderer } = window.require('electron');
+window.ipcRenderer = ipcRenderer;
+window.ipcRenderer.on('info', (event, data) => {
+  console.log(data);
+  window.ipcRenderer.send('reply', 'hello to main !');
+});
+
+window.ipcRenderer.on('contract-compiled', (event, data) => {
+  console.log(data);
+});
 
 const {
   userStore,

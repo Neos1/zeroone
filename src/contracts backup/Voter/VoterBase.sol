@@ -1,4 +1,4 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5;
 
 import "../libs/QuestionGroups.sol";
 import "../libs/UserGroups.sol";
@@ -57,7 +57,7 @@ contract VoterBase is VoterInterface {
         address _target,
         bytes4 _methodSelector,
         uint[] memory _formula,
-        bytes32[] memory  _parameters
+        bytes32[] memory _parameters
     ) private returns (Questions.Question memory _question) {
         Questions.Question memory question = Questions.Question({
             groupId: _idsAndTime[1],
@@ -90,14 +90,14 @@ contract VoterBase is VoterInterface {
      * @return new question id
      */
     function saveNewQuestion(
-        uint[] calldata _idsAndTime,
+        uint[] _idsAndTime,
         Questions.Status _status,
-        string calldata  _caption,
-        string calldata  _text,
+        string  _caption,
+        string  _text,
         address _target,
         bytes4 _methodSelector,
-        uint[] calldata _formula,
-        bytes32[] calldata _parameters
+        uint[]  _formula,
+        bytes32[] _parameters
 
     ) external returns (bool _saved){
         Questions.Question memory question = createNewQuestion( 
@@ -120,7 +120,7 @@ contract VoterBase is VoterInterface {
      * @return new question id
      */
     function saveNewGroup(
-        string calldata _name
+        string _name
     ) external returns (uint id) {
         QuestionGroups.Group memory group = QuestionGroups.Group({
             name: _name,
@@ -166,7 +166,7 @@ contract VoterBase is VoterInterface {
     }
 
     function getQuestionGroup(uint _id) public view returns (
-        string memory name,
+        string name,
         QuestionGroups.GroupType groupType
     ) {
         return (
@@ -179,8 +179,8 @@ contract VoterBase is VoterInterface {
         return groups.groupIdIndex ;
     }
     function getUserGroup(uint _id) public view returns (
-        string memory name,
-        string memory groupType,
+        string name,
+        string groupType,
         UserGroups.GroupStatus status,
         address groupAddress
     ) {
@@ -212,7 +212,7 @@ contract VoterBase is VoterInterface {
         uint _questionId,
         Votings.Status _status,
         uint _starterGroup,
-        bytes calldata _data
+        bytes _data
     ) external returns (bool) {
         bool canStart;
         uint votingId = votings.votingIdIndex - 1;
@@ -255,7 +255,7 @@ contract VoterBase is VoterInterface {
         string memory text,
         uint startTime,
         uint endTime,
-        bytes memory data
+        bytes data
     ){
         uint votingId = _id;
         uint questionId = votings.voting[_id].questionId;
@@ -353,8 +353,8 @@ contract VoterBase is VoterInterface {
     }
     
 
-    function applyVotingData(uint votingId, uint questionId, bytes calldata votingData) external returns (bool) {
-        address(this).call(votingData);
+    function applyVotingData(uint votingId, uint questionId, bytes votingData) external returns (bool) {
+        require(address(this).call(votingData));
         return true;
     }
 
@@ -383,7 +383,7 @@ contract VoterBase is VoterInterface {
         uint userVote = this.getUserVote(votingId, msg.sender); 
 
         if (!isReturned) {
-            if(keccak256(abi.encodePacked((groupType))) == keccak256(abi.encodePacked(("ERC20")))) {
+            if( bytes4(keccak256(groupType)) == bytes4(keccak256("ERC20"))) {
                 group.transfer(msg.sender, weight);            
             } else {
                 group.transferFrom(address(this), msg.sender, weight);
@@ -465,7 +465,7 @@ contract VoterBase is VoterInterface {
         return ERC20.totalSupply();
     }
 
-    function getERCSymbol() external view returns (string memory symbol) {
+    function getERCSymbol() external view returns (string symbol) {
         return ERC20.symbol();
     }
 
@@ -515,7 +515,7 @@ contract VoterBase is VoterInterface {
         );
     }
 
-    function saveNewUserGroup (string calldata _name, address _address,  string calldata _type) external {
+    function saveNewUserGroup (string _name, address _address,  string _type) external {
         UserGroups.UserGroup memory userGroup = UserGroups.UserGroup({
             name: _name,
             groupType: _type,
@@ -525,8 +525,8 @@ contract VoterBase is VoterInterface {
         userGroups.save(userGroup);
     } 
 
-    function setCustomGroupAdmin(address group, address admin) external returns (bool)  {
-        group.call(abi.encodeWithSignature("setAdmin(address)", admin));
+    function setCustomGroupAdmin(address group, address admin) external returns (bool)  {    
+        require(group.call( bytes4( keccak256("setAdmin(address)")), admin));
         return true;
     }
 }

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
@@ -12,11 +12,11 @@ interface IERC20 {
     /**
      * @dev Returns the amount of tokens in existence.
      */
-    function name() external view returns (string memory);
+    function name() external view returns (string);
     /**
      * @dev Returns the amount of tokens in existence.
      */
-    function symbol() external view returns (string memory);
+    function symbol() external view returns (string);
 
     /**
      * @dev Returns the amount of tokens owned by `account`.

@@ -8,6 +8,7 @@ import { observer } from 'mobx-react';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
+// eslint-disable-next-line import/no-named-as-default
 import progressByDateRange from '../../utils/Date';
 import { getDateString } from './utils';
 

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5;
 
 contract MERC20 {
   string private _name;
@@ -11,7 +11,7 @@ contract MERC20 {
 	mapping (uint => mapping (address => uint256)) userBalances;
   address[] users;
 
-  constructor (string memory name, string memory symbol, uint256 decimals ) public {
+  constructor (string name, string symbol, uint256 decimals ) public {
     _name = name;
     _symbol = symbol;
     _decimals = decimals;
@@ -23,17 +23,17 @@ contract MERC20 {
     users.push(msg.sender);
   }
 
-  function symbol() external returns(string memory) {
+  function symbol() external returns(string) {
     return _symbol;
   }
-  function name() external returns(string memory) {
+  function name() external returns(string) {
     return _name;
   }
   function totalSupply() external returns(uint256) {
     return _decimals;
   }
 
-  function getUsers() external returns (address[] memory) {
+  function getUsers() external returns (address[]) {
     return users;
   }
 
