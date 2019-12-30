@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import TransferTokenForm from '../../stores/FormsStore/TransferTokenForm';
 import Dialog from '../Dialog/Dialog';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
@@ -17,6 +18,7 @@ import styles from './TokenTransfer.scss';
 /**
  * Component form for transfer token
  */
+@withRouter
 @withTranslation()
 @inject('membersStore', 'userStore', 'dialogStore')
 @observer
@@ -64,6 +66,7 @@ class TokenTransfer extends React.Component {
               projectStore: { historyStore },
             },
           },
+          history,
         } = this.props;
         const { password } = form.values();
         userStore.setPassword(password);
@@ -84,6 +87,7 @@ class TokenTransfer extends React.Component {
           .then(() => {
             dialogStore.show('success_modal');
             historyStore.getMissingVotings();
+            history.push('/votings');
           })
           .catch((error) => {
             dialogStore.show('error_modal');
@@ -122,6 +126,9 @@ class TokenTransfer extends React.Component {
       readWallet: PropTypes.func.isRequired,
       address: PropTypes.string.isRequired,
     }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   }
 
   static defaultProps = {
@@ -141,7 +148,7 @@ class TokenTransfer extends React.Component {
     const {
       t, wallet, groupId, groupType,
     } = props;
-    console.log(groupId, groupType);
+
     return (
       <div className={styles['token-transfer']}>
         <h2 className={styles['token-transfer__title']}>
@@ -190,14 +197,21 @@ class TokenTransfer extends React.Component {
             )
             : null
         }
-        <Dialog
-          name={`password_form-${groupId}`}
-          size="md"
-          footer={null}
-          header={t('fields:enterPassword')}
-        >
-          <FinPassFormWrapper form={this.passwordForm} />
-        </Dialog>
+        {
+          groupType !== 'ERC20'
+            ? (
+              <Dialog
+                name={`password_form-${groupId}`}
+                size="md"
+                footer={null}
+                header={t('fields:enterPassword')}
+              >
+                <FinPassFormWrapper form={this.passwordForm} />
+              </Dialog>
+            )
+            : null
+        }
+
       </div>
     );
   }
