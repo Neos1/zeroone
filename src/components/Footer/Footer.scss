@@ -2,8 +2,8 @@
 
 .footer {
   padding: 15px 0;
+  text-align: center;
   a {
-    display: flex;
     flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
@@ -11,12 +11,14 @@
     font-size: 11px;
     text-align: center;
     svg {
+      vertical-align: middle;
       path {
         transition: .2s;
       }
     }
     span {
       margin-left: 10px;
+      vertical-align: middle;
       transition: .2s;
     }
     &:hover{ 
