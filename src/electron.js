@@ -64,6 +64,7 @@ function createWindow() {
       },
     };
     const output = JSON.parse(solc.compile(JSON.stringify(data)));
+    console.log(output);
     mainWindow.webContents.send('contract-compiled', output.contracts['test.sol']);
   }));
 }

@@ -46,7 +46,6 @@ class ContractService {
   compileContract(type) {
     return new Promise((resolve, reject) => {
       const contract = this.combineContract(type);
-      fs.writeFileSync(path.join(PATH_TO_CONTRACTS, 'contractsdfdsf.sol'), contract);
       window.ipcRenderer.send('compile-request', contract);
       window.ipcRenderer.on('contract-compiled', (event, compiledContract) => {
         const contractData = compiledContract[type];

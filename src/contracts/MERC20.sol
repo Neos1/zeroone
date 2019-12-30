@@ -56,7 +56,7 @@ contract MERC20 {
     uint usersLength = users.length;
 		uint matched = 0;
 		for (uint i = 0; i < usersLength; i++) {
-			if (users[i] == 0) {
+			if (users[i] == address(0)) {
 				matched = i;
 			}
 		}
