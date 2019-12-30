@@ -75,6 +75,10 @@ class StartNewVote extends React.Component {
       this.initIndex = Number(selected.value) - 1;
       this.handleSelect(selected);
     });
+    eventEmitterService.subscribe('new_vote:closed', () => {
+      this.initIndex = null;
+      this.setState({ isSelected: false });
+    });
   }
 
   // eslint-disable-next-line consistent-return

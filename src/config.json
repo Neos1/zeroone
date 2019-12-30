@@ -3,16 +3,12 @@
 	"hostBackup": "https://ropsten.infura.io/v3/14b2319f08e24f3aadfe1aa933301b38",
 	"projects": [
 		{
-			"name": "voter",
-			"address": "0x459F809432Fc50Ef6136cC2fC262f19A00562B7e"
-		},
-		{
-			"name": "voter2",
-			"address": "0x661345ADc2c5eC0fdbEd3009803c5926070C3f1e"
-		},
-		{
 			"name": "asdasdas",
 			"address": "0x2F690d1f6CB76971DEEfb965900E6C008ff19E17"
+		},
+		{
+			"name": "BORODA_PROJ",
+			"address": "0xd5951f042335F816517e466E2E556a726F6FE8DD"
 		},
 		{
 			"name": "21312312",

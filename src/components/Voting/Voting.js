@@ -153,6 +153,18 @@ class Voting extends React.Component {
     dialogStore.hide(name);
   }
 
+  onCloseNewVote = () => {
+    const { props } = this;
+    const {
+      projectStore: {
+        rootStore: {
+          eventEmitterService,
+        },
+      },
+    } = props;
+    eventEmitterService.emit('new_vote:closed');
+  }
+
   render() {
     const {
       props,
@@ -230,6 +242,7 @@ class Voting extends React.Component {
           name="start_new_vote"
           header={null}
           footer={null}
+          onClose={this.onCloseNewVote}
         >
           <StartNewVote />
         </Dialog>

@@ -18,8 +18,7 @@ import { getDateString } from './utils';
 import Button from '../Button/Button';
 import VotingStats from './VotingStats';
 import ProgressBar from '../ProgressBar/ProgressBar';
-// eslint-disable-next-line import/no-named-as-default
-import progressByDateRange from '../../utils/Date';
+import { progressByDateRange } from '../../utils/Date';
 import VotingInfoButtons from './VotingInfoButtons';
 import VotingInfoResult from './VotingInfoResult';
 import VotingInfoUserDecision from './VotingInfoUserDecision';
