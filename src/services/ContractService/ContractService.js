@@ -45,20 +45,16 @@ class ContractService {
    */
   compileContract(type) {
     return new Promise((resolve, reject) => {
-      window.BrowserSolc.getVersions((sources, releases) => {
-        const version = releases['0.4.24'];
-        const contract = this.combineContract(type);
-        window.BrowserSolc.loadVersion(version, (compiler) => {
-          const compiledContract = compiler.compile(contract);
-          console.log(compiledContract);
-          const contractData = compiledContract.contracts[`:${type}`];
-          if (contractData.interface !== '') {
-            const { bytecode, metadata } = contractData;
-            const { output: { abi } } = JSON.parse(metadata);
-            fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
-            resolve({ type, bytecode, abi });
-          } else reject(new Error('Something went wrong on contract compiling'));
-        });
+      const contract = this.combineContract(type);
+      window.ipcRenderer.send('compile-request', contract);
+      window.ipcRenderer.on('contract-compiled', (event, compiledContract) => {
+        const contractData = compiledContract[type];
+        console.log(contractData);
+        if (contractData.abi !== '') {
+          const { evm: { bytecode: { object } }, abi } = contractData;
+          fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
+          resolve({ type, bytecode: object, abi });
+        } else reject(new Error('Something went wrong on contract compiling'));
       });
     });
   }
@@ -72,7 +68,7 @@ class ContractService {
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
     let dir;
-    const compiler = 'pragma solidity ^0.4.24;';
+    const compiler = 'pragma solidity ^0.5;';
     switch (type) {
       case ('ERC20'): case ('MERC20'):
         dir = './';
@@ -88,7 +84,7 @@ class ContractService {
 
     let output = readSolFile(pathToMainFile, importedFiles);
     output = output.replace(SOL_VERSION_REGEXP, compiler);
-    output = output.replace(/(calldata)/g, '');
+    // output = output.replace(/(calldata)/g, '');
 
     return output;
   }

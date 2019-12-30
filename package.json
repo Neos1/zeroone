@@ -10,6 +10,8 @@
   "scripts": {
     "test": "jest",
     "build": "webpack --mode=production --config webpack.dev.js && electron-builder",
+    "react-dev": "webpack-dev-server --hot --config webpack.dev.js",
+    "electron": "electron  ./src/electron.js",
     "electron-dev": "concurrently \"webpack-dev-server --hot --config webpack.dev.js\" \"wait-on http://localhost:3000 && electron  ./src/electron.js\"",
     "storybook": "start-storybook",
     "docs": "jsdoc -c ./jsdoc.json"
@@ -48,6 +50,7 @@
     "react-router-dom": "^5.1.2",
     "react-tabs": "^3.0.0",
     "recharts": "^2.0.0-beta.1",
+    "solc": "^0.5.15",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
     "validatorjs": "^3.17.1",
