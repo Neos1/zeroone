@@ -29,8 +29,6 @@ class QuestionStore {
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
-      // TODO remove after full realization
-      itemsCountPerPage: 2,
     });
   }
 
@@ -83,6 +81,15 @@ class QuestionStore {
       value: '*',
       label: 'All',
     }]);
+  }
+
+  @computed get newVotingOptions() {
+    return this._questions.map((question) => (
+      {
+        value: question.id,
+        label: question.caption,
+      }
+    ));
   }
 
   @computed get questionGroups() {

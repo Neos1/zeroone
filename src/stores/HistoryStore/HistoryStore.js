@@ -8,6 +8,12 @@ import PaginationStore from '../PaginationStore';
 import { statusStates, GAS_LIMIT } from '../../constants';
 
 class HistoryStore {
+  /**
+   * Interval for update missing &
+   * active voting (in ms)
+   */
+  intervalUpdate = 60000;
+
   @observable pagination;
 
   @observable _votings = [];
@@ -20,8 +26,10 @@ class HistoryStore {
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
-      itemsCountPerPage: 5,
     });
+    setInterval(() => {
+      this.getActualVotings();
+    }, this.intervalUpdate);
   }
 
   /**
@@ -114,6 +122,7 @@ class HistoryStore {
    * from the contract & file
    */
   @action getActualVotings = async () => {
+    this.loading = true;
     const votings = this.getVotingsFromFile();
     if (!votings || !votings.data) {
       await this.getVotingsFromContract();
@@ -157,9 +166,10 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const lastIndex = this._votings.length;
-    const voting = await this.getVotingFromContractById(lastIndex);
-    this._votings[0].update(voting);
+    const lastIndex = await this.fetchVotingsCount() - 1;
+    const votingFromContract = await this.getVotingFromContractById(lastIndex);
+    const [voting] = this.getVotingById(lastIndex);
+    voting.update(votingFromContract);
     this.writeVotingsToFile();
   }
 
@@ -193,7 +203,8 @@ class HistoryStore {
       const voting = votings.data[i];
       if (voting) {
         // For correct work {getMissingVotings} method
-        this.votings.push(new Voting(voting));
+        const duplicateVoting = this._votings.find((item) => item.id === voting.id);
+        if (!duplicateVoting) this.votings.push(new Voting(voting));
       }
     }
     return votings;
@@ -214,8 +225,11 @@ class HistoryStore {
     if (countVotingFromContract > votingsFromFileLength) {
       for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const voting = await this.getVotingFromContractById(i);
-        this._votings.unshift(new Voting(voting));
+        const duplicateVoting = this._votings.find((item) => item.id === i);
+        if (!duplicateVoting) {
+          const voting = await this.getVotingFromContractById(i);
+          this._votings.unshift(new Voting(voting));
+        }
       }
       this.writeVotingsToFile();
     }
@@ -228,6 +242,20 @@ class HistoryStore {
    */
   addFilterRule = (rule) => {
     this.filter.addFilterRule(rule);
+    this.pagination.update({
+      activePage: 1,
+      totalItemsCount: this.list.length,
+    });
+  }
+
+  /**
+   * Method for remove filter rule
+   * by name
+   *
+   * @param {string} rule name rule
+   */
+  removeFilterRule = (rule) => {
+    this.filter.removeFilterRule(rule);
     this.pagination.update({
       activePage: 1,
       totalItemsCount: this.list.length,
@@ -334,6 +362,7 @@ class HistoryStore {
   async hasActiveVoting() {
     const countOfVotings = await this.fetchVotingsCount();
     const lastVote = countOfVotings - 1;
+    if (lastVote === 0) return false;
     const voting = await this.getVotingFromContractById(lastVote);
     return voting.status === statusStates.active;
   }

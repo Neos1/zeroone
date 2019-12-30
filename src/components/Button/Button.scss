@@ -10,6 +10,48 @@
   cursor: pointer;
   transition: 0.2s linear;
 
+  &__hint {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    z-index: 999;
+    text-align: left;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s;
+
+    &-content {
+      display: inline-block;
+      padding: 14px 16px 16px;
+      color: #4d4d4d;
+      font-size: 11px;
+      line-height: 13px;
+      white-space: nowrap;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 2px;
+    }
+  }
+
+  &--with-hint {
+    position: relative;
+
+    &:hover {
+      .btn__hint {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    &:active,
+    &:focus {
+      .btn__hint {
+        color: #000;
+      }
+    }
+  }
+
   svg,
   &__icon,
   &__text {
@@ -38,7 +80,10 @@
 
   &[disabled]{
     cursor: default;
-    opacity: .5;
+
+    .btn__content {
+      opacity: .5;
+    }
   }
 
   &--black {
@@ -191,6 +236,42 @@
 
   &--310 {
     width: 310px;
+  }
+
+  &--with-play-icon {
+    width: 100%;
+    padding: 26px 96px 26px 100px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+
+    .btn__text {
+      color: #000;
+      font-weight: 300;
+      font-size: 18px;
+      font-family: "Grotesk";
+      line-height: 21px;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+    }
+  }
+
+  &--question-start {
+    display: inline-block;
+    background: #fff;
+
+    .btn__text {
+      margin-top: 10px;
+      color: $primary;
+      font-size: 11px;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 

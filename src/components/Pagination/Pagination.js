@@ -42,7 +42,7 @@ class Pagination extends React.Component {
     } = this.props;
     const minPage = 1;
     let newValue = parseInt(event.target.value, 10) || 0;
-    // не даём ввести значение больше максимального
+    // do not let us enter a value greater than the maximum
     if (newValue >= lastPage) newValue = lastPage;
     if (newValue <= minPage) newValue = minPage;
     this.setState({ value: newValue });
@@ -95,49 +95,57 @@ class Pagination extends React.Component {
     } = this.state;
     return (
       <>
-        <ReactJsPagination
-          activePage={activePage}
-          lastPage={lastPage}
-          itemsCountPerPage={itemsCountPerPage}
-          totalItemsCount={totalItemsCount}
-          pageRangeDisplayed={pageRangeDisplayed}
-          onChange={this.onPageChange}
-          prevPageText={(<ThinArrow />)}
-          nextPageText={(<ThinArrow />)}
-          firstPageText={(
-            <>
-              <ThinArrow />
-              <ThinArrow />
-            </>
-          )}
-          lastPageText={(
-            <>
-              <ThinArrow />
-              <ThinArrow />
-            </>
-          )}
-          itemClass="pagination__item"
-          itemClassFirst="pagination__item--first"
-          itemClassLast="pagination__item--last"
-          itemClassPrev="pagination__item--prev"
-          itemClassNext="pagination__item--next"
-        />
-        <div className="pagination__footer">
-          <span>{t('other:page')}</span>
-          <input
-            type="number"
-            value={value}
-            onChange={this.handleChange}
-            onFocus={this.handleFocus}
-          />
-          <span>{`из ${lastPage}`}</span>
-          <button
-            type="button"
-            onClick={() => this.handleButtonClick(value)}
-          >
-            {t('other:goTo')}
-          </button>
-        </div>
+        {
+          totalItemsCount === 0
+            ? null
+            : (
+              <>
+                <ReactJsPagination
+                  activePage={activePage}
+                  lastPage={lastPage}
+                  itemsCountPerPage={itemsCountPerPage}
+                  totalItemsCount={totalItemsCount}
+                  pageRangeDisplayed={pageRangeDisplayed}
+                  onChange={this.onPageChange}
+                  prevPageText={(<ThinArrow />)}
+                  nextPageText={(<ThinArrow />)}
+                  firstPageText={(
+                    <>
+                      <ThinArrow />
+                      <ThinArrow />
+                    </>
+                  )}
+                  lastPageText={(
+                    <>
+                      <ThinArrow />
+                      <ThinArrow />
+                    </>
+                  )}
+                  itemClass="pagination__item"
+                  itemClassFirst="pagination__item--first"
+                  itemClassLast="pagination__item--last"
+                  itemClassPrev="pagination__item--prev"
+                  itemClassNext="pagination__item--next"
+                />
+                <div className="pagination__footer">
+                  <span>{t('other:page')}</span>
+                  <input
+                    type="number"
+                    value={value}
+                    onChange={this.handleChange}
+                    onFocus={this.handleFocus}
+                  />
+                  <span>{`${t('other:outOf')} ${lastPage}`}</span>
+                  <button
+                    type="button"
+                    onClick={() => this.handleButtonClick(value)}
+                  >
+                    {t('other:goTo')}
+                  </button>
+                </div>
+              </>
+            )
+        }
       </>
     );
   }

@@ -1,33 +1,66 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { NavLink, withRouter } from 'react-router-dom';
+import { withTranslation, Trans } from 'react-i18next';
 import { StartIcon } from '../../Icons';
+import Button from '../../Button/Button';
 
 import styles from './Question.scss';
 
 /**
  * Component for render start button
  *
- * @param {Function} t method for translate text
- * @param {*} id id question
+ * @param {object} param0 data
+ * @param {Function} param0.t method for translate text
+ * @param {*} param0.id id question
+ * @param {*} param0.history id question
  * @returns {Node} component start button
  */
-const startBlock = (t, id) => (
+const startBlock = ({
+  t,
+  id,
+  history,
+  votingIsActive,
+}) => (
   <div className={styles.question__right}>
-    <NavLink
-      className={styles.question__start}
-      to={`/votings?modal=start_new_vote&option=${id}`}
+    <Button
+      theme="question-start"
+      iconPosition="top"
+      icon={(<StartIcon />)}
+      onClick={() => history.push(`/votings?modal=start_new_vote&option=${id}`)}
+      disabled={votingIsActive}
+      hint={
+        votingIsActive
+          ? (
+            <Trans
+              i18nKey="other:hintFunctionalityNotAvailable"
+            >
+              During active voting, this
+              <br />
+              functionality is not available.
+            </Trans>
+          )
+          : null
+      }
     >
-      <p className={styles['question__start-icon']}>
-        <StartIcon />
-      </p>
-      <p className={styles['question__start-label']}>
-        {t('buttons:startNewVote')}
-      </p>
-    </NavLink>
+      {t('buttons:startNewVote')}
+    </Button>
   </div>
 );
+
+startBlock.propTypes = {
+  t: propTypes.func.isRequired,
+  id: propTypes.oneOfType([
+    propTypes.number,
+    propTypes.string,
+  ]).isRequired,
+  history: propTypes.shape({
+    push: propTypes.func.isRequired,
+  }).isRequired,
+  votingIsActive: propTypes.bool.isRequired,
+};
+
+const startBlockWithRouter = withRouter(startBlock);
 
 const ParametersBlock = (params, t) => (
   <div className={styles.question__right}>
@@ -75,6 +108,7 @@ const Question = withTranslation()(({
   text,
   formula,
   params,
+  votingIsActive,
 }) => (
   <div className={`${styles.question} ${extended ? styles['question--extended'] : ''}`}>
     {
@@ -90,13 +124,14 @@ const Question = withTranslation()(({
           </div>
         )
     }
-    {extended ? ParametersBlock(params, t) : startBlock(t, id)}
+    {extended ? ParametersBlock(params, t) : startBlockWithRouter({ t, id, votingIsActive })}
     {extended ? FormulaBlock(formula, t) : null}
   </div>
 ));
 Question.propTypes = {
   id: propTypes.number.isRequired,
   extended: propTypes.bool,
+  votingIsActive: propTypes.bool.isRequired,
   caption: propTypes.string.isRequired,
   text: propTypes.string.isRequired,
   formula: propTypes.arrayOf(propTypes.number).isRequired,

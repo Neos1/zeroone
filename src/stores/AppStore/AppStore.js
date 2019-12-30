@@ -218,6 +218,7 @@ class AppStore {
     const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8'));
     config.host = url;
     fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'), 'utf8');
+    window.location.reload();
   }
 
   /**

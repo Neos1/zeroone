@@ -138,7 +138,7 @@ class ContractUploading extends Component {
           size="md"
           footer={null}
           header={t('headings:uploadingProject')}
-          closable={false}
+          closeable={false}
         >
           <TransactionProgress />
         </Dialog>
@@ -147,7 +147,7 @@ class ContractUploading extends Component {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }}>
             {`Contract address = ${address}`}
@@ -158,7 +158,7 @@ class ContractUploading extends Component {
           name="error_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>

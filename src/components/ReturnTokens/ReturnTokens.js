@@ -91,7 +91,7 @@ class ReturnTokens extends React.Component {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
+import { withTranslation } from 'react-i18next';
 import VotingInfo from './VotingInfo';
 import Container from '../Container';
 import Dialog from '../Dialog/Dialog';
@@ -17,6 +18,7 @@ import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
+@withTranslation()
 @inject(
   'dialogStore',
   'projectStore',
@@ -41,7 +43,6 @@ class VotingInfoWrapper extends React.PureComponent {
         const { votingId } = this;
         const { descision } = this.state;
         const {
-          match: { params: { id } },
           userStore,
           dialogStore,
           userStore: {
@@ -54,15 +55,14 @@ class VotingInfoWrapper extends React.PureComponent {
             addReturnTokensNotification,
           },
         } = this.props;
-        const [voting] = historyStore.getVotingById(Number(id));
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal');
         return contractService.sendVote(votingId, descision)
-          .then(() => {
-            voting.update({ userVote: Number(descision) });
-            historyStore.writeVotingsToFile();
+          .then(async () => {
+            await historyStore.fetchAndUpdateLastVoting();
             addReturnTokensNotification();
+            this.getVotingStats();
             switch (descision) {
               case (1):
                 dialogStore.toggle('decision_agreed_message');
@@ -111,6 +111,7 @@ class VotingInfoWrapper extends React.PureComponent {
           .then(() => {
             dialogStore.toggle('success_modal');
             historyStore.fetchAndUpdateLastVoting();
+            this.getVotingStats();
           })
           .catch(() => {
             dialogStore.toggle('error_modal');
@@ -144,6 +145,7 @@ class VotingInfoWrapper extends React.PureComponent {
     appStore: PropTypes.shape({
       parseFormula: PropTypes.func.isRequired,
     }).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -269,6 +271,7 @@ class VotingInfoWrapper extends React.PureComponent {
       dialogStore,
       projectStore: { historyStore, questionStore },
       match: { params: { id } },
+      t,
     } = props;
     this.votingId = Number(id);
     const [voting] = historyStore.getVotingById(Number(id));
@@ -356,8 +359,8 @@ class VotingInfoWrapper extends React.PureComponent {
           name="progress_modal"
           size="md"
           footer={null}
-          header="Отправка транзакции"
-          closable={false}
+          header={t('other:sendingTransaction')}
+          closeable={false}
         >
           <TransactionProgress />
         </Dialog>
@@ -366,7 +369,7 @@ class VotingInfoWrapper extends React.PureComponent {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
@@ -375,7 +378,7 @@ class VotingInfoWrapper extends React.PureComponent {
           name="error_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>

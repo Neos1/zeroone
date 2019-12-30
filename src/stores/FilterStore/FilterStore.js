@@ -1,6 +1,7 @@
 import {
   action,
   set,
+  remove,
   entries,
   computed,
   observable,
@@ -34,6 +35,18 @@ class FilterStore {
     Object.keys(rule).forEach((key) => {
       set(this._rules, key, rule[key]);
     });
+    if (cb) cb();
+  }
+
+  /**
+   * Method for removing rule from list rules
+   *
+   * @param {string} rule rule name for removing
+   * @param {Function} cb callback function
+   */
+  @action
+  removeFilterRule(rule, cb) {
+    remove(this._rules, rule);
     if (cb) cb();
   }
 

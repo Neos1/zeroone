@@ -20,7 +20,7 @@ class DecisionClose extends React.Component {
     return (
       <>
         <Decision
-          title="Завершение голосования"
+          title={t('dialogs:completionOfVoting')}
           icon={null}
           form={form}
         />

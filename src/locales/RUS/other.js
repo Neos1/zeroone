@@ -72,5 +72,7 @@ const other = {
   sendingTransaction: 'Отправка транзакции',
   parameters: 'Параметры',
   select: 'Выберите',
+  hintFunctionalityNotAvailable: 'Во время активного голосования <1/> этот функционал недоступен',
+  outOf: 'из',
 };
 export default other;

@@ -66,6 +66,14 @@ class VotingFilter extends React.PureComponent {
     });
   }
 
+  /**
+   * Method for handle clear date
+   */
+  handleDateClear = () => {
+    const { projectStore: { historyStore } } = this.props;
+    historyStore.removeFilterRule('date');
+  }
+
   render() {
     const {
       projectStore: {
@@ -91,6 +99,7 @@ class VotingFilter extends React.PureComponent {
           <DatePicker
             id={uniqKey()}
             onDatesSet={this.handleDateSelect}
+            onDatesClear={this.handleDateClear}
             init={this.dateInit}
             key={uniqKey()}
           />

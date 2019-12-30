@@ -18,7 +18,7 @@ import { getDateString } from './utils';
 import Button from '../Button/Button';
 import VotingStats from './VotingStats';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import progressByDateRange from '../../utils/Date';
+import { progressByDateRange } from '../../utils/Date';
 import VotingInfoButtons from './VotingInfoButtons';
 import VotingInfoResult from './VotingInfoResult';
 import VotingInfoUserDecision from './VotingInfoUserDecision';

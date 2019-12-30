@@ -2,7 +2,7 @@
 import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
 
-class СreateProjectForm extends ExtendedForm {
+class CreateProjectForm extends ExtendedForm {
   setup() {
     return {
       fields: [{
@@ -22,4 +22,4 @@ class СreateProjectForm extends ExtendedForm {
   }
 }
 
-export default СreateProjectForm;
+export default CreateProjectForm;

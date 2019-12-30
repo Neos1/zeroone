@@ -21,9 +21,9 @@ class ErrorMessage extends React.Component {
     return (
       <div className={styles['message--transfer-error']}>
         <DefaultMessage
-          title={t('headings:transactionFailed.heading')}
+          title={t('headings:failedTransaction.heading')}
         >
-          <p className={styles.subtext}>{t('headings:transactionFailed.subheading')}</p>
+          <p className={styles.subtext}>{t('headings:failedTransaction.subheading')}</p>
         </DefaultMessage>
         <div className={styles.footer}>
           <Button

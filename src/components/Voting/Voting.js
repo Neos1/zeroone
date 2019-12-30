@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { computed, observable } from 'mobx';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import uniqKey from 'react-id-generator';
@@ -30,6 +31,10 @@ import styles from './Voting.scss';
 @inject('dialogStore', 'projectStore', 'userStore')
 @observer
 class Voting extends React.Component {
+  @observable votingIsActive = false;
+
+  @observable _loading = false;
+
   passwordForm = new FinPassForm({
     hooks: {
       onSuccess: (form) => {
@@ -99,12 +104,13 @@ class Voting extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { props } = this;
     const {
       location,
       dialogStore,
       projectStore: {
+        historyStore,
         rootStore: {
           eventEmitterService,
         },
@@ -119,6 +125,27 @@ class Voting extends React.Component {
       const targetOption = options[Number(parsed.option)];
       eventEmitterService.emit('new_vote:toggle', targetOption);
     }
+    this._loading = true;
+    this.votingIsActive = await historyStore.hasActiveVoting();
+    this._loading = false;
+  }
+
+  @computed
+  get loading() {
+    const { projectStore: { historyStore } } = this.props;
+    if (this._loading === true) return true;
+    return historyStore.loading;
+  }
+
+  @computed
+  get votings() {
+    const { props } = this;
+    const {
+      projectStore: {
+        historyStore,
+      },
+    } = props;
+    return historyStore.paginatedList;
   }
 
   closeModal = (name) => {
@@ -126,17 +153,37 @@ class Voting extends React.Component {
     dialogStore.hide(name);
   }
 
+  onCloseNewVote = () => {
+    const { props } = this;
+    const {
+      projectStore: {
+        rootStore: {
+          eventEmitterService,
+        },
+      },
+    } = props;
+    eventEmitterService.emit('new_vote:closed');
+  }
+
   render() {
-    const { props, voteStatus, state } = this;
+    const {
+      props,
+      voteStatus,
+      state,
+      votingIsActive,
+      loading,
+      votings,
+    } = this;
     const { status } = state;
     const {
       t,
       dialogStore,
       projectStore: {
-        historyStore: { loading, pagination, paginatedList },
+        historyStore: {
+          pagination,
+        },
       },
     } = props;
-    const votings = paginatedList;
     return (
       <Container className="container--small">
         <div
@@ -151,7 +198,12 @@ class Voting extends React.Component {
           {/* eslint-disable-next-line */}
           {
             !loading
-              ? <VotingTop onClick={() => { dialogStore.show('start_new_vote'); }} />
+              ? (
+                <VotingTop
+                  onClick={() => { dialogStore.show('start_new_vote'); }}
+                  votingIsActive={votingIsActive}
+                />
+              )
               : null
           }
           <div className={styles['voting-page__list']}>
@@ -190,6 +242,7 @@ class Voting extends React.Component {
           name="start_new_vote"
           header={null}
           footer={null}
+          onClose={this.onCloseNewVote}
         >
           <StartNewVote />
         </Dialog>
@@ -216,7 +269,7 @@ class Voting extends React.Component {
           size="md"
           footer={null}
           header={t('headings:sendingTransaction')}
-          closable={!(status === voteStatus.inProgress)}
+          closeable={!(status === voteStatus.inProgress)}
         >
           <TransactionProgress />
         </Dialog>
@@ -225,7 +278,7 @@ class Voting extends React.Component {
           name="success_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
@@ -234,7 +287,7 @@ class Voting extends React.Component {
           name="error_modal"
           size="md"
           footer={null}
-          closable
+          closeable
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>

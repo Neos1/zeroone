@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
-import progressByDateRange from '../../utils/Date';
+import { progressByDateRange } from '../../utils/Date';
 import { getDateString } from './utils';
 
 import styles from './Voting.scss';

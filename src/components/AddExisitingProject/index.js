@@ -128,8 +128,8 @@ class AddExistingProject extends Component {
 const InputBlock = withTranslation()(({ t, form }) => (
   <FormBlock className={styles.form__block}>
     <Heading>
-      {t('headings:сonnectProject.heading')}
-      {t('headings:сonnectProject.subheading')}
+      {t('headings:connectProject.heading')}
+      {t('headings:connectProject.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>

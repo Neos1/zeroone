@@ -9,6 +9,7 @@ const dialog = {
   tokenTransfer: 'Transfer token',
   tokenTransferError: 'Transfer error',
   createAGroupOfQuestions: 'Create a group of questions',
+  completionOfVoting: 'Completion of voting',
 };
 
 export default dialog;

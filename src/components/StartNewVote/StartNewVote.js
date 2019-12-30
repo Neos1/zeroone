@@ -17,7 +17,7 @@ import styles from './StartNewVote.scss';
 @inject('projectStore', 'dialogStore')
 @observer
 class StartNewVote extends React.Component {
-  @observable initIndex = 0;
+  @observable initIndex = null;
 
   votingData = '';
 
@@ -64,6 +64,7 @@ class StartNewVote extends React.Component {
     super();
     this.state = {
       isSelected: false,
+      description: '',
     };
   }
 
@@ -71,8 +72,12 @@ class StartNewVote extends React.Component {
     const { props } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.initIndex = Number(selected.value);
+      this.initIndex = Number(selected.value) - 1;
       this.handleSelect(selected);
+    });
+    eventEmitterService.subscribe('new_vote:closed', () => {
+      this.initIndex = null;
+      this.setState({ isSelected: false });
     });
   }
 
@@ -82,15 +87,15 @@ class StartNewVote extends React.Component {
     const { projectStore, dialogStore } = this.props;
     const { questionStore } = projectStore;
     const [question] = questionStore.getQuestionById(selected.value);
-    const { params } = question;
+    const { params, text: description } = question;
     this.initIndex = Number(selected.value);
+    this.setState({ description });
     // @ Clearing fields, except question selection dropdown
     // eslint-disable-next-line array-callback-return
     form.map((field) => {
       if (field.name === 'question') return;
       form.del(field.name);
     });
-
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
       case 1:
@@ -121,11 +126,11 @@ class StartNewVote extends React.Component {
 
   render() {
     const { form, initIndex } = this;
-    const { isSelected } = this.state;
+    const { isSelected, description } = this.state;
     const { props } = this;
     const { t, projectStore } = props;
     const {
-      questionStore: { options },
+      questionStore: { newVotingOptions },
       questionStore: { rootStore: { membersStore: { nonERC } } },
     } = projectStore;
     return (
@@ -144,10 +149,10 @@ class StartNewVote extends React.Component {
             className={styles['new-vote__dropdown']}
           >
             <SimpleDropdown
-              options={options}
+              options={newVotingOptions}
               field={form.$('question')}
               onSelect={this.handleSelect}
-              initIndex={initIndex}
+              initIndex={initIndex - 1}
               key={uniqKey()}
             >
               <QuestionIcon />
@@ -157,7 +162,7 @@ class StartNewVote extends React.Component {
                 ? (
                   <div className={styles['new-vote__description']}>
                     {/* TODO add correct description text */}
-                    New vote description text
+                    {description.length > 150 ? description.substr(0, 130) : description}
                   </div>
                 )
                 : null

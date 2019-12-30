@@ -9,6 +9,7 @@ const dialog = {
   tokenTransfer: 'Перевести токены',
   tokenTransferError: 'Ошибка перевода',
   createAGroupOfQuestions: 'Создать группу вопросов',
+  completionOfVoting: 'Завершение голосования',
 };
 
 export default dialog;
