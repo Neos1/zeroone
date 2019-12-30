@@ -1,6 +1,8 @@
 node_modules/
 docs/
 build/
-dist/
+dist/linux-unpacked/
+dist/builder-effective-config.yaml
+dist/zero_one-app_1.0.0_amd64.deb
 coverage/
 src/data/
