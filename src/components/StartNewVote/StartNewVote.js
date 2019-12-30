@@ -35,6 +35,7 @@ class StartNewVote extends React.Component {
           dialogStore,
         } = this.props;
         const data = form.values();
+        console.log(data);
         const { question: questionId } = data;
         delete data.question;
         const values = Object.values(data);
@@ -69,10 +70,11 @@ class StartNewVote extends React.Component {
   }
 
   componentDidMount() {
-    const { props } = this;
+    const { props, form } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
       this.initIndex = Number(selected.value) - 1;
+      form.$('question').set(selected.value);
       this.handleSelect(selected);
     });
     eventEmitterService.subscribe('new_vote:closed', () => {
