@@ -99,10 +99,7 @@ class QuestionStore {
         value: group.groupType,
         label: group.name,
       },
-    ]), [{
-      value: '*',
-      label: 'All',
-    }]);
+    ]), []);
   }
 
   @action
