@@ -182,7 +182,7 @@ class StartNewVote extends React.Component {
                   <div className={styles['new-vote__form-row']}>
                     {form.map((field) => {
                       if (field.name === 'question') return null;
-                      return (field.placeholder === 'Group' || field.placeholder === 'Group Address')
+                      return (field.placeholder === 'Group' || field.placeholder === 'Group address')
                         ? (
                           <div className={styles['new-vote__form-col']}>
                             <SimpleDropdown
