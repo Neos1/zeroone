@@ -49,11 +49,10 @@ class ContractService {
       fs.writeFileSync(path.join(PATH_TO_CONTRACTS, 'contractsdfdsf.sol'), contract);
       window.ipcRenderer.send('compile-request', contract);
       window.ipcRenderer.on('contract-compiled', (event, compiledContract) => {
-        console.log(compiledContract);
-        const contractData = compiledContract[`${type}`];
+        const contractData = compiledContract[type];
+        console.log(contractData);
         if (contractData.abi !== '') {
           const { evm: { bytecode: { object } }, abi } = contractData;
-          console.log(object, abi);
           fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
           resolve({ type, bytecode: object, abi });
         } else reject(new Error('Something went wrong on contract compiling'));

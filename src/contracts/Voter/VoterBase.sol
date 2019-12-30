@@ -32,7 +32,6 @@ contract VoterBase is VoterInterface {
 
     // METHODS
     function setERC20(address _address) public {
-        ERC20 = IERC20(_address);
         userGroups.init(_address);
     }
 
@@ -450,23 +449,6 @@ contract VoterBase is VoterInterface {
             votings.voting[_voteId].descisionWeights[1][groupName],
             votings.voting[_voteId].descisionWeights[2][groupName]
         );
-    }
-
-    function getERCAddress() external view returns (address _address) {
-        return address(ERC20);
-    }
-
-    function getUserBalance() external view returns (uint256 balance) {
-        uint256 _balance = ERC20.balanceOf(msg.sender);
-        return _balance;
-    }
-
-    function getERCTotal() external view returns (uint256 balance) {
-        return ERC20.totalSupply();
-    }
-
-    function getERCSymbol() external view returns (string memory symbol) {
-        return ERC20.symbol();
     }
 
     function getUserVote(uint _voteId, address _user) external view returns (uint vote) {

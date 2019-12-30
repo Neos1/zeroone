@@ -12,14 +12,6 @@ import './assets/styles/style.scss';
 
 const { ipcRenderer } = window.require('electron');
 window.ipcRenderer = ipcRenderer;
-window.ipcRenderer.on('info', (event, data) => {
-  console.log(data);
-  window.ipcRenderer.send('reply', 'hello to main !');
-});
-
-window.ipcRenderer.on('contract-compiled', (event, data) => {
-  console.log(data);
-});
 
 const {
   userStore,

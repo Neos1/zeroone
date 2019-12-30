@@ -252,51 +252,6 @@
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "getERCAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getERCSymbol",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "symbol",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getERCTotal",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -329,21 +284,6 @@
 			{
 				"internalType": "uint256",
 				"name": "length",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getUserBalance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "balance",
 				"type": "uint256"
 			}
 		],
