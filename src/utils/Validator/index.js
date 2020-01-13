@@ -22,10 +22,13 @@ const rules = {
   uint: {
     // eslint-disable-next-line no-restricted-globals
     function: (value) => !isNaN(Number(value)),
-
   },
   bytes4: {
     function: (value) => value.match(/(0x)+([0-9 a-f A-F]){8}/g),
+  },
+  formula: {
+    // TODO should be correct in all case
+    function: (value) => value.match(/\(group\([a-zA-Z0-9]{1,}\) (=>|=<) condition\((quorum|positive) (>=|<=) ([0-9]{1,}) % of (quorum|all)\)\)/),
   },
 };
 
@@ -51,6 +54,7 @@ const plugins = {
         uint: 'Value is not numeric',
         bytes4: 'Value is not bytes4 string',
         between: 'Between :min and :max signs',
+        formula: 'Incorrect formula',
       });
       validator.setMessages('ru', {
         required: 'Обязательное поле',
@@ -61,6 +65,7 @@ const plugins = {
         uint: 'Значение не является числом',
         bytes4: 'Значение не байтовая строка',
         between: 'Между :min и :max знаками',
+        formula: 'Некорректная формула',
       });
       validator.stopOnError(true);
     },
