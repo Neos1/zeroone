@@ -56,7 +56,7 @@ class QuestionStore {
    */
   @computed
   get list() {
-    return this.filter.filteredList(this.questions);
+    return this.filter.filteredList(this._questions);
   }
 
   /**
@@ -96,7 +96,7 @@ class QuestionStore {
     return this._questionGroups.reduce((acc, group) => ([
       ...acc,
       {
-        value: group.groupType,
+        value: group.groupId,
         label: group.name,
       },
     ]), [{
@@ -112,6 +112,7 @@ class QuestionStore {
     for (let index = 1; index < length; index += 1) {
       // eslint-disable-next-line no-await-in-loop
       const element = await contractService.callMethod('getQuestionGroup', index);
+      element.groupId = index;
       this._questionGroups.push(element);
     }
   }
@@ -127,6 +128,7 @@ class QuestionStore {
     for (let i = 1; i < countOfUploaded; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const question = await contractService.fetchQuestion(i);
+      question.groupId = Number(question.groupId);
       this.addQuestion(i, question);
     }
   }

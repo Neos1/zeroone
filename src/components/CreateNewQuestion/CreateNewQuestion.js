@@ -34,6 +34,7 @@ class CreateNewQuestion extends React.Component {
   }
 
   handleDropdownSelect = (selected) => {
+    console.log(selected);
     this.setState({ isSelected: true, selectedGroup: selected.value });
   }
 
@@ -102,7 +103,7 @@ class CreateNewQuestion extends React.Component {
               ? (
                 <CreateNewQuestionForm
                   activeTab={activeTab}
-                  selectedGroup={Number(selectedGroup) + 1}
+                  selectedGroup={selectedGroup}
                   onToggle={this.toggleActiveTab}
                 />
               )

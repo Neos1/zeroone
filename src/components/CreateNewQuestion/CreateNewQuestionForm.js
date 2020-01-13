@@ -59,11 +59,10 @@ class CreateNewQuestionForm extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    const { selectedGroup } = props;
     this.data = {
       name: '',
       description: '',
-      groupId: selectedGroup,
+      groupId: '',
       time: 0,
       formula: '',
       target: '',
@@ -78,6 +77,7 @@ class CreateNewQuestionForm extends React.PureComponent {
    */
   onBasicSubmit = (form) => {
     const { props, data } = this;
+    const { selectedGroup } = props;
     const { onToggle } = props;
     const {
       question_title: Name,
@@ -93,7 +93,7 @@ class CreateNewQuestionForm extends React.PureComponent {
     data.target = target;
     data.description = description;
     data.methodSelector = methodSelector;
-    console.log(Name, time, description, target, formula);
+    data.groupId = selectedGroup;
     onToggle(1);
   }
 
