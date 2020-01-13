@@ -27,8 +27,9 @@ const rules = {
     function: (value) => value.match(/(0x)+([0-9 a-f A-F]){8}/g),
   },
   formula: {
-    // TODO should be correct in all case
-    function: (value) => value.match(/\(group\([a-zA-Z0-9]{1,}\) (=>|=<) condition\((quorum|positive) (>=|<=) ([0-9]{1,}) % of (quorum|all)\)\)/),
+    function: (value) => value.match(
+      /\(group\([a-zA-Z0-9]{1,}\) => condition\((quorum (>=|<=) [0-9]{1,} %\)\)|positive (>=|<=) [0-9]{1,} % of (quorum|all)\)\))/,
+    ),
   },
 };
 
