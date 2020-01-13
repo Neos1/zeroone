@@ -104,6 +104,7 @@ class CreateNewQuestion extends React.Component {
                   activeTab={activeTab}
                   selectedGroup={Number(selectedGroup) + 1}
                   onToggle={this.toggleActiveTab}
+                  onComplete={() => this.toggleActiveTab(0)}
                 />
               )
               : (

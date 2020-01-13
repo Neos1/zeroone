@@ -50,6 +50,8 @@ class CreateNewQuestionForm extends React.PureComponent {
     activeTab: PropTypes.number.isRequired,
     /** Method called on toggle tab */
     onToggle: PropTypes.func.isRequired,
+    /** Method called on success fill all data */
+    onComplete: PropTypes.func.isRequired,
     dialogStore: PropTypes.shape({
       toggle: PropTypes.func.isRequired,
     }).isRequired,
@@ -143,6 +145,7 @@ class CreateNewQuestionForm extends React.PureComponent {
       dialogStore,
       projectStore: { questionStore, rootStore: { contractService } },
       projectStore,
+      onComplete,
     } = this.props;
     const futureQuestionId = questionStore.questions.length + 1;
     const parameters = this.getParametersFromForm(form);
@@ -163,6 +166,7 @@ class CreateNewQuestionForm extends React.PureComponent {
     dialogStore.toggle('password_form');
     this.formBasic.clear();
     form.clear();
+    onComplete();
   }
 
   renderStep = () => {
