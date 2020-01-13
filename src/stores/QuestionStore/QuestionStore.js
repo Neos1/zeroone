@@ -9,6 +9,12 @@ import PaginationStore from '../PaginationStore';
  * Contains methods for working
  */
 class QuestionStore {
+  /**
+   * Interval for update missing &
+   * active questions (in ms)
+   */
+  intervalUpdate = 10000;
+
   @observable pagination;
 
   /** List models Question */
@@ -30,6 +36,9 @@ class QuestionStore {
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
+    setInterval(() => {
+      this.getActualQuestions();
+    }, this.intervalUpdate);
   }
 
   /**
@@ -60,7 +69,7 @@ class QuestionStore {
   }
 
   /**
-   * Get paginated list quesiotns
+   * Get paginated list questions
    *
    * @returns {Array} paginated questions list
    */
@@ -186,6 +195,7 @@ class QuestionStore {
   getMissingQuestions = async ({
     questions,
   }) => {
+    console.log('getMissingQuestions');
     const firstQuestionIndex = 1;
     const { contractService, userStore } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
@@ -193,6 +203,9 @@ class QuestionStore {
     const projectAddress = contractService._contract.options.address;
     const questionsFromFileLength = questions.data.length;
     const countQuestionFromContract = countOfUploaded - firstQuestionIndex;
+    console.log('countQuestionFromContract', countQuestionFromContract);
+    console.log('questionsFromFileLength', questionsFromFileLength);
+    console.log('countOfUploaded', countOfUploaded);
     if (countQuestionFromContract > questionsFromFileLength) {
       for (let i = questionsFromFileLength + firstQuestionIndex; i < countOfUploaded; i += 1) {
         // eslint-disable-next-line no-await-in-loop
@@ -214,7 +227,9 @@ class QuestionStore {
    * from the contract & file
    */
   getActualQuestions = async () => {
+    this.loading = true;
     const questions = this.getQuestionsFromFile();
+    console.log('getActualQuestions questions', questions);
     if (!questions || !questions.data) {
       await this.getQuestionsFromContract();
       this.loading = false;
@@ -260,7 +275,8 @@ class QuestionStore {
    */
   @action addQuestion = (id, question) => {
     const { Web3Service: { web3 } } = this.rootStore;
-    this._questions.push(new Question(id, question, web3));
+    const duplicatedQuestion = this._questions.find((item) => item.id === id);
+    if (!duplicatedQuestion) this._questions.push(new Question(id, question, web3));
   }
 
   /**
