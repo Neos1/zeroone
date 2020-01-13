@@ -74,5 +74,9 @@ const other = {
   select: 'Выберите',
   hintFunctionalityNotAvailable: 'Во время активного голосования <1/> этот функционал недоступен',
   outOf: 'из',
+  clickOnAddressForCopy: 'Нажмите на адрес кошелька, чтобы скопировать',
+  copied: 'Скопировано',
+  groups: 'Группы',
+  tokens: 'Токены',
 };
 export default other;
