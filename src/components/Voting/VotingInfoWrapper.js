@@ -112,6 +112,7 @@ class VotingInfoWrapper extends React.PureComponent {
             dialogStore.toggle('success_modal');
             historyStore.fetchAndUpdateLastVoting();
             this.getVotingStats();
+            this.updateQuestionList(voting);
           })
           .catch(() => {
             dialogStore.toggle('error_modal');
@@ -158,6 +159,26 @@ class VotingInfoWrapper extends React.PureComponent {
   componentDidMount() {
     this.getVotingStats();
     this.getVotes();
+  }
+
+  /**
+   * Method for update question list
+   * if close voting have questionId=1
+   *
+   * @param {object} voting voting object
+   * @param {string} voting.questionId voting question id
+   */
+  updateQuestionList = (voting) => {
+    const { props } = this;
+    const {
+      projectStore: {
+        questionStore,
+      },
+    } = props;
+    const idForAddingNewQuestion = '1';
+    if (voting.questionId === idForAddingNewQuestion) {
+      questionStore.getActualQuestions();
+    }
   }
 
   onVerifyClick = () => {
