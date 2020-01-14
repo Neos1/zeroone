@@ -13,6 +13,7 @@ const Button = ({
   iconPosition,
   onClick,
   hint,
+  className,
 }) => (
   // eslint-disable-next-line react/button-has-type
   <button
@@ -23,6 +24,7 @@ const Button = ({
       ${styles[`btn--${theme}`]}
       ${size ? styles[`btn--${size}`] : ''}
       ${hint ? styles['btn--with-hint'] : ''}
+      ${className || ''}
     `}
     onClick={onClick}
   >
@@ -64,6 +66,7 @@ Button.propTypes = {
     propTypes.string,
     propTypes.shape({}),
   ]),
+  className: propTypes.string,
 };
 
 Button.defaultProps = {
@@ -75,6 +78,7 @@ Button.defaultProps = {
   disabled: false,
   onClick: () => {},
   hint: null,
+  className: '',
 };
 
 export default Button;
