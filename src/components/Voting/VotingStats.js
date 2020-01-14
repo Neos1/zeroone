@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import uniqKey from 'react-id-generator';
-import { observer } from 'mobx-react';
 import { BarChart, Bar, LabelList } from 'recharts';
 import { Trans, withTranslation } from 'react-i18next';
 
 import styles from './Voting.scss';
 
 @withTranslation()
-@observer
 class VotingStats extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
