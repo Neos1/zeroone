@@ -17,8 +17,7 @@ class Question {
   /**
    * convert simple formula of system question for contract
    *
-   * @param {string} formula text implimentation of formula
-   * @returns {array} numeric implimentation of formula for smart contract
+   * @returns {Array} numeric implementation of formula for smart contract
    */
   getFormulaForContract() {
     const FORMULA_REGEXP = new RegExp(/(group)|((?:[a-zA-Z0-9]{1,}))|((quorum|positive))|(>=|<=)|([0-9%]{1,})|(quorum|all)/g);
@@ -39,7 +38,7 @@ class Question {
    * getting formed parameters for contract
    *
    * @param {string} contractAddr address of target contract
-   * @returns {array} formed data for encoding transaction
+   * @returns {Array} formed data for encoding transaction
    */
   getUploadingParams(contractAddr) {
     const {
