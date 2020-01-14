@@ -163,7 +163,7 @@ class CreateNewQuestionForm extends React.PureComponent {
     const votingData = contractService._contract
       .methods.saveNewQuestion(...rawVotingData).encodeABI();
     projectStore.setVotingData(1, 0, votingData);
-    dialogStore.toggle('password_form');
+    dialogStore.toggle('password_form_questions');
     this.formBasic.clear();
     form.clear();
     onComplete();

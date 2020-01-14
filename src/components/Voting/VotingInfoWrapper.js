@@ -57,7 +57,7 @@ class VotingInfoWrapper extends React.PureComponent {
         } = this.props;
         const { password } = form.values();
         userStore.setPassword(password);
-        dialogStore.toggle('progress_modal');
+        dialogStore.toggle('progress_modal_voting_info_wrapper');
         return contractService.sendVote(votingId, descision)
           .then(async () => {
             await historyStore.fetchAndUpdateLastVoting();
@@ -65,10 +65,10 @@ class VotingInfoWrapper extends React.PureComponent {
             this.getVotingStats();
             switch (descision) {
               case (1):
-                dialogStore.toggle('decision_agreed_message');
+                dialogStore.toggle('decision_agree_voting_info_wrapperd_message');
                 break;
               case (2):
-                dialogStore.toggle('decision_reject_message');
+                dialogStore.toggle('decision_reject_voting_info_wrapper_message');
                 break;
               default:
                 break;
@@ -76,7 +76,7 @@ class VotingInfoWrapper extends React.PureComponent {
           })
           .catch((error) => {
             console.log(error);
-            dialogStore.toggle('error_modal');
+            dialogStore.toggle('error_modal_voting_info_wrapper');
           });
       },
       onError: (form) => {
@@ -102,20 +102,20 @@ class VotingInfoWrapper extends React.PureComponent {
         } = props;
         const { password } = form.values();
         userStore.setPassword(password);
-        dialogStore.toggle('progress_modal');
+        dialogStore.toggle('progress_modal_voting_info_wrapper');
         const [voting] = historyStore.getVotingById(Number(id));
         voting.update({
           closeVoteInProgress: true,
         });
         return contractService.closeVoting()
           .then(() => {
-            dialogStore.toggle('success_modal');
+            dialogStore.toggle('success_modal_voting_info_wrapper');
             historyStore.fetchAndUpdateLastVoting();
             this.getVotingStats();
             this.updateQuestionList(voting);
           })
           .catch(() => {
-            dialogStore.toggle('error_modal');
+            dialogStore.toggle('error_modal_voting_info_wrapper');
           })
           .finally(() => {
             voting.update({
@@ -186,7 +186,7 @@ class VotingInfoWrapper extends React.PureComponent {
     this.setState({
       descision: 1,
     });
-    dialogStore.toggle('decision_agree');
+    dialogStore.toggle('decision_agree_voting_info_wrapper');
   }
 
   onRejectClick = () => {
@@ -194,12 +194,12 @@ class VotingInfoWrapper extends React.PureComponent {
     this.setState({
       descision: 2,
     });
-    dialogStore.toggle('decision_reject');
+    dialogStore.toggle('decision_reject_voting_info_wrapper');
   }
 
   onClosingClick = () => {
     const { dialogStore } = this.props;
-    dialogStore.toggle('descision_close');
+    dialogStore.toggle('descision_close_voting_info_wrapper');
   }
 
   @action getVotes = async () => {
@@ -319,14 +319,14 @@ class VotingInfoWrapper extends React.PureComponent {
           onCompleteVoteClick={() => { this.onClosingClick(); }}
           onBarClick={
             () => {
-              dialogStore.show('voter_list');
+              dialogStore.show('voter_list_voting_info_wrapper');
             }
           }
         />
         <Footer />
 
         <Dialog
-          name="decision_agree"
+          name="decision_agree_voting_info_wrapper"
           size="md"
           header={null}
           footer={null}
@@ -335,7 +335,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="decision_reject"
+          name="decision_reject_voting_info_wrapper"
           size="md"
           header={null}
           footer={null}
@@ -344,7 +344,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="descision_close"
+          name="descision_close_voting_info_wrapper"
           header={null}
           footer={null}
         >
@@ -352,7 +352,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="voter_list"
+          name="voter_list_voting_info_wrapper"
           size="lg"
           header={null}
           footer={null}
@@ -361,7 +361,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="decision_agreed_message"
+          name="decision_agree_voting_info_wrapperd_message"
           header={null}
           footer={null}
         >
@@ -369,7 +369,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="decision_reject_message"
+          name="decision_reject_voting_info_wrapper_message"
           header={null}
           footer={null}
         >
@@ -377,7 +377,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="progress_modal"
+          name="progress_modal_voting_info_wrapper"
           size="md"
           footer={null}
           header={t('other:sendingTransaction')}
@@ -387,7 +387,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="success_modal"
+          name="success_modal_voting_info_wrapper"
           size="md"
           footer={null}
           closeable
@@ -396,7 +396,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="error_modal"
+          name="error_modal_voting_info_wrapper"
           size="md"
           footer={null}
           closeable

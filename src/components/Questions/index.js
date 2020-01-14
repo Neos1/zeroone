@@ -51,7 +51,7 @@ class Questions extends Component {
           },
           userStore,
         } = props;
-        dialogStore.show('progress_modal');
+        dialogStore.show('progress_modal_questions');
         const { password } = form.values();
         const maxGasPrice = 30000000000;
         userStore.setPassword(password);
@@ -71,7 +71,7 @@ class Questions extends Component {
             historyStore.getMissingVotings();
           })
           .catch((error) => {
-            dialogStore.show('error_modal');
+            dialogStore.show('error_modal_questions');
             console.error(error);
           });
       },
@@ -287,7 +287,7 @@ class Questions extends Component {
           <CreateNewQuestion />
         </Dialog>
         <Dialog
-          name="password_form"
+          name="password_form_questions"
           size="md"
           footer={null}
           header={t('fields:enterPassword')}
@@ -295,7 +295,7 @@ class Questions extends Component {
           <FinPasswordFormWrapper form={this.passwordForm} />
         </Dialog>
         <Dialog
-          name="progress_modal"
+          name="progress_modal_questions"
           size="md"
           footer={null}
           header={t('headings:sendingTransaction')}
@@ -305,7 +305,7 @@ class Questions extends Component {
         </Dialog>
 
         <Dialog
-          name="success_modal"
+          name="success_modal_questions"
           size="md"
           footer={null}
           closeable
@@ -314,7 +314,7 @@ class Questions extends Component {
         </Dialog>
 
         <Dialog
-          name="error_modal"
+          name="error_modal_questions"
           size="md"
           footer={null}
           closeable

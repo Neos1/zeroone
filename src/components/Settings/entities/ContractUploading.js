@@ -31,15 +31,15 @@ class ContractUploading extends Component {
         } = form.values();
         userStore.setPassword(password);
         const deployArgs = [name, symbol, Number(count)];
-        dialogStore.toggle('progress_modal');
+        dialogStore.toggle('progress_modal_contract_uploading');
         return appStore.deployContract(tokenType, deployArgs, password)
           .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
           .then((receipt) => {
-            dialogStore.toggle('success_modal');
+            dialogStore.toggle('success_modal_contract_uploading');
             this.setState({ address: receipt.contractAddress });
           })
           .catch(() => {
-            dialogStore.toggle('error_modal');
+            dialogStore.toggle('error_modal_contract_uploading');
           });
       },
       onError: () => {
@@ -59,16 +59,16 @@ class ContractUploading extends Component {
         } = form.values();
         userStore.setPassword(password);
         const deployArgs = [address];
-        dialogStore.toggle('progress_modal');
+        dialogStore.toggle('progress_modal_contract_uploading');
         return appStore.deployContract('Voter', deployArgs, password)
           .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
           .then((receipt) => {
-            dialogStore.toggle('success_modal');
+            dialogStore.toggle('success_modal_contract_uploading');
             appStore.addProjectToList({ name, address: receipt.contractAddress });
             this.setState({ address: receipt.contractAddress });
           })
           .catch(() => {
-            dialogStore.toggle('error_modal');
+            dialogStore.toggle('error_modal_contract_uploading');
           });
       },
       onError: () => {
@@ -96,12 +96,12 @@ class ContractUploading extends Component {
   triggerModal = (tokenType) => {
     const { dialogStore } = this.props;
     this.setState({ tokenType });
-    dialogStore.show('token_modal');
+    dialogStore.show('token_modal_contract_uploading');
   }
 
   triggerProjectModal = () => {
     const { dialogStore } = this.props;
-    dialogStore.show('project_modal');
+    dialogStore.show('project_modal_contract_uploading');
   }
 
   render() {
@@ -116,7 +116,7 @@ class ContractUploading extends Component {
           <Button theme="white" onClick={() => { this.triggerProjectModal(); }}>Project</Button>
         </div>
         <Dialog
-          name="token_modal"
+          name="token_modal_contract_uploading"
           size="md"
           footer={null}
           header={t('headings:newTokens.heading')}
@@ -125,7 +125,7 @@ class ContractUploading extends Component {
         </Dialog>
 
         <Dialog
-          name="project_modal"
+          name="project_modal_contract_uploading"
           size="md"
           footer={null}
           header={t('headings:projectCreating.heading')}
@@ -134,7 +134,7 @@ class ContractUploading extends Component {
         </Dialog>
 
         <Dialog
-          name="progress_modal"
+          name="progress_modal_contract_uploading"
           size="md"
           footer={null}
           header={t('headings:uploadingProject')}
@@ -144,7 +144,7 @@ class ContractUploading extends Component {
         </Dialog>
 
         <Dialog
-          name="success_modal"
+          name="success_modal_contract_uploading"
           size="md"
           footer={null}
           closeable
@@ -155,7 +155,7 @@ class ContractUploading extends Component {
         </Dialog>
 
         <Dialog
-          name="error_modal"
+          name="error_modal_contract_uploading"
           size="md"
           footer={null}
           closeable

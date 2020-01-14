@@ -37,7 +37,7 @@ class CreateGroupQuestions extends React.PureComponent {
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, [name]);
         const votingData = encodedParams.replace('0x', methodSelector);
         projectStore.setVotingData(questionId, groupId, votingData);
-        dialogStore.toggle('password_form');
+        dialogStore.toggle('password_form_questions');
         return Promise.resolve();
       },
       onError: () => {
