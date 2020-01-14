@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import TransferTokenForm from '../../stores/FormsStore/TransferTokenForm';
@@ -159,8 +159,7 @@ class TokenTransfer extends React.Component {
   }
 
   render() {
-    const { form } = this;
-    const { props } = this;
+    const { form, votingIsActive, props } = this;
     const {
       t, wallet, groupId, groupType,
     } = props;
@@ -202,14 +201,27 @@ class TokenTransfer extends React.Component {
           groupType !== 'ERC20'
             ? (
               <div className={styles['token-transfer__button-container']}>
-                <button
+                <Button
                   type="button"
                   className={styles['token-transfer__button']}
                   onClick={this.handleClick}
-                  disabled={this.votingIsActive}
+                  disabled={votingIsActive}
+                  hint={
+                    votingIsActive
+                      ? (
+                        <Trans
+                          i18nKey="other:hintFunctionalityNotAvailable"
+                        >
+                          During active voting, this
+                          <br />
+                          functionality is not available.
+                        </Trans>
+                      )
+                      : null
+                  }
                 >
                   {t('buttons:designateGroupAdministrator')}
-                </button>
+                </Button>
               </div>
             )
             : null
