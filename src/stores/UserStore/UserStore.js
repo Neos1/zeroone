@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
 import i18n from 'i18next';
+import weiToFixed from '../../utils/EthUtils/wei-to-fixed';
 /**
  * Describes store with user data
  */
@@ -23,15 +24,24 @@ class UserStore {
 
   @observable password = '';
 
+  @observable currency = 'ETH';
+
+  @observable fullCurrencyName = 'ether';
+
   constructor(rootStore) {
     this.rootStore = rootStore;
+  }
+
+  @computed
+  get userBalance() {
+    return `${weiToFixed(this.balance, this.fullCurrencyName)} ${this.currency}`;
   }
 
   /**
    * saves password to store for decoding wallet and transaction signing
 param {string} value password from form
    *
-   * @param value
+   * @param {string} value new pass value
    */
   @action setPassword(value) {
     this.password = value;

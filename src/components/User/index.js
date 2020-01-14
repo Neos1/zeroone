@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { withTranslation } from 'react-i18next';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import UserStore from '../../stores/UserStore/UserStore';
 
 import styles from './User.scss';
 
 @withTranslation()
 @inject('userStore')
+@observer
 class User extends React.Component {
   timeoutCopy = 2000;
 
@@ -72,7 +73,12 @@ class User extends React.Component {
               <span>{t('other:tokens')}</span>
             </div>
             <div className={`${styles['user__balance-item']}`}>
-              {`Private balance....${userStore.balance}`}
+              <span>
+                {t('other:privateBalance')}
+              </span>
+              <span>
+                {userStore.userBalance}
+              </span>
             </div>
           </div>
         </div>

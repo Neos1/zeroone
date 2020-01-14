@@ -78,5 +78,6 @@ const other = {
   copied: 'Скопировано',
   groups: 'Группы',
   tokens: 'Токены',
+  privateBalance: 'Личный баланс',
 };
 export default other;
