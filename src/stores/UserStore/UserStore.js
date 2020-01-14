@@ -222,7 +222,10 @@ param {string} value password from form
    */
   @action async getEthBalance() {
     const { Web3Service: { web3 } } = this.rootStore;
-    this.balance = await web3.eth.getBalance(this.address);
+    web3.eth.getBalance(this.address)
+      .then((result) => {
+        this.balance = result;
+      });
   }
 
   @action setMnemonic(value) {

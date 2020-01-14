@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { withTranslation } from 'react-i18next';
+import { inject } from 'mobx-react';
+import UserStore from '../../stores/UserStore/UserStore';
 
 import styles from './User.scss';
 
 @withTranslation()
+@inject('userStore')
 class User extends React.Component {
   timeoutCopy = 2000;
 
@@ -14,6 +17,7 @@ class User extends React.Component {
   static propTypes = {
     children: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
+    userStore: PropTypes.instanceOf(UserStore).isRequired,
   };
 
   constructor() {
@@ -21,6 +25,12 @@ class User extends React.Component {
     this.state = {
       isCopied: false,
     };
+  }
+
+  componentDidMount() {
+    const { props } = this;
+    const { userStore } = props;
+    userStore.getEthBalance();
   }
 
   /**
@@ -37,7 +47,7 @@ class User extends React.Component {
   render() {
     const { isCopied } = this.state;
     const { props } = this;
-    const { children, t } = props;
+    const { children, t, userStore } = props;
     return (
       <div className={`${styles.user}`}>
         <img className={styles.user__image} src={`http://tinygraphs.com/spaceinvaders/${children}?theme=base&numcolors=2&size=22&fmt=svg`} alt="avatar" />
@@ -60,6 +70,9 @@ class User extends React.Component {
             <div className={`${styles['user__balances-top']}`}>
               <span>{t('other:groups')}</span>
               <span>{t('other:tokens')}</span>
+            </div>
+            <div className={`${styles['user__balance-item']}`}>
+              {`Private balance....${userStore.balance}`}
             </div>
           </div>
         </div>
