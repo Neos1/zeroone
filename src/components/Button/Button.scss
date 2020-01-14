@@ -273,5 +273,20 @@
       height: 30px;
     }
   }
+
+  &--toggle-user {
+    padding: 10px 16px 9px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 2px;
+
+    .btn__text {
+      color: #000;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Grotesk";
+      line-height: 107.5%;
+    }
+  }
 }
 

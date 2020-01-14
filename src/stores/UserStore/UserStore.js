@@ -258,6 +258,21 @@ param {string} value password from form
   @computed get mnemonic() {
     return this._mnemonic;
   }
+
+  @action
+  reset = () => {
+    this.authorized = false;
+    this.redirectToProjects = false;
+    this.encryptedWallet = '';
+    this.walletName = '';
+    this.privateKey = '';
+    this._mnemonic = Array(12);
+    this._mnemonicRepeat = Array(12);
+    this.balance = 0;
+    this.password = '';
+    this.currency = 'ETH';
+    this.fullCurrencyName = 'ether';
+  }
 }
 
 export default UserStore;

@@ -79,5 +79,6 @@ const other = {
   groups: 'Groups',
   tokens: 'Tokens',
   privateBalance: 'Private balance',
+  toggleUser: 'Toggle user',
 };
 export default other;

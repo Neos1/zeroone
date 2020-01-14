@@ -42,6 +42,11 @@ class NotificationStore {
     ));
     this.list = filtered;
   }
+
+  @action
+  reset = () => {
+    this.list = [];
+  }
 }
 
 export default NotificationStore;

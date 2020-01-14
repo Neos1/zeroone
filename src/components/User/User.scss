@@ -1,4 +1,5 @@
 @import '../../assets/styles/partials/variables';
+@import '../../assets/styles/includes/mixin';
 
 .user {
   position: relative;
@@ -68,10 +69,15 @@
 
   &__balance {
     &-item {
+      display: block;
+      padding-bottom: 8px;
+      overflow: hidden;
       color: $primary;
       font-size: 12px;
       line-height: 100%;
       letter-spacing: 0.01em;
+
+      @include clearfix;
 
       span {
         &:first-child {
@@ -82,7 +88,7 @@
             position: absolute;
             left: calc(100% + 5px);
             color: #c8c9ca;
-            content:'..................................................';
+            content: '.....................................................................................................................';
           }
         }
 
@@ -94,6 +100,12 @@
         }
       }
     }
+  }
+
+  &__button {
+    padding-top: 16px;
+    padding-bottom: 9px;
+    text-align: center;
   }
 
   &:hover {

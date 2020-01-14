@@ -79,5 +79,6 @@ const other = {
   groups: 'Группы',
   tokens: 'Токены',
   privateBalance: 'Личный баланс',
+  toggleUser: 'Сменить пользователя',
 };
 export default other;

@@ -24,7 +24,6 @@ class ProjectStore {
 
   @observable votingGroupId = '';
 
-
   @observable userGrops = [];
 
   @observable questionStore;
@@ -95,6 +94,19 @@ class ProjectStore {
     this.fetchUserGroupsLength(projectAddress);
     const data = {};
     this.userGrops.push(new UsergroupStore(data));
+  }
+
+  @action
+  reset = () => {
+    this.projectAddress = '';
+    this.name = '';
+    this.prepared = 0;
+    this.votingData = '';
+    this.votingQuestion = '';
+    this.votingGroupId = '';
+    this.userGrops = [];
+    this.questionStore = null;
+    this.historyStore = null;
   }
 
   addReturnTokensNotification = async () => {

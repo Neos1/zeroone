@@ -1,14 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
+import AppStore from '../../stores/AppStore';
 import UserStore from '../../stores/UserStore/UserStore';
+import { MembersStore } from '../../stores/MembersStore';
+import ProjectStore from '../../stores/ProjectStore';
+import NotificationStore from '../../stores/NotificationStore';
+import Button from '../Button/Button';
 
 import styles from './User.scss';
 
+@withRouter
 @withTranslation()
-@inject('userStore')
+@inject(
+  'userStore',
+  'membersStore',
+  'projectStore',
+  'appStore',
+  'notificationStore',
+)
 @observer
 class User extends React.Component {
   timeoutCopy = 2000;
@@ -19,6 +32,13 @@ class User extends React.Component {
     children: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     userStore: PropTypes.instanceOf(UserStore).isRequired,
+    membersStore: PropTypes.instanceOf(MembersStore).isRequired,
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
+    appStore: PropTypes.instanceOf(AppStore).isRequired,
+    notificationStore: PropTypes.instanceOf(NotificationStore).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor() {
@@ -45,10 +65,35 @@ class User extends React.Component {
     }, this.timeoutCopy);
   }
 
+  handleToggleUser = () => {
+    const { props } = this;
+    const {
+      appStore,
+      userStore,
+      projectStore,
+      membersStore,
+      notificationStore,
+      history,
+    } = props;
+    history.push('/');
+    appStore.reset();
+    userStore.reset();
+    projectStore.reset();
+    membersStore.reset();
+    notificationStore.reset();
+  }
+
   render() {
     const { isCopied } = this.state;
     const { props } = this;
-    const { children, t, userStore } = props;
+    const {
+      children,
+      t,
+      userStore,
+      membersStore: {
+        groups,
+      },
+    } = props;
     return (
       <div className={`${styles.user}`}>
         <img className={styles.user__image} src={`http://tinygraphs.com/spaceinvaders/${children}?theme=base&numcolors=2&size=22&fmt=svg`} alt="avatar" />
@@ -80,6 +125,31 @@ class User extends React.Component {
                 {userStore.userBalance}
               </span>
             </div>
+            {
+              groups
+              && groups.length
+                ? (
+                  groups.map((item) => (
+                    <div className={`${styles['user__balance-item']}`}>
+                      <span>
+                        {item.name}
+                      </span>
+                      <span>
+                        {item.fullUserBalance}
+                      </span>
+                    </div>
+                  ))
+                )
+                : null
+            }
+          </div>
+          <div className={`${styles.user__button}`}>
+            <Button
+              theme="toggle-user"
+              onClick={this.handleToggleUser}
+            >
+              {t('other:toggleUser')}
+            </Button>
           </div>
         </div>
       </div>

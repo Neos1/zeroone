@@ -167,8 +167,12 @@ class MembersStore {
    * @param {object} group data for group
    */
   addToGroups = (group) => {
+    const { userStore } = this.rootStore;
     // TODO maybe fix for duplicate
-    this.groups.push(new MembersGroup(group));
+    this.groups.push(new MembersGroup({
+      ...group,
+      userAddress: userStore.address,
+    }));
   }
 
   @action
@@ -214,6 +218,13 @@ class MembersStore {
   }
 
   @action getMemberById = (id) => this.list[Number(id)];
+
+  @action
+  reset = () => {
+    this.groups = [];
+    this._transferStatus = 0;
+    this.loading = true;
+  }
 
   @computed
   get transferStatus() {
