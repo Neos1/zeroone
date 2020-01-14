@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
+import uniqKey from 'react-id-generator';
 import AppStore from '../../stores/AppStore';
 import UserStore from '../../stores/UserStore/UserStore';
 import { MembersStore } from '../../stores/MembersStore';
@@ -130,7 +131,10 @@ class User extends React.Component {
               && groups.length
                 ? (
                   groups.map((item) => (
-                    <div className={`${styles['user__balance-item']}`}>
+                    <div
+                      className={`${styles['user__balance-item']}`}
+                      key={uniqKey()}
+                    >
                       <span>
                         {item.name}
                       </span>
