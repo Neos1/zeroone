@@ -74,5 +74,9 @@ const other = {
   select: 'Select',
   hintFunctionalityNotAvailable: 'During active voting, this <1/> functionality is not available.',
   outOf: 'out of',
+  clickOnAddressForCopy: 'Click on address for copy',
+  copied: 'Copied',
+  groups: 'Groups',
+  tokens: 'Tokens',
 };
 export default other;
