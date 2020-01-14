@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
+import Common from 'ethereumjs-common';
 import i18n from 'i18next';
 /**
  * Describes store with user data
@@ -194,7 +195,16 @@ param {string} value password from form
           info.privateKey,
           'hex',
         );
-        const tx = new Tx(data, { chain: chainId });
+        const customCommon = Common.forCustomChain(
+          'mainnet',
+          {
+            name: 'my-network',
+            networkId: 123,
+            chainId,
+          },
+          'petersburg',
+        );
+        const tx = new Tx(data, { common: customCommon });
         tx.sign(privateKey);
         const serialized = tx.serialize().toString('hex');
         resolve(serialized);

@@ -172,7 +172,7 @@ class Questions extends Component {
         addFilterRule,
       },
     } = projectStore;
-    addFilterRule({ groupId: (selected.value).toString() });
+    addFilterRule({ groupId: selected.value });
   }
 
   render() {
