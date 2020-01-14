@@ -20,9 +20,11 @@ import styles from './TokenTransfer.scss';
  */
 @withRouter
 @withTranslation()
-@inject('membersStore', 'userStore', 'dialogStore')
+@inject('membersStore', 'userStore', 'dialogStore', 'projectStore')
 @observer
 class TokenTransfer extends React.Component {
+  votingIsActive = false;
+
   form = new TransferTokenForm({
     hooks: {
       onSuccess: (form) => {
@@ -126,6 +128,11 @@ class TokenTransfer extends React.Component {
       readWallet: PropTypes.func.isRequired,
       address: PropTypes.string.isRequired,
     }).isRequired,
+    projectStore: PropTypes.shape({
+      historyStore: PropTypes.shape({
+        hasActiveVoting: PropTypes.func.isRequired,
+      }),
+    }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -133,6 +140,15 @@ class TokenTransfer extends React.Component {
 
   static defaultProps = {
     wallet: EMPTY_DATA_STRING,
+  }
+
+  async componentDidMount() {
+    const {
+      projectStore: {
+        historyStore,
+      },
+    } = this.props;
+    this.votingIsActive = await historyStore.hasActiveVoting();
   }
 
   handleClick = () => {
@@ -190,6 +206,7 @@ class TokenTransfer extends React.Component {
                   type="button"
                   className={styles['token-transfer__button']}
                   onClick={this.handleClick}
+                  disabled={this.votingIsActive}
                 >
                   {t('buttons:designateGroupAdministrator')}
                 </button>
