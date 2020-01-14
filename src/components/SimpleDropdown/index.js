@@ -23,6 +23,7 @@ class SimpleDropdown extends Component {
     onSelect: propTypes.func,
     field: propTypes.shape({
       set: propTypes.func,
+      validate: propTypes.func,
       error: propTypes.string,
     }),
     initIndex: propTypes.number,
@@ -34,6 +35,7 @@ class SimpleDropdown extends Component {
     onSelect: () => false,
     field: {
       set: () => {},
+      validate: () => {},
       error: null,
     },
     initIndex: null,
@@ -77,12 +79,13 @@ class SimpleDropdown extends Component {
     this.setState({ opened: false });
   }
 
-  handleSelect = async (selected) => {
+  handleSelect = (selected) => {
     const { onSelect, field } = this.props;
     field.set(selected.value);
+    field.validate();
     onSelect(selected);
 
-    await this.setState({
+    this.setState({
       selectedLabel: selected.label,
       selectedValue: selected.value,
     });
