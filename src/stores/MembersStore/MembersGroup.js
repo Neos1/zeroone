@@ -24,6 +24,7 @@ class MembersGroup {
     tokenSymbol,
     members,
     textForEmptyState,
+    userAddress,
   }) {
     if (
       !name
@@ -39,10 +40,12 @@ class MembersGroup {
     this.balance = totalSupply;
     this.contract = contract;
     this.customTokenName = tokenSymbol;
+    this.userAddress = userAddress;
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }
     this.addToList(members);
+    this.getUserBalanceInGroup();
   }
 
   /** Name group (Example: Admins) */
@@ -63,12 +66,28 @@ class MembersGroup {
   /** Balance group */
   balance;
 
+  /** User balance in group */
+  @observable userBalance;
+
   /** Text for state when list is empty */
   textForEmptyState = 'other:noData';
 
   @computed
   get fullBalance() {
     return `${this.balance} ${this.customTokenName}`;
+  }
+
+  @computed
+  get fullUserBalance() {
+    return `${this.userBalance} ${this.customTokenName}`;
+  }
+
+  /**
+   * Method for getting balance in group
+   */
+  getUserBalanceInGroup = async () => {
+    const balance = await this.contract.methods.balanceOf(this.userAddress).call();
+    this.userBalance = balance;
   }
 
   /** Members list */
@@ -101,6 +120,7 @@ class MembersGroup {
   @action
   updateMemberBalanceAndWeight = async (address) => {
     const userBalance = await this.contract.methods.balanceOf(address).call();
+    this.getUserBalanceInGroup();
     const user = this.list.find((member) => member.wallet === address);
     if (!user || !user.setTokenBalance || !user.setWeight) return;
     const weight = (userBalance / Number(this.balance)) * 100;

@@ -78,5 +78,7 @@ const other = {
   copied: 'Скопировано',
   groups: 'Группы',
   tokens: 'Токены',
+  privateBalance: 'Личный баланс',
+  toggleUser: 'Сменить пользователя',
 };
 export default other;

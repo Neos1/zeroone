@@ -78,5 +78,7 @@ const other = {
   copied: 'Copied',
   groups: 'Groups',
   tokens: 'Tokens',
+  privateBalance: 'Private balance',
+  toggleUser: 'Toggle user',
 };
 export default other;

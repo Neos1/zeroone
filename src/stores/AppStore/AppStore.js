@@ -267,6 +267,19 @@ class AppStore {
   @action setProjectAddress(value) {
     this._projectAddress = value;
   }
+
+  @action
+  reset = () => {
+    this.projectList = [];
+    this.ERC = {};
+    this.deployArgs = [];
+    this.name = '';
+    this.alert = new Alert();
+    this.uploadedQuestion = 0;
+    this.countOfQuestions = 0;
+    this.userInProject = false;
+    this._projectAddress = '';
+  }
 }
 
 export default AppStore;
