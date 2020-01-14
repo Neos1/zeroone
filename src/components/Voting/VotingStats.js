@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uniqKey from 'react-id-generator';
+import { observer } from 'mobx-react';
 import { BarChart, Bar, LabelList } from 'recharts';
 import { Trans, withTranslation } from 'react-i18next';
 
 import styles from './Voting.scss';
 
 @withTranslation()
+@observer
 class VotingStats extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -76,10 +79,10 @@ class VotingStats extends React.PureComponent {
       <div className={styles.voting__stats}>
         {
           data && data.length
-            ? data.map((item, index) => (
+            ? data.map((item) => (
               <div
                 className={styles['voting__stats-col']}
-                key={`voting__stats-col--${index + 1}`}
+                key={uniqKey()}
               >
                 <BarChart
                   width={274}
