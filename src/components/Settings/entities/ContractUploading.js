@@ -137,7 +137,7 @@ class ContractUploading extends Component {
           name="progress_modal_contract_uploading"
           size="md"
           footer={null}
-          header={t('headings:uploadingProject')}
+          header={t('headings:uploadingProject.heading')}
           closeable={false}
         >
           <TransactionProgress />
