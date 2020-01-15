@@ -51,7 +51,7 @@ class Voting extends React.Component {
           },
           userStore,
         } = props;
-        dialogStore.toggle('progress_modal');
+        dialogStore.toggle('progress_modal_voting');
         const { password } = form.values();
         const maxGasPrice = 30000000000;
         userStore.setPassword(password);
@@ -66,11 +66,11 @@ class Voting extends React.Component {
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
-            dialogStore.show('success_modal');
+            dialogStore.show('success_modal_voting');
             historyStore.getMissingVotings();
           })
           .catch((error) => {
-            dialogStore.show('error_modal');
+            dialogStore.show('error_modal_voting');
             console.error(error);
           });
       },
@@ -265,7 +265,7 @@ class Voting extends React.Component {
         </Dialog>
 
         <Dialog
-          name="progress_modal"
+          name="progress_modal_voting"
           size="md"
           footer={null}
           header={t('headings:sendingTransaction')}
@@ -275,7 +275,7 @@ class Voting extends React.Component {
         </Dialog>
 
         <Dialog
-          name="success_modal"
+          name="success_modal_voting"
           size="md"
           footer={null}
           closeable
@@ -284,7 +284,7 @@ class Voting extends React.Component {
         </Dialog>
 
         <Dialog
-          name="error_modal"
+          name="error_modal_voting"
           size="md"
           footer={null}
           closeable

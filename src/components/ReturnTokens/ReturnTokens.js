@@ -29,17 +29,17 @@ class ReturnTokens extends React.Component {
         } = this.props;
         const { password } = form.values();
         userStore.setPassword(password);
-        dialogStore.toggle('progress_modal');
+        dialogStore.toggle('progress_modal_return_tokens');
         return historyStore.returnTokens()
           .then(() => {
             const notificationId = notificationStore.list[0].id;
             notificationStore.remove(notificationId);
-            dialogStore.toggle('success_modal');
+            dialogStore.toggle('success_modal_return_tokens');
             historyStore.fetchAndUpdateLastVoting();
           })
           .catch((error) => {
             console.error(error);
-            dialogStore.toggle('error_modal');
+            dialogStore.toggle('error_modal_return_tokens');
           });
       },
       onError: (form) => {
@@ -72,7 +72,7 @@ class ReturnTokens extends React.Component {
           <FinPassFormWrapper form={form} />
         </Dialog>
         <Dialog
-          name="progress_modal"
+          name="progress_modal_return_tokens"
           size="md"
           footer={null}
           header={t('other:sendingTransaction')}
@@ -81,14 +81,14 @@ class ReturnTokens extends React.Component {
           <TransactionProgress />
         </Dialog>
         <Dialog
-          name="error_modal"
+          name="error_modal_return_tokens"
           size="md"
           footer={null}
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
         <Dialog
-          name="success_modal"
+          name="success_modal_return_tokens"
           size="md"
           footer={null}
           closeable
