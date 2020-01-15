@@ -79,7 +79,7 @@ class CreateNewQuestion extends React.Component {
           <div className={styles['create-question__top-right']}>
             <div className={styles['create-question__dropdown']}>
               <SimpleDropdown
-                options={questionStore.questionGroups}
+                options={questionStore.questionGroupsForVoting}
                 onSelect={this.handleDropdownSelect}
               >
                 <QuestionUploadingIcon />
