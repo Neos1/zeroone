@@ -28,7 +28,7 @@ const rules = {
   },
   formula: {
     function: (value) => value.match(
-      /\(\s*group\s*\(\s*[a-zA-Z0-9]{1,}\s*\) => condition\s*\(\s*(quorum (>=|<=) [0-9]{1,} %\)\)|positive (>=|<=) [0-9]{1,} % of (quorum|all)\s*\)\s*\))/,
+      /\(\s*group\s*\(\s*[a-zA-Z0-9]{1,}\s*\)\s*=>\s*condition\s*\(\s*(quorum\s*(>=|<=)\s*[0-9]{1,} %\)\)|positive\s*(>=|<=)\s*[0-9]{1,}\s*% \s*of \s*(quorum|all)\s*\)\s*\))/,
     ),
   },
 };
