@@ -94,8 +94,9 @@ class CreateNewQuestionForm extends React.PureComponent {
     data.formula = formula;
     data.target = target;
     data.description = description;
-    data.methodSelector = methodSelector;
+    data.methodSelector = methodSelector || '0x00000000';
     data.groupId = selectedGroup;
+    console.log(data.methodSelector);
     onToggle(1);
   }
 
