@@ -13,7 +13,7 @@ const headings = {
   existingTokens: { heading: 'Connecting contract of tokens', subheading: 'The owner of this contract will be considered the owner of the created project' },
   checkingTokens: { heading: 'Checking the project address', subheading: 'It does not take much time' },
   checkingTokensConfirm: { heading: 'The contract is checked', subheading: ['Verify the data', 'before proceeding'] },
-  newTokens: { heading: 'Token creating', subheading: '' },
+  newTokens: { heading: 'Creating token ', subheading: '' },
   tokensCreating: { heading: 'Creating ERC20 tokens', subheading: 'It will take some time' },
   tokensCreated: { heading: 'Tokens are created!', subheading: 'Now you need to create a project' },
   projectCreating: { heading: 'Creating a project', subheading: ['The project contract will be uploaded', 'to the network by a wallet'] },
