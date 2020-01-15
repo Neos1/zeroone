@@ -114,6 +114,14 @@ class QuestionStore {
     }]);
   }
 
+  @computed get questionGroupsForVoting() {
+    return this._questionGroups.map((group) => (
+      {
+        value: group.groupId,
+        label: group.name,
+      }));
+  }
+
   @action
   fetchQuestionGroups = async () => {
     const { contractService } = this.rootStore;

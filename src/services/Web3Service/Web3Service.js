@@ -22,7 +22,7 @@ class Web3Service {
   }
 
   createTxData(address, tx, maxGasPrice) {
-    const { web3: { eth } } = this;
+    const { web3: { eth, utils } } = this;
     let transaction = { ...tx };
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
@@ -34,7 +34,7 @@ class Web3Service {
         if (!maxGasPrice) return (Promise.resolve(gas));
         return this.getGasPrice()
           .then((gasPrice) => {
-            const minGasPrice = 20000000000;
+            const minGasPrice = utils.numberToHex(20000000000);
             const gp = new BN(gasPrice);
             const minGp = new BN(minGasPrice);
             const maxGp = new BN(maxGasPrice);

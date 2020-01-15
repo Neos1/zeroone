@@ -1,6 +1,6 @@
 {
 	"host": "https://ropsten.infura.io/v3/14b2319f08e24f3aadfe1aa933301b38",
-	"hostBackup": "https://ropsten.infura.io/v3/14b2319f08e24f3aadfe1aa933301b38",
+	"hostBackup": "http://hive3.thexproject.ru:21595",
 	"projects": [
 		{
 			"name": "asdasdas",

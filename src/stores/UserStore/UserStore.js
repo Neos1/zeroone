@@ -204,6 +204,13 @@ param {string} value password from form
           info.privateKey,
           'hex',
         );
+        // const customCommon = Common.forCustomChain(
+        //   'mainnet',
+        //   {
+        //     chainId,
+        //   },
+        //   'byzantium',
+        // );
         const tx = new Tx(data, { chain: chainId });
         tx.sign(privateKey);
         const serialized = tx.serialize().toString('hex');
