@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import { EMPTY_DATA_STRING } from '../../constants';
 import renderDecisionIcon from './utils';
+import { getTimeLeftString } from '../../utils/Date';
 
 import styles from './Voting.scss';
 
@@ -52,7 +53,12 @@ const VotingInfoResult = ({
         <div
           className={styles['voting-info__result-item-value']}
         >
-          {endDate.from(startDate)}
+          {
+            getTimeLeftString({
+              startDate,
+              endDate,
+            })
+          }
         </div>
       </div>
     </div>

@@ -36,9 +36,28 @@ const getCorrectMomentLocale = (locale) => {
   }
 };
 
+/**
+ * Method for obtaining human-readable
+ * difference value for a given period
+ * of time
+ *
+ * @param {object} param0 date start & end
+ * @param {moment} param0.endDate moment js date object
+ * @param {moment} param0.startDate moment js date object
+ * @returns {string} readable period of time
+ */
+const getTimeLeftString = ({
+  endDate,
+  startDate,
+}) => {
+  const duration = endDate.diff(startDate);
+  return moment.duration(duration).humanize();
+};
+
 export default progressByDateRange;
 
 export {
+  getTimeLeftString,
   progressByDateRange,
   getCorrectMomentLocale,
 };

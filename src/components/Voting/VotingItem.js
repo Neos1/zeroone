@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 import VotingDecisionProgress from './VotingDecisionProgress';
 import { statusStates, votingStates } from '../../constants';
 import VotingDecision from './VotingDecision';
-import { progressByDateRange } from '../../utils/Date';
+import { progressByDateRange, getTimeLeftString } from '../../utils/Date';
 import { getDateString } from './utils';
 
 import styles from './Voting.scss';
@@ -68,7 +68,12 @@ class VotingItem extends React.PureComponent {
         return (
           <VotingDecisionProgress
             progress={progress}
-            remained={moment(date.end * 1000).fromNow()}
+            remained={
+              getTimeLeftString({
+                startDate: moment.now(),
+                endDate: moment(date.end * 1000),
+              })
+            }
           />
         );
       case (progress >= 100):
