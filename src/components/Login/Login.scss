@@ -150,7 +150,7 @@
       margin-right: 10px;
       color: #181818;
       opacity: .5;
-    
+
     }
     &-text {
       font-weight: bold;
@@ -235,7 +235,7 @@
       }
     }
   }
-} 
+}
 .create {
 
   .btn--white {
@@ -254,7 +254,7 @@
         margin: 5px auto 0;
       }
     }
-    
+
   }
 
   &__label {
@@ -275,7 +275,7 @@
     display: inline-block;
     width: 80px;
     height: 80px;
-    transition: .3s linear; 
+    transition: .3s linear;
     &__icon {
       position: absolute;
       top: 50%;
@@ -351,7 +351,7 @@
         opacity: 1;
       }
     }
-  
+
     &.active{
       & > img {
         opacity: 1;

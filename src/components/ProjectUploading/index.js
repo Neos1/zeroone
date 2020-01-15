@@ -138,7 +138,7 @@ const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, s
             text={item[0]}
             index={index}
             state={step}
-            noline={index === 4}
+            noline={index === 0}
           >
             {item[1]}
           </ProgressBlock>

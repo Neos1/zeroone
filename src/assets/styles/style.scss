@@ -63,31 +63,54 @@ svg {
   width: 80px;
   height: 80px;
   transition: .3s linear;
+
   .progress-line{
-    position: absolute;
+    position: relative;
     top: 50%;
-    left: 100%;
+    left: -96px;
     width: 96px;
-    border: 1px dashed rgba($color: $primary, $alpha: .5);
+    height: 4px;
+    overflow: hidden;
+    border: unset;
     transform: translateY(-50%);
     opacity: 0;
     transition: .3s ease-in;
+
+    &::after {
+      position: absolute;
+      top: 2px;
+      left: -100%;
+      z-index: 1;
+      width: 200%;
+      height: 2px;
+      background-image: linear-gradient(90deg, #000, #000 75%, transparent 75%, transparent 100%);
+      background-size: 4px 2px;
+      animation: ticker-animation 6s linear;
+      animation-play-state: running;
+      animation-delay: 0s;
+      animation-iteration-count: infinite;
+      content: '';
+    }
   }
+
   &__icon {
     position: absolute;
     top: 50%;
     left: 50%;
     display: inline-block;
     transform: translate(-50%, -50%);
+
     & > svg {
       width: 42px;
       height: 42px;
+
       path {
         transition: .2s;
         fill: rgba($color: $primary, $alpha: .5);
       }
     }
   }
+
   &>svg {
     position: absolute;
     top: 0%;
@@ -96,12 +119,14 @@ svg {
     height: 80px;
     transform: translate(-50%, 0%) scale(1);
   }
+
   .stroke-still {
     stroke-dasharray: 2;
     stroke-width: 4;
     transition: .2s;
     stroke: rgba($color: $primary, $alpha: .5);
   }
+
   & > img {
     position: absolute;
     top: 50%;
@@ -109,16 +134,19 @@ svg {
     transform: translate(-50%, -50%);
     opacity: .5;
   }
+
   &>p{
     width: 100%;
     margin: 90px 0 0;
     color: #37474F;
     font-size: 12px;
     opacity: .5;
+
     span {
       display: block;
       margin-bottom: 10px;
     }
+
     &+strong {
       display: inline-block;
       width: 165%;
@@ -134,18 +162,27 @@ svg {
         }
       }
     }
+
     .stroke-still {
       stroke-dasharray: 0;
       stroke: rgba($color: $primary, $alpha: 1);
     }
+
     & > img {
       opacity: 1;
     }
+
     .progress-line{
       width: 96px;
-      border-top: 2px solid rgba($color: $primary, $alpha: 1);
+      border: unset;
       opacity: 1;
+
+      &::after {
+        background-color: $primary;
+        background-image: unset;
+      }
     }
+
     &>p{
       color: $primary;
       opacity: 1;
@@ -155,6 +192,7 @@ svg {
     & > img {
       opacity: 1;
     }
+
     .progress-block__icon {
       svg {
         path {
@@ -162,22 +200,24 @@ svg {
         }
       }
     }
+
     .progress-line {
       opacity: 1;
     }
+
     .stroke-still {
       stroke: transparent;
     }
+
     .stroke-animation {
       stroke-width: 4;
-      animation: stroke-spacing 4s ease-in, stroke-color 5.2s linear;
-      animation-iteration-count: infinite;
-      animation-delay: 0;
-      animation-direction: normal;
-      animation-fill-mode: forwards;
-      animation-play-state: running;
       transform-origin: center center;
+      animation: stroke-spacing 6s linear, stroke-color 6s linear;
+      animation-play-state: running;
+      animation-delay: 0s;
+      animation-iteration-count: infinite;
     }
+
     &>p{
       color: $primary;
       opacity: 1;
@@ -191,19 +231,11 @@ svg {
 
 @keyframes stroke-spacing {
   0% {
-    stroke-dasharray: 0 200;
-  }
-  45% {
-    stroke-dashoffset: 0;
-    stroke-dasharray: 200 200;
-  }
-  90% {
-    stroke-dashoffset: -200;
-    stroke-dasharray: 200 200;
+    stroke-dasharray: 2;
   }
   100% {
-    stroke-dashoffset: -200;
-    stroke-dasharray: 200 200;
+    stroke-dashoffset: -108;
+    stroke-dasharray: 2;
   }
 }
 
@@ -217,6 +249,15 @@ svg {
   74% { stroke: $primary; }
   75% { stroke: $primary; }
   99% { stroke: $primary; }
+}
+
+@keyframes ticker-animation {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0;
+  }
 }
 
 ::-webkit-scrollbar-thumb {
