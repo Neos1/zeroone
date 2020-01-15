@@ -13,8 +13,6 @@ import Footer from '../Footer';
 import Pagination from '../Pagination';
 import Dialog from '../Dialog/Dialog';
 import StartNewVote from '../StartNewVote';
-import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
-import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
@@ -246,15 +244,6 @@ class Voting extends React.Component {
         >
           <StartNewVote />
         </Dialog>
-
-        <Dialog name="create_group_question" size="md" footer={null}>
-          <CreateGroupQuestions />
-        </Dialog>
-
-        <Dialog name="create_question" size="xlg" footer={null}>
-          <CreateNewQuestion />
-        </Dialog>
-
         <Dialog
           name="password_form"
           size="md"
