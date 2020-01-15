@@ -2,6 +2,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import { observable } from 'mobx';
 import uniqKey from 'react-id-generator';
@@ -13,6 +14,7 @@ import StarNewVoteForm from '../../stores/FormsStore/StartNewVoteForm';
 
 import styles from './StartNewVote.scss';
 
+@withRouter
 @withTranslation()
 @inject('projectStore', 'dialogStore')
 @observer
@@ -59,6 +61,9 @@ class StartNewVote extends React.Component {
     t: PropTypes.func.isRequired,
     projectStore: PropTypes.shape().isRequired,
     dialogStore: PropTypes.shape().isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   constructor() {
@@ -86,7 +91,7 @@ class StartNewVote extends React.Component {
   // eslint-disable-next-line consistent-return
   handleSelect = (selected) => {
     const { form } = this;
-    const { projectStore, dialogStore } = this.props;
+    const { projectStore, dialogStore, history } = this.props;
     const { questionStore } = projectStore;
     const [question] = questionStore.getQuestionById(selected.value);
     const { params, text: description } = question;
@@ -101,9 +106,11 @@ class StartNewVote extends React.Component {
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
       case 1:
+        history.push('/questions');
         dialogStore.toggle('create_question');
         break;
       case 3:
+        history.push('/questions');
         dialogStore.toggle('create_group_question');
         break;
       default:
