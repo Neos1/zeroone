@@ -16,6 +16,13 @@ export const userVotingStates = {
   decisionAgainst: 2,
 };
 
+export const systemQuestionsId = {
+  addingNewQuestion: '1',
+  connectGroupUsers: '2',
+  connectGroupQuestions: '3',
+  assignGroupAdmin: '4',
+};
+
 export const SOL_PATH_REGEXP = new RegExp(/(\"|\')((\.{1,2}\/){1,})(\w+\/){0,}?(\w+\.(?:sol))(\"|\')/g);
 export const SOL_IMPORT_REGEXP = new RegExp(/(import)*.(\"|\')((\.{1,2}\/){1,})(\w+\/){0,}?(\w+\.(?:sol))(\"|\')(;)/g);
 export const SOL_VERSION_REGEXP = new RegExp(/(pragma).(solidity).((\^)?)([0-9](.)?){1,}.(;)/g);

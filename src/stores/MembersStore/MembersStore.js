@@ -43,7 +43,6 @@ class MembersStore {
 
   @action init() {
     this.groups = [];
-    this.fetchUserGroups();
   }
 
   fetchUserGroupsLength = () => {
@@ -51,8 +50,9 @@ class MembersStore {
     return contractService.fetchUserGroupsLength();
   }
 
-  fetchUserGroups = () => {
-    this.fetchUserGroupsLength()
+  fetchUserGroups = async () => {
+    this.loading = true;
+    await this.fetchUserGroupsLength()
       .then((length) => this.getActualUserGroups(length))
       .then((groups) => this.getPrimaryGroupsInfo(groups))
       .then((groups) => this.getUsersBalances(groups))
@@ -60,6 +60,10 @@ class MembersStore {
         groups.forEach((group) => {
           this.addToGroups(group);
         });
+        this.loading = false;
+      })
+      .catch((err) => {
+        console.error(err);
         this.loading = false;
       });
   }
@@ -168,11 +172,13 @@ class MembersStore {
    */
   addToGroups = (group) => {
     const { userStore } = this.rootStore;
-    // TODO maybe fix for duplicate
-    this.groups.push(new MembersGroup({
-      ...group,
-      userAddress: userStore.address,
-    }));
+    const duplicateMembersGroup = this.groups.find((item) => item.name === group.name);
+    if (!duplicateMembersGroup) {
+      this.groups.push(new MembersGroup({
+        ...group,
+        userAddress: userStore.address,
+      }));
+    }
   }
 
   @action

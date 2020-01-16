@@ -17,6 +17,10 @@ import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
+import { systemQuestionsId } from '../../constants';
+import AppStore from '../../stores/AppStore/AppStore';
+import MembersStore from '../../stores/MembersStore/MembersStore';
+import UserStore from '../../stores/UserStore/UserStore';
 
 @withTranslation()
 @inject(
@@ -59,6 +63,12 @@ class VotingInfoWrapper extends React.PureComponent {
         dialogStore.toggle('progress_modal_voting_info_wrapper');
         return contractService.sendVote(votingId, descision)
           .then(async () => {
+            // TODO добавить проверку на закрытие голосования
+            // в случае если голосование закрыто вызывать #{updateAfterCompleteVoting}
+            // TODO также заменить показ модалки не на основе
+            // изначального решения, а на основе ответа от контракта (исправит баг с
+            // показом первоначального решения, хотя пользователь ушёл за пределы
+            // блока и голосование просто закрылось)
             await historyStore.fetchAndUpdateLastVoting();
             this.getVotingStats();
             switch (descision) {
@@ -110,7 +120,7 @@ class VotingInfoWrapper extends React.PureComponent {
             dialogStore.toggle('success_modal_voting_info_wrapper');
             historyStore.fetchAndUpdateLastVoting();
             this.getVotingStats();
-            this.updateQuestionList(voting);
+            this.updateAfterCompleteVoting(voting);
           })
           .catch(() => {
             dialogStore.toggle('error_modal_voting_info_wrapper');
@@ -126,24 +136,16 @@ class VotingInfoWrapper extends React.PureComponent {
   })
 
   static propTypes = {
-    dialogStore: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-      hide: PropTypes.func.isRequired,
-      toggle: PropTypes.func.isRequired,
-    }).isRequired,
-    membersStore: PropTypes.shape({
-      getMemberById: PropTypes.func.isRequired,
-    }).isRequired,
+    dialogStore: PropTypes.instanceOf(AppStore).isRequired,
+    membersStore: PropTypes.instanceOf(MembersStore).isRequired,
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
-    userStore: PropTypes.shape().isRequired,
-    appStore: PropTypes.shape({
-      parseFormula: PropTypes.func.isRequired,
-    }).isRequired,
+    userStore: PropTypes.instanceOf(UserStore).isRequired,
+    appStore: PropTypes.instanceOf(AppStore).isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -166,16 +168,27 @@ class VotingInfoWrapper extends React.PureComponent {
    * @param {object} voting voting object
    * @param {string} voting.questionId voting question id
    */
-  updateQuestionList = (voting) => {
+  updateAfterCompleteVoting = (voting) => {
     const { props } = this;
     const {
       projectStore: {
         questionStore,
       },
+      membersStore,
     } = props;
-    const idForAddingNewQuestion = '1';
-    if (voting.questionId === idForAddingNewQuestion) {
-      questionStore.getActualQuestions();
+    const {
+      addingNewQuestion,
+      connectGroupUsers,
+    } = systemQuestionsId;
+    switch (voting.questionId) {
+      case addingNewQuestion:
+        questionStore.getActualQuestions();
+        break;
+      case connectGroupUsers:
+        membersStore.fetchUserGroups();
+        break;
+      default:
+        break;
     }
   }
 
