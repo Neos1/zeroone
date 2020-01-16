@@ -47,6 +47,10 @@ function createWindow() {
     mainWindow.webContents.toggleDevTools();
   });
 
+  ipcMain.on('change-language:request', ((event, value) => {
+    mainWindow.webContents.send('change-language:confirm', value);
+  }));
+
   ipcMain.on('compile-request', ((event, input) => {
     const data = {
       language: 'Solidity',

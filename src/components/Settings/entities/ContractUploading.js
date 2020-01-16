@@ -45,6 +45,7 @@ class ContractUploading extends Component {
       onError: () => {
 
       },
+
     },
   })
 
@@ -104,6 +105,10 @@ class ContractUploading extends Component {
     dialogStore.show('project_modal_contract_uploading');
   }
 
+  changeFormLang =() => {
+    this.projectForm.fireHook('onLangChangeHook');
+  }
+
   render() {
     const { address } = this.state;
     const { t, dialogStore } = this.props;
@@ -114,6 +119,7 @@ class ContractUploading extends Component {
           <Button theme="white" onClick={() => { this.triggerModal('ERC20'); }}>ERC20</Button>
           <Button theme="white" onClick={() => { this.triggerModal('MERC20'); }}>Custom tokens</Button>
           <Button theme="white" onClick={() => { this.triggerProjectModal(); }}>Project</Button>
+          <Button theme="white" onClick={() => { this.changeFormLang(); }}>Cvtyf zpsrf</Button>
         </div>
         <Dialog
           name="token_modal_contract_uploading"
