@@ -9,6 +9,9 @@ const solc = require('solc');
 let mainWindow;
 let loadingScreen;
 
+/**
+ *
+ */
 function createLoadingScreen() {
   loadingScreen = new BrowserWindow({
     minWidth: 539,
@@ -66,17 +69,10 @@ function createWindow() {
     shell.openExternal(url);
   });
 
-  mainWindow.webContents.browserWindowOptions.solc = solc;
-
   electronLocalShortcut.register(mainWindow, 'F12', () => {
     mainWindow.webContents.toggleDevTools();
   });
 
-<<<<<<< HEAD
-  ipcMain.on('change-language:request', ((event, value) => {
-    mainWindow.webContents.send('change-language:confirm', value);
-  }));
-=======
   // keep listening on the did-finish-load event, when the mainWindow content has loaded
   mainWindow.webContents.on('did-finish-load', () => {
     // then close the loading screen window and show the main window
@@ -85,14 +81,18 @@ function createWindow() {
     }
     mainWindow.show();
   });
->>>>>>> 8e59c7a658632fed9155ec5a3c05ab398780da5f
+
+  ipcMain.on('change-language:request', ((event, value) => {
+    mainWindow.webContents.send('change-language:confirm', value);
+  }));
 
   ipcMain.on('compile-request', ((event, input) => {
+    const { contract, type } = input;
     const data = {
       language: 'Solidity',
       sources: {
         'test.sol': {
-          content: input,
+          content: contract,
         },
       },
       settings: {
@@ -104,8 +104,7 @@ function createWindow() {
       },
     };
     const output = JSON.parse(solc.compile(JSON.stringify(data)));
-    console.log(output);
-    mainWindow.webContents.send('contract-compiled', output.contracts['test.sol']);
+    mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
   }));
 }
 
