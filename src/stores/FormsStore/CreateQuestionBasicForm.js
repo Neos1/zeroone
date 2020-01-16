@@ -52,6 +52,7 @@ class CreateQuestionBasicForm extends ExtendedForm {
           name: 'description',
           type: 'text',
           label: 'questionDescription',
+          placeholder: i18n.t('fields:questionDescription'),
           rules: 'required',
         },
       ],
