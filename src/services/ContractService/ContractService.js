@@ -46,12 +46,11 @@ class ContractService {
   compileContract(type) {
     return new Promise((resolve, reject) => {
       const contract = this.combineContract(type);
-      window.ipcRenderer.send('compile-request', contract);
-      window.ipcRenderer.on('contract-compiled', (event, compiledContract) => {
-        const contractData = compiledContract[type];
-        console.log(contractData);
-        if (contractData.abi !== '') {
-          const { evm: { bytecode: { object } }, abi } = contractData;
+      window.ipcRenderer.send('compile-request', { contract, type });
+      window.ipcRenderer.once('contract-compiled', (event, compiledContract) => {
+        console.log(compiledContract);
+        if (compiledContract.abi !== '') {
+          const { evm: { bytecode: { object } }, abi } = compiledContract;
           fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
           resolve({ type, bytecode: object, abi });
         } else reject(new Error('Something went wrong on contract compiling'));

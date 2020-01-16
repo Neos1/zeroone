@@ -39,10 +39,6 @@ function createWindow() {
     event.preventDefault();
     shell.openExternal(url);
   });
-
-
-  mainWindow.webContents.browserWindowOptions.solc = solc;
-
   electronLocalshortcut.register(mainWindow, 'F12', () => {
     mainWindow.webContents.toggleDevTools();
   });
@@ -52,11 +48,12 @@ function createWindow() {
   }));
 
   ipcMain.on('compile-request', ((event, input) => {
+    const { contract, type } = input;
     const data = {
       language: 'Solidity',
       sources: {
         'test.sol': {
-          content: input,
+          content: contract,
         },
       },
       settings: {
@@ -68,8 +65,7 @@ function createWindow() {
       },
     };
     const output = JSON.parse(solc.compile(JSON.stringify(data)));
-    console.log(output);
-    mainWindow.webContents.send('contract-compiled', output.contracts['test.sol']);
+    mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
   }));
 }
 
