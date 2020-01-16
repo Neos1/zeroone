@@ -75,7 +75,14 @@ class Dropdown extends Component {
     ));
 
     return (
-      <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
+      <div
+        className={`
+        ${styles.dropdown} 
+        ${opened ? 'dropdown--opened' : ''}
+        ${field && field.error ? styles['dropdown--error'] : ''}
+      `}
+        ref={this.setWrapperRef}
+      >
         <input type="hidden" value={field.value} />
         <button type="button" className={styles.dropdown__head} onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className={styles.dropdown__icon}>{children}</span> : ''}
@@ -90,6 +97,9 @@ class Dropdown extends Component {
         <div className={styles.dropdown__options}>
           {getOptions}
         </div>
+        <p className={styles['dropdown__error-text']}>
+          {field.error}
+        </p>
       </div>
     );
   }
@@ -108,6 +118,7 @@ Dropdown.propTypes = {
       propTypes.shape({}),
     ]).isRequired,
     label: propTypes.string.isRequired,
+    error: propTypes.string.isRequired,
   }).isRequired,
 };
 
