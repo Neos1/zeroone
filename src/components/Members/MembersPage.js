@@ -2,20 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { inject, observer, PropTypes as MobxPropTypes } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import Container from '../Container';
 import MembersTop from './MembersTop';
-import MembersGroup from '../../stores/MembersStore/MembersGroup';
 import MembersGroupComponent from './MembersGroupComponent';
 import Dialog from '../Dialog/Dialog';
 import Loader from '../Loader';
 import Footer from '../Footer';
 import Notification from '../Notification/Notification';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
+import MembersStore from '../../stores/MembersStore/MembersStore';
+import DialogStore from '../../stores/DialogStore';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 import styles from './Members.scss';
 
@@ -26,28 +28,34 @@ import styles from './Members.scss';
 @inject('membersStore', 'projectStore', 'dialogStore')
 @observer
 class MembersPage extends React.Component {
+  asyncUpdater = null;
+
+  timeoutInterval = 60000; // ms
+
   @observable votingIsActive = false;
 
   @observable _loading = false;
 
   static propTypes = {
-    membersStore: PropTypes.shape({
-      addToGroups: PropTypes.func.isRequired,
-      list: MobxPropTypes.observableArrayOf(PropTypes.instanceOf(MembersGroup)),
-      loading: PropTypes.bool.isRequired,
-    }).isRequired,
-    dialogStore: PropTypes.shape({
-      hide: PropTypes.func.isRequired,
-    }).isRequired,
+    membersStore: PropTypes.instanceOf(MembersStore).isRequired,
+    dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     t: PropTypes.func.isRequired,
   }
 
   async componentDidMount() {
-    const { projectStore: { historyStore } } = this.props;
+    const { projectStore: { historyStore }, membersStore } = this.props;
     this._loading = true;
     this.votingIsActive = await historyStore.hasActiveVoting();
     this._loading = false;
+    this.asyncUpdater = new AsyncInterval({
+      timeoutInterval: this.timeoutInterval,
+      cb: membersStore.fetchUserGroups,
+    });
+  }
+
+  componentWillUnmount() {
+    this.asyncUpdater.cancel();
   }
 
   @computed
