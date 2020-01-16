@@ -26,7 +26,7 @@ class Notification extends React.Component {
 
   componentDidMount() {
     this.updateReturnTokensNotification();
-    this.idTimer = setTimeout(() => {
+    this.idTimer = setInterval(() => {
       this.updateReturnTokensNotification();
     }, this.timeoutInterval);
   }
