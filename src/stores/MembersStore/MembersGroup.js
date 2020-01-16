@@ -122,10 +122,24 @@ class MembersGroup {
     const userBalance = await this.contract.methods.balanceOf(address).call();
     this.getUserBalanceInGroup();
     const user = this.list.find((member) => member.wallet === address);
-    if (!user || !user.setTokenBalance || !user.setWeight) return;
-    const weight = (userBalance / Number(this.balance)) * 100;
-    user.setTokenBalance(userBalance);
-    user.setWeight(weight);
+    if (!user || !user.setTokenBalance || !user.setWeight) {
+      const admin = this.groupType === 'Custom'
+        ? await this.contract.methods.getAdmin().call()
+        : null;
+      this.list.push(new MemberItem({
+        wallet: address,
+        balance: userBalance,
+        weight: (userBalance / Number(this.balance)) * 100,
+        customTokenName: this.customTokenName,
+        isAdmin: admin !== null
+          ? address === admin
+          : false,
+      }));
+    } else {
+      const weight = (userBalance / Number(this.balance)) * 100;
+      user.setTokenBalance(userBalance);
+      user.setWeight(weight);
+    }
   }
 }
 
