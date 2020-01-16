@@ -52,7 +52,6 @@ class VotingInfoWrapper extends React.PureComponent {
           },
           projectStore: {
             historyStore,
-            addReturnTokensNotification,
           },
         } = this.props;
         const { password } = form.values();
@@ -61,7 +60,6 @@ class VotingInfoWrapper extends React.PureComponent {
         return contractService.sendVote(votingId, descision)
           .then(async () => {
             await historyStore.fetchAndUpdateLastVoting();
-            addReturnTokensNotification();
             this.getVotingStats();
             switch (descision) {
               case (1):
