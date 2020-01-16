@@ -32,7 +32,7 @@ class Notification extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.idTimer);
+    clearInterval(this.idTimer);
   }
 
   /**
