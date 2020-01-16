@@ -31,7 +31,8 @@ class TokenTransfer extends React.Component {
         const {
           groupId, wallet, membersStore, userStore,
         } = this.props;
-        const { address, count, password } = form.values();
+        const { address: rawAddress, count, password } = form.values();
+        const address = rawAddress.trim();
         userStore.setPassword(password);
         membersStore.setTransferStatus('transfering');
         return membersStore.transferTokens(groupId, wallet, address, count)

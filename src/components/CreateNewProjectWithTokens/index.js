@@ -64,7 +64,8 @@ class CreateNewProjectWithTokens extends Component {
 
   checkToken = (form) => {
     const { steps } = this;
-    const { address } = form.values();
+    const { address: rawAddress } = form.values();
+    const address = rawAddress.trim();
     const { appStore } = this.props;
     this.setState({
       currentStep: steps.check,

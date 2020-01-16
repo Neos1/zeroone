@@ -60,7 +60,8 @@ class AddExistingProject extends Component {
   connectProject = (form) => {
     const { steps } = this;
     const { appStore, t } = this.props;
-    const { name, address } = form.values();
+    const { name, address: rawAddress } = form.values();
+    const address = rawAddress.trim();
     this.setState({
       currentStep: steps.loading,
     });

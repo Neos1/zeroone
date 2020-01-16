@@ -39,6 +39,10 @@ class StartNewVote extends React.Component {
         const data = form.values();
         console.log(data);
         const { question: questionId } = data;
+        if (data.Address) {
+          const { Address: rawAddress } = data;
+          data.Address = rawAddress.trim();
+        }
         delete data.question;
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
