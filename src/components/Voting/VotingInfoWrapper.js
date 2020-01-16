@@ -17,7 +17,7 @@ import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
-import { systemQuestionsId, statusStates } from '../../constants';
+import { systemQuestionsId, statusStates, userVotingStates } from '../../constants';
 import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
@@ -72,14 +72,15 @@ class VotingInfoWrapper extends React.PureComponent {
               this.updateAfterCompleteVoting(voting);
               return;
             }
-            switch (voting.descision) {
-              case (1):
+            switch (Number(voting.descision)) {
+              case (userVotingStates.decisionFor):
                 dialogStore.toggle('decision_agree_voting_info_wrapper_message');
                 break;
-              case (2):
+              case (userVotingStates.decisionAgainst):
                 dialogStore.toggle('decision_reject_voting_info_wrapper_message');
                 break;
               default:
+                dialogStore.toggle('success_modal_voting_info_wrapper');
                 break;
             }
           })

@@ -173,9 +173,14 @@ class VotingInfo extends React.PureComponent {
         && progress >= 100
       ):
         return (
-          <VotingInfoUserDecision
-            voting={voting}
-          />
+          <button
+            type="button"
+            onClick={onCompleteVoteClick}
+            className={styles['voting-info__button--close']}
+            disabled={closeVoteInProgress}
+          >
+            {t('buttons:completeTheVote')}
+          </button>
         );
       case (
         status === statusStates.closed
