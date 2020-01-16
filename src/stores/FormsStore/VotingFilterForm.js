@@ -9,19 +9,19 @@ class VotingFilterForm extends ExtendedForm {
         {
           name: 'question',
           type: 'text',
-          label: i18n.t('fields:question'),
+          label: 'question',
           placeholder: i18n.t('fields:question'),
         },
         {
           name: 'date_before',
           type: 'text',
-          label: i18n.t('fields:dateBefore'),
+          label: 'dateBefore',
           placeholder: i18n.t('fields:dateBefore'),
         },
         {
           name: 'date_after',
           type: 'text',
-          label: i18n.t('fields:dateAfter'),
+          label: 'dateAfter',
           placeholder: i18n.t('fields:dateAfter'),
         },
       ],

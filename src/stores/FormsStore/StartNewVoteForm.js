@@ -11,7 +11,7 @@ class StartNewVoteForm extends ExtendedForm {
         {
           name: 'question',
           type: 'text',
-          label: 'Question',
+          label: 'chooseTheQuestion',
           placeholder: i18n.t('fields:chooseTheQuestion'),
           rules: 'required|integer|min:1',
         },

@@ -7,26 +7,26 @@ class CreateTokenForm extends ExtendedForm {
     return {
       fields: [{
         name: 'name',
+        label: 'tokenTitle',
         type: 'text',
-        label: i18n.t('fields:tokenTitle'),
         placeholder: i18n.t('fields:tokenTitle'),
         rules: 'required|string',
       }, {
         name: 'symbol',
+        label: 'symbol',
         type: 'text',
-        label: i18n.t('fields:symbol'),
         placeholder: i18n.t('fields:symbol'),
         rules: 'required|string|between:3,5',
       }, {
         name: 'count',
+        label: 'quantity',
         type: 'text',
-        label: i18n.t('fields:quantity'),
         placeholder: i18n.t('fields:quantity'),
         rules: 'required|numeric|min:1|max:2147483647 ',
       }, {
         name: 'password',
+        label: 'enterPassword',
         type: 'password',
-        label: i18n.t('fields:enterPassword'),
         placeholder: i18n.t('fields:enterPassword'),
         rules: 'required|password',
       }],

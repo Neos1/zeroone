@@ -9,14 +9,14 @@ class CreateQuestionDynamicForm extends ExtendedForm {
         {
           name: 'input--id0',
           type: 'text',
-          label: 'parameter',
+          label: 'enterNewParameterName',
           placeholder: i18n.t('fields:enterNewParameterName'),
           rules: 'required',
         },
         {
           name: 'select--id0',
           type: 'text',
-          label: 'parameter',
+          label: 'selectParameterType',
           placeholder: i18n.t('fields:selectParameterType'),
           rules: 'required',
         },

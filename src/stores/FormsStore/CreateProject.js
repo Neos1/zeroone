@@ -8,13 +8,13 @@ class CreateProjectForm extends ExtendedForm {
       fields: [{
         name: 'name',
         type: 'text',
-        label: 'Project name',
+        label: 'projectTitle',
         placeholder: i18n.t('fields:projectTitle'),
         rules: 'required|string|between:3,20',
       }, {
         name: 'password',
         type: 'password',
-        label: 'Password',
+        label: 'enterPassword',
         placeholder: i18n.t('fields:enterPassword'),
         rules: 'required|password',
       }],

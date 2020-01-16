@@ -8,13 +8,13 @@ class CreateWalletForm extends ExtendedForm {
       fields: [{
         name: 'password',
         type: 'password',
-        label: 'Password',
+        label: 'enterPassword',
         placeholder: i18n.t('fields:enterPassword'),
         rules: 'required|password',
       }, {
         name: 'passwordConfirm',
         type: 'password',
-        label: 'Password Confirmation',
+        label: 'repeatPassword',
         placeholder: i18n.t('fields:repeatPassword'),
         rules: 'required|same:password',
       }],

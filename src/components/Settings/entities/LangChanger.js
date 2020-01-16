@@ -21,17 +21,19 @@ class LangChanger extends Component {
     this.state = {
       language: i18n.language,
     };
+    window.ipcRenderer.on('change-language:confirm', (event, language) => {
+      i18n.changeLanguage(language);
+      moment.locale(getCorrectMomentLocale(i18n.language));
+    });
   }
 
   handleSelect = (language) => {
     this.setState({ language });
-    console.log(language);
   }
 
   setLanguage = () => {
     const { language } = this.state;
-    i18n.changeLanguage(language);
-    moment.locale(getCorrectMomentLocale(i18n.language));
+    window.ipcRenderer.send('change-language:request', language);
   }
 
   render() {

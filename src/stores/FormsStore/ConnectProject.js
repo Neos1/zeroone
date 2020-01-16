@@ -8,13 +8,13 @@ class ConnectProjectForm extends ExtendedForm {
       fields: [{
         name: 'name',
         type: 'text',
-        label: 'Project Name',
+        label: 'projectTitle',
         placeholder: i18n.t('fields:projectTitle'),
         rules: 'required|string|between:3,20',
       }, {
         name: 'address',
         type: 'text',
-        label: 'Token Address',
+        label: 'contractAddress',
         placeholder: i18n.t('fields:contractAddress'),
         rules: 'required|string|address',
       }],

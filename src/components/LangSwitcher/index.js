@@ -25,6 +25,11 @@ class LangSwitcher extends Component {
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+
+    window.ipcRenderer.on('change-language:confirm', (event, value) => {
+      i18n.changeLanguage(value);
+      moment.locale(getCorrectMomentLocale(i18n.language));
+    });
   }
 
   componentDidMount() {
@@ -54,8 +59,7 @@ class LangSwitcher extends Component {
     if (disabled) {
       onSelect(value);
     } else {
-      i18n.changeLanguage(value);
-      moment.locale(getCorrectMomentLocale(i18n.language));
+      window.ipcRenderer.send('change-language:request', value);
     }
   }
 

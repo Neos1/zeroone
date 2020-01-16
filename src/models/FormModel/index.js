@@ -2,6 +2,7 @@ import { extendObservable, action } from 'mobx';
 import { Form } from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
 import plugins from '../../utils/Validator';
+import i18n from '../../i18n';
 
 class ExtendedForm extends Form {
   constructor(data) {
@@ -10,6 +11,16 @@ class ExtendedForm extends Form {
     extendObservable(this, { loading: false });
     Object.keys(hooks).forEach((hook) => {
       this.addHook(hook, hooks[hook]);
+    });
+
+    this.addHook('onLangChange', () => {
+      this.fields.forEach((field) => {
+        field.set('placeholder', i18n.t(`fields:${field.label}`));
+      });
+    });
+
+    window.ipcRenderer.on('change-language:confirm', () => {
+      this.fireHook('onLangChangeHook');
     });
   }
 

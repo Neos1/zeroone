@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import DropdownOption from '../DropdownOption';
 import { DropdownArrowIcon } from '../Icons';
+import i18n from '../../i18n';
+
 import styles from './Dropdown.scss';
 
 class Dropdown extends Component {
@@ -10,9 +12,13 @@ class Dropdown extends Component {
     this.state = {
       selectedValue: '',
     };
-
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+
+    const { field } = props;
+    window.ipcRenderer.on('change-language:confirm', () => {
+      field.set('placeholder', i18n.t(`fields:${field.label}`));
+    });
   }
 
   componentDidMount() {
@@ -101,6 +107,7 @@ Dropdown.propTypes = {
       propTypes.string,
       propTypes.shape({}),
     ]).isRequired,
+    label: propTypes.string.isRequired,
   }).isRequired,
 };
 
