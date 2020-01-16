@@ -1,14 +1,38 @@
 const {
   app, BrowserWindow, shell, ipcMain,
 } = require('electron');
-const electronLocalshortcut = require('electron-localshortcut');
+const electronLocalShortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const fs = require('fs');
 const solc = require('solc');
 
 let mainWindow;
+let loadingScreen;
 
+function createLoadingScreen() {
+  loadingScreen = new BrowserWindow({
+    minWidth: 539,
+    minHeight: 539,
+    width: 539,
+    height: 539,
+    center: true,
+    backgroundColor: '#fff',
+    webPreferences: {
+      nodeIntegration: true,
+      webSecurity: false,
+    },
+    frame: false,
+    skipTaskbar: true,
+    resizable: false,
+    alwaysOnTop: true,
+  });
+  loadingScreen.setResizable(false);
+  loadingScreen.loadURL(`file://${__dirname}/splash.html`);
+  loadingScreen.on('closed', () => (loadingScreen = null));
+  loadingScreen.webContents.on('did-finish-load', () => {
+    loadingScreen.show();
+  });
+}
 /**
  *
  */
@@ -22,15 +46,10 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    // show to false mean than the window will proceed with its
+    // lifecycle, but will not render until we will show it up
+    show: false,
   });
-  const splash = new BrowserWindow({
-    width: 810,
-    height: 610,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-  });
-  splash.loadURL(`file://${__dirname}/splash.html`);
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   // eslint-disable-next-line no-unused-expressions
 
@@ -49,12 +68,17 @@ function createWindow() {
 
   mainWindow.webContents.browserWindowOptions.solc = solc;
 
-  electronLocalshortcut.register(mainWindow, 'F12', () => {
+  electronLocalShortcut.register(mainWindow, 'F12', () => {
     mainWindow.webContents.toggleDevTools();
   });
 
-  ipcMain.on('showMainWindow', () => {
-    splash.destroy();
+  // keep listening on the did-finish-load event, when the mainWindow content has loaded
+  mainWindow.webContents.on('did-finish-load', () => {
+    // then close the loading screen window and show the main window
+    if (loadingScreen) {
+      loadingScreen.close();
+    }
+    mainWindow.show();
   });
 
   ipcMain.on('compile-request', ((event, input) => {
@@ -79,7 +103,10 @@ function createWindow() {
   }));
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createLoadingScreen();
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
