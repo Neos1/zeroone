@@ -14,13 +14,16 @@ const VotingInfoButtons = ({
   onVerifyClick,
   onRejectClick,
   t,
+  disabled,
 }) => (
   <div
     className={styles['voting-info__buttons']}
   >
+    {/* TODO refactor this buttons with component Button */}
     <button
       type="button"
       onClick={onVerifyClick}
+      disabled={disabled}
     >
       <div
         className={styles['voting-info__button-icon']}
@@ -32,6 +35,7 @@ const VotingInfoButtons = ({
     <button
       type="button"
       onClick={onRejectClick}
+      disabled={disabled}
     >
       <div
         className={styles['voting-info__button-icon']}
@@ -47,6 +51,7 @@ VotingInfoButtons.propTypes = {
   onVerifyClick: PropTypes.func.isRequired,
   onRejectClick: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default withTranslation()(VotingInfoButtons);

@@ -72,6 +72,9 @@ class User extends React.Component {
       appStore,
       userStore,
       projectStore,
+      projectStore: {
+        historyStore,
+      },
       membersStore,
       notificationStore,
       history,
@@ -79,6 +82,7 @@ class User extends React.Component {
     history.push('/');
     appStore.reset();
     userStore.reset();
+    historyStore.reset();
     projectStore.reset();
     membersStore.reset();
     notificationStore.reset();

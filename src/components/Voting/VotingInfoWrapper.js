@@ -312,12 +312,14 @@ class VotingInfoWrapper extends React.PureComponent {
       t,
     } = props;
     this.votingId = Number(id);
+    const { isUserReturnTokensActual } = historyStore;
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(voting.questionId);
     const params = this.prepareParameters(voting, question);
     return (
       <Container className="container--small">
         <VotingInfo
+          isUserReturnTokensActual={isUserReturnTokensActual}
           dataStats={dataStats}
           date={{
             start: Number(voting.startTime),
