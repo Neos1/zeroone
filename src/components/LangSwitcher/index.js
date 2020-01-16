@@ -10,10 +10,17 @@ import { getCorrectMomentLocale } from '../../utils/Date';
 
 @withTranslation()
 class LangSwitcher extends Component {
+  static propTypes = {
+    t: propTypes.func.isRequired,
+    disabled: propTypes.bool.isRequired,
+    onSelect: propTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       opened: false,
+      language: null,
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -40,10 +47,16 @@ class LangSwitcher extends Component {
   }
 
   selectOption = (e) => {
+    const { props: { disabled, onSelect } } = this;
     const value = e.target.getAttribute('data-value');
     this.toggleOptions();
-    i18n.changeLanguage(value);
-    moment.locale(getCorrectMomentLocale(i18n.language));
+    this.setState({ language: value });
+    if (disabled) {
+      onSelect(value);
+    } else {
+      i18n.changeLanguage(value);
+      moment.locale(getCorrectMomentLocale(i18n.language));
+    }
   }
 
   closeOptions = () => {
@@ -59,13 +72,13 @@ class LangSwitcher extends Component {
   }
 
   render() {
-    const { opened } = this.state;
+    const { opened, language: stateLanguage } = this.state;
     const { t } = this.props;
     const { language } = i18n;
     return (
       <div className={`${styles.lang} ${opened ? styles['lang--opened'] : ''}`} ref={this.setWrapperRef}>
         <span className={styles['lang--selected']} onClick={this.toggleOptions}>
-          {language}
+          {stateLanguage !== null ? stateLanguage : language}
         </span>
         <div className={styles.lang__options}>
           {
@@ -86,8 +99,5 @@ class LangSwitcher extends Component {
   }
 }
 
-LangSwitcher.propTypes = {
-  t: propTypes.func.isRequired,
-};
 
 export default LangSwitcher;

@@ -74,9 +74,13 @@ contract MERC20 {
     return balances[user];
   }
 
+  function transferBeetweenUsers(address sender, address recipient, uint256 amount) public returns (bool)  {
+    require((msg.sender == admin) || (msg.sender == sender));
+    this.transferFrom(sender, recipient, amount);
+  }
 
-  function transferFrom(address _who, address _to, uint256 value) external {
-    require(msg.sender == admin);
+
+  function transferFrom(address _who, address _to, uint256 value) public returns (bool) {
     require(_who != address(0), "MERC20: transfer from the zero address");
     require(_to != address(0), "MERC20: transfer to the zero address");
     require(balances[_who] >= value, "MERC20: Token value must be lower or equal");
