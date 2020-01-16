@@ -23,7 +23,14 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-
+  const splash = new BrowserWindow({
+    width: 810,
+    height: 610,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+  });
+  splash.loadURL(`file://${__dirname}/splash.html`);
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
   // eslint-disable-next-line no-unused-expressions
 
@@ -40,11 +47,14 @@ function createWindow() {
     shell.openExternal(url);
   });
 
-
   mainWindow.webContents.browserWindowOptions.solc = solc;
 
   electronLocalshortcut.register(mainWindow, 'F12', () => {
     mainWindow.webContents.toggleDevTools();
+  });
+
+  ipcMain.on('showMainWindow', () => {
+    splash.destroy();
   });
 
   ipcMain.on('compile-request', ((event, input) => {
