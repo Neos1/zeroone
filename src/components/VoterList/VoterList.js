@@ -8,12 +8,14 @@ import {
 } from 'react-tabs';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
 import VoterListTable from './VoterListTable';
 
 import 'react-tabs/style/react-tabs.css';
 import styles from './VoterList.scss';
 
 @withTranslation()
+@observer
 class VoterList extends React.PureComponent {
   static propTypes = {
     t: PropTypes.func.isRequired,

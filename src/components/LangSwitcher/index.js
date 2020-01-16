@@ -27,8 +27,7 @@ class LangSwitcher extends Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
 
     window.ipcRenderer.on('change-language:confirm', (event, value) => {
-      i18n.changeLanguage(value);
-      moment.locale(getCorrectMomentLocale(i18n.language));
+      this.changeLanguage(value);
     });
   }
 
@@ -38,6 +37,9 @@ class LangSwitcher extends Component {
 
   componentWillUnmount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+    window.ipcRenderer.removeListener('change-language:confirm', (event, value) => {
+      this.changeLanguage(value);
+    });
   }
 
   setWrapperRef(node) {
@@ -49,6 +51,11 @@ class LangSwitcher extends Component {
     this.setState({
       opened: !opened,
     });
+  }
+
+  changeLanguage = (value) => {
+    i18n.changeLanguage(value);
+    moment.locale(getCorrectMomentLocale(i18n.language));
   }
 
   selectOption = (e) => {

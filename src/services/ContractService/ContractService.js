@@ -423,7 +423,7 @@ class ContractService {
       .then((receipt) => { console.log(receipt); });
   }
 
-  returnTokens(votingId) {
+  returnTokens() {
     const {
       _contract,
       rootStore: {
@@ -432,7 +432,7 @@ class ContractService {
       },
     } = this;
     const maxGasPrice = 30000000000;
-    const data = _contract.methods.returnTokens(votingId).encodeABI();
+    const data = _contract.methods.returnTokens().encodeABI();
     const tx = {
       from: userStore.address,
       to: _contract.options.address,

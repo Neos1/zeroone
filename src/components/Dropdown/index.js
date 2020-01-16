@@ -14,10 +14,8 @@ class Dropdown extends Component {
     };
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
-
-    const { field } = props;
     window.ipcRenderer.on('change-language:confirm', () => {
-      field.set('placeholder', i18n.t(`fields:${field.label}`));
+      this.updateLanguage();
     });
   }
 
@@ -27,10 +25,18 @@ class Dropdown extends Component {
 
   componentWillUnmount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+    window.ipcRenderer.removeListener('change-language:confirm', () => {
+      this.updateLanguage();
+    });
   }
 
   setWrapperRef(node) {
     this.wrapperRef = node;
+  }
+
+  updateLanguage = () => {
+    const { field } = this.props;
+    field.set('placeholder', i18n.t(`fields:${field.label}`));
   }
 
   toggleOptions = () => {

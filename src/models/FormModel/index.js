@@ -19,7 +19,7 @@ class ExtendedForm extends Form {
       });
     });
 
-    window.ipcRenderer.on('change-language:confirm', () => {
+    window.ipcRenderer.once('change-language:confirm', () => {
       this.fireHook('onLangChangeHook');
     });
   }

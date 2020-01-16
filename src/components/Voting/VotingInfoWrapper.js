@@ -61,6 +61,7 @@ class VotingInfoWrapper extends React.PureComponent {
           .then(async () => {
             await historyStore.fetchAndUpdateLastVoting();
             this.getVotingStats();
+            this.getVotes();
             switch (descision) {
               case (1):
                 dialogStore.toggle('decision_agree_voting_info_wrapperd_message');
@@ -106,11 +107,12 @@ class VotingInfoWrapper extends React.PureComponent {
           closeVoteInProgress: true,
         });
         return contractService.closeVoting()
-          .then(() => {
+          .then(async () => {
             dialogStore.toggle('success_modal_voting_info_wrapper');
             historyStore.fetchAndUpdateLastVoting();
-            this.getVotingStats();
             this.updateQuestionList(voting);
+            this.getVotingStats();
+            this.getVotes();
           })
           .catch(() => {
             dialogStore.toggle('error_modal_voting_info_wrapper');
@@ -208,7 +210,9 @@ class VotingInfoWrapper extends React.PureComponent {
         historyStore,
       },
     } = props;
-    this.dataVotes = await historyStore.getVoterList(Number(id));
+    const votes = await historyStore.getVoterList(Number(id));
+    await console.log(votes);
+    this.dataVotes = await Object.assign(this.dataVotes, votes);
   }
 
   @action
