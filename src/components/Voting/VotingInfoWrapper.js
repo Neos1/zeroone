@@ -17,7 +17,7 @@ import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
-import { systemQuestionsId } from '../../constants';
+import { systemQuestionsId, statusStates } from '../../constants';
 import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
@@ -63,17 +63,17 @@ class VotingInfoWrapper extends React.PureComponent {
         dialogStore.toggle('progress_modal_voting_info_wrapper');
         return contractService.sendVote(votingId, descision)
           .then(async () => {
-            // TODO добавить проверку на закрытие голосования
-            // в случае если голосование закрыто вызывать #{updateAfterCompleteVoting}
-            // TODO также заменить показ модалки не на основе
-            // изначального решения, а на основе ответа от контракта (исправит баг с
-            // показом первоначального решения, хотя пользователь ушёл за пределы
-            // блока и голосование просто закрылось)
             await historyStore.fetchAndUpdateLastVoting();
+            const [voting] = historyStore.getVotingById(Number(votingId));
             this.getVotingStats();
-            switch (descision) {
+            if (voting.status === statusStates.closed) {
+              dialogStore.toggle('success_modal_voting_info_wrapper');
+              this.updateAfterCompleteVoting(voting);
+              return;
+            }
+            switch (voting.descision) {
               case (1):
-                dialogStore.toggle('decision_agree_voting_info_wrapperd_message');
+                dialogStore.toggle('decision_agree_voting_info_wrapper_message');
                 break;
               case (2):
                 dialogStore.toggle('decision_reject_voting_info_wrapper_message');
@@ -372,7 +372,7 @@ class VotingInfoWrapper extends React.PureComponent {
         </Dialog>
 
         <Dialog
-          name="decision_agree_voting_info_wrapperd_message"
+          name="decision_agree_voting_info_wrapper_message"
           header={null}
           footer={null}
         >

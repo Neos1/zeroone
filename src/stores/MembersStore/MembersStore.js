@@ -43,6 +43,7 @@ class MembersStore {
 
   @action init() {
     this.groups = [];
+    this.fetchUserGroups();
   }
 
   fetchUserGroupsLength = () => {
