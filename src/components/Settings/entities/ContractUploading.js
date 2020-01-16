@@ -29,6 +29,7 @@ class ContractUploading extends Component {
         const {
           name, count, password, symbol,
         } = form.values();
+        form.clear();
         userStore.setPassword(password);
         const deployArgs = [name, symbol, Number(count)];
         dialogStore.toggle('progress_modal_contract_uploading');
@@ -58,6 +59,7 @@ class ContractUploading extends Component {
         const {
           name, address, password,
         } = form.values();
+        form.clear();
         userStore.setPassword(password);
         const deployArgs = [address];
         dialogStore.toggle('progress_modal_contract_uploading');
@@ -119,7 +121,6 @@ class ContractUploading extends Component {
           <Button theme="white" onClick={() => { this.triggerModal('ERC20'); }}>ERC20</Button>
           <Button theme="white" onClick={() => { this.triggerModal('MERC20'); }}>Custom tokens</Button>
           <Button theme="white" onClick={() => { this.triggerProjectModal(); }}>Project</Button>
-          <Button theme="white" onClick={() => { this.changeFormLang(); }}>Cvtyf zpsrf</Button>
         </div>
         <Dialog
           name="token_modal_contract_uploading"
