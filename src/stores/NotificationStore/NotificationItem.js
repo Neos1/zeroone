@@ -34,6 +34,8 @@ class NotificationItem {
   /** Notification status. [info, important] */
   @observable status;
 
+  // TODO add notification name for simple manage notification
+
   /**
    * Set new is open state
    *

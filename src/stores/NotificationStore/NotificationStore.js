@@ -30,6 +30,8 @@ class NotificationStore {
     ))];
   }
 
+  // TODO add manage notification by name after refactor NotificationItem
+
   /**
    * Method fore removing notification from list
    *
