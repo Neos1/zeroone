@@ -125,7 +125,8 @@
       "src/wallets/**/*",
       "src/contracts/**/*",
       "src/config.json",
-      "src/electron.js"
+      "src/electron.js",
+      "src/splash.html"
     ],
     "win": {
       "target": [
