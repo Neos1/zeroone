@@ -134,6 +134,21 @@ class QuestionStore {
     }
   }
 
+  @action
+  fetchActualQuestionGroups = async () => {
+    const { contractService } = this.rootStore;
+    const localGroupsLength = this._questionGroups.length;
+    const contractGroupsLength = await contractService.callMethod('getQuestionGroupsLength');
+    if (localGroupsLength < contractGroupsLength) {
+      for (let i = localGroupsLength + 1; i < contractGroupsLength; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+        const element = await contractService.callMethod('getQuestionGroup', i);
+        element.groupId = i;
+        this._questionGroups.push(element);
+      }
+    }
+  }
+
   /**
    * fetching questions from smart contract
    *

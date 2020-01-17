@@ -141,6 +141,17 @@ class MembersGroup {
       user.setWeight(weight);
     }
   }
+
+  @action
+  setNewAdmin = async () => {
+    const admin = this.list.find((member) => member.isAdmin === true);
+    const newAdmin = this.groupType === 'Custom'
+      ? await this.contract.methods.getAdmin().call()
+      : null;
+    const user = this.list.find((member) => member.wallet === newAdmin);
+    admin.removeAdminPrivileges();
+    user.addAdminPrivileges();
+  }
 }
 
 export default MembersGroup;

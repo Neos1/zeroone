@@ -14,6 +14,9 @@ import { GAS_LIMIT } from '../../constants';
  * Store for manage Members groups
  *
  * @param id
+ * @param data
+ * @param groupAddress
+ * @param admin
  * @param group
  */
 class MembersStore {
@@ -225,6 +228,19 @@ class MembersStore {
   }
 
   @action getMemberById = (id) => this.list[Number(id)];
+
+  getAddressesForAdminDesignate = (data) => new Promise((resolve) => {
+    const { Web3Service: { web3: { eth } } } = this.rootStore;
+    const parameters = ['address', 'address'];
+    const input = `0x${data.substring(10)}`;
+    resolve(Object.values(eth.abi.decodeParameters(parameters, input)));
+  });
+
+  @action
+  updateAdmin = (groupAddress) => {
+    const groups = this.groups.filter((group) => group.wallet === groupAddress);
+    groups.forEach((group) => { group.setNewAdmin(); });
+  }
 
   @action
   reset = () => {

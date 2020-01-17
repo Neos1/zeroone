@@ -183,6 +183,8 @@ class VotingInfoWrapper extends React.PureComponent {
     const {
       addingNewQuestion,
       connectGroupUsers,
+      connectGroupQuestions,
+      assignGroupAdmin,
     } = systemQuestionsId;
     switch (voting.questionId) {
       case addingNewQuestion:
@@ -190,6 +192,15 @@ class VotingInfoWrapper extends React.PureComponent {
         break;
       case connectGroupUsers:
         membersStore.fetchUserGroups();
+        break;
+      case connectGroupQuestions:
+        questionStore.fetchActualQuestionGroups();
+        break;
+      case assignGroupAdmin:
+        membersStore.getAddressesForAdminDesignate(voting.data)
+          .then(([group]) => {
+            membersStore.updateAdmin(group);
+          });
         break;
       default:
         break;

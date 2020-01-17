@@ -66,6 +66,16 @@ class MemberItem {
   setTokenBalance(balance) {
     this.balance = balance;
   }
+
+  @action
+  removeAdminPrivileges() {
+    this.isAdmin = false;
+  }
+
+  @action
+  addAdminPrivileges() {
+    this.isAdmin = true;
+  }
 }
 
 export default MemberItem;
