@@ -25,6 +25,7 @@ class MembersGroup {
     members,
     textForEmptyState,
     userAddress,
+    groupId,
   }) {
     if (
       !name
@@ -41,6 +42,7 @@ class MembersGroup {
     this.contract = contract;
     this.customTokenName = tokenSymbol;
     this.userAddress = userAddress;
+    this.groupId = groupId;
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }

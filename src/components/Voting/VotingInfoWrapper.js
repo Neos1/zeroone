@@ -32,6 +32,8 @@ import UserStore from '../../stores/UserStore/UserStore';
 )
 @observer
 class VotingInfoWrapper extends React.PureComponent {
+  question;
+
   @observable dataStats = [];
 
   @observable dataVotes = {
@@ -161,8 +163,36 @@ class VotingInfoWrapper extends React.PureComponent {
   }
 
   componentDidMount() {
+    const { props } = this;
+    const {
+      match: { params: { id } },
+      projectStore: {
+        historyStore,
+        questionStore,
+      },
+    } = props;
+    const [voting] = historyStore.getVotingById(Number(id));
+    const [question] = questionStore.getQuestionById(Number(voting.questionId));
+    this.question = question;
+    console.log(this.question);
     this.getVotingStats();
     this.getVotes();
+  }
+
+  /**
+   * Method for checking whether the type
+   * of voting is ERC20
+   *
+   * @returns {boolean} is ERC20 or not
+   */
+  get isERC20Type() {
+    const { props } = this;
+    const { membersStore } = props;
+    if (!this.question) return false;
+    const { groupId } = this.question;
+    const targetGroup = membersStore.getMemberById(groupId);
+    if (!targetGroup || !targetGroup.groupType) return false;
+    return targetGroup.groupType === 'ERC20';
   }
 
   /**
@@ -251,7 +281,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     const { groupId } = question;
-    const memberGroup = membersStore.getMemberById(Number(groupId) - 1);
+    const memberGroup = membersStore.getMemberById(Number(groupId));
     if (!memberGroup) {
       this.dataStats = [];
       return;
@@ -315,6 +345,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(voting.questionId);
     const params = this.prepareParameters(voting, question);
+    console.log('isERC20Type', this.isERC20Type);
     return (
       <Container className="container--small">
         <VotingInfo
@@ -336,6 +367,11 @@ class VotingInfoWrapper extends React.PureComponent {
           onCompleteVoteClick={() => { this.onClosingClick(); }}
           onBarClick={
             () => {
+              // TODO show other dialog, if ERC20
+              if (this.isERC20Type === true) {
+                console.log('boroda');
+                return;
+              }
               dialogStore.show('voter_list_voting_info_wrapper');
             }
           }
