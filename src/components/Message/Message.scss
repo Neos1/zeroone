@@ -77,14 +77,35 @@
       padding-bottom: 51px;
     }
   }
-  
+
   &--transfer-progress {
     &::after {
       display: inline-block;
       min-height: 200px;
       vertical-align: middle;
       content: '';
-    } 
+    }
+  }
+
+  &--erc20 {
+    .message {
+      &__title {
+        margin-top: 58px;
+        white-space: pre-wrap;
+      }
+    }
+
+    .subtext {
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 16px;
+      white-space: pre-wrap;
+    }
+
+    .footer {
+      padding-top: 40px;
+    }
   }
 
   &--progress {
@@ -111,7 +132,8 @@
   &--agreed,
   &--reject,
   &--transfer-success,
-  &--transfer-error {
+  &--transfer-error,
+  &--erc20 {
     button {
       width: 100%;
       max-width: 309px;
