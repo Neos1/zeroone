@@ -20,7 +20,7 @@ class ExtendedForm extends Form {
         field.set('placeholder', i18n.t(`fields:${field.label}`));
       });
     });
-    window.ipcRenderer.once('change-language:confirm', (event, value) => {
+    window.ipcRenderer.on('change-language:confirm', (event, value) => {
       this.fireHook('onLangChangeHook');
       window.validator.useLang(languages[value]);
     });
