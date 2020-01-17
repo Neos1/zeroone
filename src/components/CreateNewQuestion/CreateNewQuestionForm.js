@@ -89,12 +89,12 @@ class CreateNewQuestionForm extends React.PureComponent {
       methodSelector,
       voting_formula: formula,
     } = form.values();
-    data.name = Name;
+    data.name = Name.trim();
     data.time = time;
-    data.formula = formula;
-    data.target = target;
-    data.description = description;
-    data.methodSelector = methodSelector || '0x00000000';
+    data.formula = formula.trim();
+    data.target = target.trim();
+    data.description = description.trim();
+    data.methodSelector = methodSelector.trim() || '0x00000000';
     data.groupId = selectedGroup;
     onToggle(1);
   }
