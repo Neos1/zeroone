@@ -80,5 +80,6 @@ const other = {
   tokens: 'Tokens',
   privateBalance: 'Private balance',
   toggleUser: 'Toggle user',
+  selectorNonexistentFunctionDescription: 'If you specify the selector of a nonexistent function, the voting results will not be applied',
 };
 export default other;

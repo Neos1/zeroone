@@ -80,5 +80,6 @@ const other = {
   tokens: 'Токены',
   privateBalance: 'Личный баланс',
   toggleUser: 'Сменить пользователя',
+  selectorNonexistentFunctionDescription: 'Если укажете селектор несуществующей функции, то результаты голосования не будут применены',
 };
 export default other;
