@@ -18,6 +18,8 @@ import styles from './Voting.scss';
 class VotingItem extends React.PureComponent {
   @observable progress = 0;
 
+  intervalId = null;
+
   intervalProgress = 5000;
 
   static propTypes = {
@@ -39,10 +41,10 @@ class VotingItem extends React.PureComponent {
     const initProgress = progressByDateRange(date);
     this.setProgress(initProgress);
     if (initProgress !== 100) {
-      const intervalId = setInterval(() => {
+      this.intervalId = setInterval(() => {
         this.setProgress(progressByDateRange(date));
         if (this.progress === 100) {
-          clearInterval(intervalId);
+          clearInterval(this.intervalId);
         }
       }, this.intervalProgress);
     }
