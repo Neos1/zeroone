@@ -123,10 +123,8 @@ class AppStore {
   @action checkProject(address) {
     const { contractService } = this.rootStore;
     return contractService.checkProject(address)
-      .then((data) => {
-        Promise.resolve(data);
-      })
-      .catch(() => { Promise.reject(); });
+      .then((data) => Promise.resolve(data))
+      .catch((e) => Promise.reject(e));
   }
 
   /**

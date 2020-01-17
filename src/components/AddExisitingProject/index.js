@@ -23,9 +23,7 @@ import styles from '../Login/Login.scss';
 class AddExistingProject extends Component {
   connectForm = new ConnectProjectForm({
     hooks: {
-      onSuccess: (form) => {
-        this.connectProject(form);
-      },
+      onSuccess: (form) => this.connectProject(form),
       onError: () => {
         this.showError();
       },
@@ -74,14 +72,14 @@ class AddExistingProject extends Component {
             projectName: name,
           });
           appStore.addProjectToList({ name, address });
-          resolve();
+          return resolve();
         })
         .catch(() => {
           appStore.displayAlert(t('errors:tryAgain'), 3000);
-          this.state = {
+          this.setState({
             currentStep: steps.default,
-          };
-          reject();
+          });
+          return reject();
         });
     });
   }
