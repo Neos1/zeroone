@@ -129,9 +129,7 @@
       "src/splash.html"
     ],
     "win": {
-      "target": [
-        "portable"
-      ]
+      "target": "dir"
     },
     "linux": {
       "target": "deb"
