@@ -12,7 +12,7 @@ import DecisionReject from '../Decision/DecisionReject';
 import VoterList from '../VoterList/VoterList';
 import Footer from '../Footer';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
-import { AgreedMessage, RejectMessage } from '../Message';
+import { AgreedMessage, RejectMessage, ERC20TokensUsed } from '../Message';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
@@ -367,9 +367,8 @@ class VotingInfoWrapper extends React.PureComponent {
           onCompleteVoteClick={() => { this.onClosingClick(); }}
           onBarClick={
             () => {
-              // TODO show other dialog, if ERC20
               if (this.isERC20Type === true) {
-                console.log('boroda');
+                dialogStore.show('is_erc20_modal_voting_info_wrapper');
                 return;
               }
               dialogStore.show('voter_list_voting_info_wrapper');
@@ -456,8 +455,14 @@ class VotingInfoWrapper extends React.PureComponent {
         >
           <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
-
-
+        <Dialog
+          name="is_erc20_modal_voting_info_wrapper"
+          size="md"
+          footer={null}
+          closeable
+        >
+          <ERC20TokensUsed onButtonClick={() => { dialogStore.hide(); }} />
+        </Dialog>
       </Container>
     );
   }

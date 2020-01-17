@@ -81,5 +81,6 @@ const other = {
   privateBalance: 'Личный баланс',
   toggleUser: 'Сменить пользователя',
   selectorNonexistentFunctionDescription: 'Если укажете селектор несуществующей функции, то результаты голосования не будут применены',
+  erc20ListIsNotViewable: 'ERC20 токены устроены так, что список\n проголосовавших недоступен для просмотра',
 };
 export default other;

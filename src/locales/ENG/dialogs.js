@@ -10,6 +10,7 @@ const dialog = {
   tokenTransferError: 'Transfer error',
   createAGroupOfQuestions: 'Create a group of questions',
   completionOfVoting: 'Completion of voting',
+  ERC20TokensUsed: 'This vote uses ERC20 tokens',
 };
 
 export default dialog;

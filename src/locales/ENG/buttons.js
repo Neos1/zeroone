@@ -31,5 +31,6 @@ const buttons = {
   completeTheVote: 'Complete the vote',
   pickUpTokens: 'pick up tokens',
   pickUpTokensCapital: 'Pick up tokens',
+  clear: 'Clear',
 };
 export default buttons;
