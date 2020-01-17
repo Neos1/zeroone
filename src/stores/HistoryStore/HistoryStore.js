@@ -8,17 +8,21 @@ import PaginationStore from '../PaginationStore';
 import { statusStates, GAS_LIMIT } from '../../constants';
 
 class HistoryStore {
+  votingIntervalId = null;
+
   /**
    * Interval for update missing &
    * active voting (in ms)
    */
   intervalUpdate = 60000;
 
-  @observable pagination;
+  @observable pagination = null;
 
   @observable _votings = [];
 
   @observable loading = true;
+
+  @observable isUserReturnTokensActual = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -27,8 +31,10 @@ class HistoryStore {
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
-    setInterval(() => {
+    this.votingIntervalId = setInterval(async () => {
       this.getActualVotings();
+      const isReturn = await this.isUserReturnTokens();
+      this.isUserReturnTokensActual = isReturn;
     }, this.intervalUpdate);
   }
 
@@ -182,6 +188,14 @@ class HistoryStore {
    */
   // TODO fix method
   @action getVotingStats = (id) => id
+
+  @action
+  reset = () => {
+    clearInterval(this.votingIntervalId);
+    this.pagination = null;
+    this._votings = [];
+    this.loading = true;
+  }
 
   getVotingsFromContract = async () => {
     await this.fetchVotings();

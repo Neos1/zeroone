@@ -80,5 +80,6 @@ const other = {
   tokens: 'Tokens',
   privateBalance: 'Private balance',
   toggleUser: 'Toggle user',
+  returnTokensFirst: 'Return tokens first',
 };
 export default other;

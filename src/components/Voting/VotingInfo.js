@@ -73,6 +73,7 @@ class VotingInfo extends React.PureComponent {
     onRejectClick: PropTypes.func.isRequired,
     onCompleteVoteClick: PropTypes.func.isRequired,
     onBarClick: PropTypes.func.isRequired,
+    isUserReturnTokensActual: PropTypes.bool.isRequired,
   };
 
   constructor() {
@@ -119,6 +120,7 @@ class VotingInfo extends React.PureComponent {
         descision,
         closeVoteInProgress,
       },
+      isUserReturnTokensActual,
       date,
       onVerifyClick,
       onRejectClick,
@@ -135,6 +137,7 @@ class VotingInfo extends React.PureComponent {
       ):
         return (
           <VotingInfoButtons
+            disabled={!isUserReturnTokensActual}
             onVerifyClick={onVerifyClick}
             onRejectClick={onRejectClick}
           />

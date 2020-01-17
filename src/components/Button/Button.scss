@@ -13,9 +13,10 @@
   &__hint {
     position: absolute;
     bottom: calc(100% + 10px);
-    left: 0;
+    left: 50%;
     z-index: 999;
     text-align: left;
+    transform: translateX(-50%);
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.5s;
@@ -286,6 +287,24 @@
       font-size: 14px;
       font-family: "Grotesk";
       line-height: 107.5%;
+    }
+  }
+
+  &--voting-decision {
+    width: 50%;
+    padding: 28px 30px 23px;
+    background-color: #fff;
+
+    .btn__text {
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
     }
   }
 }

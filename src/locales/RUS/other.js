@@ -80,5 +80,6 @@ const other = {
   tokens: 'Токены',
   privateBalance: 'Личный баланс',
   toggleUser: 'Сменить пользователя',
+  returnTokensFirst: 'Сначала верните токены',
 };
 export default other;
