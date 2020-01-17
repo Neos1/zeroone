@@ -74,6 +74,7 @@ class User extends React.Component {
       projectStore,
       projectStore: {
         historyStore,
+        questionStore,
       },
       membersStore,
       notificationStore,
@@ -86,6 +87,7 @@ class User extends React.Component {
     projectStore.reset();
     membersStore.reset();
     notificationStore.reset();
+    questionStore.reset();
   }
 
   render() {

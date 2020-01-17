@@ -15,6 +15,8 @@ class QuestionStore {
    */
   intervalUpdate = 60000;
 
+  interval = '';
+
   @observable pagination;
 
   /** List models Question */
@@ -30,14 +32,15 @@ class QuestionStore {
     this._questions = [];
     this._questionGroups = [];
     this.rootStore = rootStore;
-    this.fetchQuestionGroups();
+    this.fetchActualQuestionGroups();
     this.getActualQuestions();
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.getActualQuestions();
+      this.fetchActualQuestionGroups();
     }, this.intervalUpdate);
   }
 
@@ -135,7 +138,7 @@ class QuestionStore {
   }
 
   @action
-  fetchActualQuestionGroups = async () => {
+  async fetchActualQuestionGroups() {
     const { contractService } = this.rootStore;
     const localGroupsLength = this._questionGroups.length;
     const contractGroupsLength = await contractService.callMethod('getQuestionGroupsLength');
@@ -144,7 +147,7 @@ class QuestionStore {
       // eslint-disable-next-line no-await-in-loop
         const element = await contractService.callMethod('getQuestionGroup', i);
         element.groupId = i;
-        this._questionGroups.push(element);
+        this._questionGroups[i - 1] = element;
       }
     }
   }
@@ -307,6 +310,13 @@ class QuestionStore {
    * @returns {Array} array with lenght == 1, contains question matched by id
    */
   @action getQuestionById = (id) => this._questions.filter((question) => question.id === Number(id))
+
+  @action reset = () => {
+    this._questions = [];
+    this._questionGroups = [];
+    this.interval = '';
+    clearInterval(this.interval);
+  }
 }
 
 export default QuestionStore;

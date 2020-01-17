@@ -152,10 +152,12 @@ class ContractService {
   checkProject(address) {
     const { rootStore: { Web3Service } } = this;
     return new Promise((resolve, reject) => {
-      Web3Service.web3.eth.getCode(address).then((bytecode) => {
-        if (bytecode === '0x') reject();
-        resolve(bytecode);
-      });
+      const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
+      const contract = Web3Service.createContractInstance(abi);
+      contract.options.address = address;
+      contract.methods.getQuestionGroupsLength().call()
+        .then((data) => resolve())
+        .catch((err) => reject(err));
     });
   }
 
