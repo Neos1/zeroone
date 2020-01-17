@@ -330,6 +330,7 @@ const InputProjectData = withTranslation()(({
         theme="back"
         icon={<BackIcon />}
         onClick={onClick}
+        disabled={form.loading}
       >
         {t('buttons:back')}
       </Button>
