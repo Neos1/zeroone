@@ -53,7 +53,7 @@ class InputProjectData extends React.Component {
               </p>
             </Explanation>
           </div>
-          <Button theme="back" icon={<BackIcon />} onClick={onClick}>
+          <Button theme="back" icon={<BackIcon />} onClick={onClick} disabled={form.loading}>
             {t('buttons:back')}
           </Button>
         </form>
