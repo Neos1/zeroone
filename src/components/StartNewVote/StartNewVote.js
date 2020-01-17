@@ -37,11 +37,12 @@ class StartNewVote extends React.Component {
           dialogStore,
         } = this.props;
         const data = form.values();
+        const keys = Object.keys(data);
+        keys.forEach((key) => {
+          const text = String(data[key]);
+          data[key] = text.trim();
+        });
         const { question: questionId } = data;
-        if (data.Address) {
-          const { Address: rawAddress } = data;
-          data.Address = rawAddress.trim();
-        }
         delete data.question;
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
@@ -50,7 +51,6 @@ class StartNewVote extends React.Component {
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, values);
         const votingData = encodedParams.replace('0x', methodSelector);
         projectStore.setVotingData(questionId, groupId, votingData);
-
         dialogStore.toggle('password_form');
         return Promise.resolve();
       },
