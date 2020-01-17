@@ -135,6 +135,7 @@ class MembersStore {
       group.users = group.groupType === 'ERC20'
         ? [userStore.address]
         : await contract.methods.getUsers().call();
+      group.groupId = i + 1;
       // eslint-disable-next-line no-param-reassign
       groups[i] = group;
     }
@@ -227,7 +228,11 @@ class MembersStore {
     });
   }
 
-  @action getMemberById = (id) => this.list[Number(id)];
+  @action getMemberById = (id) => {
+    if (!this.list) return {};
+    const [group] = this.list.filter((groupItem) => groupItem.groupId === Number(id));
+    return group;
+  }
 
   getAddressesForAdminDesignate = (data) => new Promise((resolve) => {
     const { Web3Service: { web3: { eth } } } = this.rootStore;

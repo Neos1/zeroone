@@ -81,5 +81,7 @@ const other = {
   privateBalance: 'Private balance',
   toggleUser: 'Toggle user',
   returnTokensFirst: 'Return tokens first',
+  selectorNonexistentFunctionDescription: 'If you specify the selector of a nonexistent function, the voting results will not be applied',
+  erc20ListIsNotViewable: 'ERC20 tokens are arranged so \n that the voter list is not viewable',
 };
 export default other;

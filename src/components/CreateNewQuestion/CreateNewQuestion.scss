@@ -113,6 +113,17 @@
     }
   }
 
+  &__field-description {
+    margin-top: 8px;
+    padding: 11px 18px 10px;
+    color: rgba(0, 0, 0, 0.7);
+    font-weight: 300;
+    font-size: 11px;
+    line-height: 13px;
+    background: #fff;
+    border: 1px dashed #000;
+  }
+
   &__form {
     &--basic {
       padding-top: 49px;

@@ -31,5 +31,6 @@ const buttons = {
   completeTheVote: 'Завершить голосование',
   pickUpTokens: 'заберите токены',
   pickUpTokensCapital: 'Заберите токены',
+  clear: 'Понятно',
 };
 export default buttons;
