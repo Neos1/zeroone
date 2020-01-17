@@ -124,7 +124,7 @@ class Voting extends React.Component {
       eventEmitterService.emit('new_vote:toggle', targetOption);
     }
     this._loading = true;
-    this.votingIsActive = await historyStore.hasActiveVoting();
+    this.votingIsActive = historyStore.isVotingActive;
     this._loading = false;
   }
 
@@ -168,7 +168,6 @@ class Voting extends React.Component {
       props,
       voteStatus,
       state,
-      votingIsActive,
       loading,
       votings,
     } = this;
@@ -179,6 +178,7 @@ class Voting extends React.Component {
       projectStore: {
         historyStore: {
           pagination,
+          isVotingActive,
         },
       },
     } = props;
@@ -199,7 +199,7 @@ class Voting extends React.Component {
               ? (
                 <VotingTop
                   onClick={() => { dialogStore.show('start_new_vote'); }}
-                  votingIsActive={votingIsActive}
+                  votingIsActive={isVotingActive}
                 />
               )
               : null

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import uniqKey from 'react-id-generator';
 import Input from '../Input';
 import { TokenName, CloseIcon } from '../Icons';
@@ -11,6 +11,7 @@ import styles from './CreateNewQuestion.scss';
 import SimpleDropdown from '../SimpleDropdown';
 
 @withTranslation()
+@inject('projectStore')
 @observer
 class FormDynamic extends React.Component {
   static propTypes = {
@@ -23,6 +24,11 @@ class FormDynamic extends React.Component {
     }).isRequired,
     t: PropTypes.func.isRequired,
     onToggle: PropTypes.func.isRequired,
+    projectStore: PropTypes.shape({
+      historyStore: PropTypes.shape({
+        isVotingActive: PropTypes.bool.isRequired,
+      }),
+    }).isRequired,
   };
 
   /**
@@ -86,7 +92,9 @@ class FormDynamic extends React.Component {
 
   render() {
     const { props } = this;
-    const { formDynamic, t, onToggle } = props;
+    const {
+      formDynamic, t, onToggle, projectStore: { historyStore },
+    } = props;
     const options = [{
       label: 'uint',
       value: 'uint',
@@ -170,7 +178,7 @@ class FormDynamic extends React.Component {
             </Button>
           </div>
           <div className={styles['create-question__form-col']}>
-            <Button type="submit">{t('buttons:create')}</Button>
+            <Button type="submit" disabled={historyStore.isVotingActive}>{t('buttons:create')}</Button>
             <div className={styles['create-question__form-text']}>
               {t('other:voteLaunchDescription')}
             </div>

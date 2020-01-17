@@ -6,6 +6,7 @@ import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-ma
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
 import { statusStates, GAS_LIMIT } from '../../constants';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 class HistoryStore {
   votingIntervalId = null;
@@ -24,6 +25,8 @@ class HistoryStore {
 
   @observable isUserReturnTokensActual = false;
 
+  @observable isActiveVoting = false;
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.getActualVotings();
@@ -36,14 +39,12 @@ class HistoryStore {
       const isReturn = await this.isUserReturnTokens();
       this.isUserReturnTokensActual = isReturn;
     }, this.intervalUpdate);
-  }
-
-  /**
-   * @function
-   * @returns {bool} True if project have not ended voting
-   */
-  @computed get isVotingActive() {
-    return this._votings[0] && this._votings[0].status === 0;
+    this.isActiveVotingInterval = new AsyncInterval({
+      cb: async () => {
+        this.isActiveVoting = await this.hasActiveVoting();
+      },
+      timeoutInterval: 30000,
+    });
   }
 
   /**
@@ -191,10 +192,15 @@ class HistoryStore {
 
   @action
   reset = () => {
+    this.isActiveVotingInterval.cancel();
     clearInterval(this.votingIntervalId);
     this.pagination = null;
     this._votings = [];
     this.loading = true;
+  }
+
+  @computed get isVotingActive() {
+    return this.isActiveVoting;
   }
 
   getVotingsFromContract = async () => {
