@@ -48,6 +48,7 @@ class Dropdown extends Component {
       selectedValue: selected,
     });
     field.set(selected);
+    field.validate();
     onSelect(selected);
     this.toggleOptions();
   }
@@ -117,6 +118,7 @@ Dropdown.propTypes = {
       propTypes.string,
       propTypes.shape({}),
     ]).isRequired,
+    validate: propTypes.func.isRequired,
     label: propTypes.string.isRequired,
     error: propTypes.string.isRequired,
   }).isRequired,
