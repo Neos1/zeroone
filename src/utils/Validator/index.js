@@ -1,5 +1,6 @@
 import validatorjs from 'validatorjs';
 import i18n from 'i18next';
+import { languages } from '../../constants';
 
 validatorjs.prototype.setAttributeNames = function setAttributeNames(attributes) {
   if (!attributes) return;
@@ -37,11 +38,8 @@ const plugins = {
   dvr: {
     package: validatorjs,
     extend: ({ validator }) => {
+      window.validator = validator;
       const { language } = i18n;
-      const languages = {
-        RUS: 'ru',
-        ENG: 'en',
-      };
       Object.keys(rules).forEach(
         (key) => validator.register(key, rules[key].function, rules[key].message),
       );
