@@ -89,6 +89,7 @@ class Questions extends Component {
           value: propTypes.number.isRequired,
           label: propTypes.string.isRequired,
         })).isRequired,
+        fetchActualQuestionGroups: propTypes.func.isRequired,
         pagination: propTypes.instanceOf(PaginationStore).isRequired,
         addFilterRule: propTypes.func.isRequired,
         resetFilter: propTypes.func.isRequired,
@@ -122,9 +123,10 @@ class Questions extends Component {
   }
 
   async componentDidMount() {
-    const { projectStore: { historyStore } } = this.props;
+    const { projectStore: { historyStore, questionStore } } = this.props;
     this._loading = true;
     this.votingIsActive = await historyStore.hasActiveVoting();
+    questionStore.fetchActualQuestionGroups();
     this._loading = false;
   }
 
