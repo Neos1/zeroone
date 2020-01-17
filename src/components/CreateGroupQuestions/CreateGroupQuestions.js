@@ -57,7 +57,7 @@ class CreateGroupQuestions extends React.PureComponent {
 
   render() {
     const { props, form } = this;
-    const { t } = props;
+    const { t, projectStore: { historyStore } } = props;
     return (
       <div
         className={styles['create-group-questions']}
@@ -83,7 +83,7 @@ class CreateGroupQuestions extends React.PureComponent {
           <InputTextarea
             field={form.$('description')}
           />
-          <Button type="submit">{t('buttons:create')}</Button>
+          <Button type="submit" disabled={historyStore.isVotingActive}>{t('buttons:create')}</Button>
         </form>
         <div className={styles['create-group-questions__subtext']}>
           {t('other:voteLaunchAdminDescription')}

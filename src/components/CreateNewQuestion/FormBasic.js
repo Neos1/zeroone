@@ -1,6 +1,7 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
 import Input from '../Input';
 import { TokenName, DateIcon, Address } from '../Icons';
 import InputTextarea from '../Input/InputTextarea';
@@ -9,6 +10,8 @@ import Button from '../Button/Button';
 import styles from './CreateNewQuestion.scss';
 
 @withTranslation()
+@inject('projectStore')
+@observer
 class FormBasic extends React.Component {
   static propTypes = {
     formBasic: PropTypes.shape({
@@ -16,11 +19,16 @@ class FormBasic extends React.Component {
       $: PropTypes.func.isRequired,
     }).isRequired,
     t: PropTypes.func.isRequired,
+    projectStore: PropTypes.shape({
+      historyStore: PropTypes.shape({
+        isVotingActive: PropTypes.bool.isRequired,
+      }),
+    }).isRequired,
   };
 
   render() {
     const { props } = this;
-    const { formBasic, t } = props;
+    const { formBasic, t, projectStore: { historyStore } } = props;
     return (
       <form
         form={formBasic}
@@ -76,7 +84,7 @@ class FormBasic extends React.Component {
         <div className={styles['create-question__form-row']}>
           <div className={styles['create-question__form-col']} />
           <div className={styles['create-question__form-col']}>
-            <Button type="submit">{t('buttons:nextStep')}</Button>
+            <Button type="submit" disabled={historyStore.isVotingActive}>{t('buttons:nextStep')}</Button>
           </div>
         </div>
       </form>

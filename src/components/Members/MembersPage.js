@@ -44,9 +44,8 @@ class MembersPage extends React.Component {
   }
 
   async componentDidMount() {
-    const { projectStore: { historyStore }, membersStore } = this.props;
+    const { membersStore } = this.props;
     this._loading = true;
-    this.votingIsActive = await historyStore.hasActiveVoting();
     this._loading = false;
     this.asyncUpdater = new AsyncInterval({
       timeoutInterval: this.timeoutInterval,
@@ -66,10 +65,11 @@ class MembersPage extends React.Component {
   }
 
   render() {
-    const { loading, votingIsActive } = this;
+    const { loading } = this;
     const {
       membersStore: { list }, projectStore, dialogStore, t,
     } = this.props;
+    const { historyStore } = projectStore;
     const groups = list.toJS();
     return (
       <Container className="container--small">
@@ -79,7 +79,7 @@ class MembersPage extends React.Component {
             ? (
               <MembersTop
                 projectName={projectStore.name}
-                votingIsActive={votingIsActive}
+                votingIsActive={historyStore.isVotingActive}
               />
             )
             : null

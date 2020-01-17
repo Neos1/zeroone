@@ -125,7 +125,7 @@ class Questions extends Component {
   async componentDidMount() {
     const { projectStore: { historyStore, questionStore } } = this.props;
     this._loading = true;
-    this.votingIsActive = await historyStore.hasActiveVoting();
+    this.votingIsActive = historyStore.isVotingActive;
     questionStore.fetchActualQuestionGroups();
     this._loading = false;
   }
@@ -178,7 +178,7 @@ class Questions extends Component {
   }
 
   render() {
-    const { loading, votingIsActive } = this;
+    const { loading } = this;
     const { t, projectStore, dialogStore } = this.props;
     const {
       questionStore: {
@@ -186,6 +186,7 @@ class Questions extends Component {
         questionGroups,
         paginatedList,
       },
+      historyStore,
     } = projectStore;
     const questions = paginatedList;
     return (
@@ -201,9 +202,9 @@ class Questions extends Component {
                         theme="white"
                         icon={<CreateToken />}
                         onClick={() => { dialogStore.show('create_group_question'); }}
-                        disabled={votingIsActive}
+                        disabled={historyStore.isVotingActive}
                         hint={
-                          votingIsActive
+                          historyStore.isVotingActive
                             ? (
                               <Trans
                                 i18nKey="other:hintFunctionalityNotAvailable"
@@ -222,9 +223,9 @@ class Questions extends Component {
                         theme="white"
                         icon={<CreateToken />}
                         onClick={() => { dialogStore.show('create_question'); }}
-                        disabled={votingIsActive}
+                        disabled={historyStore.isVotingActive}
                         hint={
-                          votingIsActive
+                          historyStore.isVotingActive
                             ? (
                               <Trans
                                 i18nKey="other:hintFunctionalityNotAvailable"
@@ -258,7 +259,7 @@ class Questions extends Component {
               !loading
                 ? questions.map((question) => (
                   <Question
-                    votingIsActive={votingIsActive}
+                    votingIsActive={historyStore.isVotingActive}
                   // eslint-disable-next-line react/jsx-props-no-spreading
                     {...question}
                     key={`question__item--${question.id}`}

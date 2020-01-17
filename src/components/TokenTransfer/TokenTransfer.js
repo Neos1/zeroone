@@ -130,9 +130,7 @@ class TokenTransfer extends React.Component {
       address: PropTypes.string.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape({
-      historyStore: PropTypes.shape({
-        hasActiveVoting: PropTypes.func.isRequired,
-      }),
+      historyStore: PropTypes.shape().isRequired,
     }).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -149,7 +147,7 @@ class TokenTransfer extends React.Component {
         historyStore,
       },
     } = this.props;
-    this.votingIsActive = await historyStore.hasActiveVoting();
+    this.votingIsActive = historyStore.isVotingActive;
   }
 
   handleClick = () => {
@@ -160,9 +158,9 @@ class TokenTransfer extends React.Component {
   }
 
   render() {
-    const { form, votingIsActive, props } = this;
+    const { form, props } = this;
     const {
-      t, wallet, groupId, groupType,
+      t, wallet, groupId, groupType, projectStore: { historyStore },
     } = props;
 
     return (
@@ -206,9 +204,9 @@ class TokenTransfer extends React.Component {
                   type="button"
                   className={styles['token-transfer__button']}
                   onClick={this.handleClick}
-                  disabled={votingIsActive}
+                  disabled={historyStore.isVotingActive}
                   hint={
-                    votingIsActive
+                    historyStore.isVotingActive
                       ? (
                         <Trans
                           i18nKey="other:hintFunctionalityNotAvailable"
