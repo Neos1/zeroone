@@ -88,6 +88,7 @@ class TokenTransfer extends React.Component {
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
+            userStore.getEthBalance();
             dialogStore.show('success_modal');
             historyStore.getMissingVotings();
             history.push('/votings');
@@ -128,6 +129,7 @@ class TokenTransfer extends React.Component {
       singTransaction: PropTypes.func.isRequired,
       readWallet: PropTypes.func.isRequired,
       address: PropTypes.string.isRequired,
+      getEthBalance: PropTypes.func.isRequired,
     }).isRequired,
     projectStore: PropTypes.shape({
       historyStore: PropTypes.shape().isRequired,

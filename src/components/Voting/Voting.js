@@ -65,6 +65,7 @@ class Voting extends React.Component {
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
             dialogStore.show('success_modal_voting');
+            userStore.getEthBalance();
             historyStore.getMissingVotings();
           })
           .catch((error) => {

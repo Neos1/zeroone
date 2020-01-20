@@ -66,6 +66,7 @@ class Questions extends Component {
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
           .then(() => {
+            userStore.getEthBalance();
             dialogStore.hide();
             history.push('/votings');
             historyStore.getMissingVotings();

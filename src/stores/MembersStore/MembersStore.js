@@ -221,7 +221,10 @@ class MembersStore {
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-        .then(resolve)
+        .then(() => {
+          userStore.getEthBalance();
+          resolve();
+        })
         .catch((error) => {
           reject(error);
         });

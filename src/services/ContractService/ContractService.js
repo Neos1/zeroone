@@ -122,7 +122,10 @@ class ContractService {
       Web3Service.createTxData(address, tx, maxGasPrice)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash))
+        .then((txHash) => {
+          userStore.getEthBalance();
+          resolve(txHash);
+        })
         .catch((err) => reject(err));
     });
   }
@@ -231,7 +234,10 @@ class ContractService {
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-            .then((receipt) => resolve(receipt));
+            .then((receipt) => {
+              userStore.getEthBalance();
+              resolve(receipt);
+            });
         });
       // eslint-disable-next-line prefer-promise-reject-errors
       } return Promise.reject('WATAFAk');
@@ -340,6 +346,7 @@ class ContractService {
                     userVote: Number(descision),
                   },
                 });
+                userStore.getEthBalance();
                 resolve(rec);
               });
           })
@@ -363,6 +370,7 @@ class ContractService {
                 userVote: Number(descision),
               },
             });
+            userStore.getEthBalance();
             resolve(rec);
           })
           .catch((err) => reject(err));
@@ -393,7 +401,10 @@ class ContractService {
     return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   startVoting(questionId, params) {
@@ -422,7 +433,9 @@ class ContractService {
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then((receipt) => { console.log(receipt); });
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   returnTokens() {
@@ -447,7 +460,9 @@ class ContractService {
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then((rec) => { console.log(rec); });
+      .then((rec) => {
+        userStore.getEthBalance();
+      });
   }
 
   /**
@@ -479,7 +494,10 @@ class ContractService {
     return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
       .then((createdTx) => userStore.singTransaction(createdTx, userStore.password))
       .then((formedTx) => Web3Service.sendSignedTransaction(`0x${formedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   /**
