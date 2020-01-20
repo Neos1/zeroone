@@ -3,14 +3,6 @@
 	"hostBackup": "http://hive3.thexproject.ru:21595",
 	"projects": [
 		{
-			"name": "asdasdas",
-			"address": "0x2F690d1f6CB76971DEEfb965900E6C008ff19E17"
-		},
-		{
-			"name": "BORODA_PROJ",
-			"address": "0xd5951f042335F816517e466E2E556a726F6FE8DD"
-		},
-		{
 			"name": "21312312",
 			"address": "0xBB0cb5dA06D2a8cAf1907a854EdE290F4cfd301c"
 		},
