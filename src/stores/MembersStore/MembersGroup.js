@@ -129,8 +129,10 @@ class MembersGroup {
   updateMemberBalanceAndWeight = async (address) => {
     const userBalance = await this.contract.methods.balanceOf(address).call();
     this.getUserBalanceInGroup();
-    const user = this.list.find((member) => member.wallet === address);
-    if (!user || !user.setTokenBalance || !user.setWeight) {
+    const user = this.list.find((member) => (
+      member.wallet.toUpperCase() === address.toUpperCase()
+    ));
+    if ((!user || !user.setTokenBalance || !user.setWeight) && userBalance !== 0) {
       const admin = this.groupType === 'Custom'
         ? await this.contract.methods.getAdmin().call()
         : null;
@@ -152,14 +154,7 @@ class MembersGroup {
 
   @action
   updateUserBalance = async () => {
-    const { userAddress, userBalance, balance } = this;
-    const user = this.list.find((member) => member.wallet === userAddress);
-    if (user) {
-      await this.getUserBalanceInGroup();
-      const weight = (userBalance / Number(balance)) * 100;
-      user.setTokenBalance(userBalance);
-      user.setWeight(weight);
-    }
+    await this.updateMemberBalanceAndWeight(this.userAddress);
   }
 
   @action

@@ -248,6 +248,7 @@ param {string} value password from form
    */
   @action getEthBalance = async () => {
     const { Web3Service: { web3 } } = this.rootStore;
+    console.log('updating ETH balance');
     web3.eth.getBalance(this.address)
       .then((result) => {
         this.balance = result;

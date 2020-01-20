@@ -33,13 +33,14 @@ class ProjectStore {
   }
 
   @action init({ address, name }) {
-    const { contractService, Web3Service } = this.rootStore;
+    const { contractService, Web3Service, membersStore } = this.rootStore;
     const contract = Web3Service.createContractInstance(this.projectAbi);
     this.name = name;
     contract.options.address = address;
     contractService.setContract(contract);
     this.questionStore = new QuestionStore(this.rootStore);
     this.historyStore = new HistoryStore(this.rootStore);
+    membersStore.init();
     // this.userGrops = this.fetchUserGroups(projectAddress);
   }
 

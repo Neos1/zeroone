@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
+import { number } from 'prop-types';
 import {
   SOL_IMPORT_REGEXP,
   SOL_PATH_REGEXP,
@@ -346,6 +347,7 @@ class ContractService {
                     userVote: Number(descision),
                   },
                 });
+                groupContainsUser.updateUserBalance();
                 userStore.getEthBalance();
                 resolve(rec);
               });
@@ -370,6 +372,7 @@ class ContractService {
                 userVote: Number(descision),
               },
             });
+            groupContainsUser.updateUserBalance();
             userStore.getEthBalance();
             resolve(rec);
           })
@@ -444,6 +447,11 @@ class ContractService {
       rootStore: {
         Web3Service,
         userStore,
+        membersStore,
+        projectStore: {
+          historyStore,
+          questionStore,
+        },
       },
     } = this;
     const maxGasPrice = 30000000000;
@@ -460,8 +468,15 @@ class ContractService {
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then((rec) => {
+      .then(async (rec) => {
         userStore.getEthBalance();
+        const lastVotingId = await _contract.methods.findLastUserVoting().call();
+        const [voting] = historyStore.getVotingById(Number(lastVotingId));
+        const { questionId } = voting;
+        const [question] = questionStore.getQuestionById(Number(questionId));
+        const { groupId } = question;
+        const [group] = membersStore.getMemberById(Number(groupId));
+        group.updateUserBalance();
       });
   }
 

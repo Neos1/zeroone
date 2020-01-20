@@ -54,7 +54,6 @@ class RootStore {
    */
   @action async initProject({ address, name }) {
     this.projectStore.init({ address, name });
-    this.membersStore.init();
   }
 }
 
