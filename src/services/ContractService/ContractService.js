@@ -325,7 +325,7 @@ class ContractService {
             const tx = {
               from: userStore.address,
               to: _contract.options.address,
-              gasLimit: 8000000,
+              gasLimit: GAS_LIMIT,
               value: '0x0',
               data,
             };
@@ -438,7 +438,7 @@ class ContractService {
     const tx = {
       from: userStore.address,
       to: _contract.options.address,
-      gasLimit: 8000000,
+      gasLimit: GAS_LIMIT,
       value: '0x0',
       data,
     };
