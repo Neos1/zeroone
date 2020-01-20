@@ -249,6 +249,7 @@ class MembersStore {
 
   @action
   reset = () => {
+    this.groups.forEach((group) => { group.stopInterval(); });
     this.groups = [];
     this._transferStatus = 0;
     this.loading = true;

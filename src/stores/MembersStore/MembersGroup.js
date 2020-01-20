@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import MemberItem from './MemberItem';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 class MembersGroup {
   /**
@@ -48,6 +49,11 @@ class MembersGroup {
     }
     this.addToList(members);
     this.getUserBalanceInGroup();
+    this.updateInterval = 60000;
+    this.interval = new AsyncInterval({
+      timeoutInterval: this.updateInterval,
+      cb: this.updateUserBalance,
+    });
   }
 
   /** Name group (Example: Admins) */
@@ -145,6 +151,18 @@ class MembersGroup {
   }
 
   @action
+  updateUserBalance = async () => {
+    const { userAddress, userBalance, balance } = this;
+    const user = this.list.find((member) => member.wallet === userAddress);
+    if (user) {
+      await this.getUserBalanceInGroup();
+      const weight = (userBalance / Number(balance)) * 100;
+      user.setTokenBalance(userBalance);
+      user.setWeight(weight);
+    }
+  }
+
+  @action
   setNewAdmin = async () => {
     const admin = this.list.find((member) => member.isAdmin === true);
     const newAdmin = this.groupType === 'Custom'
@@ -153,6 +171,12 @@ class MembersGroup {
     const user = this.list.find((member) => member.wallet === newAdmin);
     admin.removeAdminPrivileges();
     user.addAdminPrivileges();
+  }
+
+  @action
+  stopInterval = () => {
+    this.interval.cancel();
+    this.interval = null;
   }
 }
 

@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
 import i18n from 'i18next';
 import weiToFixed from '../../utils/EthUtils/wei-to-fixed';
+import AsyncInterval from '../../utils/AsyncUtils';
 /**
  * Describes store with user data
  */
@@ -27,6 +28,10 @@ class UserStore {
   @observable currency = 'ETH';
 
   @observable fullCurrencyName = 'ether';
+
+  timeoutInterval = 60000;
+
+  updateBalanceInterval = null;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -136,6 +141,10 @@ param {string} value password from form
         this.setEncryptedWallet(JSON.parse(data.wallet));
         this.authorized = true;
         this.setPassword(password);
+        this.updateBalanceInterval = new AsyncInterval({
+          timeoutInterval: this.timeoutInterval,
+          cb: this.getEthBalance,
+        });
         Promise.resolve();
       }).catch(() => {
         appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
@@ -237,7 +246,7 @@ param {string} value password from form
    *
    * @returns {number} balance in ETH
    */
-  @action async getEthBalance() {
+  @action getEthBalance = async () => {
     const { Web3Service: { web3 } } = this.rootStore;
     web3.eth.getBalance(this.address)
       .then((result) => {
@@ -279,6 +288,7 @@ param {string} value password from form
     this.password = '';
     this.currency = 'ETH';
     this.fullCurrencyName = 'ether';
+    this.updateBalanceInterval.cancel();
   }
 }
 
