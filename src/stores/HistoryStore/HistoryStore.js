@@ -323,6 +323,7 @@ class HistoryStore {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(questionId);
     const { groupId } = question;
+    console.log(`voting ${voting}, group=${groupId}`);
     const { list, balance } = membersStore.list[Number(groupId) - 1];
     const result = {
       positive: [],
