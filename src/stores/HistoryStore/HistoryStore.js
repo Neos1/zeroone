@@ -413,7 +413,10 @@ class HistoryStore {
     return Web3Service.createTxData(address, tx, maxGasPrice)
       .then((createdTx) => userStore.singTransaction(createdTx, password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 }
 export default HistoryStore;

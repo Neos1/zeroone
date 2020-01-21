@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
+import { number } from 'prop-types';
 import {
   SOL_IMPORT_REGEXP,
   SOL_PATH_REGEXP,
@@ -122,7 +123,10 @@ class ContractService {
       Web3Service.createTxData(address, tx, maxGasPrice)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash))
+        .then((txHash) => {
+          userStore.getEthBalance();
+          resolve(txHash);
+        })
         .catch((err) => reject(err));
     });
   }
@@ -231,7 +235,10 @@ class ContractService {
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-            .then((receipt) => resolve(receipt));
+            .then((receipt) => {
+              userStore.getEthBalance();
+              resolve(receipt);
+            });
         });
       // eslint-disable-next-line prefer-promise-reject-errors
       } return Promise.reject('WATAFAk');
@@ -340,6 +347,8 @@ class ContractService {
                     userVote: Number(descision),
                   },
                 });
+                groupContainsUser.updateUserBalance();
+                userStore.getEthBalance();
                 resolve(rec);
               });
           })
@@ -363,6 +372,8 @@ class ContractService {
                 userVote: Number(descision),
               },
             });
+            groupContainsUser.updateUserBalance();
+            userStore.getEthBalance();
             resolve(rec);
           })
           .catch((err) => reject(err));
@@ -393,7 +404,10 @@ class ContractService {
     return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   startVoting(questionId, params) {
@@ -422,7 +436,9 @@ class ContractService {
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then((receipt) => { console.log(receipt); });
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   returnTokens() {
@@ -431,6 +447,11 @@ class ContractService {
       rootStore: {
         Web3Service,
         userStore,
+        membersStore,
+        projectStore: {
+          historyStore,
+          questionStore,
+        },
       },
     } = this;
     const maxGasPrice = 30000000000;
@@ -447,7 +468,16 @@ class ContractService {
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then((rec) => { console.log(rec); });
+      .then(async (rec) => {
+        userStore.getEthBalance();
+        const lastVotingId = await _contract.methods.findLastUserVoting().call();
+        const [voting] = historyStore.getVotingById(Number(lastVotingId));
+        const { questionId } = voting;
+        const [question] = questionStore.getQuestionById(Number(questionId));
+        const { groupId } = question;
+        const [group] = membersStore.getMemberById(Number(groupId));
+        group.updateUserBalance();
+      });
   }
 
   /**
@@ -479,7 +509,10 @@ class ContractService {
     return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
       .then((createdTx) => userStore.singTransaction(createdTx, userStore.password))
       .then((formedTx) => Web3Service.sendSignedTransaction(`0x${formedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash));
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   /**

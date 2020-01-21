@@ -120,13 +120,13 @@ class VotingInfoWrapper extends React.PureComponent {
           closeVoteInProgress: true,
         });
         return contractService.closeVoting()
-          .then(async () => {
+          .then(() => {
             dialogStore.toggle('success_modal_voting_info_wrapper');
             historyStore.fetchAndUpdateLastVoting();
             this.updateQuestionList(voting);
+            this.updateAfterCompleteVoting(voting);
             this.getVotingStats();
             this.getVotes();
-            this.updateAfterCompleteVoting(voting);
           })
           .catch(() => {
             dialogStore.toggle('error_modal_voting_info_wrapper');
@@ -227,6 +227,7 @@ class VotingInfoWrapper extends React.PureComponent {
         questionStore.fetchActualQuestionGroups();
         break;
       case assignGroupAdmin:
+        console.log('Designating Admin');
         membersStore.getAddressesForAdminDesignate(voting.data)
           .then(([group]) => {
             membersStore.updateAdmin(group);

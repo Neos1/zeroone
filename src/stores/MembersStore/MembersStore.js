@@ -221,7 +221,10 @@ class MembersStore {
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-        .then(resolve)
+        .then(() => {
+          userStore.getEthBalance();
+          resolve();
+        })
         .catch((error) => {
           reject(error);
         });
@@ -249,6 +252,7 @@ class MembersStore {
 
   @action
   reset = () => {
+    this.groups.forEach((group) => { group.stopInterval(); });
     this.groups = [];
     this._transferStatus = 0;
     this.loading = true;

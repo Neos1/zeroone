@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import MemberItem from './MemberItem';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 class MembersGroup {
   /**
@@ -48,6 +49,11 @@ class MembersGroup {
     }
     this.addToList(members);
     this.getUserBalanceInGroup();
+    this.updateInterval = 60000;
+    this.interval = new AsyncInterval({
+      timeoutInterval: this.updateInterval,
+      cb: this.updateUserBalance,
+    });
   }
 
   /** Name group (Example: Admins) */
@@ -123,8 +129,10 @@ class MembersGroup {
   updateMemberBalanceAndWeight = async (address) => {
     const userBalance = await this.contract.methods.balanceOf(address).call();
     this.getUserBalanceInGroup();
-    const user = this.list.find((member) => member.wallet === address);
-    if (!user || !user.setTokenBalance || !user.setWeight) {
+    const user = this.list.find((member) => (
+      member.wallet.toUpperCase() === address.toUpperCase()
+    ));
+    if ((!user || !user.setTokenBalance || !user.setWeight) && userBalance !== 0) {
       const admin = this.groupType === 'Custom'
         ? await this.contract.methods.getAdmin().call()
         : null;
@@ -145,6 +153,11 @@ class MembersGroup {
   }
 
   @action
+  updateUserBalance = async () => {
+    await this.updateMemberBalanceAndWeight(this.userAddress);
+  }
+
+  @action
   setNewAdmin = async () => {
     const admin = this.list.find((member) => member.isAdmin === true);
     const newAdmin = this.groupType === 'Custom'
@@ -153,6 +166,12 @@ class MembersGroup {
     const user = this.list.find((member) => member.wallet === newAdmin);
     admin.removeAdminPrivileges();
     user.addAdminPrivileges();
+  }
+
+  @action
+  stopInterval = () => {
+    this.interval.cancel();
+    this.interval = null;
   }
 }
 
