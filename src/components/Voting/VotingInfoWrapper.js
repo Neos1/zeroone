@@ -74,7 +74,7 @@ class VotingInfoWrapper extends React.PureComponent {
               this.updateAfterCompleteVoting(voting);
               return;
             }
-            switch (Number(voting.descision)) {
+            switch (Number(voting.userVote)) {
               case (userVotingStates.decisionFor):
                 dialogStore.toggle('decision_agree_voting_info_wrapper_message');
                 break;
