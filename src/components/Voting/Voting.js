@@ -180,7 +180,6 @@ class Voting extends React.Component {
               ? <VotingFilter />
               : null
           }
-          {/* eslint-disable-next-line */}
           {
             !loading
               ? (
@@ -191,7 +190,11 @@ class Voting extends React.Component {
               )
               : null
           }
-          <VotingList />
+          {
+            !loading
+              ? (<VotingList />)
+              : null
+          }
           {!loading
             ? (
               <Pagination
