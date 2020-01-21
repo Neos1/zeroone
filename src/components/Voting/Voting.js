@@ -3,10 +3,8 @@ import { inject, observer } from 'mobx-react';
 import { computed, observable } from 'mobx';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import uniqKey from 'react-id-generator';
 import queryString from 'query-string';
 import VotingTop from './VotingTop';
-import VotingItem from './VotingItem';
 import VotingFilter from './VotingFilter';
 import Container from '../Container';
 import Footer from '../Footer';
@@ -18,12 +16,12 @@ import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
-import Loader from '../Loader';
 import Notification from '../Notification/Notification';
 import ProjectStore from '../../stores/ProjectStore';
 import DialogStore from '../../stores/DialogStore';
 
 import styles from './Voting.scss';
+import VotingList from './VotingList';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')
@@ -136,17 +134,6 @@ class Voting extends React.Component {
     return historyStore.loading;
   }
 
-  @computed
-  get votings() {
-    const { props } = this;
-    const {
-      projectStore: {
-        historyStore,
-      },
-    } = props;
-    return historyStore.paginatedList;
-  }
-
   closeModal = (name) => {
     const { dialogStore } = this.props;
     dialogStore.hide(name);
@@ -170,7 +157,6 @@ class Voting extends React.Component {
       voteStatus,
       state,
       loading,
-      votings,
     } = this;
     const { status } = state;
     const {
@@ -205,23 +191,7 @@ class Voting extends React.Component {
               )
               : null
           }
-          <div className={styles['voting-page__list']}>
-            {
-              !loading
-                ? votings.map((item) => (
-                  <VotingItem
-                    key={uniqKey()}
-                    index={item.id}
-                    title={item.caption}
-                    description={item.text}
-                    actualStatus={item.status}
-                    actualDecisionStatus={item.descision}
-                    date={{ start: Number(item.startTime), end: Number(item.endTime) }}
-                  />
-                ))
-                : <Loader />
-            }
-          </div>
+          <VotingList />
           {!loading
             ? (
               <Pagination
