@@ -64,8 +64,8 @@ class VotingInfoWrapper extends React.PureComponent {
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal_voting_info_wrapper');
         return contractService.sendVote(votingId, descision)
-          .then(async () => {
-            await historyStore.fetchAndUpdateLastVoting();
+          .then(() => {
+            historyStore.fetchAndUpdateLastVoting();
             const [voting] = historyStore.getVotingById(Number(votingId));
             this.getVotingStats();
             this.getVotes();
@@ -121,14 +121,14 @@ class VotingInfoWrapper extends React.PureComponent {
         });
         return contractService.closeVoting()
           .then(() => {
-            dialogStore.toggle('success_modal_voting_info_wrapper');
             historyStore.fetchAndUpdateLastVoting();
-            this.updateQuestionList(voting);
             this.updateAfterCompleteVoting(voting);
             this.getVotingStats();
             this.getVotes();
+            dialogStore.toggle('success_modal_voting_info_wrapper');
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error(e);
             dialogStore.toggle('error_modal_voting_info_wrapper');
           })
           .finally(() => {
@@ -174,7 +174,6 @@ class VotingInfoWrapper extends React.PureComponent {
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     this.question = question;
-    console.log(this.question);
     this.getVotingStats();
     this.getVotes();
   }
@@ -216,7 +215,9 @@ class VotingInfoWrapper extends React.PureComponent {
       connectGroupQuestions,
       assignGroupAdmin,
     } = systemQuestionsId;
-    switch (voting.questionId) {
+    console.log('updateAfterCompleteVoting');
+    console.log('voting.questionId', voting.questionId);
+    switch (Number(voting.questionId)) {
       case addingNewQuestion:
         questionStore.getActualQuestions();
         break;
@@ -224,6 +225,7 @@ class VotingInfoWrapper extends React.PureComponent {
         membersStore.fetchUserGroups();
         break;
       case connectGroupQuestions:
+        console.log('getting groups');
         questionStore.fetchActualQuestionGroups();
         break;
       case assignGroupAdmin:
@@ -268,7 +270,6 @@ class VotingInfoWrapper extends React.PureComponent {
       },
     } = props;
     const votes = await historyStore.getVoterList(Number(id));
-    await console.log(votes);
     this.dataVotes = await Object.assign(this.dataVotes, votes);
   }
 
