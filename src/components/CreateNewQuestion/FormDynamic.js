@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import { observer, inject } from 'mobx-react';
 import uniqKey from 'react-id-generator';
 import Input from '../Input';
@@ -178,7 +178,25 @@ class FormDynamic extends React.Component {
             </Button>
           </div>
           <div className={styles['create-question__form-col']}>
-            <Button type="submit" disabled={historyStore.isVotingActive}>{t('buttons:create')}</Button>
+            <Button
+              type="submit"
+              disabled={historyStore.isVotingActive}
+              hint={
+                historyStore.isVotingActive
+                  ? (
+                    <Trans
+                      i18nKey="other:hintFunctionalityNotAvailable"
+                    >
+                      During active voting, this
+                      <br />
+                      functionality is not available.
+                    </Trans>
+                  )
+                  : null
+              }
+            >
+              {t('buttons:create')}
+            </Button>
             <div className={styles['create-question__form-text']}>
               {t('other:voteLaunchDescription')}
             </div>

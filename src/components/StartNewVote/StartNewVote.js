@@ -3,7 +3,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import { observable } from 'mobx';
 import uniqKey from 'react-id-generator';
 import SimpleDropdown from '../SimpleDropdown';
@@ -142,6 +142,7 @@ class StartNewVote extends React.Component {
     const { props } = this;
     const { t, projectStore } = props;
     const {
+      historyStore,
       questionStore: { newVotingOptions },
       questionStore: { rootStore: { membersStore: { nonERC } } },
     } = projectStore;
@@ -219,6 +220,20 @@ class StartNewVote extends React.Component {
                     <div className={styles['new-vote__form-col']}>
                       <Button
                         type="submit"
+                        disabled={historyStore.isVotingActive}
+                        hint={
+                          historyStore.isVotingActive
+                            ? (
+                              <Trans
+                                i18nKey="other:hintFunctionalityNotAvailable"
+                              >
+                                During active voting, this
+                                <br />
+                                functionality is not available.
+                              </Trans>
+                            )
+                            : null
+                        }
                       >
                         {t('buttons:start')}
                       </Button>

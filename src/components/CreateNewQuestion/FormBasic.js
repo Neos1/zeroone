@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Input from '../Input';
@@ -84,7 +84,25 @@ class FormBasic extends React.Component {
         <div className={styles['create-question__form-row']}>
           <div className={styles['create-question__form-col']} />
           <div className={styles['create-question__form-col']}>
-            <Button type="submit" disabled={historyStore.isVotingActive}>{t('buttons:nextStep')}</Button>
+            <Button
+              type="submit"
+              disabled={historyStore.isVotingActive}
+              hint={
+                historyStore.isVotingActive
+                  ? (
+                    <Trans
+                      i18nKey="other:hintFunctionalityNotAvailable"
+                    >
+                      During active voting, this
+                      <br />
+                      functionality is not available.
+                    </Trans>
+                  )
+                  : null
+              }
+            >
+              {t('buttons:nextStep')}
+            </Button>
           </div>
         </div>
       </form>

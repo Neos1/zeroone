@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Hint from '../Hint';
@@ -83,7 +83,25 @@ class CreateGroupQuestions extends React.PureComponent {
           <InputTextarea
             field={form.$('description')}
           />
-          <Button type="submit" disabled={historyStore.isVotingActive}>{t('buttons:create')}</Button>
+          <Button
+            type="submit"
+            disabled={historyStore.isVotingActive}
+            hint={
+              historyStore.isVotingActive
+                ? (
+                  <Trans
+                    i18nKey="other:hintFunctionalityNotAvailable"
+                  >
+                    During active voting, this
+                    <br />
+                    functionality is not available.
+                  </Trans>
+                )
+                : null
+            }
+          >
+            {t('buttons:create')}
+          </Button>
         </form>
         <div className={styles['create-group-questions__subtext']}>
           {t('other:voteLaunchAdminDescription')}
