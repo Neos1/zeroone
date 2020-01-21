@@ -85,5 +85,6 @@ const other = {
   erc20ListIsNotViewable: 'ERC20 tokens are arranged so \n that the voter list is not viewable',
   votingListIsEmpty: 'No polls created <1/> They will be displayed here later',
   noVotingFilterMatches: 'No voting matches <1/> the selected filter',
+  noQuestionsInThisGroup: 'No questions have been <1/> created in this group yet',
 };
 export default other;

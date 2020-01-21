@@ -8,11 +8,9 @@ import uniqKey from 'react-id-generator';
 import Container from '../Container';
 import Button from '../Button/Button';
 import { CreateToken } from '../Icons';
-import styles from './Questions.scss';
 import SimpleDropdown from '../SimpleDropdown';
 import Footer from '../Footer';
 import Dialog from '../Dialog/Dialog';
-import Question from './Question';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
@@ -25,6 +23,9 @@ import Notification from '../Notification/Notification';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+
+import styles from './Questions.scss';
+import QuestionsList from './QuestionsList';
 
 @withRouter
 @withTranslation()
@@ -185,11 +186,9 @@ class Questions extends Component {
       questionStore: {
         pagination,
         questionGroups,
-        paginatedList,
       },
       historyStore,
     } = projectStore;
-    const questions = paginatedList;
     return (
       <Container className="container--small">
         <Notification />
@@ -258,14 +257,7 @@ class Questions extends Component {
           <div className={styles.questions__wrapper}>
             {
               !loading
-                ? questions.map((question) => (
-                  <Question
-                    votingIsActive={historyStore.isVotingActive}
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...question}
-                    key={`question__item--${question.id}`}
-                  />
-                ))
+                ? <QuestionsList />
                 : <Loader />
             }
           </div>
