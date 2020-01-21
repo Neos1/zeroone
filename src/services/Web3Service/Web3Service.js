@@ -21,8 +21,9 @@ class Web3Service {
     return new Contract(abi);
   }
 
-  createTxData(address, tx, maxGasPrice) {
-    const { web3: { eth, utils } } = this;
+  createTxData(address, tx) {
+    const { web3: { eth }, rootStore } = this;
+    const { configStore: { MIN_GAS_PRICE, MAX_GAS_PRICE } } = rootStore;
     let transaction = { ...tx };
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
@@ -31,16 +32,15 @@ class Web3Service {
         return eth.estimateGas(transaction);
       })
       .then((gas) => {
-        if (!maxGasPrice) return (Promise.resolve(gas));
+        transaction = { ...transaction, gas };
         return this.getGasPrice()
           .then((gasPrice) => {
-            const minGasPrice = utils.numberToHex(20000000000);
             const gp = new BN(gasPrice);
-            const minGp = new BN(minGasPrice);
-            const maxGp = new BN(maxGasPrice);
+            const minGp = new BN(MIN_GAS_PRICE);
+            const maxGp = new BN(MAX_GAS_PRICE);
             transaction.gasPrice = (gp.gte(minGp) && gp.lte(maxGp))
               ? gasPrice
-              : minGasPrice;
+              : MIN_GAS_PRICE;
             return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);

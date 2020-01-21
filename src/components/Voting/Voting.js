@@ -51,7 +51,6 @@ class Voting extends React.Component {
         } = props;
         dialogStore.toggle('progress_modal_voting');
         const { password } = form.values();
-        const maxGasPrice = 30000000000;
         userStore.setPassword(password);
         return userStore.readWallet(password)
           .then(() => {
@@ -59,7 +58,7 @@ class Voting extends React.Component {
             const transaction = contractService.createVotingData(Number(votingQuestion), 0, Number(votingGroupId), votingData);
             return transaction;
           })
-          .then((tx) => Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+          .then((tx) => Web3Service.createTxData(userStore.address, tx)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))

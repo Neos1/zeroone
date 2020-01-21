@@ -9,7 +9,8 @@ import WalletService from '../../services/WalletService';
 import ContractService from '../../services/ContractService';
 import { MembersStore } from '../MembersStore';
 import EventEmitterService from '../../services/EventEmitterService';
-import { fs, path, ROOT_DIR } from '../../constants/windowModules';
+// import { fs, path, ROOT_DIR } from '../../constants/windowModules';
+import ConfigStore from '../ConfigStore';
 
 class RootStore {
   // stores
@@ -33,9 +34,8 @@ class RootStore {
   eventEmitterService;
 
   constructor() {
-    const configRaw = fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8');
-    const config = JSON.parse(configRaw);
-    this.Web3Service = new Web3Service(config.host, this);
+    this.configStore = new ConfigStore();
+    this.Web3Service = new Web3Service(this.configStore.config.host, this);
     this.appStore = new AppStore(this);
     this.userStore = new UserStore(this);
     this.projectStore = new ProjectStore(this);

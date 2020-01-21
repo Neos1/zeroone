@@ -181,11 +181,12 @@ class MembersStore {
    * @param {object} group data for group
    */
   addToGroups = (group) => {
-    const { userStore } = this.rootStore;
+    const { userStore, configStore: { config } } = this.rootStore;
     const duplicateMembersGroup = this.groups.find((item) => item.name === group.name);
     if (!duplicateMembersGroup) {
       this.groups.push(new MembersGroup({
         ...group,
+        interval: config.interval,
         userAddress: userStore.address,
       }));
     }

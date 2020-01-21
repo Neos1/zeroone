@@ -29,6 +29,8 @@ class HistoryStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
+    const { configStore: { config } } = rootStore;
+
     this.getActualVotings();
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
@@ -38,12 +40,12 @@ class HistoryStore {
       this.getActualVotings();
       const isReturn = await this.isUserReturnTokens();
       this.isUserReturnTokensActual = isReturn;
-    }, this.intervalUpdate);
+    }, config.interval);
     this.isActiveVotingInterval = new AsyncInterval({
       cb: async () => {
         this.isActiveVoting = await this.hasActiveVoting();
       },
-      timeoutInterval: 30000,
+      timeoutInterval: config.interval,
     });
   }
 
