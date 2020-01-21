@@ -18,13 +18,14 @@ import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
 import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import Pagination from '../Pagination';
-import PaginationStore from '../../stores/PaginationStore';
-import FilterStore from '../../stores/FilterStore/FilterStore';
 import Loader from '../Loader';
 import Notification from '../Notification/Notification';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
+import ProjectStore from '../../stores/ProjectStore';
+import DialogStore from '../../stores/DialogStore';
+import UserStore from '../../stores/UserStore/UserStore';
 
 @withRouter
 @withTranslation()
@@ -82,37 +83,9 @@ class Questions extends Component {
 
   static propTypes = {
     t: propTypes.func.isRequired,
-    projectStore: propTypes.shape({
-      questionStore: propTypes.shape({
-        loading: propTypes.bool.isRequired,
-        questions: propTypes.arrayOf(propTypes.shape({})).isRequired,
-        questionGroups: propTypes.arrayOf(propTypes.shape({
-          value: propTypes.number.isRequired,
-          label: propTypes.string.isRequired,
-        })).isRequired,
-        fetchActualQuestionGroups: propTypes.func.isRequired,
-        pagination: propTypes.instanceOf(PaginationStore).isRequired,
-        addFilterRule: propTypes.func.isRequired,
-        resetFilter: propTypes.func.isRequired,
-        filter: propTypes.instanceOf(FilterStore).isRequired,
-        list: propTypes.arrayOf(
-          propTypes.shape(),
-        ).isRequired,
-        paginatedList: propTypes.arrayOf(
-          propTypes.shape(),
-        ).isRequired,
-      }),
-      rootStore: propTypes.shape().isRequired,
-      historyStore: propTypes.shape().isRequired,
-      votingData: propTypes.string.isRequired,
-      votingGroupId: propTypes.string.isRequired,
-      votingQuestion: propTypes.string.isRequired,
-    }).isRequired,
-    dialogStore: propTypes.shape({
-      show: propTypes.func.isRequired,
-      hide: propTypes.func.isRequired,
-    }).isRequired,
-    userStore: propTypes.shape().isRequired,
+    projectStore: propTypes.instanceOf(ProjectStore).isRequired,
+    dialogStore: propTypes.instanceOf(DialogStore).isRequired,
+    userStore: propTypes.instanceOf(UserStore).isRequired,
     history: propTypes.shape({
       push: propTypes.func.isRequired,
     }).isRequired,
@@ -323,7 +296,10 @@ class Questions extends Component {
           footer={null}
           closeable
         >
-          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+          <ErrorMessage
+            onButtonClick={() => { dialogStore.back(3); }}
+            buttonText={t('buttons:retry')}
+          />
         </Dialog>
         <Footer />
       </Container>

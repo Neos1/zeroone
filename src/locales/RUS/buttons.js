@@ -32,5 +32,6 @@ const buttons = {
   pickUpTokens: 'заберите токены',
   pickUpTokensCapital: 'Заберите токены',
   clear: 'Понятно',
+  retry: 'Попробовать снова',
 };
 export default buttons;

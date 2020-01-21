@@ -32,5 +32,6 @@ const buttons = {
   pickUpTokens: 'pick up tokens',
   pickUpTokensCapital: 'Pick up tokens',
   clear: 'Clear',
+  retry: 'Retry',
 };
 export default buttons;

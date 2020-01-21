@@ -129,7 +129,10 @@ class MembersPage extends React.Component {
           footer={null}
           closeable
         >
-          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+          <ErrorMessage
+            onButtonClick={() => { dialogStore.back(3); }}
+            buttonText={t('buttons:retry')}
+          />
         </Dialog>
         <Footer />
       </Container>
