@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-unused-vars */
 import i18n from 'i18next';
@@ -21,7 +22,7 @@ class NodeChangeForm extends ExtendedForm {
         type: 'text',
         label: 'nodeUrl',
         placeholder: i18n.t('fields:nodeUrl'),
-        rules: 'required|string|url',
+        rules: 'required|url',
         value: config.host,
       }],
     };

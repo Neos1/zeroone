@@ -32,6 +32,10 @@ const rules = {
       /\(\s*group\s*\(\s*[a-zA-Z0-9]{1,}\s*\)\s*=>\s*condition\s*\(\s*(quorum\s*(>=|<=)\s*[0-9]{1,} %\)\)|positive\s*(>=|<=)\s*[0-9]{1,}\s*% \s*of \s*(quorum|all)\s*\)\s*\))/,
     ),
   },
+  url: {
+    // eslint-disable-next-line no-useless-escape
+    function: (value) => value.match(/^(?:(http(s)?|ws):\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/),
+  },
 };
 
 const plugins = {
@@ -54,6 +58,7 @@ const plugins = {
         bytes4: 'Value is not bytes4 string',
         between: 'Between :min and :max signs',
         formula: 'Incorrect formula',
+        url: 'Not valid URL string',
       });
       validator.setMessages('ru', {
         required: 'Обязательное поле',
@@ -65,6 +70,7 @@ const plugins = {
         bytes4: 'Значение не байтовая строка',
         between: 'Между :min и :max знаками',
         formula: 'Некорректная формула',
+        url: 'Неккоректный URL',
       });
       validator.stopOnError(true);
     },
