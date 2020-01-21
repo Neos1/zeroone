@@ -19,9 +19,10 @@ import ErrorMessage from '../Message/ErrorMessage';
 import Notification from '../Notification/Notification';
 import ProjectStore from '../../stores/ProjectStore';
 import DialogStore from '../../stores/DialogStore';
+import VotingList from './VotingList';
+import Loader from '../Loader';
 
 import styles from './Voting.scss';
-import VotingList from './VotingList';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore', 'userStore')
@@ -193,7 +194,7 @@ class Voting extends React.Component {
           {
             !loading
               ? (<VotingList />)
-              : null
+              : <Loader />
           }
           {!loading
             ? (
