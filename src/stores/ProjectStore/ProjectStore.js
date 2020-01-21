@@ -29,7 +29,11 @@ class ProjectStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-    this.projectAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
+    try {
+      this.projectAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
+    } catch {
+      alert(`Error occuried when trying to read ${path.join(PATH_TO_CONTRACTS, './Voter.abi')}. Please check it.`);
+    }
   }
 
   @action init({ address, name }) {

@@ -212,10 +212,15 @@ class HistoryStore {
     const { contractService, userStore } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
-    const votings = readDataFromFile({
-      name: 'votings',
-      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-    });
+    let votings;
+    try {
+      votings = readDataFromFile({
+        name: 'votings',
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+      });
+    } catch {
+      votings = [];
+    }
     const votingsFromFileLength = votings.data && votings.data.length
       ? votings.data.length
       : 0;
@@ -236,11 +241,18 @@ class HistoryStore {
     const countOfVotings = await this.fetchVotingsCount();
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
-    const votings = readDataFromFile({
-      name: 'votings',
-      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-    });
-    const votingsFromFileLength = votings.data.length;
+    let votings;
+    try {
+      votings = readDataFromFile({
+        name: 'votings',
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+      });
+    } catch {
+      votings = [];
+    }
+    const votingsFromFileLength = votings.data && votings.data.length
+      ? votings.data.length
+      : 0;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
     if (countVotingFromContract > votingsFromFileLength) {
       for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {

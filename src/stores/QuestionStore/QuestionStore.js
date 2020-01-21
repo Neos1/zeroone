@@ -198,10 +198,15 @@ class QuestionStore {
     const { contractService, userStore } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
-    const questions = readDataFromFile({
-      name: 'questions',
-      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-    });
+    let questions;
+    try {
+      questions = readDataFromFile({
+        name: 'questions',
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+      });
+    } catch {
+      questions = [];
+    }
     const questionsFromFileLength = questions.data && questions.data.length
       ? questions.data.length
       : 0;

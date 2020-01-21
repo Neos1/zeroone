@@ -98,10 +98,15 @@ class MembersStore {
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
     // Groups FROM FILE
-    let groups = readDataFromFile({
-      name: 'groups',
-      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-    });
+    let groups;
+    try {
+      groups = readDataFromFile({
+        name: 'groups',
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+      });
+    } catch {
+      groups = [];
+    }
     // Groups FROM CONTRACT
     if (
       !groups

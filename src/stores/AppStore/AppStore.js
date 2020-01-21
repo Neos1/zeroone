@@ -45,12 +45,17 @@ class AppStore {
 
     const files = fs.readdirSync(PATH_TO_WALLETS);
     files.forEach((file) => {
-      const wallet = JSON.parse(fs.readFileSync(path.join(PATH_TO_WALLETS, file), 'utf8'));
-      const walletObject = {};
-      eth.getBalance(wallet.address)
-        .then((balance) => { this.balances[wallet.address] = utils.fromWei(balance); });
-      walletObject[wallet.address] = wallet;
-      this.walletList = Object.assign(this.walletList, walletObject);
+      let wallet;
+      try {
+        wallet = JSON.parse(fs.readFileSync(path.join(PATH_TO_WALLETS, file), 'utf8'));
+        const walletObject = {};
+        eth.getBalance(wallet.address)
+          .then((balance) => { this.balances[wallet.address] = utils.fromWei(balance); });
+        walletObject[wallet.address] = wallet;
+        this.walletList = Object.assign(this.walletList, walletObject);
+      } catch {
+        alert(`Error occuried on reaing file ${path.join(PATH_TO_WALLETS, file)}. Please check it.`);
+      }
     });
   }
 

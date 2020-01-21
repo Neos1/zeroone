@@ -22,9 +22,22 @@ class ContractService {
   constructor(rootStore) {
     this._contract = {};
     this.rootStore = rootStore;
-    this.sysQuestions = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './sysQuestions.json'), 'utf8'));
-    this.ercAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ERC20.abi')));
+    const pathToQuestions = path.join(PATH_TO_CONTRACTS, './sysQuestions.json');
+    const pathToErcAbi = path.join(PATH_TO_CONTRACTS, './ERC20.abi');
+
+    try {
+      this.sysQuestions = JSON.parse(fs.readFileSync(pathToQuestions), 'utf8');
+    } catch (e) {
+      alert(`Error while reading file ${pathToQuestions}, please check this.`);
+    }
+
+    try {
+      this.ercAbi = JSON.parse(fs.readFileSync(pathToErcAbi));
+    } catch (e) {
+      alert(`Error while reading file ${pathToErcAbi}, please check this.`);
+    }
   }
+
 
   /**
    * sets instance of contract to this._contract
