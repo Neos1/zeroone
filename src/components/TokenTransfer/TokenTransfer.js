@@ -7,7 +7,10 @@ import TransferTokenForm from '../../stores/FormsStore/TransferTokenForm';
 import Dialog from '../Dialog/Dialog';
 import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
-import MembersGroup from '../../stores/MembersStore/MembersGroup';
+import ProjectStore from '../../stores/ProjectStore/ProjectStore';
+import UserStore from '../../stores/UserStore';
+import MembersStore from '../../stores/MembersStore/MembersStore';
+import DialogStore from '../../stores/DialogStore';
 import Input from '../Input';
 import { Password, Address, TokenCount } from '../Icons';
 import Button from '../Button/Button';
@@ -24,33 +27,6 @@ import styles from './TokenTransfer.scss';
 @observer
 class TokenTransfer extends React.Component {
   votingIsActive = false;
-
-  form = new TransferTokenForm({
-    hooks: {
-      onSuccess: (form) => {
-        const {
-          groupId, wallet, membersStore, userStore,
-        } = this.props;
-        const { address: rawAddress, count, password } = form.values();
-        const address = rawAddress.trim();
-        userStore.setPassword(password);
-        membersStore.setTransferStatus('transfering');
-        return membersStore.transferTokens(groupId, wallet, address, count)
-          .then(() => {
-            membersStore.setTransferStatus('success');
-            membersStore.list[groupId].updateMemberBalanceAndWeight(wallet);
-            membersStore.list[groupId].updateMemberBalanceAndWeight(address);
-          })
-          .catch(() => {
-            membersStore.setTransferStatus('error');
-          });
-      },
-      onError: () => {
-        /* eslint-disable-next-line */
-        console.error('form error');
-      },
-    },
-  })
 
   passwordForm = new FinPassForm({
     hooks: {
@@ -108,35 +84,19 @@ class TokenTransfer extends React.Component {
     t: PropTypes.func.isRequired,
     wallet: PropTypes.string,
     groupAddress: PropTypes.string.isRequired,
-    dialogStore: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-    }).isRequired,
+    dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
     groupId: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
     groupType: PropTypes.string.isRequired,
-    membersStore: PropTypes.shape({
-      transferTokens: PropTypes.func.isRequired,
-      setTransferStatus: PropTypes.func.isRequired,
-      list: PropTypes.arrayOf(
-        PropTypes.instanceOf(MembersGroup),
-      ).isRequired,
-      rootStore: PropTypes.shape().isRequired,
-    }).isRequired,
-    userStore: PropTypes.shape({
-      setPassword: PropTypes.func.isRequired,
-      singTransaction: PropTypes.func.isRequired,
-      readWallet: PropTypes.func.isRequired,
-      address: PropTypes.string.isRequired,
-      getEthBalance: PropTypes.func.isRequired,
-    }).isRequired,
-    projectStore: PropTypes.shape({
-      historyStore: PropTypes.shape().isRequired,
-    }).isRequired,
+    membersStore: PropTypes.instanceOf(MembersStore).isRequired,
+    userStore: PropTypes.instanceOf(UserStore).isRequired,
+    projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
+    form: PropTypes.instanceOf(TransferTokenForm).isRequired,
   }
 
   static defaultProps = {
@@ -160,11 +120,15 @@ class TokenTransfer extends React.Component {
   }
 
   render() {
-    const { form, props } = this;
+    const { props } = this;
     const {
-      t, wallet, groupId, groupType, projectStore: { historyStore },
+      t,
+      wallet,
+      groupId,
+      groupType,
+      projectStore: { historyStore },
+      form,
     } = props;
-
     return (
       <div className={styles['token-transfer']}>
         <h2 className={styles['token-transfer__title']}>
