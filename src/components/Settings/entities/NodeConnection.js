@@ -23,7 +23,7 @@ class NodeConnection extends Component {
         this.setState({ success: true });
         return appStore.nodeChange(url);
       },
-      onError: () => this.showValidationError(),
+      onError: () => {},
     },
   });
 
