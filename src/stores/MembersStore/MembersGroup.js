@@ -52,7 +52,7 @@ class MembersGroup {
     this.updateInterval = 60000;
     this.interval = new AsyncInterval({
       timeoutInterval: this.updateInterval,
-      cb: this.updateUserBalance,
+      cb: this.updateUserBalanceAndGroupAdmin,
     });
   }
 
@@ -150,6 +150,12 @@ class MembersGroup {
       user.setTokenBalance(userBalance);
       user.setWeight(weight);
     }
+  }
+
+  @action
+  updateUserBalanceAndGroupAdmin = () => {
+    this.updateUserBalance();
+    this.setNewAdmin();
   }
 
   @action
