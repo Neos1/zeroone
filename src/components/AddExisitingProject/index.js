@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import Button from '../Button/Button';
@@ -34,6 +34,7 @@ class AddExistingProject extends Component {
     default: 0,
     loading: 1,
     success: 2,
+    redirect: 3,
   }
 
   // eslint-disable-next-line react/static-property-placement
@@ -42,6 +43,9 @@ class AddExistingProject extends Component {
       checkProject: propTypes.func.isRequired,
       addProjectToList: propTypes.func.isRequired,
       displayAlert: propTypes.func.isRequired,
+      checkIsQuestionsUploaded: propTypes.func.isRequired,
+      gotoProject: propTypes.func.isRequired,
+      setProjectAddress: propTypes.func.isRequired,
     }).isRequired,
     t: propTypes.func.isRequired,
   };
@@ -89,6 +93,26 @@ class AddExistingProject extends Component {
     appStore.displayAlert(t('errors:validationError'), 3000);
   }
 
+  startUploading = (address) => {
+    const { appStore } = this.props;
+    appStore.setProjectAddress(address);
+    this.setState({ currentStep: this.steps.redirect });
+  }
+
+  checkProject = async ({
+    address,
+    name,
+  }) => {
+    const { appStore } = this.props;
+    console.log('Checking');
+    const isQuestionsUploaded = await appStore.checkIsQuestionsUploaded(address);
+    console.log(isQuestionsUploaded);
+    // eslint-disable-next-line no-unused-expressions
+    isQuestionsUploaded
+      ? appStore.gotoProject({ address, name })
+      : this.startUploading(address);
+  }
+
   renderSwitch(step) {
     const { steps } = this;
     const { projectAddress, projectName } = this.state;
@@ -106,7 +130,15 @@ class AddExistingProject extends Component {
           </LoadingBlock>
         );
       case steps.success:
-        return <MessageBlock address={projectAddress} name={projectName} />;
+        return (
+          <MessageBlock
+            address={projectAddress}
+            name={projectName}
+            onClick={this.checkProject}
+          />
+        );
+      case steps.redirect:
+        return <Redirect to="/uploadQuestions" />;
       default:
         return '';
     }
@@ -163,26 +195,24 @@ const InputBlock = withTranslation()(({ t, form }) => (
   </FormBlock>
 ));
 
-const MessageBlock = withTranslation()(inject('appStore')(observer(({
-  t, appStore, address, name,
+const MessageBlock = withTranslation()(observer(({
+  t, onClick, address, name,
 }) => (
   <FormBlock>
     <Heading>
       {t('headings:projectConnected.heading')}
       {t('headings:projectConnected.subheading')}
     </Heading>
-    <NavLink to="/questions">
-      <Button theme="black" size="240" icon={<Login />} onClick={() => { appStore.gotoProject({ address, name }); }}>
-        {t('buttons:toConnectedProject')}
-      </Button>
-    </NavLink>
+    <Button theme="black" size="240" icon={<Login />} onClick={() => { onClick({ address, name }); }}>
+      {t('buttons:toConnectedProject')}
+    </Button>
     <NavLink to="/projects">
       <Button theme="link">
         {t('buttons:otherProject')}
       </Button>
     </NavLink>
   </FormBlock>
-))));
+)));
 
 InputBlock.propTypes = {
   form: propTypes.shape({
