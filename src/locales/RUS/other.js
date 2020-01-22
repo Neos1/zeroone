@@ -83,5 +83,8 @@ const other = {
   returnTokensFirst: 'Сначала верните токены',
   selectorNonexistentFunctionDescription: 'Если укажете селектор несуществующей функции, то результаты голосования не будут применены',
   erc20ListIsNotViewable: 'ERC20 токены устроены так, что список\n проголосовавших недоступен для просмотра',
+  votingListIsEmpty: 'Не создано ни одного голосования <1/> В дальнейшем они будут отображены здесь',
+  noVotingFilterMatches: 'Выбранному фильтру не <1/> соответствует ни одно голосование',
+  noQuestionsInThisGroup: 'В этой группе пока не <1/> создано ни одного вопроса',
 };
 export default other;

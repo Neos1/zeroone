@@ -1,6 +1,7 @@
-@import '../../assets/styles/partials/variables'; 
+@import '../../assets/styles/partials/variables';
 .questions {
   margin: 0 auto;
+
   &__head {
     display: flex;
     flex-flow: row nowrap;
@@ -14,7 +15,7 @@
       width: 45%;
       .btn {
         svg {
-          path { 
+          path {
             fill: $white;
           }
         }
@@ -35,11 +36,37 @@
       }
     }
   }
+
   &__wrapper {
     display: grid;
     grid-template-columns:1fr;
     row-gap: 10px;
     justify-items: center;
     margin-bottom: 30px;
+  }
+
+  &__list-empty {
+    position: relative;
+    height: 40vh;
+    min-height: 200px;
+
+    &::after {
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+      content: '';
+    }
+
+    p {
+      display: inline-block;
+      margin: 0;
+      padding: 30px 0;
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 21px;
+      text-align: center;
+      vertical-align: middle;
+    }
   }
 }
