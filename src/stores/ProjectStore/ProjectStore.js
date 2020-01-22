@@ -27,6 +27,10 @@ class ProjectStore {
 
   @observable historyStore;
 
+  @observable isInitiated = false;
+
+  timer = null;
+
   constructor(rootStore) {
     this.rootStore = rootStore;
     try {
@@ -45,7 +49,18 @@ class ProjectStore {
     this.questionStore = new QuestionStore(this.rootStore);
     this.historyStore = new HistoryStore(this.rootStore);
     membersStore.init();
-    // this.userGrops = this.fetchUserGroups(projectAddress);
+    this.timer = setInterval(() => {
+      this.getInitStatus();
+    }, 1000);
+  }
+
+  @action getInitStatus() {
+    const { rootStore } = this;
+    if (this.questionStore && this.historyStore && rootStore.membersStore) {
+      const { membersStore } = rootStore;
+      const { questionStore, historyStore } = this;
+      this.isInitiated = !(questionStore.loading && historyStore.loading && membersStore.loading);
+    }
   }
 
   /**

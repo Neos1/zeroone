@@ -97,6 +97,7 @@ class User extends React.Component {
       children,
       t,
       userStore,
+      projectStore,
       membersStore: {
         groups,
       },
@@ -157,6 +158,7 @@ class User extends React.Component {
             <Button
               theme="toggle-user"
               onClick={this.handleToggleUser}
+              disabled={!projectStore.isInitiated}
             >
               {t('other:toggleUser')}
             </Button>
