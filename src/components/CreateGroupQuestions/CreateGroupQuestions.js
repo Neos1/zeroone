@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Hint from '../Hint';
 import CreateGroupQuestionsForm from '../../stores/FormsStore/CreateGroupQuestionsForm';
-
-import styles from './CreateGroupQuestions.scss';
 import Input from '../Input';
 import { TokenName } from '../Icons';
-import InputTextarea from '../Input/InputTextarea';
 import Button from '../Button/Button';
+// import InputTextarea from '../Input/InputTextarea';
+
+import styles from './CreateGroupQuestions.scss';
 
 @withTranslation()
 @inject('dialogStore', 'projectStore')
@@ -29,7 +29,6 @@ class CreateGroupQuestions extends React.PureComponent {
           dialogStore,
         } = this.props;
         const questionId = 3;
-        console.log(form.values());
         const { name } = form.values();
         const [question] = questionStore.getQuestionById(questionId);
         const { params: parameters, groupId, methodSelector } = question;
@@ -80,9 +79,9 @@ class CreateGroupQuestions extends React.PureComponent {
           <Input field={form.$('name')}>
             <TokenName />
           </Input>
-          <InputTextarea
+          {/* <InputTextarea
             field={form.$('description')}
-          />
+          /> */}
           <Button
             type="submit"
             disabled={historyStore.isVotingActive}
