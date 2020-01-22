@@ -30,6 +30,9 @@ const placeholders = {
   functionSelector: 'Function selector',
   nodeUrl: 'Node URL',
   chooseTheQuestion: 'Choose the question',
+  minGasPrice: 'Min. gas price, Gwei',
+  maxGasPrice: 'Max. gas price, Gwei',
+  interval: 'Data update interval, sec',
 };
 
 export default placeholders;

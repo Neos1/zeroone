@@ -33,5 +33,7 @@ const buttons = {
   pickUpTokensCapital: 'Pick up tokens',
   clear: 'Clear',
   retry: 'Retry',
+  saveAndReload: 'Save and reload app',
+  saveWithoutReload: 'Save without reload',
 };
 export default buttons;

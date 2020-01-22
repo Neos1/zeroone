@@ -3,7 +3,7 @@ import Container from '../Container';
 import Footer from '../Footer';
 import Contractuploading from './entities/ContractUploading';
 import NodeConnection from './entities/NodeConnection';
-import LangChanger from './entities/LangChanger';
+import SettingsBlock from './entities/SettingsBlock';
 
 import styles from './Settings.scss';
 
@@ -12,7 +12,7 @@ const Settings = () => (
     <div className={styles.settings}>
       <NodeConnection />
       <Contractuploading />
-      <LangChanger />
+      <SettingsBlock />
     </div>
     <Footer />
   </Container>

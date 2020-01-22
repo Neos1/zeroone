@@ -20,6 +20,7 @@ const {
   membersStore,
   projectStore,
   notificationStore,
+  configStore,
 } = rootStore;
 
 render(
@@ -30,6 +31,7 @@ render(
     membersStore={membersStore}
     projectStore={projectStore}
     notificationStore={notificationStore}
+    configStore={configStore}
   >
     <SimpleRouter />
     <Alert />

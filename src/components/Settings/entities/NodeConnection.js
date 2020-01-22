@@ -36,7 +36,7 @@ class NodeConnection extends Component {
             }
           });
       },
-      onError: () => this.showValidationError(),
+      onError: () => {},
     },
   });
 
@@ -52,6 +52,7 @@ class NodeConnection extends Component {
     };
   }
 
+
   render() {
     const { nodeChange, state, props } = this;
     const { t } = props;
@@ -60,7 +61,11 @@ class NodeConnection extends Component {
       <div className={styles.settings__block}>
         <h2 className={styles['settings__block-heading']}>{t('headings:nodeConnection')}</h2>
         <div className={styles['settings__block-content']}>
-          <form form={this.nodeChange} onSubmit={this.nodeChange.onSubmit}>
+          <form
+            className={styles['settings__block-form']}
+            form={this.nodeChange}
+            onSubmit={this.nodeChange.onSubmit}
+          >
             <Input field={nodeChange.$('url')}>
               <Address />
             </Input>
