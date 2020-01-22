@@ -36,7 +36,7 @@ class NodeConnection extends Component {
             }
           });
       },
-      onError: () => this.showValidationError(),
+      onError: () => {},
     },
   });
 

@@ -8,10 +8,12 @@ import { inject, observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
 import DialogStore from '../../stores/DialogStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
+import UserStore from '../../stores/UserStore';
 import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
 import TokenTransfer from '../TokenTransfer/TokenTransfer';
+import TransferTokenForm from '../../stores/FormsStore/TransferTokenForm';
 import {
   TokenInProgressMessage,
   TransferSuccessMessage,
@@ -27,7 +29,7 @@ import styles from './Members.scss';
  * @param item
  */
 @withTranslation()
-@inject('dialogStore', 'membersStore')
+@inject('dialogStore', 'membersStore', 'userStore')
 @observer
 class MembersGroupComponent extends React.Component {
   transferSteps = {
@@ -36,6 +38,37 @@ class MembersGroupComponent extends React.Component {
     success: 2,
     error: 3,
   }
+
+  transferForm = new TransferTokenForm({
+    hooks: {
+      onSuccess: (form) => {
+        const {
+          id,
+          wallet,
+          membersStore,
+          userStore,
+        } = this.props;
+        const groupId = id;
+        const { address: rawAddress, count, password } = form.values();
+        const address = rawAddress.trim();
+        userStore.setPassword(password);
+        membersStore.setTransferStatus('transfering');
+        return membersStore.transferTokens(groupId, wallet, address, count)
+          .then(() => {
+            membersStore.setTransferStatus('success');
+            membersStore.list[groupId].updateMemberBalanceAndWeight(wallet);
+            membersStore.list[groupId].updateMemberBalanceAndWeight(address);
+          })
+          .catch(() => {
+            membersStore.setTransferStatus('error');
+          });
+      },
+      onError: () => {
+        /* eslint-disable-next-line */
+        console.error('form error');
+      },
+    },
+  })
 
   static propTypes = {
     /** id group */
@@ -60,8 +93,8 @@ class MembersGroupComponent extends React.Component {
     t: PropTypes.func.isRequired,
     dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
     membersStore: PropTypes.instanceOf(MembersStore).isRequired,
+    userStore: PropTypes.instanceOf(UserStore).isRequired,
   }
-
 
   constructor() {
     super();
@@ -117,6 +150,7 @@ class MembersGroupComponent extends React.Component {
       case (transferSteps.input):
         return (
           <TokenTransfer
+            form={this.transferForm}
             wallet={selectedWallet}
             groupType={groupType}
             groupAddress={wallet}
