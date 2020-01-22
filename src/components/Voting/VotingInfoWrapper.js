@@ -64,12 +64,12 @@ class VotingInfoWrapper extends React.PureComponent {
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal_voting_info_wrapper');
         return contractService.sendVote(votingId, descision)
-          .then(() => {
-            historyStore.fetchAndUpdateLastVoting();
+          .then(async () => {
+            await historyStore.fetchAndUpdateLastVoting();
             const [voting] = historyStore.getVotingById(Number(votingId));
             this.getVotingStats();
             this.getVotes();
-            if (voting.status === statusStates.closed) {
+            if (String(voting.status) === statusStates.closed) {
               dialogStore.toggle('success_modal_voting_info_wrapper');
               this.updateAfterCompleteVoting(voting);
               return;
@@ -215,8 +215,6 @@ class VotingInfoWrapper extends React.PureComponent {
       connectGroupQuestions,
       assignGroupAdmin,
     } = systemQuestionsId;
-    console.log('updateAfterCompleteVoting');
-    console.log('voting.questionId', voting.questionId);
     switch (Number(voting.questionId)) {
       case addingNewQuestion:
         questionStore.getActualQuestions();
@@ -225,11 +223,9 @@ class VotingInfoWrapper extends React.PureComponent {
         membersStore.fetchUserGroups();
         break;
       case connectGroupQuestions:
-        console.log('getting groups');
         questionStore.fetchActualQuestionGroups();
         break;
       case assignGroupAdmin:
-        console.log('Designating Admin');
         membersStore.getAddressesForAdminDesignate(voting.data)
           .then(([group]) => {
             membersStore.updateAdmin(group);
@@ -359,7 +355,6 @@ class VotingInfoWrapper extends React.PureComponent {
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(voting.questionId);
     const params = this.prepareParameters(voting, question);
-    console.log('isERC20Type', this.isERC20Type);
     return (
       <Container className="container--small">
         <VotingInfo
