@@ -9,13 +9,11 @@ import { statusStates, GAS_LIMIT } from '../../constants';
 import AsyncInterval from '../../utils/AsyncUtils';
 
 class HistoryStore {
-  votingIntervalId = null;
-
   /**
    * Interval for update missing &
-   * active voting (in ms)
+   * active voting (in ms) & other data
    */
-  intervalUpdate = 60000;
+  intervalUpdate = 30000;
 
   @observable pagination = null;
 
@@ -34,16 +32,13 @@ class HistoryStore {
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
-    this.votingIntervalId = setInterval(async () => {
-      this.getActualVotings();
-      const isReturn = await this.isUserReturnTokens();
-      this.isUserReturnTokensActual = isReturn;
-    }, this.intervalUpdate);
-    this.isActiveVotingInterval = new AsyncInterval({
+    this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
+        this.getActualVotings();
         this.isActiveVoting = await this.hasActiveVoting();
+        await this.fetchUserReturnTokens();
       },
-      timeoutInterval: 30000,
+      timeoutInterval: this.intervalUpdate,
     });
   }
 
@@ -80,6 +75,18 @@ class HistoryStore {
     return this._votings.map((voting) => ({
       ...voting.raw,
     }));
+  }
+
+  /**
+   * Method for check that user return token
+   *
+   * @returns {boolean} user return tokens or not
+   */
+  @action
+  fetchUserReturnTokens = async () => {
+    const isReturn = await this.isUserReturnTokens();
+    this.isUserReturnTokensActual = isReturn;
+    return isReturn;
   }
 
   /**
@@ -192,8 +199,7 @@ class HistoryStore {
 
   @action
   reset = () => {
-    this.isActiveVotingInterval.cancel();
-    clearInterval(this.votingIntervalId);
+    this.updateHistoryInterval.cancel();
     this.pagination = null;
     this._votings = [];
     this.loading = true;
@@ -335,8 +341,9 @@ class HistoryStore {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(questionId);
     const { groupId } = question;
-    console.log(`voting ${voting}, group=${groupId}`);
-    const { list, balance } = membersStore.list[Number(groupId) - 1];
+    const memberGroup = membersStore.list[Number(groupId) - 1];
+    if (!memberGroup || !memberGroup.list) return [];
+    const { list, balance } = memberGroup;
     const result = {
       positive: [],
       negative: [],
