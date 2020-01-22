@@ -55,7 +55,6 @@ class Questions extends Component {
         } = props;
         dialogStore.show('progress_modal_questions');
         const { password } = form.values();
-        const maxGasPrice = 30000000000;
         userStore.setPassword(password);
         return userStore.readWallet(password)
           .then(() => {
@@ -63,7 +62,7 @@ class Questions extends Component {
             const transaction = contractService.createVotingData(Number(votingQuestion), 0, Number(votingGroupId), votingData);
             return transaction;
           })
-          .then((tx) => Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+          .then((tx) => Web3Service.createTxData(userStore.address, tx)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))

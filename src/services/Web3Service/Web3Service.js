@@ -21,32 +21,35 @@ class Web3Service {
     return new Contract(abi);
   }
 
-  createTxData(address, tx, maxGasPrice) {
-    const { web3: { eth, utils } } = this;
+  createTxData(address, tx) {
+    const { web3: { eth }, rootStore } = this;
+    const { configStore: { MIN_GAS_PRICE, MAX_GAS_PRICE, GAS_LIMIT: gasLimit } } = rootStore;
     let transaction = { ...tx };
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
-        transaction = { ...tx, nonce };
+        transaction = { ...tx, nonce, gasLimit };
         console.log(transaction, eth.estimateGas(transaction));
         return eth.estimateGas(transaction);
       })
       .then((gas) => {
-        if (!maxGasPrice) return (Promise.resolve(gas));
+        transaction = { ...transaction, gas };
+        console.log(transaction);
         return this.getGasPrice()
           .then((gasPrice) => {
-            const minGasPrice = utils.numberToHex(20000000000);
+            console.log(gasPrice, MIN_GAS_PRICE, MAX_GAS_PRICE);
             const gp = new BN(gasPrice);
-            const minGp = new BN(minGasPrice);
-            const maxGp = new BN(maxGasPrice);
+            const minGp = new BN(MIN_GAS_PRICE);
+            const maxGp = new BN(MAX_GAS_PRICE);
             transaction.gasPrice = (gp.gte(minGp) && gp.lte(maxGp))
               ? gasPrice
-              : minGasPrice;
+              : MIN_GAS_PRICE;
+            console.log(transaction);
             return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);
       })
       // eslint-disable-next-line no-unused-vars
-      .then((gasPrice) => (transaction))
+      .then((gasPrice) => ({ ...transaction, gasPrice }))
       .catch((err) => Promise.reject(err));
   }
 

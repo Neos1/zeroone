@@ -1,6 +1,10 @@
 {
 	"host": "https://ropsten.infura.io/v3/14b2319f08e24f3aadfe1aa933301b38",
 	"hostBackup": "http://hive3.thexproject.ru:21595",
+	"minGasPrice": 20,
+	"maxGasPrice": 30,
+	"interval": 60,
+	"gasLimit": 7900000,
 	"projects": [
 		{
 			"name": "21312312",

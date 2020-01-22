@@ -76,14 +76,13 @@ class TokenTransfer extends React.Component {
         dialogStore.show('progress_modal');
         const votingData = _contract.methods
           .setCustomGroupAdmin(groupAddress, wallet).encodeABI();
-        const maxGasPrice = 30000000000;
         return userStore.readWallet(password)
           .then(() => {
           // eslint-disable-next-line max-len
             const transaction = contractService.createVotingData(4, 0, Number(groupId), votingData);
             return transaction;
           })
-          .then((tx) => Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+          .then((tx) => Web3Service.createTxData(userStore.address, tx)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))

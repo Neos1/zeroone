@@ -45,10 +45,11 @@ class MembersPage extends React.Component {
 
   async componentDidMount() {
     const { membersStore } = this.props;
+    const { rootStore: { configStore: { UPDATE_INTERVAL } } } = membersStore;
     this._loading = true;
     this._loading = false;
     this.asyncUpdater = new AsyncInterval({
-      timeoutInterval: this.timeoutInterval,
+      timeoutInterval: UPDATE_INTERVAL,
       cb: membersStore.fetchUserGroups,
     });
   }

@@ -27,6 +27,7 @@ class MembersGroup {
     textForEmptyState,
     userAddress,
     groupId,
+    interval,
   }) {
     if (
       !name
@@ -51,7 +52,7 @@ class MembersGroup {
     this.getUserBalanceInGroup();
     this.updateInterval = 60000;
     this.interval = new AsyncInterval({
-      timeoutInterval: this.updateInterval,
+      timeoutInterval: interval,
       cb: this.updateUserBalanceAndGroupAdmin,
     });
   }

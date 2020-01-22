@@ -25,10 +25,12 @@ class Notification extends React.Component {
   };
 
   componentDidMount() {
+    const { projectStore: { rootStore } } = this.props;
+    const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.updateReturnTokensNotification();
     this.idTimer = setInterval(() => {
       this.updateReturnTokensNotification();
-    }, this.timeoutInterval);
+    }, UPDATE_INTERVAL);
   }
 
   componentWillUnmount() {

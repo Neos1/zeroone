@@ -134,7 +134,7 @@ param {string} value password from form
    * @returns {Promise} resolve on success authorization
    */
   @action login(password) {
-    const { appStore } = this.rootStore;
+    const { appStore, configStore: { UPDATE_INTERVAL } } = this.rootStore;
     return this.readWallet(password)
       .then((data) => {
         this.privateKey = data.privateKey;
@@ -142,7 +142,7 @@ param {string} value password from form
         this.authorized = true;
         this.setPassword(password);
         this.updateBalanceInterval = new AsyncInterval({
-          timeoutInterval: this.timeoutInterval,
+          timeoutInterval: UPDATE_INTERVAL,
           cb: this.getEthBalance,
         });
         Promise.resolve();
