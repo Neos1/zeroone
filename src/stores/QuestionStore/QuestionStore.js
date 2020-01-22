@@ -32,7 +32,7 @@ class QuestionStore {
     this._questions = [];
     this._questionGroups = [];
     this.rootStore = rootStore;
-    const { configStore: { config } } = rootStore;
+    const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.fetchActualQuestionGroups();
     this.getActualQuestions();
     this.filter = new FilterStore();
@@ -42,7 +42,7 @@ class QuestionStore {
     this.interval = setInterval(() => {
       this.getActualQuestions();
       this.fetchActualQuestionGroups();
-    }, config.interval);
+    }, UPDATE_INTERVAL);
   }
 
   /**

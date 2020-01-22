@@ -8,7 +8,6 @@ import {
   PATH_TO_DATA,
 } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
-import { GAS_LIMIT } from '../../constants';
 
 /**
  * Store for manage Members groups
@@ -181,12 +180,12 @@ class MembersStore {
    * @param {object} group data for group
    */
   addToGroups = (group) => {
-    const { userStore, configStore: { config } } = this.rootStore;
+    const { userStore, configStore: { UPDATE_INTERVAL } } = this.rootStore;
     const duplicateMembersGroup = this.groups.find((item) => item.name === group.name);
     if (!duplicateMembersGroup) {
       this.groups.push(new MembersGroup({
         ...group,
-        interval: config.interval,
+        interval: UPDATE_INTERVAL,
         userAddress: userStore.address,
       }));
     }
@@ -218,7 +217,6 @@ class MembersStore {
       data,
       from: userStore.address,
       to: contract.options.address,
-      gasLimit: GAS_LIMIT,
       gasPrice: maxGasPrice,
       value: '0x0',
     };

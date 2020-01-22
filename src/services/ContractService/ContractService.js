@@ -7,7 +7,6 @@ import {
   SOL_IMPORT_REGEXP,
   SOL_PATH_REGEXP,
   SOL_VERSION_REGEXP,
-  GAS_LIMIT,
 } from '../../constants';
 import {
   fs, PATH_TO_CONTRACTS, path,
@@ -117,7 +116,6 @@ class ContractService {
   }) {
     const { rootStore: { Web3Service, userStore } } = this;
     const { address } = userStore;
-    const maxGasPrice = 30000000000;
     const contract = Web3Service.createContractInstance(abi);
     const txData = contract.deploy({
       data: `0x${bytecode}`,
@@ -126,14 +124,12 @@ class ContractService {
 
     const tx = {
       data: txData,
-      gasLimit: GAS_LIMIT,
-      gasPrice: maxGasPrice,
       from: userStore.address,
       value: '0x0',
     };
 
     return new Promise((resolve, reject) => {
-      Web3Service.createTxData(address, tx, maxGasPrice)
+      Web3Service.createTxData(address, tx)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => {
@@ -196,7 +192,6 @@ class ContractService {
     const data = {
       // eslint-disable-next-line max-len
       data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
-      gasLimit: GAS_LIMIT,
       from: userStore.address,
       value: '0x0',
       to: _contract.options.address,
@@ -236,15 +231,13 @@ class ContractService {
         const params = question.getUploadingParams(contractAddr);
 
         const dataTx = _contract.methods.saveNewQuestion(...params).encodeABI();
-        const maxGasPrice = 30000000000;
         const rawTx = {
           to: contractAddr,
           data: dataTx,
-          gasLimit: GAS_LIMIT,
           value: '0x0',
         };
         return new Promise((resolve) => {
-          Web3Service.createTxData(address, rawTx, maxGasPrice)
+          Web3Service.createTxData(address, rawTx)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
             .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
             .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
@@ -333,8 +326,6 @@ class ContractService {
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(Number(groupId) - 1, userStore.address);
-
-    const maxGasPrice = 30000000000;
     const data = _contract.methods.sendVote(descision).encodeABI();
 
     // eslint-disable-next-line consistent-return
@@ -345,11 +336,10 @@ class ContractService {
             const tx = {
               from: userStore.address,
               to: _contract.options.address,
-              gasLimit: 8000000,
               value: '0x0',
               data,
             };
-            return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+            return Web3Service.createTxData(userStore.address, tx)
               .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
               .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
               .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
@@ -370,11 +360,10 @@ class ContractService {
         const tx = {
           from: userStore.address,
           to: _contract.options.address,
-          gasLimit: GAS_LIMIT,
           value: '0x0',
           data,
         };
-        return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+        return Web3Service.createTxData(userStore.address, tx)
           .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
           .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
           .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
@@ -408,13 +397,11 @@ class ContractService {
       data: _contract.methods.closeVoting().encodeABI(),
       value: '0x0',
       to: _contract.options.address,
-      gasLimit: GAS_LIMIT,
     };
-    const maxGasPrice = 30000000000;
 
     console.log('sending TX');
 
-    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+    return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
@@ -436,16 +423,14 @@ class ContractService {
     const parameters = question.getParameters();
     const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
     const votingData = (data).replace('0x', question.methodSelector);
-    const maxGasPrice = 30000000000;
     const tx = {
       data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
       from: userStore.address,
       to: _contract.options.address,
-      gasLimit: GAS_LIMIT,
       value: '0x0',
     };
     console.log('appoving');
-    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+    return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
@@ -511,15 +496,13 @@ class ContractService {
     ercContract.options.address = group.wallet;
     // eslint-disable-next-line max-len
     const txData = ercContract.methods.approve(_contract.options.address, userStore.address).encodeABI();
-    const maxGasPrice = 30000000000;
     const tx = {
       data: txData,
       from: userStore.address,
       value: '0x0',
-      gasLimit: GAS_LIMIT,
       to: group.wallet,
     };
-    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+    return Web3Service.createTxData(userStore.address, tx)
       .then((createdTx) => userStore.singTransaction(createdTx, userStore.password))
       .then((formedTx) => Web3Service.sendSignedTransaction(`0x${formedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))

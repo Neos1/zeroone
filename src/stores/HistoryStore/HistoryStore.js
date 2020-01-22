@@ -5,7 +5,7 @@ import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
-import { statusStates, GAS_LIMIT } from '../../constants';
+import { statusStates } from '../../constants';
 import AsyncInterval from '../../utils/AsyncUtils';
 
 class HistoryStore {
@@ -29,7 +29,7 @@ class HistoryStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-    const { configStore: { config } } = rootStore;
+    const { configStore: { UPDATE_INTERVAL } } = rootStore;
 
     this.getActualVotings();
     this.filter = new FilterStore();
@@ -40,12 +40,12 @@ class HistoryStore {
       this.getActualVotings();
       const isReturn = await this.isUserReturnTokens();
       this.isUserReturnTokensActual = isReturn;
-    }, config.interval);
+    }, UPDATE_INTERVAL);
     this.isActiveVotingInterval = new AsyncInterval({
       cb: async () => {
         this.isActiveVoting = await this.hasActiveVoting();
       },
-      timeoutInterval: config.interval,
+      timeoutInterval: UPDATE_INTERVAL,
     });
   }
 
@@ -418,7 +418,6 @@ class HistoryStore {
     const { address, password } = userStore;
     const tx = {
       data: contractService._contract.methods.returnTokens().encodeABI(),
-      gasLimit: GAS_LIMIT,
       value: '0x0',
       from: address,
       to: _contract.options.address,
