@@ -23,6 +23,7 @@ class DecisionReject extends React.Component {
           title={t('dialogs:definetelyReject')}
           icon={(<RejectIcon />)}
           form={form}
+          buttonText={t('buttons:vote')}
         />
       </>
     );

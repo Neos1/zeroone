@@ -23,6 +23,7 @@ class DecisionAgree extends React.Component {
           title={t('dialogs:definetelyAgree')}
           icon={(<VerifyIcon />)}
           form={form}
+          buttonText={t('buttons:vote')}
         />
       </>
     );

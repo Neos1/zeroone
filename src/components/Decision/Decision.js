@@ -15,6 +15,7 @@ class Decision extends React.Component {
       PropTypes.node,
     ]),
     title: PropTypes.string.isRequired,
+    buttonText: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -24,7 +25,7 @@ class Decision extends React.Component {
   render() {
     const { props } = this;
     const {
-      t, icon, title, form,
+      t, icon, title, form, buttonText,
     } = props;
     return (
       <div className={styles.decision}>
@@ -37,7 +38,7 @@ class Decision extends React.Component {
         <p className={styles.decision__subtext}>
           {t('other:enterPassForConfirm')}
         </p>
-        <FinPassFormWrapper form={form} />
+        <FinPassFormWrapper form={form} buttonText={buttonText} />
       </div>
     );
   }
