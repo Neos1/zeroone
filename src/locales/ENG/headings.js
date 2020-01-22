@@ -28,5 +28,6 @@ const headings = {
   sendingTransaction: 'Sending transaction',
   successfullTransaction: 'Transaction sended successfully',
   failedTransaction: { heading: 'Transaction sending failed', subheading: 'Please, try again' },
+  other: 'Other',
 };
 export default headings;

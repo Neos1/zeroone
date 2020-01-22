@@ -109,7 +109,7 @@ class ContractUploading extends Component {
     const { address } = this.state;
     const { t, dialogStore } = this.props;
     return (
-      <div className={styles.settings__block}>
+      <div className={`${styles.settings__block} ${styles['settings__block--contracts']}`}>
         <h2 className={styles['settings__block-heading']}>{t('headings:creatingAndUpload')}</h2>
         <div className={styles['settings__block-content']}>
           <Button theme="white" onClick={() => { this.triggerModal('ERC20'); }}>ERC20</Button>

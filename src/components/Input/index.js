@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
@@ -7,6 +9,15 @@ import styles from './Input.scss';
 
 @observer
 class Input extends Component {
+  constructor(props) {
+    super(props);
+
+    const { field } = props;
+    if (props.defaultValue) {
+      field.set(props.defaultValue);
+    }
+  }
+
   handleOnChange = (e) => {
     const { field, onInput } = this.props;
     field.onChange(e);
@@ -26,7 +37,12 @@ class Input extends Component {
           value={field.value}
           onChange={this.handleOnChange}
         />
-        <span className={styles.field__label}>{field.placeholder}</span>
+        <span
+          className={styles.field__label}
+          onClick={() => { field.focus(); }}
+        >
+          {field.placeholder}
+        </span>
         <p className={styles['field__error-text']}>
           {field.error}
         </p>
@@ -46,15 +62,19 @@ Input.propTypes = {
       propTypes.string,
       propTypes.shape({}),
     ]).isRequired,
+    set: propTypes.func.isRequired,
+    focus: propTypes.func.isRequired,
     bind: propTypes.func.isRequired,
     onChange: propTypes.func.isRequired,
   }).isRequired,
+  defaultValue: propTypes.oneOfType([propTypes.string, propTypes.number]),
   onInput: propTypes.func,
 };
 
 Input.defaultProps = {
   className: '',
   onInput: () => null,
+  defaultValue: '',
 };
 
 export default Input;

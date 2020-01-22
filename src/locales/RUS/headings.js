@@ -28,5 +28,6 @@ const headings = {
   sendingTransaction: 'Отправка транзакции',
   successfullTransaction: 'Транзакция успешно отправлена',
   failedTransaction: { heading: 'Ошибка отправки транзакции', subheading: 'Пожалуйста, повторите попытку' },
+  other: 'Прочее',
 };
 export default headings;

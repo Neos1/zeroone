@@ -86,5 +86,6 @@ const other = {
   votingListIsEmpty: 'No polls created <1/> They will be displayed here later',
   noVotingFilterMatches: 'No voting matches <1/> the selected filter',
   noQuestionsInThisGroup: 'No questions have been <1/> created in this group yet',
+  reloadNotification: 'Will apply on next launch',
 };
 export default other;

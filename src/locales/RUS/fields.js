@@ -30,6 +30,9 @@ const placeholders = {
   functionSelector: 'Function selector',
   nodeUrl: 'URL ноды',
   chooseTheQuestion: 'Выберите вопрос',
+  minGasPrice: 'Цена газа MIN, Gwei',
+  maxGasPrice: 'Цена газа MAX, Gwei',
+  interval: 'Интервал обновления данных, сек',
 };
 
 export default placeholders;

@@ -33,5 +33,8 @@ const buttons = {
   pickUpTokensCapital: 'Заберите токены',
   clear: 'Понятно',
   retry: 'Попробовать снова',
+  saveAndReload: 'Сохранить и перезапустить',
+  saveWithoutReload: 'Сохранить без перезагрузки',
+
 };
 export default buttons;
