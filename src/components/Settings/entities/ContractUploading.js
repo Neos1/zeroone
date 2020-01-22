@@ -29,7 +29,6 @@ class ContractUploading extends Component {
         const {
           name, count, password, symbol,
         } = form.values();
-        form.clear();
         userStore.setPassword(password);
         const deployArgs = [name, symbol, Number(count)];
         dialogStore.toggle('progress_modal_contract_uploading');
@@ -38,15 +37,13 @@ class ContractUploading extends Component {
           .then((receipt) => {
             dialogStore.toggle('success_modal_contract_uploading');
             this.setState({ address: receipt.contractAddress });
+            form.clear();
           })
           .catch(() => {
             dialogStore.toggle('error_modal_contract_uploading');
           });
       },
-      onError: () => {
-
-      },
-
+      onError: () => {},
     },
   })
 
@@ -59,7 +56,6 @@ class ContractUploading extends Component {
         const {
           name, address, password,
         } = form.values();
-        form.clear();
         userStore.setPassword(password);
         const deployArgs = [address];
         dialogStore.toggle('progress_modal_contract_uploading');
@@ -69,17 +65,15 @@ class ContractUploading extends Component {
             dialogStore.toggle('success_modal_contract_uploading');
             appStore.addProjectToList({ name, address: receipt.contractAddress });
             this.setState({ address: receipt.contractAddress });
+            form.clear();
           })
           .catch(() => {
             dialogStore.toggle('error_modal_contract_uploading');
           });
       },
-      onError: () => {
-
-      },
+      onError: () => {},
     },
   })
-
 
   static propTypes = {
     t: PropTypes.func.isRequired,
@@ -130,7 +124,6 @@ class ContractUploading extends Component {
         >
           <TokenInputForm form={this.tokenForm} />
         </Dialog>
-
         <Dialog
           name="project_modal_contract_uploading"
           size="md"
@@ -139,7 +132,6 @@ class ContractUploading extends Component {
         >
           <ProjectInputForm form={this.projectForm} />
         </Dialog>
-
         <Dialog
           name="progress_modal_contract_uploading"
           size="md"
@@ -149,7 +141,6 @@ class ContractUploading extends Component {
         >
           <TransactionProgress />
         </Dialog>
-
         <Dialog
           name="success_modal_contract_uploading"
           size="md"
@@ -160,16 +151,17 @@ class ContractUploading extends Component {
             {`Contract address = ${address}`}
           </SuccessMessage>
         </Dialog>
-
         <Dialog
           name="error_modal_contract_uploading"
           size="md"
           footer={null}
           closeable
         >
-          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+          <ErrorMessage
+            onButtonClick={() => { dialogStore.back(3); }}
+            buttonText={t('buttons:retry')}
+          />
         </Dialog>
-
       </div>
     );
   }

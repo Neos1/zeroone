@@ -86,7 +86,10 @@ class ReturnTokens extends React.Component {
           size="md"
           footer={null}
         >
-          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+          <ErrorMessage
+            onButtonClick={() => { dialogStore.back(3); }}
+            buttonText={t('buttons:retry')}
+          />
         </Dialog>
         <Dialog
           name="success_modal_return_tokens"
