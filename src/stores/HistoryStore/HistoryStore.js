@@ -111,7 +111,8 @@ class HistoryStore {
     let length = (await this.fetchVotingsCount()) - 1;
     for (length; length > 0; length -= 1) {
       const voting = await this.getVotingFromContractById(length);
-      this._votings.push(new Voting(voting));
+      const duplicateVoting = this._votings.find((item) => item.id === voting.id);
+      if (!duplicateVoting) this._votings.push(new Voting(voting));
     }
   }
 
