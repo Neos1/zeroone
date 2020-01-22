@@ -21,15 +21,19 @@ class Question {
 
   /**
    * @class
-   * @param {object} data data about question
-   * @param {number} data.groupId id of group, which can start voting for this question
-   * @param {string} data.caption question caption
-   * @param {string} data.text description of the question
-   * @param {Array} data._parameters hex strings contains parameters which will be used after voting
-   * @param {Array} data._formula Array of nums - formula interpretated for contract
-   * @param {string} data.target address, which method will be called after end of the voting
-   * @param {string} data.methodSelector hex (4 bytes) - function signature of target contract
-   * @param {number} data.status status of question: 0 - can't start voting, 1 - can start voting
+   * @param {string} id id question
+   * @param {object} question data about question
+   * @param {number} question.groupId id of group, which can start voting for this question
+   * @param {string} question.caption question caption
+   * @param {string} question.text description of the question
+   * @param {Array} question._parameters hex strings contains parameters which
+   * will be used after voting
+   * @param {Array} question._formula Array of nums - formula interpretated for contract
+   * @param {string} question.target address, which method will be called after end of the voting
+   * @param {string} question.methodSelector hex (4 bytes) - function signature of target contract
+   * @param {number} question.status status of question: 0 - can't start voting,
+   * 1 - can start voting
+   * @param {object} web3 web3
    */
   constructor(id, question, web3) {
     const {
@@ -40,7 +44,7 @@ class Question {
     };
     this.id = id;
     this.caption = caption;
-    this.groupId = groupId;
+    this.groupId = Number(groupId);
     this.text = text;
     this.time = time;
     this.methodSelector = methodSelector;
