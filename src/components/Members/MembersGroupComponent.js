@@ -6,7 +6,8 @@ import { Collapse } from 'react-collapse';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import MemberItem from '../../stores/MembersStore/MemberItem';
-import MembersGroup from '../../stores/MembersStore/MembersGroup';
+import DialogStore from '../../stores/DialogStore';
+import MembersStore from '../../stores/MembersStore/MembersStore';
 import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
@@ -57,17 +58,8 @@ class MembersGroupComponent extends React.Component {
     textForEmptyState: PropTypes.string.isRequired,
     /** translate method */
     t: PropTypes.func.isRequired,
-    dialogStore: PropTypes.shape({
-      show: PropTypes.func.isRequired,
-      hide: PropTypes.func.isRequired,
-    }).isRequired,
-    membersStore: PropTypes.shape({
-      transferStatus: PropTypes.number.isRequired,
-      setTransferStatus: PropTypes.func.isRequired,
-      list: PropTypes.arrayOf(
-        PropTypes.instanceOf(MembersGroup),
-      ).isRequired,
-    }).isRequired,
+    dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
+    membersStore: PropTypes.instanceOf(MembersStore).isRequired,
   }
 
 
@@ -116,6 +108,7 @@ class MembersGroupComponent extends React.Component {
       groupType,
       membersStore,
       dialogStore,
+      t,
     } = this.props;
     const { transferStatus } = membersStore;
     const { selectedWallet } = this.state;
@@ -135,7 +128,12 @@ class MembersGroupComponent extends React.Component {
       case (transferSteps.success):
         return <TransferSuccessMessage onButtonClick={() => dialogStore.hide()} />;
       case (transferSteps.error):
-        return <TransferErrorMessage onButtonClick={() => dialogStore.hide()} />;
+        return (
+          <TransferErrorMessage
+            onButtonClick={() => { membersStore.setTransferStatus('input'); }}
+            buttonText={t('buttons:retry')}
+          />
+        );
       default:
         return null;
     }

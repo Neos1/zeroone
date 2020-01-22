@@ -315,6 +315,15 @@ class VotingInfoWrapper extends React.PureComponent {
     ];
   }
 
+  /**
+   * Method for opening previous dialog
+   */
+  openPreviousDialog = () => {
+    const { props } = this;
+    const { dialogStore } = props;
+    dialogStore.back(3);
+  }
+
   // eslint-disable-next-line class-methods-use-this
   prepareParameters(voting, question) {
     const { projectStore: { rootStore: { Web3Service } }, appStore: { parseFormula } } = this.props;
@@ -468,7 +477,10 @@ class VotingInfoWrapper extends React.PureComponent {
           footer={null}
           closeable
         >
-          <ErrorMessage onButtonClick={() => { dialogStore.hide(); }} />
+          <ErrorMessage
+            onButtonClick={() => { dialogStore.back(3); }}
+            buttonText={t('buttons:retry')}
+          />
         </Dialog>
         <Dialog
           name="is_erc20_modal_voting_info_wrapper"
