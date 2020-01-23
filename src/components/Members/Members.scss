@@ -2,9 +2,13 @@
   &__page {
     margin-bottom: 40px;
     text-align: center;
+
+    &-loader {
+      text-align: center;
+    }
+
     .loader {
       margin-top: 50px;
-
     }
   }
 

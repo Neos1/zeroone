@@ -17,7 +17,6 @@ import DialogStore from '../../stores/DialogStore';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
-import AsyncInterval from '../../utils/AsyncUtils';
 
 import styles from './Members.scss';
 
@@ -28,13 +27,7 @@ import styles from './Members.scss';
 @inject('membersStore', 'projectStore', 'dialogStore')
 @observer
 class MembersPage extends React.Component {
-  asyncUpdater = null;
-
-  timeoutInterval = 60000; // ms
-
   @observable votingIsActive = false;
-
-  @observable _loading = false;
 
   static propTypes = {
     membersStore: PropTypes.instanceOf(MembersStore).isRequired,
@@ -43,25 +36,9 @@ class MembersPage extends React.Component {
     t: PropTypes.func.isRequired,
   }
 
-  async componentDidMount() {
-    const { membersStore } = this.props;
-    const { rootStore: { configStore: { UPDATE_INTERVAL } } } = membersStore;
-    this._loading = true;
-    this._loading = false;
-    this.asyncUpdater = new AsyncInterval({
-      timeoutInterval: UPDATE_INTERVAL,
-      cb: membersStore.fetchUserGroups,
-    });
-  }
-
-  componentWillUnmount() {
-    this.asyncUpdater.cancel();
-  }
-
   @computed
   get loading() {
     const { membersStore } = this.props;
-    if (this._loading === true) return true;
     return membersStore.loading;
   }
 
@@ -78,33 +55,41 @@ class MembersPage extends React.Component {
         {
           !loading
             ? (
-              <MembersTop
-                projectName={projectStore.name}
-                votingIsActive={historyStore.isVotingActive}
-              />
-            )
-            : null
-        }
-        <div className={styles.members__page}>
-          {
-            !loading
-              ? groups.map((group, index) => (
-                <MembersGroupComponent
-                  id={index}
-                  name={group.name}
-                  fullBalance={group.fullBalance}
-                  key={`memberGroup--${index + 1}`}
-                  description={group.description}
-                  wallet={group.wallet}
-                  token={group.tokenName}
-                  groupType={group.groupType}
-                  list={group.list}
-                  textForEmptyState={group.textForEmptyState}
+              <>
+                <MembersTop
+                  projectName={projectStore.name}
+                  votingIsActive={historyStore.isVotingActive}
                 />
-              ))
-              : <Loader />
-          }
-        </div>
+                <div className={styles.members__page}>
+                  {
+                    groups && groups.length
+                      ? (
+                        groups.map((group, index) => (
+                          <MembersGroupComponent
+                            id={index}
+                            name={group.name}
+                            fullBalance={group.fullBalance}
+                            key={`memberGroup--${index + 1}`}
+                            description={group.description}
+                            wallet={group.wallet}
+                            token={group.tokenName}
+                            groupType={group.groupType}
+                            list={group.list}
+                            textForEmptyState={group.textForEmptyState}
+                          />
+                        ))
+                      )
+                      : null
+                  }
+                </div>
+              </>
+            )
+            : (
+              <div className={styles['members__page-loader']}>
+                <Loader />
+              </div>
+            )
+        }
         <Dialog
           name="progress_modal"
           size="md"
@@ -114,7 +99,6 @@ class MembersPage extends React.Component {
         >
           <TransactionProgress />
         </Dialog>
-
         <Dialog
           name="success_modal"
           size="md"
@@ -123,7 +107,6 @@ class MembersPage extends React.Component {
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
-
         <Dialog
           name="error_modal"
           size="md"

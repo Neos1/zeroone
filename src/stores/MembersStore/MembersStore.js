@@ -8,6 +8,7 @@ import {
   PATH_TO_DATA,
 } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 /**
  * Store for manage Members groups
@@ -44,17 +45,24 @@ class MembersStore {
   @observable loading = true;
 
   @action init() {
+    const { rootStore: { configStore: { UPDATE_INTERVAL } } } = this;
     this.groups = [];
+    this.loading = true;
     this.fetchUserGroups();
+    this.asyncUpdater = new AsyncInterval({
+      timeoutInterval: UPDATE_INTERVAL,
+      cb: async () => {
+        await this.fetchUserGroups();
+      },
+    });
   }
 
-  fetchUserGroupsLength = () => {
+  async fetchUserGroupsLength() {
     const { contractService } = this.rootStore;
     return contractService.fetchUserGroupsLength();
   }
 
-  fetchUserGroups = async () => {
-    this.loading = true;
+  async fetchUserGroups() {
     await this.fetchUserGroupsLength()
       .then((length) => this.getActualUserGroups(length))
       .then((groups) => this.getPrimaryGroupsInfo(groups))
@@ -87,43 +95,76 @@ class MembersStore {
 
   /**
    * Method for getting groups from file
+   * without duplicated item
+   *
+   * @returns {Array} correct array of groups
+   */
+  async getGroupsFromFile() {
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
+    const groups = [];
+    try {
+      const groupsFromFile = await readDataFromFile({
+        name: 'groups',
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+      });
+      const groupsFromFileLength = groupsFromFile.data && groupsFromFile.data.length
+        ? groupsFromFile.data.length
+        : 0;
+      for (let i = 0; i < groupsFromFileLength; i += 1) {
+        const group = groupsFromFile.data[i];
+        if (group) {
+          const duplicateGroup = groups.find((item) => item.name === group.name);
+          if (!duplicateGroup) groups.push(group);
+        }
+      }
+    } catch {
+      return groups;
+    }
+    return groups;
+  }
+
+  /**
+   * Method for write groups to file
+   *
+   * @param {Array} groups array of groups
+   */
+  writeGroupsToFile(groups) {
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
+    writeDataToFile({
+      name: 'groups',
+      data: {
+        data: groups,
+      },
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+    });
+  }
+
+  /**
+   * Method for getting groups from file
    * or from contract
    *
    * @param {number} length length groups
    * @returns {Array} actual groups data
    */
   async getActualUserGroups(length) {
-    const { contractService, userStore } = this.rootStore;
-    const userAddress = userStore.address;
-    const projectAddress = contractService._contract.options.address;
     // Groups FROM FILE
-    let groups;
-    try {
-      groups = readDataFromFile({
-        name: 'groups',
-        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-      });
-    } catch {
-      groups = [];
-    }
+    let groups = await this.getGroupsFromFile();
+    console.log('getActualUserGroups groups', groups);
     // Groups FROM CONTRACT
     if (
       !groups
-      || !groups.data
-      || !groups.data.length
-      || groups.data.length < length
+      || !groups.length
+      || !groups.length < length
     ) {
       groups = await this.getUserGroups(length);
-      writeDataToFile({
-        name: 'groups',
-        data: {
-          data: groups,
-        },
-        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-      });
+      this.writeGroupsToFile(groups);
       return groups;
     }
-    return groups.data;
+    return groups;
   }
 
   async getPrimaryGroupsInfo(groups) {
@@ -253,6 +294,7 @@ class MembersStore {
 
   @action
   reset = () => {
+    this.asyncUpdater.cancel();
     this.groups.forEach((group) => { group.stopInterval(); });
     this.groups = [];
     this._transferStatus = 0;

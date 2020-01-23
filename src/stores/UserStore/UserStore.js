@@ -29,8 +29,6 @@ class UserStore {
 
   @observable fullCurrencyName = 'ether';
 
-  timeoutInterval = 60000;
-
   updateBalanceInterval = null;
 
   constructor(rootStore) {
