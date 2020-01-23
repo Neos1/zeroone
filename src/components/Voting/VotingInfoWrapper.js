@@ -174,7 +174,6 @@ class VotingInfoWrapper extends React.PureComponent {
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     this.question = question;
-    console.log(question);
     this.getVotingStats();
     this.getVotes();
   }

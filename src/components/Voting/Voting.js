@@ -122,15 +122,12 @@ class Voting extends React.Component {
       const targetOption = options[Number(parsed.option)];
       eventEmitterService.emit('new_vote:toggle', targetOption);
     }
-    this._loading = true;
     this.votingIsActive = historyStore.isVotingActive;
-    this._loading = false;
   }
 
   @computed
   get loading() {
     const { projectStore: { historyStore } } = this.props;
-    if (this._loading === true) return true;
     return historyStore.loading;
   }
 
@@ -166,6 +163,7 @@ class Voting extends React.Component {
         historyStore: {
           pagination,
           isVotingActive,
+          updating,
         },
       },
     } = props;
@@ -174,39 +172,36 @@ class Voting extends React.Component {
         <div
           className={styles['voting-page']}
         >
+          {`updating: ${updating}`}
           <Notification />
           {
             !loading
-              ? <VotingFilter />
-              : null
-          }
-          {
-            !loading
               ? (
-                <VotingTop
-                  onClick={() => { dialogStore.show('start_new_vote'); }}
-                  votingIsActive={isVotingActive}
-                />
+                <>
+                  <VotingFilter />
+                  <VotingTop
+                    onClick={() => { dialogStore.show('start_new_vote'); }}
+                    votingIsActive={isVotingActive}
+                  />
+                  <VotingList />
+                  <Pagination
+                    activePage={pagination.activePage}
+                    lastPage={pagination.lastPage}
+                    handlePageChange={pagination.handleChange}
+                    itemsCountPerPage={pagination.itemsCountPerPage}
+                    totalItemsCount={pagination.totalItemsCount}
+                    pageRangeDisplayed={pagination.pageRangeDisplayed}
+                  />
+                </>
               )
-              : null
+              : (
+                <div
+                  className={styles['voting-page__loader']}
+                >
+                  <Loader />
+                </div>
+              )
           }
-          {
-            !loading
-              ? (<VotingList />)
-              : <Loader />
-          }
-          {!loading
-            ? (
-              <Pagination
-                activePage={pagination.activePage}
-                lastPage={pagination.lastPage}
-                handlePageChange={pagination.handleChange}
-                itemsCountPerPage={pagination.itemsCountPerPage}
-                totalItemsCount={pagination.totalItemsCount}
-                pageRangeDisplayed={pagination.pageRangeDisplayed}
-              />
-            )
-            : null}
         </div>
         <Footer />
         <Dialog
@@ -226,7 +221,6 @@ class Voting extends React.Component {
         >
           <FinPassFormWrapper form={this.passwordForm} />
         </Dialog>
-
         <Dialog
           name="progress_modal_voting"
           size="md"
@@ -236,7 +230,6 @@ class Voting extends React.Component {
         >
           <TransactionProgress />
         </Dialog>
-
         <Dialog
           name="success_modal_voting"
           size="md"
@@ -245,7 +238,6 @@ class Voting extends React.Component {
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
-
         <Dialog
           name="error_modal_voting"
           size="md"
