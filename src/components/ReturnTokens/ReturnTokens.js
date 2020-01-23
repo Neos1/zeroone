@@ -35,8 +35,7 @@ class ReturnTokens extends React.Component {
             const notificationId = notificationStore.list[0].id;
             notificationStore.remove(notificationId);
             dialogStore.toggle('success_modal_return_tokens');
-            historyStore.fetchAndUpdateLastVoting();
-            historyStore.fetchUserReturnTokens();
+            historyStore.getActualState();
           })
           .catch((error) => {
             console.error(error);

@@ -219,6 +219,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const {
       projectStore: {
         questionStore,
+        historyStore,
       },
       membersStore,
     } = props;
@@ -228,6 +229,7 @@ class VotingInfoWrapper extends React.PureComponent {
       connectGroupQuestions,
       assignGroupAdmin,
     } = systemQuestionsId;
+    historyStore.getActualState();
     switch (Number(voting.questionId)) {
       case addingNewQuestion:
         questionStore.getActualQuestions();
