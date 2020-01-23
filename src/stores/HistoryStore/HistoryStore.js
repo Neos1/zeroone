@@ -11,14 +11,16 @@ import AsyncInterval from '../../utils/AsyncUtils';
 class HistoryStore {
   @observable pagination = null;
 
+  /** Voting list */
   @observable _votings = [];
 
+  /** Voting data is loading, should be true only on first load */
   @observable loading = true;
 
-  @observable updating = true;
-
+  /** User tokens is return (actual state, updated by interval) */
   @observable isUserReturnTokensActual = false;
 
+  /** Is there an active vote */
   @observable isActiveVoting = false;
 
   constructor(rootStore) {
@@ -41,14 +43,16 @@ class HistoryStore {
   }
 
   /**
-   * @returns {Array} list of votings
+   * Actual list of voting
+   *
+   * @returns {Array} list of voting
    */
   @computed get votings() {
     return this._votings;
   }
 
   /**
-   * Get list votings
+   * Get filtered list votings
    *
    * @returns {Array} filtered by rules
    * votings list
@@ -59,9 +63,9 @@ class HistoryStore {
   }
 
   /**
-   * Get paginated list votings
+   * Get paginated voting list
    *
-   * @returns {Array} paginated votings list
+   * @returns {Array} paginated voting list
    */
   @computed
   get paginatedList() {
@@ -69,6 +73,11 @@ class HistoryStore {
     return this.list.slice(range[0], range[1] + 1);
   }
 
+  /**
+   * Get raw voting list
+   *
+   * @returns {Array} raw voting list
+   */
   get rawList() {
     return this._votings.map((voting) => ({
       ...voting.raw,
@@ -136,18 +145,15 @@ class HistoryStore {
    */
   @action
   getActualVotings = async () => {
-    this.updating = true;
     const votings = await this.getFilteredVotingsFromFile();
     this.writeVotingListToState(votings);
     if (!votings || !votings.length) {
       await this.getVotingsFromContract();
       this.loading = false;
-      this.updating = false;
       return;
     }
     await this.getMissingVotings();
     await this.updateVotingWithActiveState();
-    this.updating = false;
     this.loading = false;
   }
 
@@ -439,8 +445,7 @@ class HistoryStore {
       from: address,
       to: _contract.options.address,
     };
-    const maxGasPrice = 30000000000;
-    return Web3Service.createTxData(address, tx, maxGasPrice)
+    return Web3Service.createTxData(address, tx)
       .then((createdTx) => userStore.singTransaction(createdTx, password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import uniqKey from 'react-id-generator';
 import { Trans } from 'react-i18next';
 import VotingItem from './VotingItem';
@@ -13,6 +13,7 @@ import styles from './Voting.scss';
  * Component for render list of voting
  */
 @inject('projectStore')
+@observer
 class VotingList extends React.Component {
   static propTypes = {
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,

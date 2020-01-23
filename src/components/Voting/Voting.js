@@ -163,7 +163,6 @@ class Voting extends React.Component {
         historyStore: {
           pagination,
           isVotingActive,
-          updating,
         },
       },
     } = props;
@@ -172,7 +171,6 @@ class Voting extends React.Component {
         <div
           className={styles['voting-page']}
         >
-          {`updating: ${updating}`}
           <Notification />
           {
             !loading
