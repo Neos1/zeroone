@@ -9,12 +9,6 @@ import PaginationStore from '../PaginationStore';
  * Contains methods for working
  */
 class QuestionStore {
-  /**
-   * Interval for update missing &
-   * active questions (in ms)
-   */
-  intervalUpdate = 60000;
-
   interval = '';
 
   @observable pagination;
