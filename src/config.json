@@ -3,7 +3,7 @@
 	"hostBackup": "http://hive3.thexproject.ru:21595",
 	"minGasPrice": "40",
 	"maxGasPrice": "70",
-	"interval": "600",
+	"interval": "30",
 	"gasLimit": 7900000,
 	"projects": [
 		{
