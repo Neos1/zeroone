@@ -34,16 +34,13 @@ class HistoryStore {
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
-    this.votingIntervalId = setInterval(async () => {
-      this.getActualVotings();
-      const isReturn = await this.isUserReturnTokens();
-      this.isUserReturnTokensActual = isReturn;
-    }, UPDATE_INTERVAL);
-    this.isActiveVotingInterval = new AsyncInterval({
+    this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
         this.getActualVotings();
         this.isActiveVoting = await this.hasActiveVoting();
         await this.fetchUserReturnTokens();
+        const isReturn = await this.isUserReturnTokens();
+        this.isUserReturnTokensActual = isReturn;
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
