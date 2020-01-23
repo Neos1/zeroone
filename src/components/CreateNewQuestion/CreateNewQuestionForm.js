@@ -119,8 +119,13 @@ class CreateNewQuestionForm extends React.PureComponent {
    * @returns {Array} array parameters
    */
   getParametersFromForm = (form) => {
-    const values = form.values();
-    const parameters = [];
+    let values;
+    if (form.values()) {
+      values = form.values();
+    } else {
+      values = {};
+    }
+    let parameters = [];
     Object.keys(values).forEach((key, index) => {
       if (Number.isInteger(index / 2) === false) return;
       const uniqKey = this.getUniqKey(key);
@@ -128,6 +133,8 @@ class CreateNewQuestionForm extends React.PureComponent {
       const inputValue = values[`input--${uniqKey}`];
       parameters.push(inputValue, selectValue);
     });
+    parameters = parameters.filter((e) => e !== '');
+    console.log(parameters);
     return parameters;
   }
 
