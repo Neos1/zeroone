@@ -208,20 +208,17 @@ class MembersStore {
     window.contract = contract;
     // eslint-disable-next-line no-unused-vars
     const { Web3Service, userStore: { address, password }, userStore } = this.rootStore;
-    const maxGasPrice = 30000000000;
     const data = groupType === 'ERC20'
       ? contract.methods.transfer(to, Number(count)).encodeABI()
       : contract.methods.transferFrom(from, to, Number(count)).encodeABI();
-
     const txData = {
       data,
       from: userStore.address,
       to: contract.options.address,
-      gasPrice: maxGasPrice,
       value: '0x0',
     };
     return new Promise((resolve, reject) => {
-      Web3Service.createTxData(address, txData, maxGasPrice)
+      Web3Service.createTxData(address, txData)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
         .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
