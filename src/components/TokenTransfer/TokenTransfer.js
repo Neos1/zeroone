@@ -65,7 +65,7 @@ class TokenTransfer extends React.Component {
           .then(() => {
             userStore.getEthBalance();
             dialogStore.show('success_modal');
-            historyStore.getMissingVotings();
+            historyStore.getActualState();
             history.push('/votings');
           })
           .catch((error) => {

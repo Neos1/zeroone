@@ -34,9 +34,7 @@ class HistoryStore {
     });
     this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
-        this.getActualVotings();
-        this.isActiveVoting = await this.hasActiveVoting();
-        await this.fetchUserReturnTokens();
+        await this.getActualState();
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
@@ -94,6 +92,19 @@ class HistoryStore {
     const isReturn = await this.isUserReturnTokens();
     this.isUserReturnTokensActual = isReturn;
     return isReturn;
+  }
+
+  /**
+   * Method for getting actual state for
+   * this store. This includes: current voting list,
+   * whether the user returned tokens, whether
+   * there is an active voting
+   */
+  @action
+  async getActualState() {
+    this.getActualVotings();
+    this.isActiveVoting = await this.hasActiveVoting();
+    await this.fetchUserReturnTokens();
   }
 
   /**

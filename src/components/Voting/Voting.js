@@ -64,7 +64,7 @@ class Voting extends React.Component {
           .then(() => {
             dialogStore.show('success_modal_voting');
             userStore.getEthBalance();
-            historyStore.getMissingVotings();
+            historyStore.getActualState();
           })
           .catch((error) => {
             dialogStore.show('error_modal_voting');

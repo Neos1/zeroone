@@ -70,7 +70,7 @@ class Questions extends Component {
             userStore.getEthBalance();
             dialogStore.hide();
             history.push('/votings');
-            historyStore.getMissingVotings();
+            historyStore.getActualState();
           })
           .catch((error) => {
             dialogStore.show('error_modal_questions');
