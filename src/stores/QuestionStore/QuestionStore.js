@@ -34,7 +34,6 @@ class QuestionStore {
     });
     this.interval = new AsyncInterval({
       cb: async () => {
-        console.log('AsyncInterval question store');
         await this.getActualState();
       },
       timeoutInterval: UPDATE_INTERVAL,

@@ -27,7 +27,7 @@ class HistoryStore {
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.loading = true;
-    this.getActualVotings();
+    this.getActualState();
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
