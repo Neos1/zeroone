@@ -81,7 +81,16 @@
     display:  flex;
     flex-flow: row nowrap;
     align-items:  center;
+    justify-content: space-between;
+    .user {
+      &:hover {
+        position: absolute;
+        right: 17px;
+      }
+    }
+
   }
+
 
   .lang {
     padding: 10px;
@@ -94,4 +103,8 @@
     vertical-align: middle;
     background-color: #FAFBFC;
   }
+  
+}
+.is-logged {
+  width: 255px;
 }
