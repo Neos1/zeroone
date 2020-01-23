@@ -48,7 +48,6 @@ class MembersPage extends React.Component {
       membersStore: { list }, projectStore, dialogStore, t,
     } = this.props;
     const { historyStore } = projectStore;
-    const groups = list.toJS();
     return (
       <Container className="container--small">
         <Notification />
@@ -62,9 +61,9 @@ class MembersPage extends React.Component {
                 />
                 <div className={styles.members__page}>
                   {
-                    groups && groups.length
+                    list && list.length
                       ? (
-                        groups.map((group, index) => (
+                        list.map((group, index) => (
                           <MembersGroupComponent
                             id={index}
                             name={group.name}
