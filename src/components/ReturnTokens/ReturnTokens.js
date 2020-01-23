@@ -70,7 +70,7 @@ class ReturnTokens extends React.Component {
           size="md"
           name="return_tokens"
         >
-          <FinPassFormWrapper form={form} />
+          <FinPassFormWrapper form={form} buttonText={t('buttons:pickUpTokensCapital')} />
         </Dialog>
         <Dialog
           name="progress_modal_return_tokens"
