@@ -21,6 +21,7 @@ import { systemQuestionsId, statusStates, userVotingStates } from '../../constan
 import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 @withTranslation()
 @inject(
@@ -169,14 +170,25 @@ class VotingInfoWrapper extends React.PureComponent {
       projectStore: {
         historyStore,
         questionStore,
+        rootStore: {
+          configStore: { UPDATE_INTERVAL },
+        },
       },
     } = props;
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     this.question = question;
-    console.log(question);
     this.getVotingStats();
     this.getVotes();
+    this.interval = new AsyncInterval({
+      timeoutInterval: UPDATE_INTERVAL,
+      cb: this.updateData,
+    });
+  }
+
+  componentWillUnmount() {
+    this.interval.cancel();
+    this.interval = null;
   }
 
   /**
@@ -256,6 +268,11 @@ class VotingInfoWrapper extends React.PureComponent {
   onClosingClick = () => {
     const { dialogStore } = this.props;
     dialogStore.toggle('descision_close_voting_info_wrapper');
+  }
+
+  updateData = () => {
+    this.getVotes();
+    this.getVotingStats();
   }
 
   @action getVotes = async () => {
