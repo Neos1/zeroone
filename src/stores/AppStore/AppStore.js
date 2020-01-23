@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import {
-  fs, path, PATH_TO_WALLETS, ROOT_DIR, PATH_TO_CONTRACTS,
+  fs, path, PATH_TO_WALLETS, PATH_TO_CONTRACTS, PATH_TO_CONFIG,
 } from '../../constants/windowModules';
 import Alert from './entities/Alert';
 
@@ -76,7 +76,7 @@ class AppStore {
    * @function
    */
   @action readProjectList() {
-    const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json')));
+    const config = JSON.parse(fs.readFileSync(PATH_TO_CONFIG));
     this.projectList = config.projects;
   }
 
@@ -163,9 +163,9 @@ class AppStore {
    */
   // eslint-disable-next-line class-methods-use-this
   @action addProjectToList(data) {
-    const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8'));
+    const config = JSON.parse(fs.readFileSync(PATH_TO_CONFIG, 'utf8'));
     config.projects.push(data);
-    fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'));
+    fs.writeFileSync(PATH_TO_CONFIG, JSON.stringify(config, null, '\t'));
   }
 
   /**
@@ -218,9 +218,9 @@ class AppStore {
 
   // eslint-disable-next-line class-methods-use-this
   nodeChange(url) {
-    const config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json'), 'utf8'));
+    const config = JSON.parse(fs.readFileSync(PATH_TO_CONFIG, 'utf8'));
     config.host = url;
-    fs.writeFileSync(path.join(ROOT_DIR, './config.json'), JSON.stringify(config, null, '\t'), 'utf8');
+    fs.writeFileSync(PATH_TO_CONFIG, JSON.stringify(config, null, '\t'), 'utf8');
     window.location.reload();
   }
 

@@ -72,7 +72,7 @@
     "better-docs": "^1.3.3",
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^5.0.0",
-    "copy-webpack-plugin": "^5.0.4",
+    "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
     "electron": "^3.0.11",
@@ -122,11 +122,13 @@
     "appId": "ZeroOne",
     "files": [
       "build/**/*",
-      "src/wallets/**/*",
-      "src/contracts/**/*",
-      "src/config.json",
       "src/electron.js",
       "src/splash.html"
+    ],
+    "extraResources": [
+      "build/wallets/**/*",
+      "build/contracts/**/*",
+      "build/config.json"
     ],
     "win": {
       "target": "dir"
@@ -143,8 +145,7 @@
     "portable": {
       "artifactName": "voter_portable--win.exe"
     },
-    "compression": "store",
-    "asar": false
+    "compression": "store"
   },
   "jest": {
     "moduleNameMapper": {

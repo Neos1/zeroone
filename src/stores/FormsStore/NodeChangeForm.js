@@ -3,14 +3,14 @@
 /* eslint-disable no-unused-vars */
 import i18n from 'i18next';
 import ExtendedForm from '../../models/FormModel';
-import { fs, ROOT_DIR, path } from '../../constants/windowModules';
+import { fs, PATH_TO_CONFIG } from '../../constants/windowModules';
 
 let config;
 try {
-  config = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, './config.json')), 'utf8');
+  config = JSON.parse(fs.readFileSync(PATH_TO_CONFIG), 'utf8');
 } catch {
   alert(`Something wrong with config file
-  located in ${path.join(ROOT_DIR, './config.json')}. 
+  located in ${PATH_TO_CONFIG}. 
   Please check it, without this you can't continue.`);
 }
 

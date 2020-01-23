@@ -15,6 +15,9 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: './src/assets', to: './build/assets' },
+      { from: './src/wallets', to: './wallets' },
+      { from: './src/contracts', to: './contracts' },
+      { from: './src/config.json', to: './build/config.json' },
     ]),
   ],
   output: {

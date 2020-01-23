@@ -5,10 +5,9 @@ import { inject, observer } from 'mobx-react';
 import Button from '../../Button/Button';
 import ConfigForm from '../../../stores/FormsStore/ConfigForm';
 import Input from '../../Input';
-
+import Dialog from '../../Dialog/Dialog';
 
 import styles from '../Settings.scss';
-import Dialog from '../../Dialog/Dialog';
 
 @withTranslation()
 @inject('configStore', 'dialogStore')
@@ -21,6 +20,9 @@ class SettingsBlock extends Component {
         const { configStore, dialogStore } = this.props;
         configStore.updateValues(form.values());
         dialogStore.show('apply_notification');
+      },
+      onError: (form) => {
+        console.log(form.error);
       },
     },
   })
