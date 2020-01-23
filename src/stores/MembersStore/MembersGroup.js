@@ -171,8 +171,8 @@ class MembersGroup {
       ? await this.contract.methods.getAdmin().call()
       : null;
     const user = this.list.find((member) => member.wallet === newAdmin);
-    admin.removeAdminPrivileges();
-    user.addAdminPrivileges();
+    if (admin) admin.removeAdminPrivileges();
+    if (user) user.addAdminPrivileges();
   }
 
   @action
