@@ -9,50 +9,48 @@ import { statusStates } from '../../constants';
 import AsyncInterval from '../../utils/AsyncUtils';
 
 class HistoryStore {
-  /**
-   * Interval for update missing &
-   * active voting (in ms) & other data
-   */
-  intervalUpdate = 30000;
-
   @observable pagination = null;
 
+  /** Voting list */
   @observable _votings = [];
 
+  /** Voting data is loading, should be true only on first load */
   @observable loading = true;
 
+  /** User tokens is return (actual state, updated by interval) */
   @observable isUserReturnTokensActual = false;
 
+  /** Is there an active vote */
   @observable isActiveVoting = false;
 
   constructor(rootStore) {
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
-
-    this.getActualVotings();
+    this.loading = true;
+    this.getActualState();
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
     this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
-        this.getActualVotings();
-        this.isActiveVoting = await this.hasActiveVoting();
-        await this.fetchUserReturnTokens();
+        await this.getActualState();
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
   }
 
   /**
-   * @returns {Array} list of votings
+   * Actual list of voting
+   *
+   * @returns {Array} list of voting
    */
   @computed get votings() {
     return this._votings;
   }
 
   /**
-   * Get list votings
+   * Get filtered list votings
    *
    * @returns {Array} filtered by rules
    * votings list
@@ -63,9 +61,9 @@ class HistoryStore {
   }
 
   /**
-   * Get paginated list votings
+   * Get paginated voting list
    *
-   * @returns {Array} paginated votings list
+   * @returns {Array} paginated voting list
    */
   @computed
   get paginatedList() {
@@ -73,6 +71,11 @@ class HistoryStore {
     return this.list.slice(range[0], range[1] + 1);
   }
 
+  /**
+   * Get raw voting list
+   *
+   * @returns {Array} raw voting list
+   */
   get rawList() {
     return this._votings.map((voting) => ({
       ...voting.raw,
@@ -89,6 +92,19 @@ class HistoryStore {
     const isReturn = await this.isUserReturnTokens();
     this.isUserReturnTokensActual = isReturn;
     return isReturn;
+  }
+
+  /**
+   * Method for getting actual state for
+   * this store. This includes: current voting list,
+   * whether the user returned tokens, whether
+   * there is an active voting
+   */
+  @action
+  async getActualState() {
+    this.getActualVotings();
+    this.isActiveVoting = await this.hasActiveVoting();
+    await this.fetchUserReturnTokens();
   }
 
   /**
@@ -138,10 +154,11 @@ class HistoryStore {
    * Method for getting actual question
    * from the contract & file
    */
-  @action getActualVotings = async () => {
-    this.loading = true;
-    const votings = this.getVotingsFromFile();
-    if (!votings || !votings.data) {
+  @action
+  getActualVotings = async () => {
+    const votings = await this.getFilteredVotingsFromFile();
+    this.writeVotingListToState(votings);
+    if (!votings || !votings.length) {
       await this.getVotingsFromContract();
       this.loading = false;
       return;
@@ -212,59 +229,68 @@ class HistoryStore {
     return this.isActiveVoting;
   }
 
-  getVotingsFromContract = async () => {
+  async getVotingsFromContract() {
     await this.fetchVotings();
     this.writeVotingsToFile();
   }
 
-  getVotingsFromFile = () => {
+  /**
+   * Method for getting list voting from file
+   * without duplicated item & with correct order
+   *
+   * @returns {Array} correct array of voting
+   */
+  async getFilteredVotingsFromFile() {
     const { contractService, userStore } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
-    let votings;
+    const votings = [];
     try {
-      votings = readDataFromFile({
+      const votingsFromFile = await readDataFromFile({
         name: 'votings',
         basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
       });
-    } catch {
-      votings = [];
-    }
-    const votingsFromFileLength = votings.data && votings.data.length
-      ? votings.data.length
-      : 0;
-    for (let i = 0; i < votingsFromFileLength; i += 1) {
-      const voting = votings.data[i];
-      if (voting) {
-        // For correct work {getMissingVotings} method
-        const duplicateVoting = this._votings.find((item) => item.id === voting.id);
-        if (!duplicateVoting) this.votings.push(new Voting(voting));
+      const votingsFromFileLength = votingsFromFile.data && votingsFromFile.data.length
+        ? votingsFromFile.data.length
+        : 0;
+      for (let i = 0; i < votingsFromFileLength; i += 1) {
+        const voting = votingsFromFile.data[i];
+        if (voting) {
+          const duplicateVoting = votings.find((item) => item.id === voting.id);
+          if (!duplicateVoting) votings.push(new Voting(voting));
+        }
       }
+    } catch (e) {
+      return votings;
     }
+    votings.sort((a, b) => b.id - a.id);
     return votings;
   }
 
-  getMissingVotings = async () => {
-    const firstVotingIndex = 1;
-    const { contractService, userStore } = this.rootStore;
-    const countOfVotings = await this.fetchVotingsCount();
-    const userAddress = userStore.address;
-    const projectAddress = contractService._contract.options.address;
-    let votings;
-    try {
-      votings = readDataFromFile({
-        name: 'votings',
-        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-      });
-    } catch {
-      votings = [];
+  /**
+   * Method for write voting list to
+   * state history
+   *
+   * @param {Array} votingList voting list
+   */
+  writeVotingListToState(votingList) {
+    const votingListLength = votingList.length;
+    for (let i = 0; i < votingListLength; i += 1) {
+      const voting = votingList[i];
+      const duplicateVoting = this._votings.find((item) => item.id === voting.id);
+      if (!duplicateVoting) this._votings.push(new Voting(voting));
     }
-    const votingsFromFileLength = votings.data && votings.data.length
-      ? votings.data.length
-      : 0;
+  }
+
+  /** Method for getting missing votings from contract */
+  async getMissingVotings() {
+    const votingListFromFile = await this.getFilteredVotingsFromFile();
+    const firstVotingIndex = 1;
+    const countOfVotings = await this.fetchVotingsCount();
+    const votingListFromFileLength = votingListFromFile.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
-    if (countVotingFromContract > votingsFromFileLength) {
-      for (let i = votingsFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
+    if (countVotingFromContract > votingListFromFileLength) {
+      for (let i = votingListFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const duplicateVoting = this._votings.find((item) => item.id === i);
         if (!duplicateVoting) {
@@ -315,7 +341,8 @@ class HistoryStore {
     });
   }
 
-  writeVotingsToFile = () => {
+  /** Write raw voting list data to file */
+  writeVotingsToFile() {
     const { contractService, userStore } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
@@ -429,9 +456,7 @@ class HistoryStore {
       from: address,
       to: _contract.options.address,
     };
-
-    const maxGasPrice = 30000000000;
-    return Web3Service.createTxData(address, tx, maxGasPrice)
+    return Web3Service.createTxData(address, tx)
       .then((createdTx) => userStore.singTransaction(createdTx, password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))

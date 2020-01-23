@@ -450,7 +450,6 @@ class ContractService {
         },
       },
     } = this;
-    const maxGasPrice = 30000000000;
     const data = _contract.methods.returnTokens().encodeABI();
     const tx = {
       from: userStore.address,
@@ -458,8 +457,7 @@ class ContractService {
       value: '0x0',
       data,
     };
-
-    return Web3Service.createTxData(userStore.address, tx, maxGasPrice)
+    return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
       .then((txHash) => Web3Service.subscribeTxReceipt(txHash))

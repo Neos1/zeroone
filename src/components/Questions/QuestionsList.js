@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Trans } from 'react-i18next';
 import Question from './Question';
 import ProjectStore from '../../stores/ProjectStore';
@@ -9,6 +9,7 @@ import ProjectStore from '../../stores/ProjectStore';
 import styles from './Questions.scss';
 
 @inject('projectStore')
+@observer
 class QuestionsList extends React.Component {
   static propTypes = {
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,

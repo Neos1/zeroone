@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import { withRouter } from 'react-router-dom';
-import uniqKey from 'react-id-generator';
+import ProjectStore from '../../stores/ProjectStore';
+import DialogStore from '../../stores/DialogStore';
+import UserStore from '../../stores/UserStore/UserStore';
 import Container from '../Container';
-import Button from '../Button/Button';
-import { CreateToken } from '../Icons';
-import SimpleDropdown from '../SimpleDropdown';
 import Footer from '../Footer';
 import Dialog from '../Dialog/Dialog';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
@@ -21,12 +20,10 @@ import Notification from '../Notification/Notification';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
-import ProjectStore from '../../stores/ProjectStore';
-import DialogStore from '../../stores/DialogStore';
-import UserStore from '../../stores/UserStore/UserStore';
+import QuestionsList from './QuestionsList';
+import QuestionsHead from './QuestionsHead';
 
 import styles from './Questions.scss';
-import QuestionsList from './QuestionsList';
 
 @withRouter
 @withTranslation()
@@ -70,7 +67,7 @@ class Questions extends Component {
             userStore.getEthBalance();
             dialogStore.hide();
             history.push('/votings');
-            historyStore.getMissingVotings();
+            historyStore.getActualState();
           })
           .catch((error) => {
             dialogStore.show('error_modal_questions');
@@ -134,32 +131,13 @@ class Questions extends Component {
     return initIndex;
   }
 
-  /**
-   * Method for handle sort
-   *
-   * @param {object} selected new sort data
-   * @param {string|number} selected.value new sort value
-   * @param {string} selected.label new sort label
-   */
-  handleSortSelect = (selected) => {
-    const { projectStore } = this.props;
-    const {
-      questionStore: {
-        addFilterRule,
-      },
-    } = projectStore;
-    addFilterRule({ groupId: selected.value });
-  }
-
   render() {
     const { loading } = this;
     const { t, projectStore, dialogStore } = this.props;
     const {
       questionStore: {
         pagination,
-        questionGroups,
       },
-      historyStore,
     } = projectStore;
     return (
       <Container className="container--small">
@@ -168,85 +146,27 @@ class Questions extends Component {
           {
               !loading
                 ? (
-                  <div className={styles.questions__head}>
-                    <div className={styles['questions__head-create']}>
-                      <Button
-                        theme="white"
-                        icon={<CreateToken />}
-                        onClick={() => { dialogStore.show('create_group_question'); }}
-                        disabled={historyStore.isVotingActive}
-                        hint={
-                          historyStore.isVotingActive
-                            ? (
-                              <Trans
-                                i18nKey="other:hintFunctionalityNotAvailable"
-                              >
-                                During active voting, this
-                                <br />
-                                functionality is not available.
-                              </Trans>
-                            )
-                            : null
-                        }
-                      >
-                        {t('buttons:createQuestionGroup')}
-                      </Button>
-                      <Button
-                        theme="white"
-                        icon={<CreateToken />}
-                        onClick={() => { dialogStore.show('create_question'); }}
-                        disabled={historyStore.isVotingActive}
-                        hint={
-                          historyStore.isVotingActive
-                            ? (
-                              <Trans
-                                i18nKey="other:hintFunctionalityNotAvailable"
-                              >
-                                During active voting, this
-                                <br />
-                                functionality is not available.
-                              </Trans>
-                            )
-                            : null
-                        }
-                      >
-                        {t('buttons:createQuestion')}
-                      </Button>
+                  <>
+                    <QuestionsHead />
+                    <div className={styles.questions__wrapper}>
+                      <QuestionsList />
                     </div>
-                    <div className={styles['questions__head-filters']}>
-                      <SimpleDropdown
-                        options={questionGroups}
-                        onSelect={this.handleSortSelect}
-                        initIndex={this.initIndex}
-                        key={uniqKey()}
-                      />
-                    </div>
+                    <Pagination
+                      activePage={pagination.activePage}
+                      lastPage={pagination.lastPage}
+                      handlePageChange={pagination.handleChange}
+                      itemsCountPerPage={pagination.itemsCountPerPage}
+                      totalItemsCount={pagination.totalItemsCount}
+                      pageRangeDisplayed={pagination.pageRangeDisplayed}
+                    />
+                  </>
+                )
+                : (
+                  <div className={styles.questions__loader}>
+                    <Loader />
                   </div>
                 )
-                : null
             }
-
-          <div className={styles.questions__wrapper}>
-            {
-              !loading
-                ? <QuestionsList />
-                : <Loader />
-            }
-          </div>
-          {
-            !loading
-              ? (
-                <Pagination
-                  activePage={pagination.activePage}
-                  lastPage={pagination.lastPage}
-                  handlePageChange={pagination.handleChange}
-                  itemsCountPerPage={pagination.itemsCountPerPage}
-                  totalItemsCount={pagination.totalItemsCount}
-                  pageRangeDisplayed={pagination.pageRangeDisplayed}
-                />
-              )
-              : null
-          }
         </div>
         <Dialog name="create_group_question" size="md" footer={null}>
           <CreateGroupQuestions />
@@ -271,7 +191,6 @@ class Questions extends Component {
         >
           <TransactionProgress />
         </Dialog>
-
         <Dialog
           name="success_modal_questions"
           size="md"
@@ -280,7 +199,6 @@ class Questions extends Component {
         >
           <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
         </Dialog>
-
         <Dialog
           name="error_modal_questions"
           size="md"

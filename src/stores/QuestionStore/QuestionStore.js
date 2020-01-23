@@ -4,19 +4,12 @@ import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-ma
 import { PATH_TO_DATA } from '../../constants/windowModules';
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 /**
  * Contains methods for working
  */
 class QuestionStore {
-  /**
-   * Interval for update missing &
-   * active questions (in ms)
-   */
-  intervalUpdate = 60000;
-
-  interval = '';
-
   @observable pagination;
 
   /** List models Question */
@@ -33,16 +26,18 @@ class QuestionStore {
     this._questionGroups = [];
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
-    this.fetchActualQuestionGroups();
-    this.getActualQuestions();
+    this.loading = true;
+    this.getActualState();
     this.filter = new FilterStore();
     this.pagination = new PaginationStore({
       totalItemsCount: this.list.length,
     });
-    this.interval = setInterval(() => {
-      this.getActualQuestions();
-      this.fetchActualQuestionGroups();
-    }, UPDATE_INTERVAL);
+    this.interval = new AsyncInterval({
+      cb: async () => {
+        await this.getActualState();
+      },
+      timeoutInterval: UPDATE_INTERVAL,
+    });
   }
 
   /**
@@ -55,6 +50,11 @@ class QuestionStore {
     return this._questions;
   }
 
+  /**
+   * Get raw questions list
+   *
+   * @returns {Array} raw questions list
+   */
   get rawList() {
     return this._questions.map((question) => ({
       ...question.raw,
@@ -126,16 +126,14 @@ class QuestionStore {
       }));
   }
 
+  /**
+   * Method for getting actual state for
+   * this store.
+   */
   @action
-  fetchQuestionGroups = async () => {
-    const { contractService } = this.rootStore;
-    const length = await contractService.callMethod('getQuestionGroupsLength');
-    for (let index = 1; index < length; index += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      const element = await contractService.callMethod('getQuestionGroup', index);
-      element.groupId = index;
-      this._questionGroups.push(element);
-    }
+  async getActualState() {
+    await this.getActualQuestions();
+    await this.fetchActualQuestionGroups();
   }
 
   @action
@@ -158,7 +156,8 @@ class QuestionStore {
    *
    * @function
    */
-  @action fetchQuestions = async () => {
+  @action
+  async fetchQuestions() {
     const { contractService } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
     for (let i = 1; i < countOfUploaded; i += 1) {
@@ -172,14 +171,66 @@ class QuestionStore {
   /**
    * Method for getting questions from contract
    * & save then to json file
-   *
-   * uniq folder
    */
-  getQuestionsFromContract = async () => {
+  async getQuestionsFromContract() {
+    await this.fetchQuestions();
+    this.writeQuestionsToFile();
+  }
+
+  /**
+   * Method for getting & adding questions from file
+   * without duplicated item
+   *
+   * @returns {Array} correct array of questions
+   */
+  async getQuestionsFromFile() {
     const { contractService, userStore } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
-    await this.fetchQuestions();
+    const questions = [];
+    try {
+      const questionsFromFile = await readDataFromFile({
+        name: 'questions',
+        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+      });
+      const questionsFromFileLength = questionsFromFile.data && questionsFromFile.data.length
+        ? questionsFromFile.data.length
+        : 0;
+      for (let i = 0; i < questionsFromFileLength; i += 1) {
+        const question = questionsFromFile.data[i];
+        if (question) {
+          const duplicateVoting = questions.find((item) => item.caption === question.caption);
+          if (!duplicateVoting) questions.push(question);
+        }
+      }
+    } catch {
+      return questions;
+    }
+    return questions;
+  }
+
+  /**
+   * Get & add questions that are not in the file,
+   * but are in the contract
+   *
+   * @param {Array} questions array of questions
+   */
+  async getMissingQuestions(questions) {
+    const firstQuestionIndex = 1;
+    const { contractService } = this.rootStore;
+    const { countOfUploaded } = await contractService.checkQuestions();
+    const questionsFromFileLength = questions.length;
+    const countQuestionFromContract = countOfUploaded - firstQuestionIndex;
+    if (countQuestionFromContract > questionsFromFileLength) {
+      this.getQuestionsFromContract();
+    }
+  }
+
+  /** Write raw voting list data to file */
+  writeQuestionsToFile() {
+    const { contractService, userStore } = this.rootStore;
+    const userAddress = userStore.address;
+    const projectAddress = contractService._contract.options.address;
     writeDataToFile({
       name: 'questions',
       data: {
@@ -190,84 +241,33 @@ class QuestionStore {
   }
 
   /**
-   * Method for getting & adding questions
-   * from file
-   *
-   * @returns {object} questions object
-   */
-  getQuestionsFromFile = () => {
-    const { contractService, userStore } = this.rootStore;
-    const userAddress = userStore.address;
-    const projectAddress = contractService._contract.options.address;
-    let questions;
-    try {
-      questions = readDataFromFile({
-        name: 'questions',
-        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-      });
-    } catch {
-      questions = [];
-    }
-    const questionsFromFileLength = questions.data && questions.data.length
-      ? questions.data.length
-      : 0;
-    for (let i = 0; i < questionsFromFileLength; i += 1) {
-      const question = questions.data[i];
-      // For correct work {getMissingQuestions} method
-      this.addQuestion(i + 1, question);
-    }
-    return questions;
-  }
-
-  /**
-   * Get & add questions that are not in the file,
-   * but are in the contract
-   *
-   * @param {object} param0 data for method
-   * @param {object} param0.questions question object data
-   */
-  getMissingQuestions = async ({
-    questions,
-  }) => {
-    const firstQuestionIndex = 1;
-    const { contractService, userStore } = this.rootStore;
-    const { countOfUploaded } = await contractService.checkQuestions();
-    const userAddress = userStore.address;
-    const projectAddress = contractService._contract.options.address;
-    const questionsFromFileLength = questions.data.length;
-    const countQuestionFromContract = countOfUploaded - firstQuestionIndex;
-    if (countQuestionFromContract > questionsFromFileLength) {
-      for (let i = questionsFromFileLength + firstQuestionIndex; i < countOfUploaded; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
-        const question = await contractService.fetchQuestion(i);
-        this.addQuestion(i, question);
-      }
-      writeDataToFile({
-        name: 'questions',
-        data: {
-          data: this.rawList,
-        },
-        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-      });
-    }
-  }
-
-  /**
    * Method for getting actual question
    * from the contract & file
    */
-  getActualQuestions = async () => {
-    this.loading = true;
-    const questions = this.getQuestionsFromFile();
-    if (!questions || !questions.data) {
+  async getActualQuestions() {
+    const questions = await this.getQuestionsFromFile();
+    this.writeQuestionsListToState(questions);
+    if (!questions || !questions.length) {
       await this.getQuestionsFromContract();
       this.loading = false;
       return;
     }
-    await this.getMissingQuestions({
-      questions,
-    });
+    await this.getMissingQuestions(questions);
     this.loading = false;
+  }
+
+  /**
+   * Method for write questions list to
+   * this state
+   *
+   * @param {Array} questionsList questions list
+   */
+  writeQuestionsListToState(questionsList) {
+    const questionsListLength = questionsList.length;
+    for (let i = 0; i < questionsListLength; i += 1) {
+      const question = questionsList[i];
+      this.addQuestion(i + 1, question);
+    }
   }
 
   /**
@@ -304,7 +304,7 @@ class QuestionStore {
    */
   @action addQuestion = (id, question) => {
     const { Web3Service: { web3 } } = this.rootStore;
-    const duplicatedQuestion = this._questions.find((item) => item.id === id);
+    const duplicatedQuestion = this._questions.find((item) => item.caption === question.caption);
     if (!duplicatedQuestion) this._questions.push(new Question(id, question, web3));
   }
 
@@ -320,8 +320,7 @@ class QuestionStore {
   @action reset = () => {
     this._questions = [];
     this._questionGroups = [];
-    this.interval = '';
-    clearInterval(this.interval);
+    this.interval.cancel();
   }
 }
 
