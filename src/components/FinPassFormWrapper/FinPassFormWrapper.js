@@ -15,11 +15,12 @@ class FinPassFormWrapper extends React.Component {
       onSubmit: PropTypes.func.isRequired,
       $: PropTypes.func.isRequired,
     }).isRequired,
+    buttonText: PropTypes.string.isRequired,
   };
 
   render() {
     const { props } = this;
-    const { t, form } = props;
+    const { t, form, buttonText } = props;
     return (
       <div
         className={styles['form-fin-pass']}
@@ -38,7 +39,7 @@ class FinPassFormWrapper extends React.Component {
               className="btn--default btn--black"
               type="submit"
             >
-              {t('buttons:startNewVoting')}
+              {buttonText || t('buttons:startNewVoting')}
             </Button>
           </div>
         </form>

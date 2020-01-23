@@ -23,6 +23,7 @@ class DecisionClose extends React.Component {
           title={t('dialogs:completionOfVoting')}
           icon={null}
           form={form}
+          buttonText={t('buttons:completeTheVote')}
         />
       </>
     );

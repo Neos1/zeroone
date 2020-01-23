@@ -62,7 +62,7 @@ class SettingsBlock extends Component {
           closeable={false}
         >
           <div className={styles['modal-buttons']}>
-            <Button theme="white" size="310" type="button" onClick={() => { this.reloadApp(); }}>{t('buttons:saveAndReload')}</Button>
+            <Button theme="black" size="310" type="button" onClick={() => { this.reloadApp(); }}>{t('buttons:saveAndReload')}</Button>
             <Button theme="white" size="310" type="button" onClick={() => { dialogStore.hide(); }}>{t('buttons:saveWithoutReload')}</Button>
             <p>
               {t('other:reloadNotificaion')}
