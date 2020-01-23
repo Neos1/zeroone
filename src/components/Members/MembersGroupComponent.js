@@ -44,19 +44,19 @@ class MembersGroupComponent extends React.Component {
       onSuccess: (form) => {
         const {
           id,
-          wallet,
           membersStore,
           userStore,
         } = this.props;
+        const { selectedWallet } = this.state;
         const groupId = id;
         const { address: rawAddress, count, password } = form.values();
         const address = rawAddress.trim();
         userStore.setPassword(password);
         membersStore.setTransferStatus('transfering');
-        return membersStore.transferTokens(groupId, wallet, address, count)
+        return membersStore.transferTokens(groupId, selectedWallet, address, count)
           .then(() => {
             membersStore.setTransferStatus('success');
-            membersStore.list[groupId].updateMemberBalanceAndWeight(wallet);
+            membersStore.list[groupId].updateMemberBalanceAndWeight(selectedWallet);
             membersStore.list[groupId].updateMemberBalanceAndWeight(address);
           })
           .catch(() => {
