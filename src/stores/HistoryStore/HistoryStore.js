@@ -39,8 +39,6 @@ class HistoryStore {
         this.getActualVotings();
         this.isActiveVoting = await this.hasActiveVoting();
         await this.fetchUserReturnTokens();
-        const isReturn = await this.isUserReturnTokens();
-        this.isUserReturnTokensActual = isReturn;
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
