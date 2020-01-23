@@ -15,8 +15,6 @@ import styles from './Notification.scss';
 @inject('notificationStore', 'projectStore')
 @observer
 class Notification extends React.Component {
-  timeoutInterval = 60000; // ms
-
   idTimer = null;
 
   static propTypes = {
