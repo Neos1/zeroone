@@ -34,7 +34,6 @@ class CreateNewQuestion extends React.Component {
   }
 
   handleDropdownSelect = (selected) => {
-    console.log(selected);
     this.setState({ isSelected: true, selectedGroup: selected.value });
   }
 

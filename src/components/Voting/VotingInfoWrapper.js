@@ -174,6 +174,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     this.question = question;
+    console.log(question);
     this.getVotingStats();
     this.getVotes();
   }
@@ -215,8 +216,6 @@ class VotingInfoWrapper extends React.PureComponent {
       connectGroupQuestions,
       assignGroupAdmin,
     } = systemQuestionsId;
-    console.log('updateAfterCompleteVoting');
-    console.log('voting.questionId', voting.questionId);
     switch (Number(voting.questionId)) {
       case addingNewQuestion:
         questionStore.getActualQuestions();
@@ -225,11 +224,9 @@ class VotingInfoWrapper extends React.PureComponent {
         membersStore.fetchUserGroups();
         break;
       case connectGroupQuestions:
-        console.log('getting groups');
         questionStore.fetchActualQuestionGroups();
         break;
       case assignGroupAdmin:
-        console.log('Designating Admin');
         membersStore.getAddressesForAdminDesignate(voting.data)
           .then(([group]) => {
             membersStore.updateAdmin(group);
@@ -328,8 +325,8 @@ class VotingInfoWrapper extends React.PureComponent {
   prepareParameters(voting, question) {
     const { projectStore: { rootStore: { Web3Service } }, appStore: { parseFormula } } = this.props;
     const { data } = voting;
-    const { methodSelector, params, id } = question;
-    const votingData = data.replace(methodSelector, '0x');
+    const { params, id } = question;
+    const votingData = `0x${data.slice(10)}`;
     let parameters;
     let decodedRawParams;
     let decodedParams;

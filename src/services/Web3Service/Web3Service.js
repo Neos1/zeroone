@@ -28,22 +28,18 @@ class Web3Service {
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
         transaction = { ...tx, nonce, gasLimit };
-        console.log(transaction, eth.estimateGas(transaction));
         return eth.estimateGas(transaction);
       })
       .then((gas) => {
         transaction = { ...transaction, gas };
-        console.log(transaction);
         return this.getGasPrice()
           .then((gasPrice) => {
-            console.log(gasPrice, MIN_GAS_PRICE, MAX_GAS_PRICE);
             const gp = new BN(gasPrice);
             const minGp = new BN(MIN_GAS_PRICE);
             const maxGp = new BN(MAX_GAS_PRICE);
             transaction.gasPrice = (gp.gte(minGp) && gp.lte(maxGp))
               ? gasPrice
               : MIN_GAS_PRICE;
-            console.log(transaction);
             return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);

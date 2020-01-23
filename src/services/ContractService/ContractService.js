@@ -61,7 +61,6 @@ class ContractService {
       const contract = this.combineContract(type);
       window.ipcRenderer.send('compile-request', { contract, type });
       window.ipcRenderer.once('contract-compiled', (event, compiledContract) => {
-        console.log(compiledContract);
         if (compiledContract.abi !== '') {
           const { evm: { bytecode: { object } }, abi } = compiledContract;
           fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
@@ -429,7 +428,6 @@ class ContractService {
       to: _contract.options.address,
       value: '0x0',
     };
-    console.log('appoving');
     return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
       .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))

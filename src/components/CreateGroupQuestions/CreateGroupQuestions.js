@@ -29,7 +29,6 @@ class CreateGroupQuestions extends React.PureComponent {
           dialogStore,
         } = this.props;
         const questionId = 3;
-        console.log(form.values());
         const { name } = form.values();
         const [question] = questionStore.getQuestionById(questionId);
         const { params: parameters, groupId, methodSelector } = question;
