@@ -370,7 +370,6 @@ class HistoryStore {
           break;
       }
     }
-    console.log(result);
     return result;
   }
 

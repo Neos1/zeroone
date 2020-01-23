@@ -104,9 +104,7 @@ class AddExistingProject extends Component {
     name,
   }) => {
     const { appStore } = this.props;
-    console.log('Checking');
     const isQuestionsUploaded = await appStore.checkIsQuestionsUploaded(address);
-    console.log(isQuestionsUploaded);
     // eslint-disable-next-line no-unused-expressions
     isQuestionsUploaded
       ? appStore.gotoProject({ address, name })

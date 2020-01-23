@@ -23,7 +23,6 @@ class CreateNewQuestionForm extends React.PureComponent {
       onSuccess: (form) => {
         this.onBasicSubmit(form);
         const { data: { groupId } } = this;
-        console.log(groupId);
         return Promise.resolve();
       },
       onError: () => {
@@ -129,7 +128,6 @@ class CreateNewQuestionForm extends React.PureComponent {
       const inputValue = values[`input--${uniqKey}`];
       parameters.push(inputValue, selectValue);
     });
-    console.log(parameters);
     return parameters;
   }
 
