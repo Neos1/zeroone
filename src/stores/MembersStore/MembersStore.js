@@ -153,7 +153,6 @@ class MembersStore {
   async getActualUserGroups(length) {
     // Groups FROM FILE
     let groups = await this.getGroupsFromFile();
-    console.log('getActualUserGroups groups', groups);
     // Groups FROM CONTRACT
     if (
       !groups
