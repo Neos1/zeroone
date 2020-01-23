@@ -479,12 +479,21 @@
   &__back {
     display: inline-block;
     padding: 5px 35px;
-    color: #c8c9ca;
+    color: #000;
     font-size: 14px;
     line-height: 107.5%;
     background: #fff;
-    border: 1px solid #e1e4e8;
+    border: 1px solid #000;
     border-radius: 2px;
+    transition: .2s linear;
+    &:hover {
+      color: #fff;
+      background: #000;
+    }
+    &:active {
+      color: #000;
+      background: #fff;
+    }
   }
 
   &__stats {
