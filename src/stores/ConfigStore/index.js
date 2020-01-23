@@ -23,10 +23,10 @@ class ConfigStore {
     minGasPrice, maxGasPrice, interval, gasLimit,
   }) {
     const { config } = this;
-    config.minGasPrice = minGasPrice < 1 ? 1 : minGasPrice;
-    config.maxGasPrice = maxGasPrice < 1 ? 1 : maxGasPrice;
-    config.interval = interval < 10 ? 10 : interval;
-    config.gasLimit = gasLimit;
+    config.minGasPrice = minGasPrice < 1 ? 1 : Number(minGasPrice);
+    config.maxGasPrice = maxGasPrice < 1 ? 1 : Number(maxGasPrice);
+    config.interval = interval < 10 ? 10 : Number(interval);
+    config.gasLimit = Number(gasLimit);
     this.updateConfig();
   }
 

@@ -34,12 +34,39 @@ class SettingsBlock extends Component {
     }).isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isChanged: false,
+    };
+  }
+
+  handleInputChange = () => {
+    const { settingsForm, props } = this;
+    const { configStore: { config } } = props;
+    const formValues = settingsForm.values();
+    const formKeys = Object.keys(settingsForm.values());
+    let changed = [];
+    formKeys.forEach((key) => {
+      if (Number(formValues[key]) !== config[key]) {
+        changed.push(key);
+      } else {
+        changed = changed.filter((e) => e !== key);
+      }
+    });
+    if (changed.length !== 0) {
+      this.setState({ isChanged: true });
+    } else {
+      this.setState({ isChanged: false });
+    }
+  }
+
   reloadApp = () => {
     window.location.reload();
   }
 
   render() {
-    const { props, settingsForm } = this;
+    const { props, settingsForm, state: { isChanged } } = this;
     const { t, dialogStore, configStore: { config } } = props;
     return (
       <div className={`${styles.settings__block} ${styles['settings__block--settings']}`}>
@@ -47,11 +74,23 @@ class SettingsBlock extends Component {
         <div className={styles['settings__block-content']}>
           <form form={settingsForm} onSubmit={settingsForm.onSubmit}>
             <div className={styles['settings__block-group']}>
-              <Input field={settingsForm.$('minGasPrice')} defaultValue={config.minGasPrice} />
-              <Input field={settingsForm.$('maxGasPrice')} defaultValue={config.maxGasPrice} />
+              <Input
+                field={settingsForm.$('minGasPrice')}
+                defaultValue={config.minGasPrice}
+                onInput={this.handleInputChange}
+              />
+              <Input
+                field={settingsForm.$('maxGasPrice')}
+                defaultValue={config.maxGasPrice}
+                onInput={this.handleInputChange}
+              />
             </div>
             <Input field={settingsForm.$('interval')} defaultValue={config.interval} />
-            <Button theme="black" size="block" type="submit">{t('buttons:apply')}</Button>
+            {
+              isChanged
+                ? <Button theme="black" size="block" type="submit">{t('buttons:apply')}</Button>
+                : null
+}
           </form>
         </div>
         <Dialog
