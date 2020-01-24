@@ -59,6 +59,8 @@ const plugins = {
         between: 'Between :min and :max signs',
         formula: 'Incorrect formula',
         url: 'Not valid URL string',
+        min: 'Value less then :min',
+        max: 'Value larger then :max',
       });
       validator.setMessages('ru', {
         required: 'Обязательное поле',
@@ -71,6 +73,8 @@ const plugins = {
         between: 'Между :min и :max знаками',
         formula: 'Некорректная формула',
         url: 'Неккоректный URL',
+        min: 'Значение меньше чем :min',
+        max: 'Значение больше чем :max',
       });
       validator.stopOnError(true);
     },
