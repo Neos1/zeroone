@@ -1,8 +1,11 @@
 @import '../../assets/styles/partials/variables';
 
 .footer {
+  position: relative;
+  z-index: 1;
   padding: 15px 0;
   text-align: center;
+
   a {
     flex-flow: row nowrap;
     align-items: center;
@@ -21,7 +24,7 @@
       vertical-align: middle;
       transition: .2s;
     }
-    &:hover{ 
+    &:hover{
       svg {
         path {
           opacity: 1;

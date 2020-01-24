@@ -162,138 +162,140 @@ class Questions extends Component {
       historyStore,
     } = projectStore;
     return (
-      <Container className="container--small">
-        <Notification />
-        <div className={styles.questions}>
-          {
+      <>
+        <Container className="container--small">
+          <Notification />
+          <div className={styles.questions}>
+            {
+                !loading
+                  ? (
+                    <div className={styles.questions__head}>
+                      <div className={styles['questions__head-create']}>
+                        <Button
+                          theme="white"
+                          icon={<CreateToken />}
+                          onClick={() => { dialogStore.show('create_group_question'); }}
+                          disabled={historyStore.isVotingActive}
+                          hint={
+                            historyStore.isVotingActive
+                              ? (
+                                <Trans
+                                  i18nKey="other:hintFunctionalityNotAvailable"
+                                >
+                                  During active voting, this
+                                  <br />
+                                  functionality is not available.
+                                </Trans>
+                              )
+                              : null
+                          }
+                        >
+                          {t('buttons:createQuestionGroup')}
+                        </Button>
+                        <Button
+                          theme="white"
+                          icon={<CreateToken />}
+                          onClick={() => { dialogStore.show('create_question'); }}
+                          disabled={historyStore.isVotingActive}
+                          hint={
+                            historyStore.isVotingActive
+                              ? (
+                                <Trans
+                                  i18nKey="other:hintFunctionalityNotAvailable"
+                                >
+                                  During active voting, this
+                                  <br />
+                                  functionality is not available.
+                                </Trans>
+                              )
+                              : null
+                          }
+                        >
+                          {t('buttons:createQuestion')}
+                        </Button>
+                      </div>
+                      <div className={styles['questions__head-filters']}>
+                        <SimpleDropdown
+                          options={questionGroups}
+                          onSelect={this.handleSortSelect}
+                          initIndex={this.initIndex}
+                          key={uniqKey()}
+                        />
+                      </div>
+                    </div>
+                  )
+                  : null
+              }
+
+            <div className={styles.questions__wrapper}>
+              {
+                !loading
+                  ? <QuestionsList />
+                  : <Loader />
+              }
+            </div>
+            {
               !loading
                 ? (
-                  <div className={styles.questions__head}>
-                    <div className={styles['questions__head-create']}>
-                      <Button
-                        theme="white"
-                        icon={<CreateToken />}
-                        onClick={() => { dialogStore.show('create_group_question'); }}
-                        disabled={historyStore.isVotingActive}
-                        hint={
-                          historyStore.isVotingActive
-                            ? (
-                              <Trans
-                                i18nKey="other:hintFunctionalityNotAvailable"
-                              >
-                                During active voting, this
-                                <br />
-                                functionality is not available.
-                              </Trans>
-                            )
-                            : null
-                        }
-                      >
-                        {t('buttons:createQuestionGroup')}
-                      </Button>
-                      <Button
-                        theme="white"
-                        icon={<CreateToken />}
-                        onClick={() => { dialogStore.show('create_question'); }}
-                        disabled={historyStore.isVotingActive}
-                        hint={
-                          historyStore.isVotingActive
-                            ? (
-                              <Trans
-                                i18nKey="other:hintFunctionalityNotAvailable"
-                              >
-                                During active voting, this
-                                <br />
-                                functionality is not available.
-                              </Trans>
-                            )
-                            : null
-                        }
-                      >
-                        {t('buttons:createQuestion')}
-                      </Button>
-                    </div>
-                    <div className={styles['questions__head-filters']}>
-                      <SimpleDropdown
-                        options={questionGroups}
-                        onSelect={this.handleSortSelect}
-                        initIndex={this.initIndex}
-                        key={uniqKey()}
-                      />
-                    </div>
-                  </div>
+                  <Pagination
+                    activePage={pagination.activePage}
+                    lastPage={pagination.lastPage}
+                    handlePageChange={pagination.handleChange}
+                    itemsCountPerPage={pagination.itemsCountPerPage}
+                    totalItemsCount={pagination.totalItemsCount}
+                    pageRangeDisplayed={pagination.pageRangeDisplayed}
+                  />
                 )
                 : null
             }
-
-          <div className={styles.questions__wrapper}>
-            {
-              !loading
-                ? <QuestionsList />
-                : <Loader />
-            }
           </div>
-          {
-            !loading
-              ? (
-                <Pagination
-                  activePage={pagination.activePage}
-                  lastPage={pagination.lastPage}
-                  handlePageChange={pagination.handleChange}
-                  itemsCountPerPage={pagination.itemsCountPerPage}
-                  totalItemsCount={pagination.totalItemsCount}
-                  pageRangeDisplayed={pagination.pageRangeDisplayed}
-                />
-              )
-              : null
-          }
-        </div>
-        <Dialog name="create_group_question" size="md" footer={null}>
-          <CreateGroupQuestions />
-        </Dialog>
-        <Dialog name="create_question" size="xlg" footer={null}>
-          <CreateNewQuestion />
-        </Dialog>
-        <Dialog
-          name="password_form_questions"
-          size="md"
-          footer={null}
-          header={t('fields:enterPassword')}
-        >
-          <FinPasswordFormWrapper form={this.passwordForm} />
-        </Dialog>
-        <Dialog
-          name="progress_modal_questions"
-          size="md"
-          footer={null}
-          header={t('headings:sendingTransaction')}
-          closeable={false}
-        >
-          <TransactionProgress />
-        </Dialog>
+          <Dialog name="create_group_question" size="md" footer={null}>
+            <CreateGroupQuestions />
+          </Dialog>
+          <Dialog name="create_question" size="xlg" footer={null}>
+            <CreateNewQuestion />
+          </Dialog>
+          <Dialog
+            name="password_form_questions"
+            size="md"
+            footer={null}
+            header={t('fields:enterPassword')}
+          >
+            <FinPasswordFormWrapper form={this.passwordForm} />
+          </Dialog>
+          <Dialog
+            name="progress_modal_questions"
+            size="md"
+            footer={null}
+            header={t('headings:sendingTransaction')}
+            closeable={false}
+          >
+            <TransactionProgress />
+          </Dialog>
 
-        <Dialog
-          name="success_modal_questions"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
+          <Dialog
+            name="success_modal_questions"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
 
-        <Dialog
-          name="error_modal_questions"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ErrorMessage
-            onButtonClick={() => { dialogStore.back(3); }}
-            buttonText={t('buttons:retry')}
-          />
-        </Dialog>
+          <Dialog
+            name="error_modal_questions"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ErrorMessage
+              onButtonClick={() => { dialogStore.back(3); }}
+              buttonText={t('buttons:retry')}
+            />
+          </Dialog>
+        </Container>
         <Footer />
-      </Container>
+      </>
     );
   }
 }

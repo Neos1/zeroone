@@ -73,70 +73,72 @@ class MembersPage extends React.Component {
     const { historyStore } = projectStore;
     const groups = list.toJS();
     return (
-      <Container className="container--small">
-        <Notification />
-        {
-          !loading
-            ? (
-              <MembersTop
-                projectName={projectStore.name}
-                votingIsActive={historyStore.isVotingActive}
-              />
-            )
-            : null
-        }
-        <div className={styles.members__page}>
+      <>
+        <Container className="container--small">
+          <Notification />
           {
             !loading
-              ? groups.map((group, index) => (
-                <MembersGroupComponent
-                  id={index}
-                  name={group.name}
-                  fullBalance={group.fullBalance}
-                  key={`memberGroup--${index + 1}`}
-                  description={group.description}
-                  wallet={group.wallet}
-                  token={group.tokenName}
-                  groupType={group.groupType}
-                  list={group.list}
-                  textForEmptyState={group.textForEmptyState}
+              ? (
+                <MembersTop
+                  projectName={projectStore.name}
+                  votingIsActive={historyStore.isVotingActive}
                 />
-              ))
-              : <Loader />
+              )
+              : null
           }
-        </div>
-        <Dialog
-          name="progress_modal"
-          size="md"
-          footer={null}
-          header={t('headings:sendingTransaction')}
-          closeable={false}
-        >
-          <TransactionProgress />
-        </Dialog>
+          <div className={styles.members__page}>
+            {
+              !loading
+                ? groups.map((group, index) => (
+                  <MembersGroupComponent
+                    id={index}
+                    name={group.name}
+                    fullBalance={group.fullBalance}
+                    key={`memberGroup--${index + 1}`}
+                    description={group.description}
+                    wallet={group.wallet}
+                    token={group.tokenName}
+                    groupType={group.groupType}
+                    list={group.list}
+                    textForEmptyState={group.textForEmptyState}
+                  />
+                ))
+                : <Loader />
+            }
+          </div>
+          <Dialog
+            name="progress_modal"
+            size="md"
+            footer={null}
+            header={t('headings:sendingTransaction')}
+            closeable={false}
+          >
+            <TransactionProgress />
+          </Dialog>
 
-        <Dialog
-          name="success_modal"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
+          <Dialog
+            name="success_modal"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
 
-        <Dialog
-          name="error_modal"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ErrorMessage
-            onButtonClick={() => { dialogStore.back(3); }}
-            buttonText={t('buttons:retry')}
-          />
-        </Dialog>
+          <Dialog
+            name="error_modal"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ErrorMessage
+              onButtonClick={() => { dialogStore.back(3); }}
+              buttonText={t('buttons:retry')}
+            />
+          </Dialog>
+        </Container>
         <Footer />
-      </Container>
+      </>
     );
   }
 }

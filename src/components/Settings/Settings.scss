@@ -6,6 +6,11 @@
   align-self: center;
   justify-content: space-around;
   padding-top: 50px;
+
+  &__container {
+    display: block;
+  }
+
   &__block {
     display: flex;
     flex-flow: column nowrap;

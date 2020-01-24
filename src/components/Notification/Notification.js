@@ -110,23 +110,27 @@ class Notification extends React.Component {
       },
     } = props;
     return (
-      <div className={styles.notification__container}>
+      <>
         {
           list && list.length
             ? (
-              list.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  isOpen={notification.isOpen}
-                  content={notification.content}
-                  status={notification.status}
-                  handleRemove={() => this.removeNotification(notification.id)}
-                />
-              ))
+              <div className={styles.notification__container}>
+                {
+                  list.map((notification) => (
+                    <NotificationItem
+                      key={notification.id}
+                      isOpen={notification.isOpen}
+                      content={notification.content}
+                      status={notification.status}
+                      handleRemove={() => this.removeNotification(notification.id)}
+                    />
+                  ))
+                }
+              </div>
             )
             : null
         }
-      </div>
+      </>
     );
   }
 }

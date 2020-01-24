@@ -8,14 +8,18 @@ import SettingsBlock from './entities/SettingsBlock';
 import styles from './Settings.scss';
 
 const Settings = () => (
-  <Container>
-    <div className={styles.settings}>
-      <NodeConnection />
-      <Contractuploading />
-      <SettingsBlock />
-    </div>
+  <>
+    <Container>
+      <div className={styles.settings__container}>
+        <div className={styles.settings}>
+          <NodeConnection />
+          <Contractuploading />
+          <SettingsBlock />
+        </div>
+      </div>
+    </Container>
     <Footer />
-  </Container>
+  </>
 );
 
 export default Settings;

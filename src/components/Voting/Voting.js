@@ -170,94 +170,96 @@ class Voting extends React.Component {
       },
     } = props;
     return (
-      <Container className="container--small">
-        <div
-          className={styles['voting-page']}
-        >
-          <Notification />
-          {
-            !loading
-              ? <VotingFilter />
-              : null
-          }
-          {
-            !loading
+      <>
+        <Container className="container--small">
+          <div
+            className={styles['voting-page']}
+          >
+            <Notification />
+            {
+              !loading
+                ? <VotingFilter />
+                : null
+            }
+            {
+              !loading
+                ? (
+                  <VotingTop
+                    onClick={() => { dialogStore.show('start_new_vote'); }}
+                    votingIsActive={isVotingActive}
+                  />
+                )
+                : null
+            }
+            {
+              !loading
+                ? (<VotingList />)
+                : <Loader />
+            }
+            {!loading
               ? (
-                <VotingTop
-                  onClick={() => { dialogStore.show('start_new_vote'); }}
-                  votingIsActive={isVotingActive}
+                <Pagination
+                  activePage={pagination.activePage}
+                  lastPage={pagination.lastPage}
+                  handlePageChange={pagination.handleChange}
+                  itemsCountPerPage={pagination.itemsCountPerPage}
+                  totalItemsCount={pagination.totalItemsCount}
+                  pageRangeDisplayed={pagination.pageRangeDisplayed}
                 />
               )
-              : null
-          }
-          {
-            !loading
-              ? (<VotingList />)
-              : <Loader />
-          }
-          {!loading
-            ? (
-              <Pagination
-                activePage={pagination.activePage}
-                lastPage={pagination.lastPage}
-                handlePageChange={pagination.handleChange}
-                itemsCountPerPage={pagination.itemsCountPerPage}
-                totalItemsCount={pagination.totalItemsCount}
-                pageRangeDisplayed={pagination.pageRangeDisplayed}
-              />
-            )
-            : null}
-        </div>
+              : null}
+          </div>
+          <Dialog
+            size="xlg"
+            name="start_new_vote"
+            header={null}
+            footer={null}
+            onClose={this.onCloseNewVote}
+          >
+            <StartNewVote />
+          </Dialog>
+          <Dialog
+            name="password_form"
+            size="md"
+            footer={null}
+            header={t('fields:enterPassword')}
+          >
+            <FinPassFormWrapper form={this.passwordForm} />
+          </Dialog>
+
+          <Dialog
+            name="progress_modal_voting"
+            size="md"
+            footer={null}
+            header={t('headings:sendingTransaction')}
+            closeable={!(status === voteStatus.inProgress)}
+          >
+            <TransactionProgress />
+          </Dialog>
+
+          <Dialog
+            name="success_modal_voting"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
+
+          <Dialog
+            name="error_modal_voting"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ErrorMessage
+              onButtonClick={() => { dialogStore.back(3); }}
+              buttonText={t('buttons:retry')}
+            />
+          </Dialog>
+        </Container>
         <Footer />
-        <Dialog
-          size="xlg"
-          name="start_new_vote"
-          header={null}
-          footer={null}
-          onClose={this.onCloseNewVote}
-        >
-          <StartNewVote />
-        </Dialog>
-        <Dialog
-          name="password_form"
-          size="md"
-          footer={null}
-          header={t('fields:enterPassword')}
-        >
-          <FinPassFormWrapper form={this.passwordForm} />
-        </Dialog>
-
-        <Dialog
-          name="progress_modal_voting"
-          size="md"
-          footer={null}
-          header={t('headings:sendingTransaction')}
-          closeable={!(status === voteStatus.inProgress)}
-        >
-          <TransactionProgress />
-        </Dialog>
-
-        <Dialog
-          name="success_modal_voting"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
-
-        <Dialog
-          name="error_modal_voting"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ErrorMessage
-            onButtonClick={() => { dialogStore.back(3); }}
-            buttonText={t('buttons:retry')}
-          />
-        </Dialog>
-      </Container>
+      </>
     );
   }
 }

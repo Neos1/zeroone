@@ -366,127 +366,129 @@ class VotingInfoWrapper extends React.PureComponent {
     const [question] = questionStore.getQuestionById(voting.questionId);
     const params = this.prepareParameters(voting, question);
     return (
-      <Container className="container--small">
-        <VotingInfo
-          isUserReturnTokensActual={isUserReturnTokensActual}
-          dataStats={dataStats}
-          date={{
-            start: Number(voting.startTime),
-            end: Number(voting.endTime),
-          }}
-          voting={voting}
-          index={id}
-          title={question.caption}
-          duration={Number(question.time)}
-          addressContract={question.target}
-          description={question.text}
-          formula={question.getFormula()}
-          params={params}
-          onVerifyClick={() => { this.onVerifyClick(); }}
-          onRejectClick={() => { this.onRejectClick(); }}
-          onCompleteVoteClick={() => { this.onClosingClick(); }}
-          onBarClick={
-            () => {
-              if (this.isERC20Type === true) {
-                dialogStore.show('is_erc20_modal_voting_info_wrapper');
-                return;
+      <>
+        <Container className="container--small">
+          <VotingInfo
+            isUserReturnTokensActual={isUserReturnTokensActual}
+            dataStats={dataStats}
+            date={{
+              start: Number(voting.startTime),
+              end: Number(voting.endTime),
+            }}
+            voting={voting}
+            index={id}
+            title={question.caption}
+            duration={Number(question.time)}
+            addressContract={question.target}
+            description={question.text}
+            formula={question.getFormula()}
+            params={params}
+            onVerifyClick={() => { this.onVerifyClick(); }}
+            onRejectClick={() => { this.onRejectClick(); }}
+            onCompleteVoteClick={() => { this.onClosingClick(); }}
+            onBarClick={
+              () => {
+                if (this.isERC20Type === true) {
+                  dialogStore.show('is_erc20_modal_voting_info_wrapper');
+                  return;
+                }
+                dialogStore.show('voter_list_voting_info_wrapper');
               }
-              dialogStore.show('voter_list_voting_info_wrapper');
             }
-          }
-        />
-        <Footer />
-
-        <Dialog
-          name="decision_agree_voting_info_wrapper"
-          size="md"
-          header={null}
-          footer={null}
-        >
-          <DecisionAgree form={this.votingForm} />
-        </Dialog>
-
-        <Dialog
-          name="decision_reject_voting_info_wrapper"
-          size="md"
-          header={null}
-          footer={null}
-        >
-          <DecisionReject form={this.votingForm} />
-        </Dialog>
-
-        <Dialog
-          name="descision_close_voting_info_wrapper"
-          header={null}
-          footer={null}
-        >
-          <DecisionClose form={this.closingForm} />
-        </Dialog>
-
-        <Dialog
-          name="voter_list_voting_info_wrapper"
-          size="lg"
-          header={null}
-          footer={null}
-        >
-          <VoterList data={this.dataVotes} />
-        </Dialog>
-
-        <Dialog
-          name="decision_agree_voting_info_wrapper_message"
-          header={null}
-          footer={null}
-        >
-          <AgreedMessage onButtonClick={() => dialogStore.hide()} />
-        </Dialog>
-
-        <Dialog
-          name="decision_reject_voting_info_wrapper_message"
-          header={null}
-          footer={null}
-        >
-          <RejectMessage onButtonClick={() => dialogStore.hide()} />
-        </Dialog>
-
-        <Dialog
-          name="progress_modal_voting_info_wrapper"
-          size="md"
-          footer={null}
-          header={t('other:sendingTransaction')}
-          closeable={false}
-        >
-          <TransactionProgress />
-        </Dialog>
-
-        <Dialog
-          name="success_modal_voting_info_wrapper"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
-
-        <Dialog
-          name="error_modal_voting_info_wrapper"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ErrorMessage
-            onButtonClick={() => { dialogStore.back(3); }}
-            buttonText={t('buttons:retry')}
           />
-        </Dialog>
-        <Dialog
-          name="is_erc20_modal_voting_info_wrapper"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ERC20TokensUsed onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
-      </Container>
+
+          <Dialog
+            name="decision_agree_voting_info_wrapper"
+            size="md"
+            header={null}
+            footer={null}
+          >
+            <DecisionAgree form={this.votingForm} />
+          </Dialog>
+
+          <Dialog
+            name="decision_reject_voting_info_wrapper"
+            size="md"
+            header={null}
+            footer={null}
+          >
+            <DecisionReject form={this.votingForm} />
+          </Dialog>
+
+          <Dialog
+            name="descision_close_voting_info_wrapper"
+            header={null}
+            footer={null}
+          >
+            <DecisionClose form={this.closingForm} />
+          </Dialog>
+
+          <Dialog
+            name="voter_list_voting_info_wrapper"
+            size="lg"
+            header={null}
+            footer={null}
+          >
+            <VoterList data={this.dataVotes} />
+          </Dialog>
+
+          <Dialog
+            name="decision_agree_voting_info_wrapper_message"
+            header={null}
+            footer={null}
+          >
+            <AgreedMessage onButtonClick={() => dialogStore.hide()} />
+          </Dialog>
+
+          <Dialog
+            name="decision_reject_voting_info_wrapper_message"
+            header={null}
+            footer={null}
+          >
+            <RejectMessage onButtonClick={() => dialogStore.hide()} />
+          </Dialog>
+
+          <Dialog
+            name="progress_modal_voting_info_wrapper"
+            size="md"
+            footer={null}
+            header={t('other:sendingTransaction')}
+            closeable={false}
+          >
+            <TransactionProgress />
+          </Dialog>
+
+          <Dialog
+            name="success_modal_voting_info_wrapper"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
+
+          <Dialog
+            name="error_modal_voting_info_wrapper"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ErrorMessage
+              onButtonClick={() => { dialogStore.back(3); }}
+              buttonText={t('buttons:retry')}
+            />
+          </Dialog>
+          <Dialog
+            name="is_erc20_modal_voting_info_wrapper"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ERC20TokensUsed onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
+        </Container>
+        <Footer />
+      </>
     );
   }
 }
