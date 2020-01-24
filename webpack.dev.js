@@ -17,7 +17,7 @@ module.exports = {
       { from: './src/assets', to: './build/assets' },
       { from: './src/wallets', to: './wallets' },
       { from: './src/contracts', to: './contracts' },
-      { from: './src/config.json', to: './build/config.json' },
+      { from: './src/config.json', to: './config.json' },
     ]),
   ],
   output: {
