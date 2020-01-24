@@ -35,9 +35,14 @@ class HistoryStore {
             totalItemsCount: this.list.length,
           });
         });
+        await this.setLoadingFinish();
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
+  }
+
+  @action setLoadingFinish() {
+    this.loading = false;
   }
 
   /**
@@ -168,12 +173,10 @@ class HistoryStore {
     this.writeVotingListToState(votings);
     if (!votings || !votings.length) {
       await this.getVotingsFromContract();
-      this.loading = false;
       return;
     }
     await this.getMissingVotings();
     await this.updateVotingWithActiveState();
-    this.loading = false;
   }
 
   /**

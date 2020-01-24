@@ -59,7 +59,8 @@ class ProjectStore {
     if (this.questionStore && this.historyStore && rootStore.membersStore) {
       const { membersStore } = rootStore;
       const { questionStore, historyStore } = this;
-      this.isInitiated = !(questionStore.loading && historyStore.loading && membersStore.loading);
+      this.isInitiated = !(questionStore.loading || historyStore.loading || membersStore.loading);
+      console.log(questionStore.loading, historyStore.loading, membersStore.loading);
     }
   }
 
