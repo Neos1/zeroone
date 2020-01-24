@@ -41,6 +41,15 @@
       border: 1px solid #e1e4e8;
       border-radius: 2px;
       outline: none;
+      transition: .2s;
+      &::-webkit-input-placeholder {
+        opacity: 0;
+      }
+      &:focus {
+        & + .field__label--textarea {
+          color: $primary;
+        }
+      } 
     }
   }
 
@@ -55,6 +64,8 @@
     transition: 0.2s;
 
     &--textarea {
+      position: absolute;
+      bottom: 100%;
       margin-bottom: 4px;
       color: $placeholderColor;
       font-size: 14px;
@@ -126,7 +137,6 @@
 
   &--textarea {
     position: relative;
-
     .field__error-text {
       top: unset;
       bottom: -17px;
