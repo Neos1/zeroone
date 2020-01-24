@@ -10,13 +10,13 @@ class ConfigForm extends ExtendedForm {
         type: 'text',
         label: 'minGasPrice',
         placeholder: i18n.t('fields:minGasPrice'),
-        rules: 'numeric|min:1|max:100',
+        rules: 'numeric|bettween:1,100',
       }, {
         name: 'maxGasPrice',
         type: 'text',
         label: 'maxGasPrice',
         placeholder: i18n.t('fields:maxGasPrice'),
-        rules: 'numeric|min:1|max:100',
+        rules: 'numeric|bettween:1,100',
       },
       {
         name: 'gasLimit',
