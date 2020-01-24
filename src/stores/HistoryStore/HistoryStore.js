@@ -27,14 +27,14 @@ class HistoryStore {
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.loading = true;
-    this.getActualState();
     this.filter = new FilterStore();
-    this.pagination = new PaginationStore({
-      totalItemsCount: this.list.length,
-    });
     this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
-        await this.getActualState();
+        await this.getActualState(() => {
+          this.pagination = new PaginationStore({
+            totalItemsCount: this.list.length,
+          });
+        });
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
@@ -67,7 +67,12 @@ class HistoryStore {
    */
   @computed
   get paginatedList() {
-    const range = this.pagination.paginationRange;
+    let range;
+    if (!this.pagination || !this.pagination.paginationRange) {
+      range = [0, 5];
+    } else {
+      range = this.pagination.paginationRange;
+    }
     return this.list.slice(range[0], range[1] + 1);
   }
 
@@ -99,12 +104,15 @@ class HistoryStore {
    * this store. This includes: current voting list,
    * whether the user returned tokens, whether
    * there is an active voting
+   *
+   * @param {Function} cb callback function
    */
   @action
-  async getActualState() {
-    this.getActualVotings();
+  async getActualState(cb) {
+    await this.getActualVotings();
     this.isActiveVoting = await this.hasActiveVoting();
     await this.fetchUserReturnTokens();
+    if (cb) cb();
   }
 
   /**
@@ -292,9 +300,9 @@ class HistoryStore {
     if (countVotingFromContract > votingListFromFileLength) {
       for (let i = votingListFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const duplicateVoting = this._votings.find((item) => item.id === i);
+        const voting = await this.getVotingFromContractById(i);
+        const duplicateVoting = this._votings.find((item) => item.id === voting.id);
         if (!duplicateVoting) {
-          const voting = await this.getVotingFromContractById(i);
           this._votings.unshift(new Voting(voting));
         }
       }
@@ -309,10 +317,12 @@ class HistoryStore {
    */
   addFilterRule = (rule) => {
     this.filter.addFilterRule(rule);
-    this.pagination.update({
-      activePage: 1,
-      totalItemsCount: this.list.length,
-    });
+    if (this.pagination) {
+      this.pagination.update({
+        activePage: 1,
+        totalItemsCount: this.list.length,
+      });
+    }
   }
 
   /**
@@ -323,10 +333,12 @@ class HistoryStore {
    */
   removeFilterRule = (rule) => {
     this.filter.removeFilterRule(rule);
-    this.pagination.update({
-      activePage: 1,
-      totalItemsCount: this.list.length,
-    });
+    if (this.pagination) {
+      this.pagination.update({
+        activePage: 1,
+        totalItemsCount: this.list.length,
+      });
+    }
   }
 
   /**
@@ -335,10 +347,15 @@ class HistoryStore {
    */
   resetFilter = () => {
     this.filter.reset();
-    this.pagination.update({
-      activePage: 1,
-      totalItemsCount: this.list.length,
-    });
+    if (
+      this.pagination
+      && this.pagination.update
+    ) {
+      this.pagination.update({
+        activePage: 1,
+        totalItemsCount: this.list.length,
+      });
+    }
   }
 
   /** Write raw voting list data to file */
