@@ -219,6 +219,27 @@
 
   &--showseed {
     @extend .btn--white;
+    svg{
+      path{ 
+        fill: $white;
+      }
+    }
+    &:hover {
+      svg {
+        path {
+          fill: $white;
+          stroke: $primary;
+        }
+      }
+    } 
+    &:active {
+      svg {
+        path {
+          fill: $primary;
+          stroke: $white;
+        }
+      }
+    } 
   }
 
   &--back {

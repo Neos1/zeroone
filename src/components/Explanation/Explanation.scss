@@ -17,4 +17,13 @@
       }
     }
   }
+  &--bold {
+    color: $primary;
+    .explanation__string {
+      border-left: 2px solid $primary;
+    }
+    p {
+      font-weight: 700;
+    }
+  }
 }
