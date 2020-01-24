@@ -182,14 +182,20 @@ class Voting extends React.Component {
                     votingIsActive={isVotingActive}
                   />
                   <VotingList />
-                  <Pagination
-                    activePage={pagination.activePage}
-                    lastPage={pagination.lastPage}
-                    handlePageChange={pagination.handleChange}
-                    itemsCountPerPage={pagination.itemsCountPerPage}
-                    totalItemsCount={pagination.totalItemsCount}
-                    pageRangeDisplayed={pagination.pageRangeDisplayed}
-                  />
+                  {
+                    pagination
+                      ? (
+                        <Pagination
+                          activePage={pagination.activePage}
+                          lastPage={pagination.lastPage}
+                          handlePageChange={pagination.handleChange}
+                          itemsCountPerPage={pagination.itemsCountPerPage}
+                          totalItemsCount={pagination.totalItemsCount}
+                          pageRangeDisplayed={pagination.pageRangeDisplayed}
+                        />
+                      )
+                      : null
+                  }
                 </>
               )
               : (

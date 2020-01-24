@@ -151,14 +151,20 @@ class Questions extends Component {
                     <div className={styles.questions__wrapper}>
                       <QuestionsList />
                     </div>
-                    <Pagination
-                      activePage={pagination.activePage}
-                      lastPage={pagination.lastPage}
-                      handlePageChange={pagination.handleChange}
-                      itemsCountPerPage={pagination.itemsCountPerPage}
-                      totalItemsCount={pagination.totalItemsCount}
-                      pageRangeDisplayed={pagination.pageRangeDisplayed}
-                    />
+                    {
+                      pagination
+                        ? (
+                          <Pagination
+                            activePage={pagination.activePage}
+                            lastPage={pagination.lastPage}
+                            handlePageChange={pagination.handleChange}
+                            itemsCountPerPage={pagination.itemsCountPerPage}
+                            totalItemsCount={pagination.totalItemsCount}
+                            pageRangeDisplayed={pagination.pageRangeDisplayed}
+                          />
+                        )
+                        : null
+                    }
                   </>
                 )
                 : (

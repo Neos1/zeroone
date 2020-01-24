@@ -27,14 +27,14 @@ class QuestionStore {
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.loading = true;
-    this.getActualState();
     this.filter = new FilterStore();
-    this.pagination = new PaginationStore({
-      totalItemsCount: this.list.length,
-    });
     this.interval = new AsyncInterval({
       cb: async () => {
-        await this.getActualState();
+        await this.getActualState(() => {
+          this.pagination = new PaginationStore({
+            totalItemsCount: this.list.length,
+          });
+        });
       },
       timeoutInterval: UPDATE_INTERVAL,
     });
@@ -79,7 +79,12 @@ class QuestionStore {
    */
   @computed
   get paginatedList() {
-    const range = this.pagination.paginationRange;
+    let range;
+    if (!this.pagination || !this.pagination.paginationRange) {
+      range = [0, 5];
+    } else {
+      range = this.pagination.paginationRange;
+    }
     return this.list.slice(range[0], range[1] + 1);
   }
 
@@ -129,11 +134,16 @@ class QuestionStore {
   /**
    * Method for getting actual state for
    * this store.
+   *
+   * @param {Function} cb callback function
    */
   @action
-  async getActualState() {
+  async getActualState(cb) {
     await this.getActualQuestions();
     await this.fetchActualQuestionGroups();
+    this.loading = false;
+    console.log('only after questions');
+    if (cb) cb();
   }
 
   @action
@@ -249,11 +259,9 @@ class QuestionStore {
     this.writeQuestionsListToState(questions);
     if (!questions || !questions.length) {
       await this.getQuestionsFromContract();
-      this.loading = false;
       return;
     }
     await this.getMissingQuestions(questions);
-    this.loading = false;
   }
 
   /**
@@ -277,10 +285,12 @@ class QuestionStore {
    */
   addFilterRule = (rule) => {
     this.filter.addFilterRule(rule);
-    this.pagination.update({
-      activePage: 1,
-      totalItemsCount: this.list.length,
-    });
+    if (this.pagination) {
+      this.pagination.update({
+        activePage: 1,
+        totalItemsCount: this.list.length,
+      });
+    }
   }
 
   /**
@@ -289,10 +299,12 @@ class QuestionStore {
    */
   resetFilter = () => {
     this.filter.reset();
-    this.pagination.update({
-      activePage: 1,
-      totalItemsCount: this.list.length,
-    });
+    if (this.pagination) {
+      this.pagination.update({
+        activePage: 1,
+        totalItemsCount: this.list.length,
+      });
+    }
   }
 
   /**
