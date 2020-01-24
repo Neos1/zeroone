@@ -350,8 +350,13 @@ class VotingInfoWrapper extends React.PureComponent {
     let decodedRawParams;
     let decodedParams;
     if (id !== 1) {
-      parameters = params.map((param) => param[1]);
-      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, votingData);
+      parameters = params[0] !== undefined
+        ? params.map((param) => param[1])
+        : [];
+
+      decodedRawParams = votingData !== '0x'
+        ? Web3Service.web3.eth.abi.decodeParameters(parameters, votingData)
+        : [];
       decodedParams = params.map((param, index) => [param[0], decodedRawParams[index]]);
     } else {
       parameters = ['uint[]', 'uint8', 'string', 'string', 'address', 'bytes4', 'uint[]', 'bytes32[]'];

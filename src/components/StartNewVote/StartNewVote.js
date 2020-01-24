@@ -47,7 +47,10 @@ class StartNewVote extends React.Component {
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
         const { params: parameters, groupId, methodSelector } = question;
-        const params = parameters.map((param) => (param[1]));
+        let params = parameters.map((param) => (param[1]));
+        if (params[0] === undefined) {
+          params = [];
+        }
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, values);
         const votingData = encodedParams.replace('0x', methodSelector);
         projectStore.setVotingData(questionId, groupId, votingData);
@@ -125,14 +128,16 @@ class StartNewVote extends React.Component {
   // eslint-disable-next-line class-methods-use-this
   createFields(params) {
     // eslint-disable-next-line array-callback-return
-    params.map(([name, type]) => {
-      this.form.add({
-        name,
-        type: 'text',
-        label: 'parameter',
-        placeholder: name,
-        rules: `required|${type}`,
-      });
+    params.map((param) => {
+      if (params.length !== 0 && typeof params[0] !== 'object') {
+        this.form.add({
+          name: param.name,
+          type: 'text',
+          label: 'parameter',
+          placeholder: param.name,
+          rules: `required|${param.type}`,
+        });
+      }
     });
   }
 

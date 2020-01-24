@@ -134,7 +134,6 @@ class CreateNewQuestionForm extends React.PureComponent {
       parameters.push(inputValue, selectValue);
     });
     parameters = parameters.filter((e) => e !== '');
-    console.log(parameters);
     return parameters;
   }
 
