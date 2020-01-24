@@ -18,7 +18,7 @@ const buttons = {
   withoutTokens: 'Создать новые токены и проект',
   toWallets: 'К выбору кошелька',
   createQuestion: 'Создать вопрос',
-  createQuestionGroup: 'Создать группу воросов',
+  createQuestionGroup: 'Создать группу вопросов',
   startNewVoting: 'Начать новое голосование',
   transfer: 'Перевести',
   designateGroupAdministrator: 'назначить администратором группы',
