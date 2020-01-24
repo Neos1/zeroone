@@ -118,6 +118,7 @@ class SimpleDropdown extends Component {
       <div
         className={`
           ${styles.dropdown}
+          ${styles['dropdown--simple']}
           ${opened ? 'dropdown--opened' : ''}
           ${field && field.error ? styles['dropdown--error'] : ''}
         `}

@@ -327,12 +327,14 @@
 
   &__filter  {
     &-dropdown {
-      display: inline-block;
-      width: 220px;
+      display: inline-flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      width: 500px;
       margin-right: 29px;
 
       .dropdown {
-        width: 100%;
+        width: 220px;
       }
     }
 
@@ -350,22 +352,24 @@
   &__item {
     min-height: 126px;
     margin-bottom: 8px;
-    padding: 16px 8px 16px 30px;
+    padding: 10px 8px 16px 30px;
     font-size : 0;
     background: #fff;
     border: 1px solid #e1e4e8;
     transition: border-color 0.3s;
 
-    &-info,
     &-date,
     &-progress {
       display: inline-block;
+      margin-top: 8px;
       vertical-align: middle;
     }
 
     &-info {
+      display: inline-block;
       width: 54%;
       text-align: left;
+      vertical-align: top;
     }
 
     &-date {
@@ -387,7 +391,7 @@
       &-text {
         color: rgba(0, 0, 0, 0.7);
         font-size: 11px;
-        line-height: 13px;
+        line-height: 15px;
         text-align: left;
       }
     }
@@ -407,6 +411,7 @@
     &-title {
       margin-bottom: 8px;
       color: rgba(0, 0, 0, 1);
+      font-weight: 700;
       font-size: 18px;
       line-height: 21px;
     }

@@ -7,6 +7,24 @@
     background: transparent;
     outline: none;
   }
+  
+  &--simple {
+    .dropdown__options {
+      width: 100%;
+      height: 160px;
+      max-height: 160px;
+    }
+    .dropdown__option {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: left;
+      text-overflow: ellipsis;
+      &:hover {
+        background-color: rgba($color: #E6E6E6, $alpha: .8);
+      }
+    }
+  }
 
   &__head {
     position: relative;
@@ -68,10 +86,11 @@
     transform: translateY(-50%) rotate(0deg);
     transition: 0.2s;
     svg {
+      width: 12px;
       path {
         opacity: 1;
         transition: 0.2s;
-        stroke: $lightGrey;
+        stroke: $border;
       }
     }
   }
@@ -111,7 +130,7 @@
     width: 155%;
     height: 0;
     max-height: 150px;
-    padding: 5px 10px;
+    padding: 5px 0;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: $white;
@@ -154,9 +173,10 @@
 
   &__option {
     display: block;
-    padding: 10px 0;
+    padding: 10px;
     border: none;
     cursor: pointer;
+    transition: .2s;
   }
 
   &__suboption {

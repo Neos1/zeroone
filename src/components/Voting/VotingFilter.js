@@ -49,6 +49,11 @@ class VotingFilter extends React.PureComponent {
     addFilterRule({ questionId: selected.value.toString() });
   }
 
+  handleStatusSelect = (selected) => {
+    const { projectStore: { historyStore: { addFilterRule } } } = this.props;
+    addFilterRule({ descision: selected.value.toString(), status: '1' });
+  }
+
   /**
    * Method for handle date change
    */
@@ -81,6 +86,20 @@ class VotingFilter extends React.PureComponent {
         historyStore: { filter: { rules } },
       },
     } = this.props;
+
+    const statusOptions = [{
+      label: 'Descision',
+      value: '*',
+    }, {
+      label: 'Not Accepted',
+      value: '0',
+    }, {
+      label: 'Positive',
+      value: '1',
+    }, {
+      label: 'Negative',
+      value: '2',
+    }];
     return (
       <>
         <div className={styles['voting__filter-dropdown']}>
@@ -89,6 +108,14 @@ class VotingFilter extends React.PureComponent {
             options={options}
             onSelect={this.handleQuestionSelect}
             initIndex={Number(rules.questionId)}
+            key={uniqKey()}
+          >
+            <QuestionIcon />
+          </SimpleDropdown>
+          <SimpleDropdown
+            options={statusOptions}
+            onSelect={this.handleStatusSelect}
+            initIndex={0}
             key={uniqKey()}
           >
             <QuestionIcon />
