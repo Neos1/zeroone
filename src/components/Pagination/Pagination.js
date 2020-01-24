@@ -31,6 +31,15 @@ class Pagination extends React.Component {
     };
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.activePage !== state.value) {
+      return {
+        value: props.activePage,
+      };
+    }
+    return null;
+  }
+
   /**
    * Handle input change
    *
@@ -45,8 +54,17 @@ class Pagination extends React.Component {
     // do not let us enter a value greater than the maximum
     if (newValue >= lastPage) newValue = lastPage;
     if (newValue <= minPage) newValue = minPage;
-    this.setState({ value: newValue });
+    this.setPaginationValue(newValue);
     event.target.select();
+  }
+
+  /**
+   * Method for setting input value
+   *
+   * @param {number} newValue new value input
+   */
+  setPaginationValue = (newValue) => {
+    this.setState({ value: newValue });
   }
 
   /**
@@ -69,7 +87,7 @@ class Pagination extends React.Component {
       handlePageChange,
     } = this.props;
     handlePageChange(page);
-    this.setState({ value: page });
+    this.setPaginationValue(page);
   }
 
   /**
