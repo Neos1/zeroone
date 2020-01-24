@@ -1,5 +1,5 @@
 const {
-  app, BrowserWindow, shell, ipcMain,
+  app, BrowserWindow, shell, ipcMain, dialog,
 } = require('electron');
 const electronLocalShortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
@@ -31,6 +31,7 @@ function createLoadingScreen() {
   });
   loadingScreen.setResizable(false);
   loadingScreen.loadURL(`file://${__dirname}/splash.html`);
+  // eslint-disable-next-line no-return-assign
   loadingScreen.on('closed', () => (loadingScreen = null));
   loadingScreen.webContents.on('did-finish-load', () => {
     loadingScreen.show();
@@ -54,14 +55,14 @@ function createWindow() {
     show: false,
   });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-  // eslint-disable-next-line no-unused-expressions
 
-  isDev
-    ? process.env.NODE_ENV = 'production'
-    : process.env.NODE_ENV = 'development';
+  process.env.NODE_ENV = isDev
+    ? 'production'
+    : 'development';
 
   mainWindow.setMenu(null);
 
+  // eslint-disable-next-line no-return-assign
   mainWindow.on('closed', () => mainWindow = null);
 
   mainWindow.webContents.on('new-window', (event, url) => {
@@ -80,6 +81,11 @@ function createWindow() {
       loadingScreen.close();
     }
     mainWindow.show();
+  });
+
+  ipcMain.on('config-problem', (event, filePath) => {
+    dialog.showErrorBox('File reading error', `File ${filePath} is corrupted, please check it`);
+    loadingScreen.close();
   });
 
   ipcMain.on('change-language:request', ((event, value) => {

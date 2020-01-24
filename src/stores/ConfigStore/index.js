@@ -15,8 +15,9 @@ class ConfigStore {
     try {
       this.config = JSON.parse(fs.readFileSync(PATH_TO_CONFIG));
       this.updateValues(this.config);
+    // eslint-disable-next-line no-empty
     } catch {
-      alert('Problems with config. Please check it.');
+
     }
   }
 
