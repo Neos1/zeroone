@@ -142,7 +142,6 @@ class QuestionStore {
     await this.getActualQuestions();
     await this.fetchActualQuestionGroups();
     this.loading = false;
-    console.log('only after questions');
     if (cb) cb();
   }
 
