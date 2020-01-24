@@ -27,7 +27,7 @@ function createLoadingScreen() {
     frame: false,
     skipTaskbar: true,
     resizable: false,
-    alwaysOnTop: true,
+    alwaysOnTop: false,
   });
   loadingScreen.setResizable(false);
   loadingScreen.loadURL(`file://${__dirname}/splash.html`);
