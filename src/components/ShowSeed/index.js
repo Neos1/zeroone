@@ -67,12 +67,15 @@ class ShowSeed extends Component {
             </Button>
           </NavLink>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
-            <Explanation>
+            <Explanation
+              bold
+            >
               <p>{t('explanations:seed.0')}</p>
               <p>{t('explanations:seed.1')}</p>
             </Explanation>
             <Button
               theme="white"
+              className="btn--showseed"
               icon={!visible ? <EyeIcon /> : <CrossedEyeIcon />}
               onClick={this.toggleWords}
             >

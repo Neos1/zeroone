@@ -147,10 +147,11 @@
     text-align: left;
     &-id {
       display: inline-block;
+      width: 20px;
       margin-right: 10px;
       color: #181818;
+      text-align: right;
       opacity: .5;
-
     }
     &-text {
       font-weight: bold;
