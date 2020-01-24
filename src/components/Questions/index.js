@@ -140,84 +140,86 @@ class Questions extends Component {
       },
     } = projectStore;
     return (
-      <Container className="container--small">
-        <Notification />
-        <div className={styles.questions}>
-          {
-              !loading
-                ? (
-                  <>
-                    <QuestionsHead />
-                    <div className={styles.questions__wrapper}>
-                      <QuestionsList />
+      <>
+        <Container className="container--small">
+          <Notification />
+          <div className={styles.questions}>
+            {
+                !loading
+                  ? (
+                    <>
+                      <QuestionsHead />
+                      <div className={styles.questions__wrapper}>
+                        <QuestionsList />
+                      </div>
+                      {
+                        pagination
+                          ? (
+                            <Pagination
+                              activePage={pagination.activePage}
+                              lastPage={pagination.lastPage}
+                              handlePageChange={pagination.handleChange}
+                              itemsCountPerPage={pagination.itemsCountPerPage}
+                              totalItemsCount={pagination.totalItemsCount}
+                              pageRangeDisplayed={pagination.pageRangeDisplayed}
+                            />
+                          )
+                          : null
+                      }
+                    </>
+                  )
+                  : (
+                    <div className={styles.questions__loader}>
+                      <Loader />
                     </div>
-                    {
-                      pagination
-                        ? (
-                          <Pagination
-                            activePage={pagination.activePage}
-                            lastPage={pagination.lastPage}
-                            handlePageChange={pagination.handleChange}
-                            itemsCountPerPage={pagination.itemsCountPerPage}
-                            totalItemsCount={pagination.totalItemsCount}
-                            pageRangeDisplayed={pagination.pageRangeDisplayed}
-                          />
-                        )
-                        : null
-                    }
-                  </>
-                )
-                : (
-                  <div className={styles.questions__loader}>
-                    <Loader />
-                  </div>
-                )
-            }
-        </div>
-        <Dialog name="create_group_question" size="md" footer={null}>
-          <CreateGroupQuestions />
-        </Dialog>
-        <Dialog name="create_question" size="xlg" footer={null}>
-          <CreateNewQuestion />
-        </Dialog>
-        <Dialog
-          name="password_form_questions"
-          size="md"
-          footer={null}
-          header={t('fields:enterPassword')}
-        >
-          <FinPasswordFormWrapper form={this.passwordForm} />
-        </Dialog>
-        <Dialog
-          name="progress_modal_questions"
-          size="md"
-          footer={null}
-          header={t('headings:sendingTransaction')}
-          closeable={false}
-        >
-          <TransactionProgress />
-        </Dialog>
-        <Dialog
-          name="success_modal_questions"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
-        <Dialog
-          name="error_modal_questions"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ErrorMessage
-            onButtonClick={() => { dialogStore.back(3); }}
-            buttonText={t('buttons:retry')}
-          />
-        </Dialog>
+                  )
+              }
+          </div>
+          <Dialog name="create_group_question" size="md" footer={null}>
+            <CreateGroupQuestions />
+          </Dialog>
+          <Dialog name="create_question" size="xlg" footer={null}>
+            <CreateNewQuestion />
+          </Dialog>
+          <Dialog
+            name="password_form_questions"
+            size="md"
+            footer={null}
+            header={t('fields:enterPassword')}
+          >
+            <FinPasswordFormWrapper form={this.passwordForm} />
+          </Dialog>
+          <Dialog
+            name="progress_modal_questions"
+            size="md"
+            footer={null}
+            header={t('headings:sendingTransaction')}
+            closeable={false}
+          >
+            <TransactionProgress />
+          </Dialog>
+          <Dialog
+            name="success_modal_questions"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
+          <Dialog
+            name="error_modal_questions"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ErrorMessage
+              onButtonClick={() => { dialogStore.back(3); }}
+              buttonText={t('buttons:retry')}
+            />
+          </Dialog>
+        </Container>
         <Footer />
-      </Container>
+      </>
     );
   }
 }

@@ -49,77 +49,79 @@ class MembersPage extends React.Component {
     } = this.props;
     const { historyStore } = projectStore;
     return (
-      <Container className="container--small">
-        <Notification />
-        {
-          !loading
-            ? (
-              <>
-                <MembersTop
-                  projectName={projectStore.name}
-                  votingIsActive={historyStore.isVotingActive}
-                />
-                <div className={styles.members__page}>
-                  {
-                    list && list.length
-                      ? (
-                        list.map((group, index) => (
-                          <MembersGroupComponent
-                            id={index}
-                            name={group.name}
-                            fullBalance={group.fullBalance}
-                            key={`memberGroup--${index + 1}`}
-                            description={group.description}
-                            wallet={group.wallet}
-                            token={group.tokenName}
-                            groupType={group.groupType}
-                            list={group.list}
-                            textForEmptyState={group.textForEmptyState}
-                            admin={group.groupAdmin}
-                          />
-                        ))
-                      )
-                      : null
-                  }
+      <>
+        <Container className="container--small">
+          <Notification />
+          {
+            !loading
+              ? (
+                <>
+                  <MembersTop
+                    projectName={projectStore.name}
+                    votingIsActive={historyStore.isVotingActive}
+                  />
+                  <div className={styles.members__page}>
+                    {
+                      list && list.length
+                        ? (
+                          list.map((group, index) => (
+                            <MembersGroupComponent
+                              id={index}
+                              name={group.name}
+                              fullBalance={group.fullBalance}
+                              key={`memberGroup--${index + 1}`}
+                              description={group.description}
+                              wallet={group.wallet}
+                              token={group.tokenName}
+                              groupType={group.groupType}
+                              list={group.list}
+                              textForEmptyState={group.textForEmptyState}
+                              admin={group.groupAdmin}
+                            />
+                          ))
+                        )
+                        : null
+                    }
+                  </div>
+                </>
+              )
+              : (
+                <div className={styles['members__page-loader']}>
+                  <Loader />
                 </div>
-              </>
-            )
-            : (
-              <div className={styles['members__page-loader']}>
-                <Loader />
-              </div>
-            )
-        }
-        <Dialog
-          name="progress_modal"
-          size="md"
-          footer={null}
-          header={t('headings:sendingTransaction')}
-          closeable={false}
-        >
-          <TransactionProgress />
-        </Dialog>
-        <Dialog
-          name="success_modal"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
-        </Dialog>
-        <Dialog
-          name="error_modal"
-          size="md"
-          footer={null}
-          closeable
-        >
-          <ErrorMessage
-            onButtonClick={() => { dialogStore.back(3); }}
-            buttonText={t('buttons:retry')}
-          />
-        </Dialog>
+              )
+          }
+          <Dialog
+            name="progress_modal"
+            size="md"
+            footer={null}
+            header={t('headings:sendingTransaction')}
+            closeable={false}
+          >
+            <TransactionProgress />
+          </Dialog>
+          <Dialog
+            name="success_modal"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <SuccessMessage onButtonClick={() => { dialogStore.hide(); }} />
+          </Dialog>
+          <Dialog
+            name="error_modal"
+            size="md"
+            footer={null}
+            closeable
+          >
+            <ErrorMessage
+              onButtonClick={() => { dialogStore.back(3); }}
+              buttonText={t('buttons:retry')}
+            />
+          </Dialog>
+        </Container>
         <Footer />
-      </Container>
+      </>
     );
   }
 }
