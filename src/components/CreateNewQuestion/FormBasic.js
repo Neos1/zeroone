@@ -64,9 +64,15 @@ class FormBasic extends React.Component {
             <Input field={formBasic.$('methodSelector')}>
               <Address />
             </Input>
-            <div className={styles['create-question__field-description']}>
-              {t('other:selectorNonexistentFunctionDescription')}
-            </div>
+            {
+              !formBasic.$('methodSelector').error
+                ? (
+                  <div className={styles['create-question__field-description']}>
+                    {t('other:selectorNonexistentFunctionDescription')}
+                  </div>
+                )
+                : null
+            }
           </div>
         </div>
         <div className={styles['create-question__form-row']}>
