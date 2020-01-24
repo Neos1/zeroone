@@ -91,6 +91,11 @@ class MembersGroup {
     return `${this.userBalance} ${this.customTokenName}`;
   }
 
+  @computed
+  get groupAdmin() {
+    return this.list.filter((user) => user.isAdmin === true);
+  }
+
   /**
    * Method for getting balance in group
    */

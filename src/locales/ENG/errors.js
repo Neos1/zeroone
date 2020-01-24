@@ -6,6 +6,7 @@ const errors = {
   emptyFields: 'Form have empty fields',
   lowBalance: 'Your balance is to low for this',
   hostUnreachable: 'Host is unreachable, please check your internet connection and try again',
+  transferIfNotAdmin: 'You cannot tranfer tokens from other wallets',
 };
 
 export default errors;

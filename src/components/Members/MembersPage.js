@@ -75,6 +75,7 @@ class MembersPage extends React.Component {
                             groupType={group.groupType}
                             list={group.list}
                             textForEmptyState={group.textForEmptyState}
+                            admin={group.groupAdmin}
                           />
                         ))
                       )

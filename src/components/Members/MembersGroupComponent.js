@@ -9,6 +9,7 @@ import MemberItem from '../../stores/MembersStore/MemberItem';
 import DialogStore from '../../stores/DialogStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore';
+import AppStore from '../../stores/AppStore';
 import { Pudding } from '../Icons';
 import MembersGroupTable from './MembersGroupTable';
 import Dialog from '../Dialog/Dialog';
@@ -29,7 +30,7 @@ import styles from './Members.scss';
  * @param item
  */
 @withTranslation()
-@inject('dialogStore', 'membersStore', 'userStore')
+@inject('dialogStore', 'membersStore', 'userStore', 'appStore')
 @observer
 class MembersGroupComponent extends React.Component {
   transferSteps = {
@@ -94,6 +95,8 @@ class MembersGroupComponent extends React.Component {
     dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
     membersStore: PropTypes.instanceOf(MembersStore).isRequired,
     userStore: PropTypes.instanceOf(UserStore).isRequired,
+    appStore: PropTypes.instanceOf(AppStore).isRequired,
+    admin: PropTypes.shape().isRequired,
   }
 
   constructor() {
@@ -184,12 +187,33 @@ class MembersGroupComponent extends React.Component {
     membersStore.setTransferStatus('input');
   }
 
-  handleClick = (selectedWallet) => {
-    const { membersStore } = this.props;
-    membersStore.setTransferStatus('input');
-    const { dialogStore, id } = this.props;
-    this.setState({ selectedWallet });
-    dialogStore.show(`transfer-token-${id}`);
+  handleClick = ({ selectedWallet }) => {
+    const {
+      membersStore,
+      admin: administrator,
+      userStore: { address },
+      appStore,
+      groupType,
+      t,
+    } = this.props;
+    let admin = [];
+    let isAdmininstrator = false;
+
+    const isIdentical = selectedWallet.toUpperCase() === address.toUpperCase();
+
+    if (groupType === 'Custom') {
+      [admin] = administrator;
+      isAdmininstrator = (address.toUpperCase() === admin.wallet.toUpperCase());
+    }
+    if (isIdentical || isAdmininstrator) {
+      membersStore.setTransferStatus('input');
+      const { dialogStore, id } = this.props;
+      this.setState({ selectedWallet });
+      dialogStore.show(`transfer-token-${id}`);
+    } else {
+      // eslint-disable-next-line react/prop-types
+      appStore.displayAlert(t('errors:transferIfNotAdmin'));
+    }
   }
 
   render() {

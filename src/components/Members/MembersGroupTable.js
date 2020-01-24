@@ -110,7 +110,9 @@ class MembersGroupTable extends React.PureComponent {
                 >
                   <button
                     type="button"
-                    onClick={() => { onRowClick(item.wallet); }}
+                    onClick={() => {
+                      onRowClick({ selectedWallet: item.wallet });
+                    }}
                   >
                     {item.fullBalance}
                     <span>
