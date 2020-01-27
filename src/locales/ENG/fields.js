@@ -17,6 +17,7 @@ const placeholders = {
   durationInBlocks: 'Duration of circulation in blocks',
   questionTitle: 'Question title',
   questionLifeTime: 'Question lifetime',
+  methodSelector: 'Function selector',
   parameter: 'Parameter',
   enterNewParameterName: 'Enter new parameter name',
   votingFormula: 'Voting formula',
