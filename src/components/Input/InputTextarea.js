@@ -25,13 +25,13 @@ class InputTextarea extends Component {
           ${className}
         `}
       >
-        <div className={styles['field__label--textarea']}>{field.placeholder}</div>
         <textarea
           className={styles['field__input--textarea']}
           {...field.bind()}
           value={field.value}
           onChange={this.handleOnChange}
         />
+        <div className={styles['field__label--textarea']}>{field.placeholder}</div>
         <p className={styles['field__error-text']}>
           {field.error}
         </p>

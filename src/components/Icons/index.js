@@ -34,6 +34,7 @@ import ThinArrow from './entities/ThinArrow';
 import DateIcon from './entities/DateIcon';
 import SettingsIcon from './entities/SettingsIcon';
 import NoQuorum from './entities/NoQuorum';
+import DescisionIcon from './entities/DescisionIcon';
 
 export {
   AddIcon,
@@ -72,4 +73,5 @@ export {
   DateIcon,
   SettingsIcon,
   NoQuorum,
+  DescisionIcon,
 };

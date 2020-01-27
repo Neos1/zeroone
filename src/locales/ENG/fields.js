@@ -13,6 +13,7 @@ const placeholders = {
   question: 'Question',
   status: 'Status',
   date: 'Date',
+  descision: 'Descision',
   durationInBlocks: 'Duration of circulation in blocks',
   questionTitle: 'Question title',
   questionLifeTime: 'Question lifetime',

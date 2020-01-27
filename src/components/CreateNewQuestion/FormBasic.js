@@ -75,7 +75,7 @@ class FormBasic extends React.Component {
             }
           </div>
         </div>
-        <div className={styles['create-question__form-row']}>
+        <div className={`${styles['create-question__form-row']} ${styles['extra-padding']}`}>
           <div
             className={`
               ${styles['create-question__form-col']}

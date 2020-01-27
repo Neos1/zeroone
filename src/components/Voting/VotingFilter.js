@@ -3,19 +3,22 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import uniqKey from 'react-id-generator';
+import { withTranslation } from 'react-i18next';
 import { computed } from 'mobx';
 import SimpleDropdown from '../SimpleDropdown';
-import { QuestionIcon } from '../Icons';
+import { QuestionIcon, DescisionIcon } from '../Icons';
 import DatePicker from '../DatePicker/DatePicker';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 
 import styles from './Voting.scss';
 
+@withTranslation()
 @inject('projectStore')
 @observer
 class VotingFilter extends React.PureComponent {
   static propTypes = {
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   @computed
@@ -49,6 +52,11 @@ class VotingFilter extends React.PureComponent {
     addFilterRule({ questionId: selected.value.toString() });
   }
 
+  handleStatusSelect = (selected) => {
+    const { projectStore: { historyStore: { addFilterRule } } } = this.props;
+    addFilterRule({ descision: selected.value.toString() });
+  }
+
   /**
    * Method for handle date change
    */
@@ -80,7 +88,22 @@ class VotingFilter extends React.PureComponent {
         questionStore: { options },
         historyStore: { filter: { rules } },
       },
+      t,
     } = this.props;
+
+    const statusOptions = [{
+      label: t('fields:descision'),
+      value: '*',
+    }, {
+      label: t('other:notAccepted'),
+      value: '0',
+    }, {
+      label: t('other:pros'),
+      value: '1',
+    }, {
+      label: t('other:cons'),
+      value: '2',
+    }];
     return (
       <>
         <div className={styles['voting__filter-dropdown']}>
@@ -92,6 +115,14 @@ class VotingFilter extends React.PureComponent {
             key={uniqKey()}
           >
             <QuestionIcon />
+          </SimpleDropdown>
+          <SimpleDropdown
+            options={statusOptions}
+            onSelect={this.handleStatusSelect}
+            initIndex={0}
+            key={uniqKey()}
+          >
+            <DescisionIcon />
           </SimpleDropdown>
         </div>
         <div className={styles['voting__filter-date']}>

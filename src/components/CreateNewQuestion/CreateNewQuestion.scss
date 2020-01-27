@@ -3,7 +3,7 @@
 
 .create-question {
   width: 100%;
-  padding: 41px 60px 0;
+  padding: 40px 60px 0;
 
   &__top {
     display: inline-block;
@@ -206,4 +206,7 @@
       border-bottom: 1px solid $primary;
     }
   }
+}
+.extra-padding {
+  padding-top: 20px;
 }

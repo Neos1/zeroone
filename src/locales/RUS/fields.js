@@ -13,6 +13,7 @@ const placeholders = {
   question: 'Вопрос',
   status: 'Статус',
   date: 'Дата',
+  descision: 'Решение',
   durationInBlocks: 'Продолжительность тиража в блоках',
   questionTitle: 'Название вопроса',
   questionLifeTime: 'Время жизни вопроса',
