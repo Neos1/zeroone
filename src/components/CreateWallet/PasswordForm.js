@@ -22,6 +22,15 @@ class PasswordForm extends Component {
     };
   }
 
+  componentDidMount() {
+    const { form } = this.props;
+    if (form.$('password').value !== '') {
+      const { value } = form.$('password');
+      const validity = passwordValidation(value);
+      this.setState({ validity });
+    }
+  }
+
   handleInput = (value) => {
     const validity = passwordValidation(value);
     this.setState({ validity });
