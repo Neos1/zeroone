@@ -208,7 +208,6 @@ class Voting extends React.Component {
                 )
             }
           </div>
-          <Footer />
           <Dialog
             size="xlg"
             name="start_new_vote"
