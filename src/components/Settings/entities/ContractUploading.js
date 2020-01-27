@@ -124,6 +124,7 @@ class ContractUploading extends Component {
         >
           <TokenInputForm form={this.tokenForm} />
         </Dialog>
+
         <Dialog
           name="project_modal_contract_uploading"
           size="md"
