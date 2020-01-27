@@ -9,9 +9,13 @@
   }
   
   &--simple {
+    &.dropdown--opened {
+      .dropdown__options {
+        height: 160px;
+      }
+    }
     .dropdown__options {
       width: 100%;
-      height: 160px;
       max-height: 160px;
     }
     .dropdown__option {
