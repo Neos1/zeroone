@@ -13,7 +13,7 @@ const Header = inject('userStore', 'appStore')(observer(({ appStore: { inProject
   <header className={styles.header}>
     <Logo />
     {inProject ? <HeaderNav /> : ''}
-    <hr className={`${styles.header__line}`} />
+    <hr className={`${styles.header__line} ${inProject ? styles['header__line--bold'] : ''}`} />
     <div className={`${styles.header__right} ${authorized ? styles['is-logged'] : ''}`}>
       <LangSwitcher />
       {authorized ? <User>{address}</User> : ''}
