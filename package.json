@@ -33,6 +33,7 @@
     "ethereumjs-wallet": "^0.6.3",
     "i18next": "^19.0.0",
     "i18next-xhr-backend": "^3.2.2",
+    "litepicker": "^1.0.29",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "mobx-react-form": "^2.0.8",

@@ -8,6 +8,7 @@ import SimpleDropdown from '../SimpleDropdown';
 import { QuestionIcon } from '../Icons';
 import DatePicker from '../DatePicker/DatePicker';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
+import DateTest from '../DatePicker/DateTest';
 
 import styles from './Voting.scss';
 
@@ -103,6 +104,7 @@ class VotingFilter extends React.PureComponent {
             init={this.dateInit}
             key={uniqKey()}
           />
+          <DateTest />
         </div>
       </>
     );

@@ -1,7 +1,69 @@
 .date-picker {
   display: inline-block;
   max-width: 240px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  &__base {
+    position: relative;
+    // display: none;
+  }
+
+  &__min,
+  &__max {
+    position: relative;
+    display: inline-block;
+    width: 73px;
+    padding: 8px 0;
+    color: #181818;
+    font-size: 14px;
+    line-height: 16px;
+    background: transparent;
+    border: unset;
+    outline: none;
+    transition: border-bottom-color 0.3s;
+
+    & + span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    &:focus + span {
+      background-color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  &__min {
+    margin-left: 22px;
+  }
+
+  &__max {
+    // margin-left: 7px;
+  }
+
+  label {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &__arrow {
+    &--basic {
+      display: inline-block;
+      margin-right: 7px;
+      margin-left: 9px;
+      vertical-align: middle;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+    }
+  }
 
   &__icon {
     position: relative;
@@ -18,6 +80,14 @@
       transform: translate(-50%, -50%);
       content: "";
     }
+  }
+}
+
+.litepicker {
+  .container__months.columns-2 {
+    border: 1px solid #e1e4e8;
+    border-radius: 0;
+    box-shadow: unset;
   }
 }
 
