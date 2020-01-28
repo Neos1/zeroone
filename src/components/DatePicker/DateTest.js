@@ -6,6 +6,8 @@ import moment from 'moment';
 import { observer } from 'mobx-react';
 import { computed, observable, action } from 'mobx';
 import { withTranslation } from 'react-i18next';
+import { getCorrectPickerLocale } from '../../utils/Date';
+import i18n from '../../i18n';
 import {
   ThinArrow,
   Arrow,
@@ -68,10 +70,16 @@ class DateTest extends React.Component {
         ),
       },
     });
-    console.log('mount', this.picker);
+    this.updateLanguage();
+    window.ipcRenderer.on('change-language:confirm', () => {
+      this.updateLanguage();
+    });
   }
 
   componentWillUnmount() {
+    window.ipcRenderer.removeListener('change-language:confirm', () => {
+      this.updateLanguage();
+    });
   }
 
   @computed
@@ -84,13 +92,21 @@ class DateTest extends React.Component {
     return this.end;
   }
 
+  /**
+   * Method for handle date select
+   *
+   * @param {Date} startDate start date
+   * @param {Date} endDate end date
+   */
   @action
   handleSelect = (startDate, endDate) => {
     this.start = moment(startDate);
     this.end = moment(endDate);
-    console.log('startDate', startDate, 'endDate', endDate);
   }
 
+  /**
+   * Method for clearing selected date
+   */
   @action
   handleClear = () => {
     if (this.picker) {
@@ -100,12 +116,53 @@ class DateTest extends React.Component {
     this.end = null;
   }
 
+  /**
+   * Method for getting correct plural
+   * text for tooltip
+   *
+   * @param {string} language actual language
+   * @returns {object} correct tooltip text
+   */
+  getTooltipText = (language) => {
+    switch (language) {
+      case 'ru-RU':
+        return {
+          one: 'день',
+          many: 'дней',
+          few: 'дня',
+        };
+      case 'en-US':
+        return {
+          one: 'day',
+          other: 'days',
+        };
+      default:
+        return {
+          one: 'day',
+          other: 'days',
+        };
+    }
+  }
+
+  /**
+   * Method for update options in picker
+   * on change language event
+   */
+  updateLanguage = () => {
+    const lang = getCorrectPickerLocale(i18n.language);
+    const tooltipText = this.getTooltipText(lang);
+    if (this.picker) {
+      this.picker.setOptions({
+        lang: getCorrectPickerLocale(i18n.language),
+        tooltipText,
+      });
+    }
+  }
+
   render() {
     const { start, end, props } = this;
     const { t } = props;
     const filled = Boolean(start && end);
-    console.log('startDate', start, 'endDate', end);
-    console.log('filled', filled);
     return (
       <div
         className={styles['date-picker']}
