@@ -11,7 +11,9 @@ const DropdownOption = ({
     className={styles.dropdown__option}
     onClick={() => { select(value); }}
   >
-    {label}
+    <span className={styles['dropdown__option-label']}>
+      {label}
+    </span>
     {subOption !== ''
       ? (
         <span className={styles.dropdown__suboption}>
