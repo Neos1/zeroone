@@ -56,7 +56,6 @@ class VotingFilter extends React.PureComponent {
     startDate,
     endDate,
   }) => {
-    console.log('filter', startDate, endDate);
     const { projectStore: { historyStore: { addFilterRule } } } = this.props;
     addFilterRule({
       date: {
