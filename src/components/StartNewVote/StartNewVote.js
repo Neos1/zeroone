@@ -130,12 +130,13 @@ class StartNewVote extends React.Component {
     // eslint-disable-next-line array-callback-return
     params.map((param) => {
       if (param.length !== 0 && param[0] !== undefined) {
+        const [name, type] = param;
         this.form.add({
-          name: param.name,
+          name,
           type: 'text',
           label: 'parameter',
-          placeholder: param.name,
-          rules: `required|${param.type}`,
+          placeholder: name,
+          rules: `required|${type}`,
         });
       }
     });
