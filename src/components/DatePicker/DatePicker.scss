@@ -1,15 +1,13 @@
 .date-picker {
+  position: relative;
   display: inline-block;
   max-width: 240px;
-  // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
   &__base {
     position: relative;
-    // display: none;
   }
 
-  &__min,
-  &__max {
+  &__input {
     position: relative;
     display: inline-block;
     width: 73px;
@@ -22,7 +20,7 @@
     outline: none;
     transition: border-bottom-color 0.3s;
 
-    & + span {
+    &-line {
       position: absolute;
       bottom: 0;
       left: 0;
@@ -32,17 +30,49 @@
       transition: background-color 0.3s;
     }
 
-    &:focus + span {
-      background-color: rgba(0, 0, 0, 1);
+    &-placeholder {
+      position: absolute;
+      top: 50%;
+      color: rgba(24, 24, 24, 0.5);
+      font-size: 14px;
+      line-height: 16px;
+      transform: translateY(-50%);
+      cursor: text;
+      transition: all 0.3s;
+    }
+
+    &::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    &:focus {
+      & + .date-picker__input-after {
+        .date-picker__input-line {
+          background-color: rgba(0, 0, 0, 1);
+        }
+      }
+    }
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      & + .date-picker__input-after {
+        .date-picker__input-placeholder {
+          top: 0;
+          font-size: 9px;
+          line-height: 11px;
+        }
+      }
     }
   }
 
   &__min {
     margin-left: 22px;
-  }
 
-  &__max {
-    // margin-left: 7px;
+    & + .date-picker__input-after {
+      .date-picker__input-placeholder {
+        left: 38px;
+      }
+    }
   }
 
   label {
@@ -79,6 +109,38 @@
       background-color: rgba(0, 0, 0, 0.1);
       transform: translate(-50%, -50%);
       content: "";
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    top: 50%;
+    right: -28px;
+    padding: 5px;
+    color: #e1e4e8;
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    outline: none;
+    transform: translateY(-50%);
+    visibility: hidden;
+    cursor: pointer;
+    opacity: 0;
+    transition: color 0.3s, border-color 0.3s, opacity 0.3s;
+
+    &:hover,
+    &:active {
+      color: #000;
+      border-color: #000;
+    }
+
+    &--visible {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    svg {
+      width: 7px;
+      height: 7px;
     }
   }
 }

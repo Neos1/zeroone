@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
+import PropTypes from 'prop-types';
 import Litepicker from 'litepicker';
 import moment from 'moment';
 import { observer } from 'mobx-react';
 import { computed, observable, action } from 'mobx';
-import { ThinArrow, Arrow, DateIcon } from '../Icons';
+import { withTranslation } from 'react-i18next';
+import {
+  ThinArrow,
+  Arrow,
+  DateIcon,
+  CloseIcon,
+} from '../Icons';
 
 import styles from './DatePicker.scss';
 
+@withTranslation()
 @observer
 class DateTest extends React.Component {
   @observable start = null;
@@ -17,6 +25,10 @@ class DateTest extends React.Component {
   ref;
 
   picker;
+
+  static propTypes = {
+    t: PropTypes.func.isRequired,
+  };
 
   componentDidMount() {
     this.picker = new Litepicker({
@@ -76,9 +88,21 @@ class DateTest extends React.Component {
     console.log('startDate', startDate, 'endDate', endDate);
   }
 
+  @action
+  handleClear = () => {
+    if (this.picker) {
+      this.picker.clearSelection();
+    }
+    this.start = null;
+    this.end = null;
+  }
+
   render() {
-    const { start, end } = this;
+    const { start, end, props } = this;
+    const { t } = props;
+    const filled = Boolean(start && end);
     console.log('startDate', start, 'endDate', end);
+    console.log('filled', filled);
     return (
       <div
         className={styles['date-picker']}
@@ -89,14 +113,23 @@ class DateTest extends React.Component {
             <DateIcon />
           </div>
           <input
-            className={styles['date-picker__min']}
+            placeholder={t('fields:dateFrom')}
+            className={`
+              ${styles['date-picker__input']}
+              ${styles['date-picker__min']}
+            `}
             ref={
               (el) => {
                 this.minRef = el;
               }
             }
           />
-          <span />
+          <div className={styles['date-picker__input-after']}>
+            <span className={styles['date-picker__input-placeholder']}>
+              {t('fields:dateFrom')}
+            </span>
+            <span className={styles['date-picker__input-line']} />
+          </div>
         </label>
         <div className={styles['date-picker__arrow--basic']}>
           <Arrow />
@@ -104,15 +137,38 @@ class DateTest extends React.Component {
         { /* eslint-disable-next-line */}
         <label>
           <input
-            className={styles['date-picker__max']}
+            placeholder={t('fields:dateTo')}
+            className={`
+              ${styles['date-picker__input']}
+              ${styles['date-picker__max']}
+            `}
             ref={
               (el) => {
                 this.maxRef = el;
               }
             }
           />
-          <span />
+          <div className={styles['date-picker__input-after']}>
+            <span className={styles['date-picker__input-placeholder']}>
+              {t('fields:dateTo')}
+            </span>
+            <span className={styles['date-picker__input-line']} />
+          </div>
         </label>
+        <button
+          type="button"
+          className={`
+            ${styles['date-picker__clear']}
+            ${
+              filled ? styles['date-picker__clear--visible'] : ''
+            }
+          `}
+          onClick={this.handleClear}
+        >
+          <CloseIcon
+            fill="currentColor"
+          />
+        </button>
       </div>
     );
   }
