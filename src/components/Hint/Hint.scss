@@ -36,6 +36,7 @@
       position: relative;
       top: 1px;
       z-index: 3;
+      font-weight: 400;
       content: ' ? ';
     }
 
@@ -67,7 +68,7 @@
     text-align: left;
     background-color: #fff;
     border: 1px solid $border;
-    transform: translate(-1px, 0);
+    transform: translateZ(0);
     visibility: hidden;
     opacity: 0;
     transition: 0.2s;
