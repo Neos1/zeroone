@@ -37,6 +37,24 @@ const getCorrectMomentLocale = (locale) => {
 };
 
 /**
+ * Method for getting correct litepicker
+ * locale name
+ *
+ * @param {string} locale locale for convert
+ * @returns {string} correct locale
+ */
+const getCorrectPickerLocale = (locale) => {
+  switch (locale) {
+    case 'RUS':
+      return 'ru-RU';
+    case 'ENG':
+      return 'en-US';
+    default:
+      return 'en-US';
+  }
+};
+
+/**
  * Method for obtaining human-readable
  * difference value for a given period
  * of time
@@ -60,4 +78,5 @@ export {
   getTimeLeftString,
   progressByDateRange,
   getCorrectMomentLocale,
+  getCorrectPickerLocale,
 };

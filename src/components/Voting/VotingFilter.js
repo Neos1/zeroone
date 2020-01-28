@@ -7,8 +7,8 @@ import { withTranslation } from 'react-i18next';
 import { computed } from 'mobx';
 import SimpleDropdown from '../SimpleDropdown';
 import { QuestionIcon, DescisionIcon } from '../Icons';
-import DatePicker from '../DatePicker/DatePicker';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
+import DatePicker from '../DatePicker';
 
 import styles from './Voting.scss';
 
@@ -126,13 +126,10 @@ class VotingFilter extends React.PureComponent {
           </SimpleDropdown>
         </div>
         <div className={styles['voting__filter-date']}>
-          {/* Is not work correctly without key */}
           <DatePicker
-            id={uniqKey()}
             onDatesSet={this.handleDateSelect}
             onDatesClear={this.handleDateClear}
             init={this.dateInit}
-            key={uniqKey()}
           />
         </div>
       </>
