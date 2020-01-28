@@ -92,6 +92,7 @@
     width: 0;
     height: 1px;
     background-color: $primary;
+    border-bottom: 1px solid $primary;
     transition: 0.3s ease-in;
   }
 
@@ -134,7 +135,7 @@
       }
       &:focus {
         & ~ .field__line {
-          width: 0;
+          width: 100%;
         }
       }
 
