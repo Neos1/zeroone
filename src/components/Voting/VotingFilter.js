@@ -6,9 +6,8 @@ import uniqKey from 'react-id-generator';
 import { computed } from 'mobx';
 import SimpleDropdown from '../SimpleDropdown';
 import { QuestionIcon } from '../Icons';
-import DatePicker from '../DatePicker/DatePicker';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
-import DateTest from '../DatePicker/DateTest';
+import DatePicker from '../DatePicker';
 
 import styles from './Voting.scss';
 
@@ -57,6 +56,7 @@ class VotingFilter extends React.PureComponent {
     startDate,
     endDate,
   }) => {
+    console.log('filter', startDate, endDate);
     const { projectStore: { historyStore: { addFilterRule } } } = this.props;
     addFilterRule({
       date: {
@@ -96,15 +96,11 @@ class VotingFilter extends React.PureComponent {
           </SimpleDropdown>
         </div>
         <div className={styles['voting__filter-date']}>
-          {/* Is not work correctly without key */}
           <DatePicker
-            id={uniqKey()}
             onDatesSet={this.handleDateSelect}
             onDatesClear={this.handleDateClear}
             init={this.dateInit}
-            key={uniqKey()}
           />
-          <DateTest />
         </div>
       </>
     );

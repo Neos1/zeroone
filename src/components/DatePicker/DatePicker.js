@@ -1,21 +1,37 @@
 import React from 'react';
-import { DateRangePicker } from 'react-dates';
-import moment from 'moment';
+import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
+import Litepicker from 'litepicker';
+import moment from 'moment';
+import { observer } from 'mobx-react';
+import { computed, observable, action } from 'mobx';
 import { withTranslation } from 'react-i18next';
-import { DateIcon } from '../Icons';
-import 'react-dates/initialize';
+import { getCorrectPickerLocale } from '../../utils/Date';
+import i18n from '../../i18n';
+import {
+  ThinArrow,
+  Arrow,
+  DateIcon,
+  CloseIcon,
+} from '../Icons';
 
-import 'react-dates/lib/css/_datepicker.css';
 import styles from './DatePicker.scss';
 
 @withTranslation()
-class DatePicker extends React.PureComponent {
+@observer
+class DateTest extends React.Component {
+  @observable start = null;
+
+  @observable end = null;
+
+  ref;
+
+  picker;
+
   static propTypes = {
     t: PropTypes.func.isRequired,
-    onDatesSet: PropTypes.func,
-    onDatesClear: PropTypes.func,
-    id: PropTypes.string.isRequired,
+    onDatesSet: PropTypes.func.isRequired,
+    onDatesClear: PropTypes.func.isRequired,
     init: PropTypes.shape({
       startDate: PropTypes.instanceOf(moment),
       endDate: PropTypes.instanceOf(moment),
@@ -23,68 +39,231 @@ class DatePicker extends React.PureComponent {
   };
 
   static defaultProps = {
-    onDatesSet: () => {},
-    onDatesClear: () => {},
     init: {
       startDate: null,
       endDate: null,
     },
   }
 
-  constructor(props) {
-    super();
+  componentDidMount() {
+    const { props } = this;
     const {
       init: {
         startDate,
         endDate,
       },
     } = props;
-    this.state = {
-      start: startDate,
-      end: endDate,
-      focusedInput: null,
-    };
+    this.picker = new Litepicker({
+      element: this.minRef,
+      elementEnd: this.maxRef,
+      format: 'DD.MM.YYYY',
+      firstDay: 1,
+      numberOfMonths: 2,
+      numberOfColumns: 2,
+      minDate: null,
+      maxDate: null,
+      minDays: null,
+      maxDays: null,
+      singleMode: false,
+      autoApply: true,
+      scrollToDate: true,
+      showWeekNumbers: false,
+      showTooltip: true,
+      disableWeekends: false,
+      splitView: true,
+      onSelect: this.handleSelect,
+      buttonText: {
+        previousMonth: ReactDOMServer.renderToStaticMarkup(
+          <ThinArrow
+            width={8}
+            height={12}
+            color="transparent"
+          />,
+        ),
+        nextMonth: ReactDOMServer.renderToStaticMarkup(
+          <ThinArrow
+            width={8}
+            height={12}
+            color="transparent"
+            reverse
+          />,
+        ),
+      },
+      startDate,
+      endDate,
+    });
+    this.updateLanguage();
+    this.start = startDate;
+    this.end = endDate;
+    window.ipcRenderer.on('change-language:confirm', () => {
+      this.updateLanguage();
+    });
   }
 
+  componentWillUnmount() {
+    window.ipcRenderer.removeListener('change-language:confirm', () => {
+      this.updateLanguage();
+    });
+  }
 
-  handleDatesChange = ({ startDate, endDate }) => {
+  @computed
+  get startDate() {
+    return this.start;
+  }
+
+  @computed
+  get endDate() {
+    return this.end;
+  }
+
+  /**
+   * Method for handle date select
+   *
+   * @param {Date} startDate start date
+   * @param {Date} endDate end date
+   */
+  @action
+  handleSelect = (startDate, endDate) => {
     const { props } = this;
-    const { onDatesSet, onDatesClear } = props;
-    this.setState({ start: startDate, end: endDate });
-    if (!startDate || !endDate) onDatesClear();
-    if (startDate && endDate) onDatesSet({ startDate, endDate });
+    const { onDatesSet } = props;
+    this.start = moment(startDate);
+    this.end = moment(endDate);
+    console.log(startDate, endDate);
+    // TODO add to max date 23:59:59 for correct result
+    onDatesSet({ startDate, endDate });
+  }
+
+  /**
+   * Method for clearing selected date
+   */
+  @action
+  handleClear = () => {
+    const { props } = this;
+    const { onDatesClear } = props;
+    if (this.picker) {
+      this.picker.clearSelection();
+    }
+    this.start = null;
+    this.end = null;
+    onDatesClear();
+  }
+
+  /**
+   * Method for getting correct plural
+   * text for tooltip
+   *
+   * @param {string} language actual language
+   * @returns {object} correct tooltip text
+   */
+  getTooltipText = (language) => {
+    switch (language) {
+      case 'ru-RU':
+        return {
+          one: 'день',
+          many: 'дней',
+          few: 'дня',
+        };
+      case 'en-US':
+        return {
+          one: 'day',
+          other: 'days',
+        };
+      default:
+        return {
+          one: 'day',
+          other: 'days',
+        };
+    }
+  }
+
+  /**
+   * Method for update options in picker
+   * on change language event
+   */
+  updateLanguage = () => {
+    const lang = getCorrectPickerLocale(i18n.language);
+    const tooltipText = this.getTooltipText(lang);
+    if (this.picker) {
+      this.picker.setOptions({
+        lang: getCorrectPickerLocale(i18n.language),
+        tooltipText,
+      });
+    }
   }
 
   render() {
-    const { start, end, focusedInput } = this.state;
-    const { props } = this;
-    const { t, id } = props;
+    const { start, end, props } = this;
+    const { t } = props;
+    const filled = Boolean(start && end);
     return (
-      <div className={styles['date-picker']}>
-        <div className={styles['date-picker__icon']}>
-          <DateIcon />
-        </div>
-        <DateRangePicker
-          startDate={start}
-          startDateId={`date_start--${id}`}
-          endDate={end}
-          endDateId={`date_end--${id}`}
-          onDatesChange={this.handleDatesChange}
-          customArrowIcon="-"
-          startDatePlaceholderText={t('fields:dateFrom')}
-          endDatePlaceholderText={t('fields:dateTo')}
-          focusedInput={focusedInput}
-          // Allow past dates see: https://github.com/airbnb/react-dates/issues/239#issuecomment-302574295
-          isOutsideRange={() => false}
-          onFocusChange={
-            (focusedInputChanged) => {
-              this.setState({ focusedInput: focusedInputChanged });
+      <div
+        className={styles['date-picker']}
+      >
+        { /* eslint-disable-next-line */}
+        <label>
+          <div className={styles['date-picker__icon']}>
+            <DateIcon />
+          </div>
+          <input
+            placeholder={t('fields:dateFrom')}
+            className={`
+              ${styles['date-picker__input']}
+              ${styles['date-picker__min']}
+            `}
+            ref={
+              (el) => {
+                this.minRef = el;
+              }
             }
-          }
-        />
+          />
+          <div className={styles['date-picker__input-after']}>
+            <span className={styles['date-picker__input-placeholder']}>
+              {t('fields:dateFrom')}
+            </span>
+            <span className={styles['date-picker__input-line']} />
+          </div>
+        </label>
+        <div className={styles['date-picker__arrow--basic']}>
+          <Arrow />
+        </div>
+        { /* eslint-disable-next-line */}
+        <label>
+          <input
+            placeholder={t('fields:dateTo')}
+            className={`
+              ${styles['date-picker__input']}
+              ${styles['date-picker__max']}
+            `}
+            ref={
+              (el) => {
+                this.maxRef = el;
+              }
+            }
+          />
+          <div className={styles['date-picker__input-after']}>
+            <span className={styles['date-picker__input-placeholder']}>
+              {t('fields:dateTo')}
+            </span>
+            <span className={styles['date-picker__input-line']} />
+          </div>
+        </label>
+        <button
+          type="button"
+          className={`
+            ${styles['date-picker__clear']}
+            ${
+              filled ? styles['date-picker__clear--visible'] : ''
+            }
+          `}
+          onClick={this.handleClear}
+        >
+          <CloseIcon
+            fill="currentColor"
+          />
+        </button>
       </div>
     );
   }
 }
 
-export default DatePicker;
+export default DateTest;
