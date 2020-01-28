@@ -46,6 +46,7 @@
         opacity: 0;
       }
       &:focus {
+        border-color: $primary;
         & + .field__label--textarea {
           color: $primary;
         }
@@ -111,6 +112,10 @@
       style: dashed;
       color: $primary;
     }
+    &.field--textarea {
+      padding-bottom: 1px;
+      border-bottom: none;
+    }
     .field__error-text {
       visibility: visible;
       opacity: 1;
@@ -132,7 +137,13 @@
           width: 0;
         }
       }
+
+      &--textarea {
+        border-color: $primary;
+        border-style: dashed;
+      }
     }
+    
   }
 
   &--textarea {
