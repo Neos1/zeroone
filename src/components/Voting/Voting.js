@@ -203,7 +203,9 @@ class Voting extends React.Component {
                   <div
                     className={styles['voting-page__loader']}
                   >
-                    <Loader />
+                    <Loader
+                      theme="gray"
+                    />
                   </div>
                 )
             }

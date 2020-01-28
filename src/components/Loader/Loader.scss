@@ -7,7 +7,7 @@
   height: 14px;
   margin: 20px;
   background-color: $primary;
-  
+
   &:before {
     position: absolute;
     top: 50%;
@@ -20,6 +20,7 @@
     animation: loaderSpin 2s ease-in infinite;
     content: '';
   }
+
   &:after {
     position: absolute;
     top: 50%;
@@ -28,10 +29,22 @@
     color: $white;
     font-weight: bolder;
     font-size: 102px;
-    line-height: 26px; 
+    line-height: 26px;
     transform: translate(-50%, -50%);
     animation: loaderSpin 2s ease-in infinite;
     content: "+";
+  }
+
+  &--white {
+    &::after {
+      color: $white;
+    }
+  }
+
+  &--gray {
+    &::after {
+      color: #fafbfc;
+    }
   }
 }
 

@@ -170,7 +170,9 @@ class Questions extends Component {
                   )
                   : (
                     <div className={styles.questions__loader}>
-                      <Loader />
+                      <Loader
+                        theme="gray"
+                      />
                     </div>
                   )
               }
