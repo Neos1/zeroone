@@ -74,3 +74,10 @@
     }
   }
 }
+
+.question {
+  &--back {
+    width: 105px;
+    padding: 7px 25px;
+  }
+}

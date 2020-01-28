@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { inject, observer } from 'mobx-react';
 import SimpleDropdown from '../SimpleDropdown';
-import { QuestionUploadingIcon } from '../Icons';
+import { QuestionIcon } from '../Icons';
 import CreateNewQuestionForm from './CreateNewQuestionForm';
 import StepIndicator from '../StepIndicator';
 
@@ -80,8 +80,9 @@ class CreateNewQuestion extends React.Component {
               <SimpleDropdown
                 options={questionStore.questionGroupsForVoting}
                 onSelect={this.handleDropdownSelect}
+                placeholder={t('fields:selectQuestionGroup')}
               >
-                <QuestionUploadingIcon />
+                <QuestionIcon />
               </SimpleDropdown>
             </div>
             {

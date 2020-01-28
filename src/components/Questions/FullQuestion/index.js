@@ -20,7 +20,7 @@ const FullQuestion = withTranslation()(inject('projectStore')(observer(({ t, pro
       <div className={styles.questions}>
         <div className={styles.questions__head}>
           <div className={styles['questions__head-create']}>
-            <Button theme="white" onClick={goBack}>
+            <Button theme="white" className={`${styles['question--back']}`} onClick={goBack}>
               {t('buttons:back')}
             </Button>
           </div>
