@@ -181,7 +181,8 @@
 
         &--weight,
         &--balance {
-          text-align: center;
+          padding-right: 40px;
+          text-align: right;
         }
       }
 
@@ -217,10 +218,15 @@
 
         &--weight,
         &--balance {
+          padding-right: 40px;
           font-weight: 700;
           font-size: 14px;
           line-height: 16px;
-          text-align: center;
+          text-align: right;
+
+          button {
+            text-align: right;
+          }
         }
 
         &--balance {
