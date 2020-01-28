@@ -44,6 +44,7 @@ class DateTest extends React.Component {
       maxDays: null,
       singleMode: false,
       autoApply: true,
+      scrollToDate: true,
       showWeekNumbers: false,
       showTooltip: true,
       disableWeekends: false,
@@ -52,14 +53,16 @@ class DateTest extends React.Component {
       buttonText: {
         previousMonth: ReactDOMServer.renderToStaticMarkup(
           <ThinArrow
-            width={18}
-            height={18}
+            width={8}
+            height={12}
+            color="transparent"
           />,
         ),
         nextMonth: ReactDOMServer.renderToStaticMarkup(
           <ThinArrow
-            width={18}
-            height={18}
+            width={8}
+            height={12}
+            color="transparent"
             reverse
           />,
         ),
