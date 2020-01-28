@@ -126,11 +126,15 @@ class DateTest extends React.Component {
   handleSelect = (startDate, endDate) => {
     const { props } = this;
     const { onDatesSet } = props;
-    this.start = moment(startDate);
-    this.end = moment(endDate);
-    console.log(startDate, endDate);
-    // TODO add to max date 23:59:59 for correct result
-    onDatesSet({ startDate, endDate });
+    const start = moment(startDate);
+    // To include the maximum date in the range
+    const end = moment(endDate)
+      .add('hours', 23)
+      .add('minutes', 59)
+      .add('seconds', 59);
+    this.start = start;
+    this.end = end;
+    onDatesSet({ startDate: start, endDate: end });
   }
 
   /**
