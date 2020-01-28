@@ -87,7 +87,9 @@ class MembersPage extends React.Component {
               )
               : (
                 <div className={styles['members__page-loader']}>
-                  <Loader />
+                  <Loader
+                    theme="gray"
+                  />
                 </div>
               )
           }
