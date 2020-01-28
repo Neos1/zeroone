@@ -121,6 +121,22 @@
       min-width: 845px;
     }
   }
+
+  &#dialog-success_modal_voting_info_wrapper {
+    .dialog {
+      &__header {
+        padding: 20px;
+        padding-top: 55px;
+      }
+      &__body {
+        padding-bottom: 10px;
+      }
+    }
+    .content__inner {
+      height: auto;
+      min-height: 255px;
+    }
+  }
 }
 
 .close {
@@ -158,6 +174,8 @@
     min-width: 309px;
   }
 }
+
+
 
 @keyframes anim-open {
   0% {

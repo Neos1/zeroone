@@ -89,12 +89,17 @@
     opacity: 0.7;
   }
 }
-.dialog {
-  &__header {
-    padding: 20px;
-    padding-top: 55px;
-  }
-  &__body {
-    padding-bottom: 50px;
+
+#dialog-project_modal_contract_uploading,
+#dialog-token_modal_contract_uploading
+#dialog-success_modal_voting_info_wrapper {
+  .dialog {
+    &__header {
+      padding: 20px;
+      padding-top: 55px;
+    }
+    &__body {
+      padding-bottom: 50px;
+    }
   }
 }
