@@ -133,7 +133,6 @@
     }
 
     &__buttons {
-      border-top: 1px solid #e1e4e8;
 
       button {
         float: left;
@@ -144,23 +143,28 @@
         font-size: 18px;
         line-height: 21px;
         background-color: #fff;
-        border: unset;
+        border: 1px solid #e1e4e8;
         outline: none;
         cursor: pointer;
 
         &:first-child {
           position: relative;
-
-          &::after {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 1px;
-            height: 100%;
-            background-color: #e1e4e8;
-            content: '';
-          }
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          // &::after {
+          //   position: absolute;
+          //   top: 0;
+          //   right: 0;
+          //   width: 1px;
+          //   height: 100%;
+          //   background-color: #e1e4e8;
+          //   content: '';
+          // }
         }
+        &:last-child {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        } 
       }
 
       @include clearfix;

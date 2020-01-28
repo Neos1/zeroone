@@ -330,6 +330,24 @@
       width: auto;
       height: auto;
     }
+
+    &:hover {
+      border-color: $primary;
+    } 
+
+    &:active {
+      background-color: $primary;
+
+      .btn__text {
+        color: $white;
+      }
+      
+      svg {
+        path {
+          stroke: $white;
+        }
+      }
+    }
   }
 }
 
