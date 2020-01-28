@@ -37,8 +37,8 @@ class CreateQuestionBasicForm extends ExtendedForm {
         {
           name: 'methodSelector',
           type: 'text',
-          label: 'functionSelector',
-          placeholder: i18n.t('fields:functionSelector'),
+          label: 'methodSelector',
+          placeholder: i18n.t('fields:methodSelector'),
           rules: 'string|bytes4',
         },
         {
