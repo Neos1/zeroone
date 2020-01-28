@@ -215,6 +215,9 @@
     &:hover {
       color: $primary;
     }
+    &:active {
+      color: $white;
+    }
   }
 
   &--showseed {
