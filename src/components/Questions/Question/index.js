@@ -110,7 +110,12 @@ const Question = withTranslation()(({
   params,
   votingIsActive,
 }) => (
-  <div className={`${styles.question} ${extended ? styles['question--extended'] : ''}`}>
+  <div className={`
+    ${styles.question} 
+    ${extended ? styles['question--extended'] : ''}
+    ${(params.length > 3 && extended) ? styles['question--short-name'] : ''}
+    `}
+  >
     {
       !extended
         ? (
@@ -119,7 +124,7 @@ const Question = withTranslation()(({
           </NavLink>
         )
         : (
-          <div className={styles.question__left}>
+          <div className={`${styles.question__left}`}>
             {Content(id, caption, text, extended)}
           </div>
         )

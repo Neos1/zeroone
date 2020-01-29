@@ -19,6 +19,25 @@
       padding-top: 28px;
     }
   }
+  &--short-name {
+    .question__left {
+      width: 50%;
+    }
+    .question__right {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+      width: 50%;
+      .question__parameter {
+        &-heading {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        width: 50%;
+      }
+    }
+  }
   &__left {
     align-self: flex-start;
     width: 80%;
