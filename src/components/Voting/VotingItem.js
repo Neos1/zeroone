@@ -34,11 +34,16 @@ class VotingItem extends React.PureComponent {
       start: PropTypes.number.isRequired,
       end: PropTypes.number.isRequired,
     }).isRequired,
+    onMouseEnter: PropTypes.func,
   };
 
+  static defaultProps = {
+    onMouseEnter: () => {},
+  }
+
   componentDidMount() {
-    const { props } = this;
-    const { date } = props;
+    const { props, ref } = this;
+    const { date, onMouseEnter } = props;
     const initProgress = progressByDateRange(date);
     this.setProgress(initProgress);
     if (initProgress !== 100) {
@@ -49,6 +54,9 @@ class VotingItem extends React.PureComponent {
         }
       }, this.intervalProgress);
     }
+    ref.addEventListener('mouseenter', () => {
+      onMouseEnter();
+    });
   }
 
   @action
@@ -144,6 +152,11 @@ class VotingItem extends React.PureComponent {
                 : ''
             }
           `}
+          ref={
+            (element) => {
+              this.ref = element;
+            }
+          }
         >
           <div
             className={styles['voting__item-info']}

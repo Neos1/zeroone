@@ -8,6 +8,7 @@ import VotingItem from './VotingItem';
 import ProjectStore from '../../stores/ProjectStore';
 
 import styles from './Voting.scss';
+import { statusStates } from '../../constants';
 
 /**
  * Component for render list of voting
@@ -28,6 +29,27 @@ class VotingList extends React.Component {
       },
     } = props;
     return historyStore.paginatedList;
+  }
+
+  handleVotingMouseEnter = (item) => {
+    const { props } = this;
+    const {
+      projectStore: {
+        historyStore,
+      },
+    } = props;
+    if (
+      item.status === statusStates.active
+      && item.newForUser === true
+    ) {
+      const [voting] = historyStore.getVotingById(item.id);
+      if (voting) {
+        voting.update({
+          newForUser: false,
+        });
+        historyStore.writeVotingsToFile();
+      }
+    }
   }
 
   render() {
@@ -73,6 +95,7 @@ class VotingList extends React.Component {
                 actualDecisionStatus={item.descision}
                 newForUser={item.newForUser}
                 date={{ start: Number(item.startTime), end: Number(item.endTime) }}
+                onMouseEnter={() => this.handleVotingMouseEnter(item)}
               />
             ))
             : (
