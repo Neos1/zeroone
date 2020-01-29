@@ -17,6 +17,7 @@ const placeholders = {
   durationInBlocks: 'Продолжительность тиража в блоках',
   questionTitle: 'Название вопроса',
   questionLifeTime: 'Время жизни вопроса',
+  methodSelector: 'Селектор функции',
   parameter: 'Параметр',
   enterNewParameterName: 'Введите название нового параметра',
   votingFormula: 'Формула голосования',

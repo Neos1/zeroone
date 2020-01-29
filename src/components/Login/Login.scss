@@ -46,6 +46,12 @@
     form, .add-project {
       padding: 0 50px;
     }
+
+    &.create-token-data {
+      .btn {
+        margin: 38px auto 16px;
+      }
+    }
   }
 
   &__submit {

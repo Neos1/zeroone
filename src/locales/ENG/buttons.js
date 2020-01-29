@@ -21,7 +21,7 @@ const buttons = {
   createQuestionGroup: 'Create group of questions',
   startNewVoting: 'Start new voting',
   transfer: 'Transfer',
-  designateGroupAdministrator: 'designate group administrator',
+  designateGroupAdministrator: 'start voting for appointment as group administrator',
   vote: 'Vote',
   startNewVote: 'Start a new vote',
   start: 'Start',

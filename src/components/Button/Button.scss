@@ -215,6 +215,9 @@
     &:hover {
       color: $primary;
     }
+    &:active {
+      color: $white;
+    }
   }
 
   &--showseed {
@@ -326,6 +329,24 @@
     svg {
       width: auto;
       height: auto;
+    }
+
+    &:hover {
+      border-color: $primary;
+    } 
+
+    &:active {
+      background-color: $primary;
+
+      .btn__text {
+        color: $white;
+      }
+      
+      svg {
+        path {
+          stroke: $white;
+        }
+      }
     }
   }
 }

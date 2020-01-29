@@ -198,7 +198,9 @@ class CreateNewProjectWithoutTokens extends Component {
 const CreateTokenData = withTranslation()(inject('userStore', 'appStore')(observer((({
   t, userStore: { address }, appStore: { balances }, form,
 }) => (
-  <FormBlock>
+  <FormBlock
+    className="create-token-data"
+  >
     <Heading>
       {t('headings:newTokens.heading')}
       {t('headings:newTokens.subheading')}
