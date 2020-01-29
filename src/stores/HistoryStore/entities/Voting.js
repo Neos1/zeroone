@@ -1,4 +1,5 @@
 import { action, observable } from 'mobx';
+import { statusStates } from '../../../constants';
 
 class Voting {
   raw;
@@ -13,8 +14,10 @@ class Voting {
 
   /**
    * Voting is new for user. Used to highlight a new vote.
+   * It differs only for active voting. For closed, this is
+   * always false
    */
-  @observable newForUser;
+  @observable newForUser = false;
 
   /**
    * @class
@@ -43,7 +46,9 @@ class Voting {
     this.text = text;
     this.userVote = Number(userVote);
     this.closeVoteInProgress = false;
-    this.newForUser = newForUser !== undefined ? newForUser : true;
+    if (status === statusStates.active) {
+      this.newForUser = newForUser !== undefined ? newForUser : true;
+    }
   }
 
   /**
