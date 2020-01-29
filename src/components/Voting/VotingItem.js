@@ -29,15 +29,21 @@ class VotingItem extends React.PureComponent {
     t: PropTypes.func.isRequired,
     actualStatus: PropTypes.string.isRequired,
     actualDecisionStatus: PropTypes.string.isRequired,
+    newForUser: PropTypes.bool.isRequired,
     date: PropTypes.shape({
       start: PropTypes.number.isRequired,
       end: PropTypes.number.isRequired,
     }).isRequired,
+    onMouseEnter: PropTypes.func,
   };
 
+  static defaultProps = {
+    onMouseEnter: () => {},
+  }
+
   componentDidMount() {
-    const { props } = this;
-    const { date } = props;
+    const { props, ref } = this;
+    const { date, onMouseEnter } = props;
     const initProgress = progressByDateRange(date);
     this.setProgress(initProgress);
     if (initProgress !== 100) {
@@ -48,6 +54,9 @@ class VotingItem extends React.PureComponent {
         }
       }, this.intervalProgress);
     }
+    ref.addEventListener('mouseenter', () => {
+      onMouseEnter();
+    });
   }
 
   @action
@@ -127,11 +136,27 @@ class VotingItem extends React.PureComponent {
       description,
       t,
       date,
+      newForUser,
+      actualStatus,
     } = props;
     return (
       <Link to={`/votings/info/${index}`}>
         <div
-          className={styles.voting__item}
+          className={`
+            ${styles.voting__item}
+            ${
+              newForUser !== undefined
+              && newForUser === true
+              && actualStatus === statusStates.active
+                ? styles['voting__item--new']
+                : ''
+            }
+          `}
+          ref={
+            (element) => {
+              this.ref = element;
+            }
+          }
         >
           <div
             className={styles['voting__item-info']}

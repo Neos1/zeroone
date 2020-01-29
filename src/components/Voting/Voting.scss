@@ -164,7 +164,7 @@
         &:last-child {
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
-        } 
+        }
       }
 
       @include clearfix;
@@ -200,7 +200,7 @@
         &:hover {
           border: 1px solid $primary
         }
-        
+
         &:active {
           color: $white;
           background-color: $primary;
@@ -315,7 +315,7 @@
       padding: 33px 20px 44px;
       text-align: center;
       border: 1px solid #e1e4e8;
-      
+
       &-item {
         display: inline-block;
         margin: 0 32px;
@@ -440,6 +440,33 @@
 
     &:hover {
       border: 1px solid #000;
+    }
+
+    &--new {
+      position: relative;
+      border: 1px dashed #000;
+
+      &::before {
+        left: -20px;
+      }
+
+      &::after {
+        right: -20px;
+        transform: rotate(180deg);
+      }
+
+      &::after,
+      &::before {
+        position: absolute;
+        top: 12%;
+        width: 12px;
+        height: 76%;
+        background-image: url('../../assets/images/activeVoting.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        content: '';
+      }
     }
   }
 

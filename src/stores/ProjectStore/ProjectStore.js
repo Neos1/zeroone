@@ -60,7 +60,6 @@ class ProjectStore {
       const { membersStore } = rootStore;
       const { questionStore, historyStore } = this;
       this.isInitiated = !(questionStore.loading || historyStore.loading || membersStore.loading);
-      console.log(questionStore.loading, historyStore.loading, membersStore.loading);
     }
   }
 
@@ -115,6 +114,8 @@ class ProjectStore {
 
   @action
   reset = () => {
+    clearInterval(this.timer);
+    this.timer = null;
     this.projectAddress = '';
     this.name = '';
     this.prepared = 0;
