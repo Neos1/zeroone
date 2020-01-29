@@ -122,19 +122,26 @@
     }
   }
 
-  &#dialog-success_modal_voting_info_wrapper {
-    .dialog {
-      &__header {
-        padding: 20px;
-        padding-top: 55px;
+  &#dialog-success {
+    &_modal,
+    &_modal_voting_info_wrapper,
+    &_modal_contract_uploading,
+    &_modal_questions,
+    &_modal_return_tokens,
+    &_modal_voting {
+      .dialog {
+        &__header {
+          padding: 20px;
+          padding-top: 55px;
+        }
+        &__body {
+          padding-bottom: 10px;
+        }
       }
-      &__body {
-        padding-bottom: 10px;
+      .content__inner {
+        height: auto;
+        min-height: 255px;
       }
-    }
-    .content__inner {
-      height: auto;
-      min-height: 255px;
     }
   }
 }
