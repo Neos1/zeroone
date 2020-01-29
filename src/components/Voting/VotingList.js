@@ -71,6 +71,7 @@ class VotingList extends React.Component {
                 description={item.text}
                 actualStatus={item.status}
                 actualDecisionStatus={item.descision}
+                newForUser={item.newForUser}
                 date={{ start: Number(item.startTime), end: Number(item.endTime) }}
               />
             ))

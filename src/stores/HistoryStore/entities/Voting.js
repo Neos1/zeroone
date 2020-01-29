@@ -12,6 +12,11 @@ class Voting {
   @observable closeVoteInProgress;
 
   /**
+   * Voting is new for user. Used to highlight a new vote.
+   */
+  @observable newForUser;
+
+  /**
    * @class
    * @param {object} data object contains info adout voting
    * @param {number} data.id id of voting
@@ -19,7 +24,10 @@ class Voting {
    * @param {Array} data.params parameters of voting
    */
   constructor({
-    id, descision, questionId, data, status, startTime, endTime, caption, text, userVote,
+    id, descision, questionId,
+    data, status, startTime,
+    endTime, caption, text,
+    userVote, newForUser,
   }) {
     this.raw = {
       id, descision, questionId, data, status, startTime, endTime, caption, text, userVote,
@@ -35,6 +43,7 @@ class Voting {
     this.text = text;
     this.userVote = Number(userVote);
     this.closeVoteInProgress = false;
+    this.newForUser = newForUser !== undefined ? newForUser : true;
   }
 
   /**
