@@ -48,6 +48,12 @@ class Dropdown extends Component {
     this.setState({ opened: false });
   }
 
+  calculateHeight = () => {
+    const optionsLength = document.querySelectorAll('.dropdown__option').length;
+    const height = optionsLength * 40;
+    return height > 150 ? 150 : height;
+  }
+
   handleSelect = (selected) => {
     const { onSelect, field } = this.props;
     this.setState({
@@ -101,7 +107,12 @@ class Dropdown extends Component {
           </span>
           <div className={styles['dropdown__head-line']} />
         </button>
-        <div className={styles.dropdown__options}>
+        <div
+          className={styles.dropdown__options}
+          style={{
+            height: !opened ? 0 : this.calculateHeight(),
+          }}
+        >
           {getOptions}
         </div>
         <p className={styles['dropdown__error-text']}>
