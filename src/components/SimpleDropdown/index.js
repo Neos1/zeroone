@@ -29,6 +29,7 @@ class SimpleDropdown extends Component {
     initIndex: propTypes.number,
     t: propTypes.func.isRequired,
     placeholder: propTypes.string.isRequired,
+    isNewQuestion: propTypes.bool,
   };
 
   static defaultProps = {
@@ -40,6 +41,7 @@ class SimpleDropdown extends Component {
       error: null,
     },
     initIndex: null,
+    isNewQuestion: false,
   }
 
   constructor(props) {
@@ -106,6 +108,7 @@ class SimpleDropdown extends Component {
       t,
       field,
       placeholder,
+      isNewQuestion,
     } = this.props;
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option) => (
@@ -131,6 +134,15 @@ class SimpleDropdown extends Component {
           {children ? <span className="dropdown__icon">{children}</span> : ''}
           <span className="dropdown__selected" data-value={selectedValue}>
             {selectedLabel || placeholder || t('other:select') }
+            {
+              (isNewQuestion && selectedLabel !== '')
+                ? (
+                  <span className={styles['dropdown__selected-label']}>
+                    {placeholder}
+                  </span>
+                )
+                : ''
+            }
             <span className="dropdown__arrow">
               <DropdownArrowIcon />
             </span>

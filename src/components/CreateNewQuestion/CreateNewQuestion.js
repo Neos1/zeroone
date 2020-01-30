@@ -81,6 +81,7 @@ class CreateNewQuestion extends React.Component {
                 options={questionStore.questionGroupsForVoting}
                 onSelect={this.handleDropdownSelect}
                 placeholder={t('fields:selectQuestionGroup')}
+                isNewQuestion
               >
                 <QuestionIcon />
               </SimpleDropdown>
