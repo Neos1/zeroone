@@ -40,11 +40,12 @@
 
   &__options {
     position: absolute;
+    right: 10px;
     display: inline-block;
     width: max-content;
-    padding: 5px 10px;
+    padding: 5px 15px;
     background-color: $white;
-    border: 1px solid $border;
+    border: 1px solid #E1E4E8;
     visibility: hidden;
     opacity: 0;
     transition: 0.2s linear;
@@ -52,10 +53,18 @@
   &__option {
     display: block;
     padding: 5px 0;
-    font-size: 16px;
+    font-size: 14px;
     background-color: $white;
     border: none;
     outline: none;
     cursor: pointer;
+
+    &:first-child {
+      padding: 5px 0 10px;
+    }
+    
+    &:last-child {
+      padding: 10px 0 5px;
+    }
   }
 }

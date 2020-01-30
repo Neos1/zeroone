@@ -19,14 +19,12 @@
       max-height: 160px;
     }
     .dropdown__option {
+      display: block;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       text-align: left;
       text-overflow: ellipsis;
-      &:hover {
-        background-color: rgba($color: #E6E6E6, $alpha: .8);
-      }
     }
   }
 
@@ -138,7 +136,7 @@
     position: absolute;
     top: 100%;
     z-index: 1;
-    width: 155%;
+    width: 156%;
     height: 0;
     max-height: 150px;
     padding: 5px 0;
@@ -149,6 +147,8 @@
     opacity: 0;
     transition: .3s ease-in-out;
     &::-webkit-scrollbar {
+      position: relative;
+      right: -30px;
       width: 20px;
     }
     /* Track */
@@ -183,17 +183,32 @@
   }
 
   &__option {
-    display: block;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 100%;
     padding: 10px;
+    text-align: left;
     border: none;
     cursor: pointer;
     transition: .2s;
+
+    &:hover {
+      background-color: rgba($color: #E6E6E6, $alpha: .8);
+    }
+
+    &-label {
+      display: inline-block;
+      width: 320px;
+    }
   }
 
   &__suboption {
-    margin-left: 30px;
+    margin-left: 20px;
     color: $linkColor;
     font-weight: 700;
+    font-size: 14px;
+    text-align: right;
   }
 
   &--opened {
