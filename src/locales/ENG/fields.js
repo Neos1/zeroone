@@ -35,6 +35,7 @@ const placeholders = {
   minGasPrice: 'Min. gas price, Gwei',
   maxGasPrice: 'Max. gas price, Gwei',
   interval: 'Data update interval, sec',
+  selectQuestionGroup: 'Select group of questions',
 };
 
 export default placeholders;

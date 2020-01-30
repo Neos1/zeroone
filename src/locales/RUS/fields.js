@@ -34,7 +34,8 @@ const placeholders = {
   chooseTheQuestion: 'Выберите вопрос',
   minGasPrice: 'Цена газа MIN, Gwei',
   maxGasPrice: 'Цена газа MAX, Gwei',
-  interval: 'Интервал обновления данных, сек',
+  selectQuestionGroup: 'Выберите группу вопросов',
+
 };
 
 export default placeholders;

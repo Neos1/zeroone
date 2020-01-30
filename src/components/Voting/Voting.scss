@@ -96,6 +96,24 @@
       font-size: 0;
     }
 
+    &--long-params {
+      .voting-info__description {
+        width: 40%;
+      }
+
+      .voting-info__data {
+        display: inline-flex;
+        flex-flow: row wrap;
+        width: 60%;
+        & > div {
+          width: 50%;
+          &.voting-info__block {
+            width: 100%;
+          }
+        }
+      }
+    }
+
     &__description {
       display: inline-block;
       width: 50%;

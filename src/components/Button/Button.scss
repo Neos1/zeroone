@@ -288,7 +288,8 @@
     background: #fff;
 
     .btn__text {
-      margin-top: 10px;
+      display: inline-block;
+      width: 65%;
       color: $primary;
       font-size: 11px;
     }
@@ -349,5 +350,6 @@
       }
     }
   }
+
 }
 

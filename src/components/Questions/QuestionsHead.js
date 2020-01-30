@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import uniqKey from 'react-id-generator';
 import ProjectStore from '../../stores/ProjectStore';
 import DialogStore from '../../stores/DialogStore';
-import { CreateToken } from '../Icons';
+import { CreateToken, QuestionIcon } from '../Icons';
 import Button from '../Button/Button';
 import SimpleDropdown from '../SimpleDropdown';
 
@@ -101,7 +101,10 @@ class QuestionsHead extends React.Component {
             onSelect={this.handleSortSelect}
             initIndex={this.initIndex}
             key={uniqKey()}
-          />
+            placeholder={t('fields:questionGroup')}
+          >
+            <QuestionIcon />
+          </SimpleDropdown>
         </div>
       </div>
     );

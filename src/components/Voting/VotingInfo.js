@@ -286,7 +286,9 @@ class VotingInfo extends React.PureComponent {
               {title}
             </div>
             <div
-              className={styles['voting-info__main']}
+              className={`
+                ${styles['voting-info__main']}
+                ${params.length > 3 ? styles['voting-info--long-params'] : ''}`}
             >
               <div
                 className={styles['voting-info__description']}
@@ -299,6 +301,12 @@ class VotingInfo extends React.PureComponent {
                 {params.map((item) => (
                   <div
                     key={uniqKey()}
+                    className={
+                      (params.length > 3
+                      && (new RegExp(/(0x)+([0-9 a-f A-F]){40}/g)).test(item[1]))
+                        ? styles['voting-info__block']
+                        : ''
+                    }
                   >
                     <div
                       className={styles['voting-info__data-title']}
