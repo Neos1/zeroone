@@ -27,7 +27,7 @@ class ProjectStore {
 
   @observable historyStore;
 
-  @observable isInitiated = false;
+  @observable isInitiated = true;
 
   timer = null;
 
@@ -44,6 +44,7 @@ class ProjectStore {
     const { contractService, Web3Service, membersStore } = this.rootStore;
     const contract = Web3Service.createContractInstance(this.projectAbi);
     this.name = name;
+    this.isInitiated = false;
     contract.options.address = address;
     contractService.setContract(contract);
     this.questionStore = new QuestionStore(this.rootStore);
@@ -60,6 +61,10 @@ class ProjectStore {
       const { membersStore } = rootStore;
       const { questionStore, historyStore } = this;
       this.isInitiated = !(questionStore.loading || historyStore.loading || membersStore.loading);
+      if (this.isInitiated) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
     }
   }
 
