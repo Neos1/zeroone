@@ -97,30 +97,29 @@ class FilterStore {
    */
   filteredList(data) {
     const rawList = data;
-    let resultList = [];
     const listByDate = this.filteredByDateList(rawList);
     const rulesKeys = Object.keys(this.rules);
     // If _rules not exist return list by date
     if (!rulesKeys.length) {
       return listByDate;
     }
+    let resultList = listByDate;
     rulesKeys.forEach((key) => {
       if (key !== 'date') {
-        const filtered = listByDate.filter(
-          (item) => (
-            item[key] === this.rules[key]
-            // Check that the item has not been added to the resultList
-            && !resultList.find((included) => Object.is(included, item))
-          ),
-        );
-        resultList = resultList.concat(filtered);
-        if (this.rules[key] === '*') resultList = listByDate;
+        if (this.rules[key] !== '*') {
+          resultList = this.filterByKey(resultList, key, this.rules[key]);
+        }
         // If exist only date rule result is list by date
       } else if (rulesKeys.length === 1) {
         resultList = listByDate;
       }
     });
     return resultList;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  filterByKey(list, key, value) {
+    return list.filter((item) => item[key] === value);
   }
 }
 
