@@ -21,6 +21,23 @@ class VotingFilter extends React.PureComponent {
     t: PropTypes.func.isRequired,
   };
 
+  getStatusOptions() {
+    const { t } = this.props;
+    return [{
+      label: 'All',
+      value: '*',
+    }, {
+      label: t('other:notAccepted'),
+      value: '0',
+    }, {
+      label: t('other:pros'),
+      value: '1',
+    }, {
+      label: t('other:cons'),
+      value: '2',
+    }];
+  }
+
   @computed
   get dateInit() {
     const {
@@ -38,6 +55,18 @@ class VotingFilter extends React.PureComponent {
       startDate: moment(rules.date.start * 1000),
       endDate: moment(rules.date.end * 1000),
     };
+  }
+
+  @computed
+  get indexForDescision() {
+    const {
+      projectStore: {
+        historyStore: { filter: { rules } },
+      },
+    } = this.props;
+    const options = this.getStatusOptions();
+    const [element] = options.filter((item) => item.value === rules.descision);
+    return options.indexOf(element);
   }
 
   /**
@@ -88,22 +117,8 @@ class VotingFilter extends React.PureComponent {
         questionStore: { options },
         historyStore: { filter: { rules } },
       },
-      t,
     } = this.props;
 
-    const statusOptions = [{
-      label: t('fields:descision'),
-      value: '*',
-    }, {
-      label: t('other:notAccepted'),
-      value: '0',
-    }, {
-      label: t('other:pros'),
-      value: '1',
-    }, {
-      label: t('other:cons'),
-      value: '2',
-    }];
     return (
       <>
         <div className={styles['voting__filter-dropdown']}>
@@ -117,9 +132,9 @@ class VotingFilter extends React.PureComponent {
             <QuestionIcon />
           </SimpleDropdown>
           <SimpleDropdown
-            options={statusOptions}
+            options={this.getStatusOptions()}
             onSelect={this.handleStatusSelect}
-            initIndex={0}
+            initIndex={this.indexForDescision}
             key={uniqKey()}
           >
             <DescisionIcon />

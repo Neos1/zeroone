@@ -82,12 +82,11 @@ class SimpleDropdown extends Component {
     this.setState({ opened: false });
   }
 
-  handleSelect = (selected) => {
+  handleSelect = async (selected) => {
     const { onSelect, field } = this.props;
     field.set(selected.value);
     field.validate();
     onSelect(selected);
-
     this.setState({
       selectedLabel: selected.label,
       selectedValue: selected.value,
