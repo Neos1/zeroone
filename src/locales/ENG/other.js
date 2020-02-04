@@ -87,5 +87,6 @@ const other = {
   noVotingFilterMatches: 'No voting matches <1/> the selected filter',
   noQuestionsInThisGroup: 'No questions have been <1/> created in this group yet',
   reloadNotification: 'Will apply on next launch',
+  loadingToggleDisabled: "While all data is not loaded, you can't change user",
 };
 export default other;
