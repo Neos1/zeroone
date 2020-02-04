@@ -42,6 +42,10 @@ class PaginationStore {
     this.activePage = activePage;
   }
 
+  getCurrentPage() {
+    return this.activePage;
+  }
+
   /**
    * Method for getting pagination range
    *

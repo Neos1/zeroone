@@ -31,9 +31,7 @@ class HistoryStore {
     this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
         await this.getActualState(() => {
-          this.pagination = new PaginationStore({
-            totalItemsCount: this.list.length,
-          });
+          this.returnToLastPage();
         });
         await this.setLoadingFinish();
       },
@@ -118,6 +116,22 @@ class HistoryStore {
     this.isActiveVoting = await this.hasActiveVoting();
     await this.fetchUserReturnTokens();
     if (cb) cb();
+  }
+
+  /**
+   * Method for returning on last page after votings
+   * list update
+   */
+  @action
+  returnToLastPage() {
+    let currentPage = 1;
+    if (this.pagination !== null) {
+      currentPage = this.pagination.getCurrentPage();
+    }
+    this.pagination = new PaginationStore({
+      totalItemsCount: this.list.length,
+    });
+    this.pagination.handleChange(currentPage);
   }
 
   /**
