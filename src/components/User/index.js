@@ -159,6 +159,11 @@ class User extends React.Component {
               theme="toggle-user"
               onClick={this.handleToggleUser}
               disabled={!projectStore.isInitiated}
+              hint={
+                !projectStore.isInitiated
+                  ? t('other:loadingToggleDisabled')
+                  : null
+              }
             >
               {t('other:toggleUser')}
             </Button>

@@ -87,5 +87,6 @@ const other = {
   noVotingFilterMatches: 'Выбранному фильтру не <1/> соответствует ни одно голосование',
   noQuestionsInThisGroup: 'В этой группе пока не <1/> создано ни одного вопроса',
   reloadNotificaion: 'Применятся при следующем запуске',
+  loadingToggleDisabled: 'Вы не можете сменить пользователя, пока не загруженны данные',
 };
 export default other;
