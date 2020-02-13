@@ -1,0 +1,25 @@
+@import '../../assets/styles/includes/mixin';
+
+.decision {
+  width: 100%;
+  text-align: center;
+
+  &__title {
+    @include title;
+  }
+
+  &__subtext {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  &__icon {
+    svg {
+      width: auto;
+      height: auto;
+      margin-top: 47px;
+    }
+  }
+}

@@ -8,6 +8,8 @@ const placeholders = {
   quantity: 'Quantity',
   projectTitle: 'Project title',
   contractAddress: 'Enter contract address',
+  address: 'Address',
+  countTokens: 'Count tokens',
 };
 
 export default placeholders;

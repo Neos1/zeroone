@@ -42,6 +42,7 @@ class RootStore {
 
   /**
    * initiating project
+   *
    * @param {string} address adress of project
    */
   @action initProject(address) {

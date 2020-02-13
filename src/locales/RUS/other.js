@@ -14,6 +14,8 @@ const other = {
   withTokens: 'Если есть токены ERC20',
   withoutTokens: 'Если токенов ERC20 нет',
   yourBalance: 'Ваш баланс',
+  notEnoughTokens: 'Возможно не хватает токенов',
+  enterPassForConfirm: 'Введите пароль, чтобы подтвердить свое решеине',
   RUS: 'Русский',
   ENG: 'English',
 };
