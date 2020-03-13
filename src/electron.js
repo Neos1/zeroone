@@ -4,7 +4,14 @@ const {
 const electronLocalShortcut = require('electron-localshortcut');
 const isDev = require('electron-is-dev');
 const path = require('path');
+const fs = require('fs');
 const solc = require('solc');
+
+require.extensions['.sol'] = function (module, filename) {
+  module.exports = fs.readFileSync(filename, 'utf8');
+};
+
+const zeroOne = require.resolve('zeroone-contracts/contracts/ZeroOne/ZeroOne.sol');
 
 let mainWindow;
 let loadingScreen;
@@ -98,7 +105,7 @@ function createWindow() {
       language: 'Solidity',
       sources: {
         'test.sol': {
-          content: contract,
+          content: zeroOne,
         },
       },
       settings: {
@@ -109,7 +116,9 @@ function createWindow() {
         },
       },
     };
+
     const output = JSON.parse(solc.compile(JSON.stringify(data)));
+    fs.writeFileSync('./test.json', JSON.stringify(output, null, '\t'));
     mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
   }));
 }

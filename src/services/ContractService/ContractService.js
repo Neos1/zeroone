@@ -56,6 +56,7 @@ class ContractService {
    * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
    * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
    */
+  // eslint-disable-next-line class-methods-use-this
   compileContract(type) {
     return new Promise((resolve, reject) => {
       const contract = this.combineContract(type);
@@ -87,7 +88,11 @@ class ContractService {
       case ('Voter'):
         dir = './Voter/';
         break;
+      case ('ZeroOne'):
+        dir = '../../node_modules/zeroone-contracts/contracts/ZeroOne/';
+        break;
       default:
+        break;
     }
     const pathToMainFile = path.join(PATH_TO_CONTRACTS, `${dir}${type}.sol`);
 

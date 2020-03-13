@@ -1,4 +1,4 @@
-import { SOL_IMPORT_REGEXP, SOL_VERSION_REGEXP } from '../../constants';
+import { SOL_IMPORT_REGEXP, SOL_VERSION_REGEXP, VM_IMPORT_REGEXP } from '../../constants';
 import getImports from './get-sol-imports';
 import { fs, path } from '../../constants/windowModules';
 
@@ -7,8 +7,12 @@ const readSolFile = (src, importedFiles) => {
   if (!fs.existsSync(src)) throw new Error(`${src} - file not exist`);
   mainImport = fs.readFileSync(src, 'utf8');
   const importList = getImports(mainImport);
+  console.log(importList);
   const currentFolder = src.replace(/(((\.\/|\.\.\/)).{1,})*([a-zA-Z0-9])*(\.sol)/g, '');
   importList.forEach((file) => {
+    if (VM_IMPORT_REGEXP.test(file)) {
+      console.log(true);
+    }
     const pathToFile = path.join(currentFolder, file);
     if (!importedFiles[pathToFile] && (pathToFile !== src)) {
       const includedFile = (readSolFile(pathToFile, importedFiles)).replace(SOL_VERSION_REGEXP, '');

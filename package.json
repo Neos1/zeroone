@@ -52,14 +52,15 @@
     "react-router-dom": "^5.1.2",
     "react-tabs": "^3.0.0",
     "recharts": "^2.0.0-beta.1",
-    "solc": "^0.5.15",
+    "solc": "^0.6.1",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
     "validatorjs": "^3.17.1",
     "web3": "^1.2.4",
     "web3-utils": "^1.2.4",
     "webpack": "^4.41.2",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.8.2",
+    "zeroone-contracts": "github:Neos1/zeroone-contracts#ballot"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.5.5",
@@ -90,7 +91,7 @@
     "jest": "^24.9.0",
     "jest-css-modules": "^2.1.0",
     "jsdoc": "^3.6.3",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
     "wait-on": "^3.3.0",
