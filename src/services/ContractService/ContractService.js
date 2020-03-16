@@ -80,7 +80,7 @@ class ContractService {
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
     let dir;
-    const compiler = 'pragma solidity ^0.5;';
+    const compiler = 'pragma solidity 0.6.1;';
     switch (type) {
       case ('ERC20'): case ('MERC20'):
         dir = './';

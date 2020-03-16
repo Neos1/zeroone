@@ -104,7 +104,7 @@ function createWindow() {
       language: 'Solidity',
       sources: {
         'test.sol': {
-          content: zeroOne,
+          content: contract,
         },
       },
       settings: {
@@ -115,10 +115,15 @@ function createWindow() {
         },
       },
     };
-
-    const output = JSON.parse(solc.compile(JSON.stringify(data)));
-    fs.writeFileSync('./test.json', JSON.stringify(output, null, '\t'));
-    mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
+    solc.loadRemoteVersion('0.6.1+commit.e6f7d5a.Emscripten.clang', (err, solcSnapshot) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const output = JSON.parse(solcSnapshot.compile(JSON.stringify(data)));
+        fs.writeFileSync('./test.json', JSON.stringify(output, null, '\t'));
+        mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
+      }
+    });
   }));
 }
 
