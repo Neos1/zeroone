@@ -2,7 +2,7 @@
 	"errors": [
 		{
 			"component": "general",
-			"formattedMessage": "test.sol:1:1: ParserError: Expected pragma, import directive or contract/interface/library/struct/enum definition.\n/home/pavel/repos/zeroone/node_modules/zeroone-contracts/contracts/ZeroOne/ZeroOne.sol\n^\n",
+			"formattedMessage": "test.sol:1:1: ParserError: Expected pragma, import directive or contract/interface/library/struct/enum definition.\nd:\\REPOS\\zeroone\\node_modules\\zeroone-contracts\\contracts\\ZeroOne\\ZeroOne.sol\n^\n",
 			"message": "Expected pragma, import directive or contract/interface/library/struct/enum definition.",
 			"severity": "error",
 			"sourceLocation": {

@@ -11,7 +11,6 @@ require.extensions['.sol'] = function (module, filename) {
   module.exports = fs.readFileSync(filename, 'utf8');
 };
 
-const zeroOne = require.resolve('zeroone-contracts/contracts/ZeroOne/ZeroOne.sol');
 
 let mainWindow;
 let loadingScreen;
