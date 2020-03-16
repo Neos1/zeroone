@@ -91,7 +91,7 @@ class AppStore {
   @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
     return new Promise((resolve, reject) => {
-      contractService.compileContract(type)
+      contractService.compileContract(type, password)
         .then(({ bytecode, abi }) => contractService.deployContract({
           type, deployArgs, bytecode, abi, password,
         }))
@@ -140,7 +140,7 @@ class AppStore {
    */
   @action async deployQuestions(address) {
     const { Web3Service, contractService } = this.rootStore;
-    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi'), 'utf8'));
+    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ZeroOne.abi'), 'utf8'));
     const contract = Web3Service.createContractInstance(abi);
     contract.options.address = address;
     contractService.setContract(contract);
@@ -176,7 +176,7 @@ class AppStore {
    */
   async checkIsQuestionsUploaded(address) {
     const { Web3Service, contractService } = this.rootStore;
-    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi'), 'utf8'));
+    const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ZeroOne.abi'), 'utf8'));
     const contract = Web3Service.createContractInstance(abi);
     contract.options.address = address;
     contractService.setContract(contract);

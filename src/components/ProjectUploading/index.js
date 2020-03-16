@@ -68,7 +68,7 @@ class ProjectUploading extends Component {
     const { steps } = this;
     const { appStore, appStore: { name }, t } = this.props;
 
-    appStore.deployContract('Voter', deployArgs, password)
+    appStore.deployContract('ZeroOne', deployArgs, password)
       .then((txHash) => {
         this.setState({
           step: steps.receipt,
@@ -90,7 +90,10 @@ class ProjectUploading extends Component {
             });
           });
         }
-      }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
+      }).catch((err) => {
+        alert(err);
+        appStore.displayAlert(t('errors:hostUnreachable'), 3000);
+      });
   }
 
   render() {

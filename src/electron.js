@@ -6,6 +6,7 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const fs = require('fs');
 const solc = require('solc');
+const linker = require('solc/linker');
 
 require.extensions['.sol'] = function (module, filename) {
   module.exports = fs.readFileSync(filename, 'utf8');
@@ -108,6 +109,10 @@ function createWindow() {
         },
       },
       settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200,
+        },
         outputSelection: {
           '*': {
             '*': ['*'],
@@ -115,15 +120,16 @@ function createWindow() {
         },
       },
     };
-    solc.loadRemoteVersion('0.6.1+commit.e6f7d5a.Emscripten.clang', (err, solcSnapshot) => {
-      if (err) {
-        console.log(err);
-      } else {
-        const output = JSON.parse(solcSnapshot.compile(JSON.stringify(data)));
-        fs.writeFileSync('./test.json', JSON.stringify(output, null, '\t'));
-        mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
-      }
-    });
+    const output = JSON.parse(solc.compile(JSON.stringify(data)));
+    if (type === 'ZeroOne') {
+      const contracts = {
+        ZeroOne: output.contracts['test.sol'][type],
+        ZeroOneVM: output.contracts['test.sol'].ZeroOneVM,
+      };
+      mainWindow.webContents.send('contract-compiled', contracts);
+    } else {
+      mainWindow.webContents.send('contract-compiled', output.contracts['test.sol'][type]);
+    }
   }));
 }
 

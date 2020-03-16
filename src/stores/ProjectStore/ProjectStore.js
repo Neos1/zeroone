@@ -34,9 +34,9 @@ class ProjectStore {
   constructor(rootStore) {
     this.rootStore = rootStore;
     try {
-      this.projectAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
+      this.projectAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ZeroOne.abi')));
     } catch {
-      alert(`Error occuried when trying to read ${path.join(PATH_TO_CONTRACTS, './Voter.abi')}. Please check it.`);
+      alert(`Error occuried when trying to read ${path.join(PATH_TO_CONTRACTS, './ZeroOne.abi')}. Please check it.`);
     }
   }
 

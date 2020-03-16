@@ -3,6 +3,7 @@
 import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
 import { number } from 'prop-types';
+import * as linker from 'solc/linker';
 import {
   SOL_IMPORT_REGEXP,
   SOL_PATH_REGEXP,
@@ -54,19 +55,45 @@ class ContractService {
    * compiles contracts and returning type of compiled contract, bytecode & abi
    *
    * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
+   * @param password
    * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
    */
   // eslint-disable-next-line class-methods-use-this
-  compileContract(type) {
+  compileContract(type, password) {
+    const { rootStore: { Web3Service, userStore } } = this;
+    const { address } = userStore;
+    window.linker = linker;
     return new Promise((resolve, reject) => {
+      let bytecode;
+      let abi;
+
       const contract = this.combineContract(type);
       window.ipcRenderer.send('compile-request', { contract, type });
-      window.ipcRenderer.once('contract-compiled', (event, compiledContract) => {
-        if (compiledContract.abi !== '') {
-          const { evm: { bytecode: { object } }, abi } = compiledContract;
-          fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
-          resolve({ type, bytecode: object, abi });
+      window.ipcRenderer.once('contract-compiled', async (event, compiledContract) => {
+        console.log(compiledContract);
+        if (type === 'ZeroOne') {
+          const { ZeroOne, ZeroOneVM } = compiledContract;
+          const { evm: { bytecode: { object: libraryBytecode } } } = ZeroOneVM;
+          const { evm: { bytecode: { object: ZeroOneBytecode } }, abi: ZeroOneABI } = ZeroOne;
+          const libTX = { data: `0x${libraryBytecode}` };
+          await Web3Service.createTxData(address, libTX)
+            .then((formedTx) => userStore.singTransaction(formedTx, password))
+            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+            .then(({ contractAddress }) => {
+              console.log(`library at ${contractAddress}`);
+              abi = ZeroOneABI;
+              const [link] = Object.keys(linker.findLinkReferences(ZeroOneBytecode));
+              bytecode = linker.linkBytecode(ZeroOneBytecode, { [link]: contractAddress });
+            });
+        } else if (compiledContract.abi !== '') {
+          const { evm: { bytecode: { object } }, abi: contractAbi } = compiledContract;
+          abi = contractAbi;
+          bytecode = object;
         } else reject(new Error('Something went wrong on contract compiling'));
+
+        fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
+        resolve({ type, bytecode, abi });
       });
     });
   }
@@ -83,7 +110,7 @@ class ContractService {
     const compiler = 'pragma solidity 0.6.1;';
     switch (type) {
       case ('ERC20'): case ('MERC20'):
-        dir = './';
+        dir = '../../node_modules/zeroone-contracts/contracts/__vendor__/';
         break;
       case ('Voter'):
         dir = './Voter/';
@@ -99,7 +126,7 @@ class ContractService {
     const importedFiles = {};
 
     let output = readSolFile(pathToMainFile, importedFiles);
-    output = output.replace(SOL_VERSION_REGEXP, compiler);
+    output = output.replace(SOL_VERSION_REGEXP, compiler).replace((SOL_IMPORT_REGEXP), '');
     // output = output.replace(/(calldata)/g, '');
 
     return output;
@@ -121,13 +148,14 @@ class ContractService {
     const { rootStore: { Web3Service, userStore } } = this;
     const { address } = userStore;
     const contract = Web3Service.createContractInstance(abi);
-    const txData = contract.deploy({
+    const data = contract.deploy({
       data: `0x${bytecode}`,
       arguments: deployArgs,
     }).encodeABI();
 
+
     const tx = {
-      data: txData,
+      data,
       from: userStore.address,
       value: '0x0',
     };
@@ -169,7 +197,7 @@ class ContractService {
   checkProject(address) {
     const { rootStore: { Web3Service } } = this;
     return new Promise((resolve, reject) => {
-      const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './Voter.abi')));
+      const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ZeroOne.abi')));
       const contract = Web3Service.createContractInstance(abi);
       contract.options.address = address;
       contract.methods.getQuestionGroupsLength().call()
@@ -210,7 +238,7 @@ class ContractService {
    * @returns {object} {countOfUploaded, totalCount}
    */
   async checkQuestions() {
-    const countOfUploaded = await this._contract.methods.getCount().call();
+    const countOfUploaded = await this._contract.methods.getQuestionsAmount().call();
     const totalCount = Object.keys(this.sysQuestions).length;
     return ({ countOfUploaded, totalCount });
   }

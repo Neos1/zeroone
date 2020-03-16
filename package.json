@@ -60,7 +60,8 @@
     "web3-utils": "^1.2.4",
     "webpack": "^4.41.2",
     "webpack-dev-server": "^3.8.2",
-    "zeroone-contracts": "github:Neos1/zeroone-contracts#ballot",
+    "zeroone-contracts": "github:Neos1/zeroone-contracts#zeroone",
+    "zeroone-translator": "github:Neos1/zeroone-translator",
     "zeroone-voting-vm": "github:Neos1/zeroone-voting-vm#master"
   },
   "devDependencies": {

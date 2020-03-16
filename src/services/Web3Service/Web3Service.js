@@ -23,11 +23,12 @@ class Web3Service {
 
   createTxData(address, tx) {
     const { web3: { eth }, rootStore } = this;
+    // eslint-disable-next-line no-unused-vars
     const { configStore: { MIN_GAS_PRICE, MAX_GAS_PRICE, GAS_LIMIT: gasLimit } } = rootStore;
     let transaction = { ...tx };
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
-        transaction = { ...tx, nonce, gasLimit };
+        transaction = { ...tx, nonce };
         return eth.estimateGas(transaction);
       })
       .then((gas) => {

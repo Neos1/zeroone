@@ -59,7 +59,7 @@ class ContractUploading extends Component {
         userStore.setPassword(password);
         const deployArgs = [address];
         dialogStore.toggle('progress_modal_contract_uploading');
-        return appStore.deployContract('Voter', deployArgs, password)
+        return appStore.deployContract('ZeroOne', deployArgs, password)
           .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
           .then((receipt) => {
             dialogStore.toggle('success_modal_contract_uploading');
