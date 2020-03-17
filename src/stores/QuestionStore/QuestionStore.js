@@ -231,7 +231,7 @@ class QuestionStore {
    * @param {Array} questions array of questions
    */
   async getMissingQuestions(questions) {
-    const firstQuestionIndex = 1;
+    const firstQuestionIndex = 0;
     const { contractService } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
     const questionsFromFileLength = questions.length;
