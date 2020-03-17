@@ -63,8 +63,8 @@ class MembersStore {
   async fetchUserGroups() {
     await this.fetchUserGroupsLength()
       .then((length) => this.getActualUserGroups(length))
-      // .then((groups) => this.getPrimaryGroupsInfo(groups))
-      // .then((groups) => this.getUsersBalances(groups))
+      .then((groups) => this.getPrimaryGroupsInfo(groups))
+      .then((groups) => this.getUsersBalances(groups))
       .then((groups) => {
         groups.forEach((group) => {
           this.addToGroups(group);
@@ -82,10 +82,6 @@ class MembersStore {
     const groups = [];
     for (let i = 0; i < length; i += 1) {
       const group = await contractService.callMethod('getUserGroup', i);
-      delete group['0'];
-      delete group['1'];
-      delete group['2'];
-      delete group['3'];
       groups.push(group);
     }
     return groups;
@@ -168,7 +164,7 @@ class MembersStore {
     const { Web3Service, userStore } = this.rootStore;
     for (let i = 0; i < groups.length; i += 1) {
       const group = groups[i];
-      const abi = fs.readFileSync(path.join(PATH_TO_CONTRACTS, group.groupType === 'ERC20' ? './ERC20.abi' : './CustomToken.abi'));
+      const abi = fs.readFileSync(path.join(PATH_TO_CONTRACTS, group.groupType === 0 ? './ERC20.abi' : './CustomToken.abi'));
       const contract = Web3Service.createContractInstance(JSON.parse(abi));
       contract.options.address = await group.groupAddress;
       group.contract = contract;
@@ -176,7 +172,7 @@ class MembersStore {
       group.tokenSymbol = await contract.methods.symbol().call();
       group.users = group.groupType === 'ERC20'
         ? [userStore.address]
-        : await contract.methods.getUsers().call();
+        : [userStore.address];// await contract.methods.getUsers().call();
       group.groupId = i + 1;
       // eslint-disable-next-line no-param-reassign
       groups[i] = group;
@@ -190,8 +186,8 @@ class MembersStore {
       const group = groups[i];
       const { contract, groupType } = group;
       group.members = [];
-      const admin = groupType === 'Custom'
-        ? await contract.methods.getAdmin().call()
+      const admin = groupType === 1
+        ? await contract.methods.owner().call()
         : null;
 
       for (let j = 0; j < group.users.length; j += 1) {
