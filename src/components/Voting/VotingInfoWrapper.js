@@ -204,7 +204,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const { groupId } = this.question;
     const targetGroup = membersStore.getMemberById(groupId);
     if (!targetGroup || !targetGroup.groupType) return false;
-    return targetGroup.groupType === 'ERC20';
+    return targetGroup.groupType === '0';
   }
 
   /**

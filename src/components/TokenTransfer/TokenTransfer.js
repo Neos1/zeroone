@@ -162,7 +162,7 @@ class TokenTransfer extends React.Component {
           <div className={styles.wallet__wrapper}>{wallet}</div>
         </form>
         {
-          groupType !== 'ERC20'
+          groupType !== '0'
             ? (
               <div className={styles['token-transfer__button-container']}>
                 <Button
@@ -191,7 +191,7 @@ class TokenTransfer extends React.Component {
             : null
         }
         {
-          groupType !== 'ERC20'
+          groupType !== '0'
             ? (
               <Dialog
                 name={`password_form-${groupId}`}

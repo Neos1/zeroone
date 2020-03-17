@@ -170,7 +170,7 @@ class MembersStore {
       group.contract = contract;
       group.totalSupply = await contract.methods.totalSupply().call();
       group.tokenSymbol = await contract.methods.symbol().call();
-      group.users = group.groupType === 'ERC20'
+      group.users = group.groupType === '0'
         ? [userStore.address]
         : [userStore.address];// await contract.methods.getUsers().call();
       group.groupId = i + 1;
@@ -186,7 +186,7 @@ class MembersStore {
       const group = groups[i];
       const { contract, groupType } = group;
       group.members = [];
-      const admin = groupType === 1
+      const admin = groupType === '1'
         ? await contract.methods.owner().call()
         : null;
 
@@ -242,7 +242,7 @@ class MembersStore {
     window.contract = contract;
     // eslint-disable-next-line no-unused-vars
     const { Web3Service, userStore: { address, password }, userStore } = this.rootStore;
-    const data = groupType === 'ERC20'
+    const data = groupType === '0'
       ? contract.methods.transfer(to, Number(count)).encodeABI()
       : contract.methods.transferFrom(from, to, Number(count)).encodeABI();
     const txData = {
@@ -301,7 +301,7 @@ class MembersStore {
 
   @computed
   get nonERC() {
-    return this.groups.filter((group) => group.groupType !== 'ERC20')
+    return this.groups.filter((group) => group.groupType !== '0')
       .map((group) => ({ label: group.name, value: group.wallet }));
   }
 

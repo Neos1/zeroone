@@ -201,7 +201,7 @@ class MembersGroupComponent extends React.Component {
 
     const isIdentical = selectedWallet.toUpperCase() === address.toUpperCase();
 
-    if (groupType === 'Custom') {
+    if (groupType === '1') {
       [admin] = administrator;
       isAdmininstrator = (address.toUpperCase() === admin.wallet.toUpperCase());
     }

@@ -379,7 +379,7 @@ class ContractService {
 
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
-      if ((groupContainsUser) && (groupContainsUser.groupType === 'ERC20')) {
+      if ((groupContainsUser) && (groupContainsUser.groupType === '0')) {
         this.approveErc(groupContainsUser)
           .then(() => {
             const tx = {
@@ -405,7 +405,7 @@ class ContractService {
               });
           })
           .catch((err) => reject(err));
-      } else if ((groupContainsUser) && (groupContainsUser.groupType !== 'ERC20')) {
+      } else if ((groupContainsUser) && (groupContainsUser.groupType !== '0')) {
         const tx = {
           from: userStore.address,
           to: _contract.options.address,

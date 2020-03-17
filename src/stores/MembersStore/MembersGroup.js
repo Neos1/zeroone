@@ -139,8 +139,8 @@ class MembersGroup {
       member.wallet.toUpperCase() === address.toUpperCase()
     ));
     if ((!user || !user.setTokenBalance || !user.setWeight) && userBalance !== 0) {
-      const admin = this.groupType === 'Custom'
-        ? await this.contract.methods.getAdmin().call()
+      const admin = this.groupType === '1'
+        ? await this.contract.methods.owner().call()
         : null;
       this.list.push(new MemberItem({
         wallet: address,
@@ -172,8 +172,8 @@ class MembersGroup {
   @action
   setNewAdmin = async () => {
     const admin = this.list.find((member) => member.isAdmin === true);
-    const newAdmin = this.groupType === 'Custom'
-      ? await this.contract.methods.getAdmin().call()
+    const newAdmin = this.groupType === '1'
+      ? await this.contract.methods.owner().call()
       : null;
     const user = this.list.find((member) => member.wallet === newAdmin);
     if (admin) admin.removeAdminPrivileges();
