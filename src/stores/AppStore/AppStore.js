@@ -147,8 +147,8 @@ class AppStore {
     const { countOfUploaded, totalCount } = await contractService.checkQuestions();
     this.countOfQuestions = Number(totalCount);
     this.uploadedQuestion = Number(countOfUploaded);
-    let idx = Number(countOfUploaded) === 0 ? 1 : Number(countOfUploaded);
-    for (idx; idx <= totalCount; idx += 1) {
+    let idx = Number(countOfUploaded) === 0 ? 0 : Number(countOfUploaded);
+    for (idx; idx < totalCount; idx += 1) {
       // eslint-disable-next-line no-await-in-loop
       await contractService.sendQuestion(idx);
       this.uploadedQuestion += 1;

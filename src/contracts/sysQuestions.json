@@ -1,5 +1,5 @@
 {
-  "1": {
+  "0": {
     "groupId": 0,
     "name": "Добавить Вопрос",
     "description": "Добавление нового вопроса",
@@ -27,7 +27,7 @@
     ],
     "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   },
-  "2": {
+  "1": {
     "groupId": 0,
     "name": "Подключить группу пользователей",
     "description": "Подключить новую группу пользователей для участия в голосованиях",
@@ -45,7 +45,7 @@
     ],
     "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   },
-  "3": {
+  "2": {
     "groupId": 0,
     "name": "Добавить группу вопросов",
     "description": "Добавить новую группу вопросов",
@@ -59,7 +59,7 @@
     ],
     "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   },
-  "4": {
+  "3": {
     "groupId": 0,
     "name": "Установить администратора группы",
     "description": "Установка администратора в группе кастомных токенов",

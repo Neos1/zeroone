@@ -4,6 +4,7 @@ import browserSolc from 'browser-solc';
 import { BN } from 'ethereumjs-util';
 import { number } from 'prop-types';
 import * as linker from 'solc/linker';
+import { compile } from 'zeroone-translator';
 import {
   SOL_IMPORT_REGEXP,
   SOL_PATH_REGEXP,
@@ -12,7 +13,6 @@ import {
 import {
   fs, PATH_TO_CONTRACTS, path,
 } from '../../constants/windowModules';
-import Question from './entities/Question';
 import readSolFile from '../../utils/fileUtils/index';
 
 /**
@@ -200,7 +200,7 @@ class ContractService {
       const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ZeroOne.abi')));
       const contract = Web3Service.createContractInstance(abi);
       contract.options.address = address;
-      contract.methods.getQuestionGroupsLength().call()
+      contract.methods.getQuestionGroupsAmount().call()
         .then((data) => resolve())
         .catch((err) => reject(err));
     });
@@ -250,36 +250,38 @@ class ContractService {
    * @returns {Promise} Promise, which resolves on transaction hash
    */
   async sendQuestion(idx) {
-    const { _contract, rootStore } = this;
+    console.log(`question id = ${idx}`);
+    const { _contract: contract, rootStore } = this;
     const {
       Web3Service, userStore,
     } = rootStore;
-    const sysQuestion = this.sysQuestions[idx];
-    await this.fetchQuestion(idx).then((result) => {
-      if (result.caption === '') {
-        const { address, password } = userStore;
-        const question = new Question(sysQuestion);
-        const contractAddr = this._contract.options.address;
-        const params = question.getUploadingParams(contractAddr);
+    const question = this.sysQuestions[idx];
+    const owners = await contract.methods.getUserGroup(0).call();
 
-        const dataTx = _contract.methods.saveNewQuestion(...params).encodeABI();
-        const rawTx = {
-          to: contractAddr,
-          data: dataTx,
-          value: '0x0',
-        };
-        return new Promise((resolve) => {
-          Web3Service.createTxData(address, rawTx)
-            .then((formedTx) => userStore.singTransaction(formedTx, password))
-            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-            .then((receipt) => {
-              userStore.getEthBalance();
-              resolve(receipt);
-            });
+    const { address, password } = userStore;
+    const contractAddr = contract.options.address;
+    question.target = contractAddr;
+    question.formula = compile(question.rawFormula.replace('%s', owners.groupAddress));
+    question.active = true;
+
+    console.log(question);
+    const dataTx = contract.methods.addQuestion(question).encodeABI();
+    console.log(dataTx);
+    const rawTx = {
+      to: contractAddr,
+      data: dataTx,
+      value: '0x0',
+    };
+
+    return new Promise((resolve) => {
+      Web3Service.createTxData(address, rawTx)
+        .then((formedTx) => userStore.singTransaction(formedTx, password))
+        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+        .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        .then((receipt) => {
+          userStore.getEthBalance();
+          resolve(receipt);
         });
-      // eslint-disable-next-line prefer-promise-reject-errors
-      } return Promise.reject('WATAFAk');
     });
   }
 
@@ -290,7 +292,7 @@ class ContractService {
    * @returns {object} Question data from contract
    */
   fetchQuestion(id) {
-    return this.callMethod('question', id);
+    return this.callMethod('getQuestion', id);
   }
 
   /**
