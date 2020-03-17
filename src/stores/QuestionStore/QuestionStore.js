@@ -331,9 +331,9 @@ class QuestionStore {
    * @param {number} id id of question
    * @returns {Array} array with lenght == 1, contains question matched by id
    */
-  @action getQuestionById = (id) => {
-    return this._questions.filter((question) => question.id === Number(id));
-  }
+  @action getQuestionById = (id) => (
+    this._questions.filter((question) => question.id === Number(id))
+  )
 
   @action reset = () => {
     this._questions = [];
