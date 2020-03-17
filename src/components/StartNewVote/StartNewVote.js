@@ -11,6 +11,7 @@ import { Address, QuestionIcon } from '../Icons';
 import Input from '../Input';
 import Button from '../Button/Button';
 import StarNewVoteForm from '../../stores/FormsStore/StartNewVoteForm';
+import { systemQuestionsId } from '../../constants';
 
 import styles from './StartNewVote.scss';
 
@@ -105,14 +106,13 @@ class StartNewVote extends React.Component {
       if (field.name === 'question') return;
       form.del(field.name);
     });
-    console.log('selected.value', selected.value);
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
-      case 1:
+      case systemQuestionsId.addingNewQuestion:
         history.push('/questions');
         dialogStore.toggle('create_question');
         break;
-      case 3:
+      case systemQuestionsId.connectGroupQuestions:
         history.push('/questions');
         dialogStore.toggle('create_group_question');
         break;

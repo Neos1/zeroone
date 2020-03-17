@@ -8,6 +8,7 @@ import Input from '../Input';
 import { TokenName } from '../Icons';
 import Button from '../Button/Button';
 // import InputTextarea from '../Input/InputTextarea';
+import { systemQuestionsId } from '../../constants';
 
 import styles from './CreateGroupQuestions.scss';
 
@@ -28,10 +29,9 @@ class CreateGroupQuestions extends React.PureComponent {
           projectStore,
           dialogStore,
         } = this.props;
-        const questionId = 2;
+        const questionId = systemQuestionsId.connectGroupQuestions;
         const { name } = form.values();
         const [question] = questionStore.getQuestionById(questionId);
-        console.log('question', question);
         const { paramTypes, groupId } = question;
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(paramTypes, [name]);
         // const votingData = encodedParams.replace('0x', methodSelector);

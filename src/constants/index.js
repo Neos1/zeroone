@@ -17,10 +17,10 @@ export const userVotingStates = {
 };
 
 export const systemQuestionsId = {
-  addingNewQuestion: 1,
-  connectGroupUsers: 2,
-  connectGroupQuestions: 3,
-  assignGroupAdmin: 4,
+  addingNewQuestion: 0,
+  connectGroupUsers: 1,
+  connectGroupQuestions: 2,
+  assignGroupAdmin: 3,
 };
 
 export const languages = {

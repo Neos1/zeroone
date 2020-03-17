@@ -145,11 +145,15 @@ class QuestionStore {
     if (cb) cb();
   }
 
+  /**
+   * Method for getting question groups
+   * from contract
+   */
   @action
   async fetchActualQuestionGroups() {
     const { contractService } = this.rootStore;
     const localGroupsLength = this._questionGroups.length;
-    const contractGroupsLength = await contractService.callMethod('getQuestionsAmount');
+    const contractGroupsLength = Number(await contractService.callMethod('getQuestionsAmount'));
     if (localGroupsLength < contractGroupsLength) {
       for (let i = localGroupsLength; i < contractGroupsLength; i += 1) {
       // eslint-disable-next-line no-await-in-loop
@@ -169,7 +173,8 @@ class QuestionStore {
   @action
   async fetchQuestions() {
     const { contractService } = this.rootStore;
-    const { countOfUploaded } = await contractService.checkQuestions();
+    const data = await contractService.checkQuestions();
+    const countOfUploaded = Number(data.countOfUploaded);
     for (let i = 0; i < countOfUploaded; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const question = await contractService.fetchQuestion(i);
@@ -327,7 +332,6 @@ class QuestionStore {
    * @returns {Array} array with lenght == 1, contains question matched by id
    */
   @action getQuestionById = (id) => {
-    console.log('this._questions', this._questions);
     return this._questions.filter((question) => question.id === Number(id));
   }
 
