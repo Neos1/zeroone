@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import { observable } from 'mobx';
-import uniqKey from 'react-id-generator';
+import nextId from 'react-id-generator';
 import SimpleDropdown from '../SimpleDropdown';
 import { Address, QuestionIcon } from '../Icons';
 import Input from '../Input';
@@ -173,7 +173,7 @@ class StartNewVote extends React.Component {
               field={form.$('question')}
               onSelect={this.handleSelect}
               initIndex={initIndex - 1}
-              key={uniqKey()}
+              key={nextId('question_dropdown')}
             >
               <QuestionIcon />
             </SimpleDropdown>
@@ -210,7 +210,10 @@ class StartNewVote extends React.Component {
                       if (field.name === 'question') return null;
                       return (field.placeholder === 'Group' || field.placeholder === 'Group address')
                         ? (
-                          <div className={styles['new-vote__form-col']}>
+                          <div
+                            className={styles['new-vote__form-col']}
+                            key={nextId('new_vote__form_col')}
+                          >
                             <SimpleDropdown
                               options={nonERC}
                               field={field}
@@ -219,10 +222,12 @@ class StartNewVote extends React.Component {
                               <Address />
                             </SimpleDropdown>
                           </div>
-
                         )
                         : (
-                          <div className={styles['new-vote__form-col']}>
+                          <div
+                            className={styles['new-vote__form-col']}
+                            key={nextId('new_vote__form_col')}
+                          >
                             <Input field={field}><Address /></Input>
                           </div>
                         );

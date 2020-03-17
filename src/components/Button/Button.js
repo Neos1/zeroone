@@ -1,5 +1,5 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import styles from './Button.scss';
 
@@ -51,22 +51,25 @@ const Button = ({
 );
 
 Button.propTypes = {
-  children: propTypes.oneOfType([
-    propTypes.string,
-    propTypes.shape({}),
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({}),
   ]).isRequired,
-  icon: propTypes.node,
-  iconPosition: propTypes.bool,
-  type: propTypes.string,
-  disabled: propTypes.bool,
-  onClick: propTypes.func,
-  theme: propTypes.string,
-  size: propTypes.string,
-  hint: propTypes.oneOfType([
-    propTypes.string,
-    propTypes.shape({}),
+  icon: PropTypes.node,
+  iconPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
   ]),
-  className: propTypes.string,
+  type: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  theme: PropTypes.string,
+  size: PropTypes.string,
+  hint: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({}),
+  ]),
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {

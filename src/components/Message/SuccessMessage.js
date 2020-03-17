@@ -14,8 +14,15 @@ class SuccessMessage extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     onButtonClick: PropTypes.func.isRequired,
-    children: PropTypes.func.isRequired,
+    children: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node,
+    ]),
   }
+
+  static defaultProps = {
+    children: null,
+  };
 
   render() {
     const { props: { t, onButtonClick, children } } = this;

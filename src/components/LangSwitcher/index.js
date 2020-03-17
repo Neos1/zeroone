@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import propTypes from 'prop-types';
+import nextId from 'react-id-generator';
 import i18n from '../../i18n';
 import styles from './LangSwitcher.scss';
 import { getCorrectMomentLocale } from '../../utils/Date';
@@ -12,9 +13,14 @@ import { getCorrectMomentLocale } from '../../utils/Date';
 class LangSwitcher extends Component {
   static propTypes = {
     t: propTypes.func.isRequired,
-    disabled: propTypes.bool.isRequired,
-    onSelect: propTypes.func.isRequired,
+    disabled: propTypes.bool,
+    onSelect: propTypes.func,
   }
+
+  static defaultProps = {
+    disabled: false,
+    onSelect: () => {},
+  };
 
   constructor(props) {
     super(props);
@@ -99,6 +105,7 @@ class LangSwitcher extends Component {
               className={styles.lang__option}
               data-value={item}
               onClick={this.selectOption}
+              key={nextId('lang_switcher_option')}
             >
               {`${t(`other:${item}`)} (${item})`}
             </button>

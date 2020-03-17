@@ -199,7 +199,7 @@ class TokenTransfer extends React.Component {
                 footer={null}
                 header={t('fields:enterPassword')}
               >
-                <FinPassFormWrapper form={this.passwordForm} />
+                <FinPassFormWrapper form={this.passwordForm} buttonText={t('buttons:transfer')} />
               </Dialog>
             )
             : null

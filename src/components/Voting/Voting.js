@@ -227,7 +227,7 @@ class Voting extends React.Component {
             footer={null}
             header={t('fields:enterPassword')}
           >
-            <FinPassFormWrapper form={this.passwordForm} />
+            <FinPassFormWrapper form={this.passwordForm} buttonText={t('buttons:continue')} />
           </Dialog>
           <Dialog
             name="progress_modal_voting"
