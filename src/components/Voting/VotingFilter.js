@@ -2,7 +2,7 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import uniqKey from 'react-id-generator';
+import nextId from 'react-id-generator';
 import { withTranslation } from 'react-i18next';
 import { computed } from 'mobx';
 import SimpleDropdown from '../SimpleDropdown';
@@ -127,7 +127,7 @@ class VotingFilter extends React.PureComponent {
             options={options}
             onSelect={this.handleQuestionSelect}
             initIndex={Number(rules.questionId)}
-            key={uniqKey()}
+            key={nextId('voting_filter_dropdown')}
           >
             <QuestionIcon />
           </SimpleDropdown>
@@ -135,7 +135,7 @@ class VotingFilter extends React.PureComponent {
             options={this.getStatusOptions()}
             onSelect={this.handleStatusSelect}
             initIndex={this.indexForDescision}
-            key={uniqKey()}
+            key={nextId('voting_filter_dropdown')}
           >
             <DescisionIcon />
           </SimpleDropdown>

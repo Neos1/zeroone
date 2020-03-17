@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import nextId from 'react-id-generator';
 import { withTranslation } from 'react-i18next';
 import { DropdownArrowIcon } from '../Icons';
 import DropdownOption from '../SimpleDropdownOption';
@@ -112,7 +113,7 @@ class SimpleDropdown extends Component {
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option) => (
       <DropdownOption
-        key={`dropdown-${option.label}`}
+        key={nextId('dropdown_option')}
         label={option.label}
         value={option.value}
         select={this.handleSelect}
