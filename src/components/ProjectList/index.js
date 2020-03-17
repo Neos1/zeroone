@@ -56,6 +56,7 @@ class ProjectList extends Component {
     name,
   }) => {
     const { appStore } = this.props;
+    // eslint-disable-next-line no-unused-vars
     const isQuestionsUploaded = await appStore.checkIsQuestionsUploaded(address);
     // eslint-disable-next-line no-unused-expressions
     isQuestionsUploaded

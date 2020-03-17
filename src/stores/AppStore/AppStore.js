@@ -181,7 +181,7 @@ class AppStore {
     contract.options.address = address;
     contractService.setContract(contract);
     const { countOfUploaded, totalCount } = await contractService.checkQuestions();
-    return countOfUploaded > totalCount;
+    return countOfUploaded >= totalCount;
   }
 
   // eslint-disable-next-line class-methods-use-this
