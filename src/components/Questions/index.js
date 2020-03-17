@@ -16,7 +16,8 @@ import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
-import Notification from '../Notification/Notification';
+// FIXME remove comment
+// import Notification from '../Notification/Notification';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
@@ -142,7 +143,8 @@ class Questions extends Component {
     return (
       <>
         <Container className="container--small">
-          <Notification />
+          {/* FIXME remove comment */}
+          {/* <Notification /> */}
           <div className={styles.questions}>
             {
                 !loading

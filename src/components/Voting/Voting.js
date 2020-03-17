@@ -16,7 +16,8 @@ import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
-import Notification from '../Notification/Notification';
+// FIXME remove comment
+// import Notification from '../Notification/Notification';
 import ProjectStore from '../../stores/ProjectStore';
 import DialogStore from '../../stores/DialogStore';
 import VotingList from './VotingList';
@@ -172,7 +173,8 @@ class Voting extends React.Component {
           <div
             className={styles['voting-page']}
           >
-            <Notification />
+            {/* FIXME remove comment */}
+            {/* <Notification /> */}
             {
               !loading
                 ? (

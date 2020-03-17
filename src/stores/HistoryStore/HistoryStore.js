@@ -6,7 +6,8 @@ import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-ma
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
 import { statusStates } from '../../constants';
-import AsyncInterval from '../../utils/AsyncUtils';
+// FIXME remove comment
+// import AsyncInterval from '../../utils/AsyncUtils';
 
 class HistoryStore {
   @observable pagination = null;
@@ -25,18 +26,20 @@ class HistoryStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-    const { configStore: { UPDATE_INTERVAL } } = rootStore;
+    // FIXME remove comment
+    // const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.loading = true;
     this.filter = new FilterStore();
-    this.updateHistoryInterval = new AsyncInterval({
-      cb: async () => {
-        await this.getActualState(() => {
-          this.returnToLastPage();
-        });
-        await this.setLoadingFinish();
-      },
-      timeoutInterval: UPDATE_INTERVAL,
-    });
+    // FIXME remove comment
+    // this.updateHistoryInterval = new AsyncInterval({
+    //   cb: async () => {
+    //     await this.getActualState(() => {
+    //       this.returnToLastPage();
+    //     });
+    //     await this.setLoadingFinish();
+    //   },
+    //   timeoutInterval: UPDATE_INTERVAL,
+    // });
   }
 
   @action setLoadingFinish() {
@@ -472,7 +475,10 @@ class HistoryStore {
 
   async isUserReturnTokens() {
     const { contractService, userStore } = this.rootStore;
-    return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
+    // FIXME remove comment & console
+    console.log(contractService, userStore);
+    // return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
+    return false;
   }
 
   async lastUserVoting() {

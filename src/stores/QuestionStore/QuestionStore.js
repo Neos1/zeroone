@@ -3,8 +3,9 @@ import Question from './entities/Question';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import { PATH_TO_DATA } from '../../constants/windowModules';
 import FilterStore from '../FilterStore/FilterStore';
-import PaginationStore from '../PaginationStore';
-import AsyncInterval from '../../utils/AsyncUtils';
+// FIXME remove comment
+// import PaginationStore from '../PaginationStore';
+// import AsyncInterval from '../../utils/AsyncUtils';
 
 /**
  * Contains methods for working
@@ -25,19 +26,21 @@ class QuestionStore {
     this._questions = [];
     this._questionGroups = [];
     this.rootStore = rootStore;
-    const { configStore: { UPDATE_INTERVAL } } = rootStore;
+    // FIXME remove comment
+    // const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.loading = true;
     this.filter = new FilterStore();
-    this.interval = new AsyncInterval({
-      cb: async () => {
-        await this.getActualState(() => {
-          this.pagination = new PaginationStore({
-            totalItemsCount: this.list.length,
-          });
-        });
-      },
-      timeoutInterval: UPDATE_INTERVAL,
-    });
+    // FIXME remove comment
+    // this.interval = new AsyncInterval({
+    //   cb: async () => {
+    //     await this.getActualState(() => {
+    //       this.pagination = new PaginationStore({
+    //         totalItemsCount: this.list.length,
+    //       });
+    //     });
+    //   },
+    //   timeoutInterval: UPDATE_INTERVAL,
+    // });
   }
 
   /**

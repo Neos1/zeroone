@@ -10,7 +10,8 @@ import MembersGroupComponent from './MembersGroupComponent';
 import Dialog from '../Dialog/Dialog';
 import Loader from '../Loader';
 import Footer from '../Footer';
-import Notification from '../Notification/Notification';
+// FIXME remove comment
+// import Notification from '../Notification/Notification';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import DialogStore from '../../stores/DialogStore';
@@ -51,7 +52,8 @@ class MembersPage extends React.Component {
     return (
       <>
         <Container className="container--small">
-          <Notification />
+          {/* FIXME remove comment */}
+          {/* <Notification /> */}
           {
             !loading
               ? (
