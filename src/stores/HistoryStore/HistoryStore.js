@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-await-in-loop */
 import { observable, action, computed } from 'mobx';
 import Voting from './entities/Voting';
@@ -15,7 +16,7 @@ class HistoryStore {
   @observable _votings = [];
 
   /** Voting data is loading, should be true only on first load */
-  @observable loading = true;
+  @observable loading = false;
 
   /** User tokens is return (actual state, updated by interval) */
   @observable isUserReturnTokensActual = false;
@@ -26,13 +27,13 @@ class HistoryStore {
   constructor(rootStore) {
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
-    this.loading = true;
+    // this.loading = true;
     this.filter = new FilterStore();
     this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
-        await this.getActualState(() => {
-          this.returnToLastPage();
-        });
+        // await this.getActualState(() => {
+        //   this.returnToLastPage();
+        // });
         await this.setLoadingFinish();
       },
       timeoutInterval: UPDATE_INTERVAL,
@@ -97,7 +98,7 @@ class HistoryStore {
    */
   @action
   fetchUserReturnTokens = async () => {
-    const isReturn = await this.isUserReturnTokens();
+    const isReturn = true; // await this.isUserReturnTokens();
     this.isUserReturnTokensActual = isReturn;
     return isReturn;
   }
@@ -143,7 +144,6 @@ class HistoryStore {
   @action fetchVotingsCount = async () => {
     // eslint-disable-next-line no-unused-vars
     const { contractService: { _contract } } = this.rootStore;
-    console.log('_contract.methods', _contract.methods);
     const votingsLength = await _contract.methods.getVotingsAmount().call();
     return votingsLength;
   }
@@ -481,7 +481,7 @@ class HistoryStore {
 
   async lastUserVoting() {
     const { contractService, userStore } = this.rootStore;
-    return contractService._contract.methods.findLastUserVoting(userStore.address).call();
+    return 0;// contractService._contract.methods.findLastUserVoting(userStore.address).call();
   }
 
   async returnTokens() {

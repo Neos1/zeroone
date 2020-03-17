@@ -105,11 +105,11 @@ class ContractService {
     let dir;
     const compiler = 'pragma solidity 0.6.1;';
     switch (type) {
-      case ('ERC20'): case ('MERC20'):
+      case ('ERC20'):
         dir = '../../node_modules/zeroone-contracts/contracts/__vendor__/';
         break;
-      case ('Voter'):
-        dir = './Voter/';
+      case ('CustomToken'):
+        dir = '../../node_modules/zeroone-contracts/contracts/Token/';
         break;
       case ('ZeroOne'):
         dir = '../../node_modules/zeroone-contracts/contracts/ZeroOne/';
@@ -218,6 +218,10 @@ class ContractService {
    * Method create data for voting
    *
    * @returns {object} voting data
+   * @param votingQuestion
+   * @param status
+   * @param votingGroupId
+   * @param votingData
    */
   createVotingData(votingQuestion, status, votingGroupId, votingData) {
     const { rootStore: { userStore }, _contract } = this;

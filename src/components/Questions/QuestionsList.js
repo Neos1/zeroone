@@ -35,14 +35,17 @@ class QuestionsList extends React.Component {
           paginatedQuestions
           && paginatedQuestions.length
             ? (
-              paginatedQuestions.map((question) => (
-                <Question
-                  votingIsActive={historyStore.isVotingActive}
+              paginatedQuestions.map((question) => {
+                console.log(`name = ${question.name} id = ${question.id}`);
+                return (
+                  <Question
+                    votingIsActive={historyStore.isVotingActive}
                   // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...question}
-                  key={`question__item--${question.id}`}
-                />
-              ))
+                    {...question}
+                    key={`question__item--${question.id}`}
+                  />
+                );
+              })
             )
             : (
               <div className={styles['questions__list-empty']}>
