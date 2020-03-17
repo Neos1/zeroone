@@ -31,8 +31,6 @@ class MembersGroup {
     textForEmptyState,
     groupId,
   }) {
-    console.log('name', name);
-    console.log('groupAddress', groupAddress);
     if (
       !name
       // FIXME remove comment
@@ -108,6 +106,7 @@ class MembersGroup {
    * Method for getting balance in group
    */
   getUserBalanceInGroup = async () => {
+    if (!this.contract || !this.contract.methods) return;
     const balance = await this.contract.methods.balanceOf(this.userAddress).call();
     this.userBalance = balance;
   }

@@ -6,8 +6,7 @@ import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-ma
 import FilterStore from '../FilterStore/FilterStore';
 import PaginationStore from '../PaginationStore';
 import { statusStates } from '../../constants';
-// FIXME remove comment
-// import AsyncInterval from '../../utils/AsyncUtils';
+import AsyncInterval from '../../utils/AsyncUtils';
 
 class HistoryStore {
   @observable pagination = null;
@@ -26,20 +25,18 @@ class HistoryStore {
 
   constructor(rootStore) {
     this.rootStore = rootStore;
-    // FIXME remove comment
-    // const { configStore: { UPDATE_INTERVAL } } = rootStore;
+    const { configStore: { UPDATE_INTERVAL } } = rootStore;
     this.loading = true;
     this.filter = new FilterStore();
-    // FIXME remove comment
-    // this.updateHistoryInterval = new AsyncInterval({
-    //   cb: async () => {
-    //     await this.getActualState(() => {
-    //       this.returnToLastPage();
-    //     });
-    //     await this.setLoadingFinish();
-    //   },
-    //   timeoutInterval: UPDATE_INTERVAL,
-    // });
+    this.updateHistoryInterval = new AsyncInterval({
+      cb: async () => {
+        await this.getActualState(() => {
+          this.returnToLastPage();
+        });
+        await this.setLoadingFinish();
+      },
+      timeoutInterval: UPDATE_INTERVAL,
+    });
   }
 
   @action setLoadingFinish() {
@@ -115,7 +112,7 @@ class HistoryStore {
    */
   @action
   async getActualState(cb) {
-    await this.getActualVotings();
+    await this.getActualVotingList();
     this.isActiveVoting = await this.hasActiveVoting();
     await this.fetchUserReturnTokens();
     if (cb) cb();
@@ -146,7 +143,8 @@ class HistoryStore {
   @action fetchVotingsCount = async () => {
     // eslint-disable-next-line no-unused-vars
     const { contractService: { _contract } } = this.rootStore;
-    const votingsLength = await _contract.methods.getVotingsCount().call();
+    console.log('_contract.methods', _contract.methods);
+    const votingsLength = await _contract.methods.getVotingsAmount().call();
     return votingsLength;
   }
 
@@ -185,14 +183,14 @@ class HistoryStore {
    * from the contract & file
    */
   @action
-  getActualVotings = async () => {
-    const votings = await this.getFilteredVotingsFromFile();
+  getActualVotingList = async () => {
+    const votings = await this.getFilteredVotingListFromFile();
     this.writeVotingListToState(votings);
     if (!votings || !votings.length) {
-      await this.getVotingsFromContract();
+      await this.getVotingListFromContract();
       return;
     }
-    await this.getMissingVotings();
+    await this.getFilteredVotingList();
     await this.updateVotingWithActiveState();
   }
 
@@ -257,7 +255,7 @@ class HistoryStore {
     return this.isActiveVoting;
   }
 
-  async getVotingsFromContract() {
+  async getVotingListFromContract() {
     await this.fetchVotings();
     this.writeVotingsToFile();
   }
@@ -268,7 +266,7 @@ class HistoryStore {
    *
    * @returns {Array} correct array of voting
    */
-  async getFilteredVotingsFromFile() {
+  async getFilteredVotingListFromFile() {
     const { contractService, userStore } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
@@ -311,8 +309,8 @@ class HistoryStore {
   }
 
   /** Method for getting missing votings from contract */
-  async getMissingVotings() {
-    const votingListFromFile = await this.getFilteredVotingsFromFile();
+  async getFilteredVotingList() {
+    const votingListFromFile = await this.getFilteredVotingListFromFile();
     const firstVotingIndex = 1;
     const countOfVotings = await this.fetchVotingsCount();
     const votingListFromFileLength = votingListFromFile.length;
