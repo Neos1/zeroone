@@ -96,7 +96,9 @@ class MembersGroupComponent extends React.Component {
     membersStore: PropTypes.instanceOf(MembersStore).isRequired,
     userStore: PropTypes.instanceOf(UserStore).isRequired,
     appStore: PropTypes.instanceOf(AppStore).isRequired,
-    admin: PropTypes.shape().isRequired,
+    admin: PropTypes.arrayOf(
+      PropTypes.shape({}),
+    ).isRequired,
   }
 
   constructor() {
@@ -196,14 +198,13 @@ class MembersGroupComponent extends React.Component {
       groupType,
       t,
     } = this.props;
-    let admin = [];
     let isAdmininstrator = false;
 
     const isIdentical = selectedWallet.toUpperCase() === address.toUpperCase();
 
     if (groupType === '1') {
-      [admin] = administrator;
-      isAdmininstrator = (address.toUpperCase() === admin.wallet.toUpperCase());
+      const [groupAdmin] = administrator;
+      isAdmininstrator = (address.toUpperCase() === groupAdmin.wallet.toUpperCase());
     }
     if (isIdentical || isAdmininstrator) {
       membersStore.setTransferStatus('input');
