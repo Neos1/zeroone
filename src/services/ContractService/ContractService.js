@@ -381,7 +381,7 @@ class ContractService {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
-    const groupContainsUser = membersStore.isUserInGroup(Number(groupId) - 1, userStore.address);
+    const groupContainsUser = membersStore.isUserInGroup(Number(groupId), userStore.address);
     const data = _contract.methods.sendVote(descision).encodeABI();
 
     // eslint-disable-next-line consistent-return

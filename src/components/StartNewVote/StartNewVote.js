@@ -81,7 +81,7 @@ class StartNewVote extends React.Component {
     const { props, form } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.initIndex = Number(selected.value) - 1;
+      this.initIndex = Number(selected.value);
       form.$('question').set(selected.value);
       this.handleSelect(selected);
     });
@@ -172,7 +172,7 @@ class StartNewVote extends React.Component {
               options={newVotingOptions}
               field={form.$('question')}
               onSelect={this.handleSelect}
-              initIndex={initIndex - 1}
+              initIndex={initIndex}
               key={nextId('question_dropdown')}
             >
               <QuestionIcon />
