@@ -8,6 +8,7 @@ import Input from '../Input';
 import { TokenName } from '../Icons';
 import Button from '../Button/Button';
 // import InputTextarea from '../Input/InputTextarea';
+import { systemQuestionsId } from '../../constants';
 
 import styles from './CreateGroupQuestions.scss';
 
@@ -28,14 +29,14 @@ class CreateGroupQuestions extends React.PureComponent {
           projectStore,
           dialogStore,
         } = this.props;
-        const questionId = 3;
+        const questionId = systemQuestionsId.connectGroupQuestions;
         const { name } = form.values();
         const [question] = questionStore.getQuestionById(questionId);
-        const { params: parameters, groupId, methodSelector } = question;
-        const params = parameters.map((param) => (param[1]));
-        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, [name]);
-        const votingData = encodedParams.replace('0x', methodSelector);
-        projectStore.setVotingData(questionId, groupId, votingData);
+        const { paramTypes, groupId } = question;
+        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(paramTypes, [name]);
+        // const votingData = encodedParams.replace('0x', methodSelector);
+        // TODO groupId fix
+        projectStore.setVotingData(questionId, groupId, encodedParams);
         dialogStore.toggle('password_form_questions');
         return Promise.resolve();
       },

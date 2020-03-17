@@ -12,7 +12,7 @@ import Footer from '../Footer';
 import Dialog from '../Dialog/Dialog';
 import CreateGroupQuestions from '../CreateGroupQuestions/CreateGroupQuestions';
 import CreateNewQuestion from '../CreateNewQuestion/CreateNewQuestion';
-import FinPasswordFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
+import FinPassFormWrapper from '../FinPassFormWrapper/FinPassFormWrapper';
 import FinPassForm from '../../stores/FormsStore/FinPassForm';
 import Pagination from '../Pagination';
 import Loader from '../Loader';
@@ -57,7 +57,7 @@ class Questions extends Component {
         return userStore.readWallet(password)
           .then(() => {
             // eslint-disable-next-line max-len
-            const transaction = contractService.createVotingData(Number(votingQuestion), 0, Number(votingGroupId), votingData);
+            const transaction = contractService.createVotingData(Number(votingQuestion), Number(votingGroupId), votingData);
             return transaction;
           })
           .then((tx) => Web3Service.createTxData(userStore.address, tx)
@@ -191,7 +191,7 @@ class Questions extends Component {
             footer={null}
             header={t('fields:enterPassword')}
           >
-            <FinPasswordFormWrapper form={this.passwordForm} />
+            <FinPassFormWrapper form={this.passwordForm} buttonText={t('buttons:continue')} />
           </Dialog>
           <Dialog
             name="progress_modal_questions"

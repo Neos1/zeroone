@@ -101,6 +101,7 @@ class MembersGroup {
    * Method for getting balance in group
    */
   getUserBalanceInGroup = async () => {
+    if (!this.contract || !this.contract.methods) return;
     const balance = await this.contract.methods.balanceOf(this.userAddress).call();
     this.userBalance = balance;
   }

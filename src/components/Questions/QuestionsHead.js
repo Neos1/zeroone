@@ -19,9 +19,6 @@ class QuestionsHead extends React.Component {
     t: PropTypes.func.isRequired,
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired,
-    }).isRequired,
   };
 
   /**

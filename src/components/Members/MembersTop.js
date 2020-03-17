@@ -6,6 +6,7 @@ import { PlayCircleIcon } from '../Icons';
 import Button from '../Button/Button';
 
 import styles from './Members.scss';
+import { systemQuestionsId } from '../../constants';
 
 /**
  * Component in top members page
@@ -22,7 +23,7 @@ const MembersTop = ({
       icon={(<PlayCircleIcon />)}
       theme="with-play-icon"
       onClick={
-        () => history.push('/votings?modal=start_new_vote&option=2')
+        () => history.push(`/votings?modal=start_new_vote&option=${systemQuestionsId.connectGroupUsers}`)
       }
       disabled={votingIsActive}
       hint={

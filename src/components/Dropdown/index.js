@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import DropdownOption from '../DropdownOption';
 import { DropdownArrowIcon } from '../Icons';
 import i18n from '../../i18n';
@@ -7,6 +7,29 @@ import i18n from '../../i18n';
 import styles from './Dropdown.scss';
 
 class Dropdown extends Component {
+  static propTypes = {
+    children: PropTypes.element,
+    options: PropTypes.arrayOf(PropTypes.object).isRequired,
+    subOptions: PropTypes.shape({}),
+    onSelect: PropTypes.func.isRequired,
+    field: PropTypes.shape({
+      set: PropTypes.func.isRequired,
+      value: PropTypes.string.isRequired,
+      placeholder: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.shape({}),
+      ]).isRequired,
+      validate: PropTypes.func.isRequired,
+      label: PropTypes.string.isRequired,
+      error: PropTypes.string,
+    }).isRequired,
+  };
+
+  static defaultProps = {
+    children: '',
+    subOptions: {},
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -90,7 +113,7 @@ class Dropdown extends Component {
     return (
       <div
         className={`
-        ${styles.dropdown} 
+        ${styles.dropdown}
         ${opened ? 'dropdown--opened' : ''}
         ${field && field.error ? styles['dropdown--error'] : ''}
       `}
@@ -122,29 +145,5 @@ class Dropdown extends Component {
     );
   }
 }
-
-Dropdown.propTypes = {
-  children: propTypes.element,
-  options: propTypes.arrayOf(propTypes.object).isRequired,
-  subOptions: propTypes.shape({}),
-  onSelect: propTypes.func.isRequired,
-  field: propTypes.shape({
-    set: propTypes.func.isRequired,
-    value: propTypes.string.isRequired,
-    placeholder: propTypes.oneOfType([
-      propTypes.string,
-      propTypes.shape({}),
-    ]).isRequired,
-    validate: propTypes.func.isRequired,
-    label: propTypes.string.isRequired,
-    error: propTypes.string.isRequired,
-  }).isRequired,
-};
-
-Dropdown.defaultProps = {
-  children: '',
-  subOptions: {},
-};
-
 
 export default Dropdown;

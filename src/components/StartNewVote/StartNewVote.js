@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import { observable } from 'mobx';
-import uniqKey from 'react-id-generator';
+import nextId from 'react-id-generator';
 import SimpleDropdown from '../SimpleDropdown';
 import { Address, QuestionIcon } from '../Icons';
 import Input from '../Input';
 import Button from '../Button/Button';
 import StarNewVoteForm from '../../stores/FormsStore/StartNewVoteForm';
+import { systemQuestionsId } from '../../constants';
 
 import styles from './StartNewVote.scss';
 
@@ -46,12 +47,8 @@ class StartNewVote extends React.Component {
         delete data.question;
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
-        const { params: parameters, groupId, methodSelector } = question;
-        let params = parameters.map((param) => (param[1]));
-        if (params[0] === undefined) {
-          params = [];
-        }
-        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, values);
+        const { paramTypes, groupId, methodSelector } = question;
+        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(paramTypes, values);
         const votingData = encodedParams.replace('0x', methodSelector);
         projectStore.setVotingData(questionId, groupId, votingData);
         dialogStore.toggle('password_form');
@@ -84,7 +81,7 @@ class StartNewVote extends React.Component {
     const { props, form } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.initIndex = Number(selected.value) - 1;
+      this.initIndex = Number(selected.value);
       form.$('question').set(selected.value);
       this.handleSelect(selected);
     });
@@ -100,7 +97,7 @@ class StartNewVote extends React.Component {
     const { projectStore, dialogStore, history } = this.props;
     const { questionStore } = projectStore;
     const [question] = questionStore.getQuestionById(selected.value);
-    const { params, text: description } = question;
+    const { paramTypes, paramNames, text: description } = question;
     this.initIndex = Number(selected.value);
     this.setState({ description });
     // @ Clearing fields, except question selection dropdown
@@ -111,35 +108,39 @@ class StartNewVote extends React.Component {
     });
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
-      case 1:
+      case systemQuestionsId.addingNewQuestion:
         history.push('/questions');
         dialogStore.toggle('create_question');
         break;
-      case 3:
+      case systemQuestionsId.connectGroupQuestions:
         history.push('/questions');
         dialogStore.toggle('create_group_question');
         break;
       default:
-        this.createFields(params);
+        this.createFields(paramTypes, paramNames);
     }
     this.setState({ isSelected: true });
   }
 
   // eslint-disable-next-line class-methods-use-this
-  createFields(params) {
-    // eslint-disable-next-line array-callback-return
-    params.map((param) => {
-      if (param.length !== 0 && param[0] !== undefined) {
-        const [name, type] = param;
+  createFields(paramTypes, paramNames) {
+    if (
+      paramTypes
+      && paramNames
+      && paramTypes.length
+      && paramNames.length
+      && paramTypes.length === paramNames.length
+    ) {
+      paramNames.forEach((name, index) => {
         this.form.add({
           name,
           type: 'text',
           label: 'parameter',
           placeholder: name,
-          rules: `required|${type}`,
+          rules: `required|${paramTypes[index]}`,
         });
-      }
-    });
+      });
+    }
   }
 
   render() {
@@ -171,8 +172,8 @@ class StartNewVote extends React.Component {
               options={newVotingOptions}
               field={form.$('question')}
               onSelect={this.handleSelect}
-              initIndex={initIndex - 1}
-              key={uniqKey()}
+              initIndex={initIndex}
+              key={nextId('question_dropdown')}
             >
               <QuestionIcon />
             </SimpleDropdown>
@@ -181,7 +182,13 @@ class StartNewVote extends React.Component {
                 ? (
                   <div className={styles['new-vote__description']}>
                     {/* TODO add correct description text */}
-                    {description.length > 150 ? description.substr(0, 130) : description}
+                    {
+                      description
+                      && description.length
+                      && description.length > 150
+                        ? description.substr(0, 130)
+                        : description
+                      }
                   </div>
                 )
                 : null
@@ -203,7 +210,10 @@ class StartNewVote extends React.Component {
                       if (field.name === 'question') return null;
                       return (field.placeholder === 'Group' || field.placeholder === 'Group address')
                         ? (
-                          <div className={styles['new-vote__form-col']}>
+                          <div
+                            className={styles['new-vote__form-col']}
+                            key={nextId('new_vote__form_col')}
+                          >
                             <SimpleDropdown
                               options={nonERC}
                               field={field}
@@ -212,10 +222,12 @@ class StartNewVote extends React.Component {
                               <Address />
                             </SimpleDropdown>
                           </div>
-
                         )
                         : (
-                          <div className={styles['new-vote__form-col']}>
+                          <div
+                            className={styles['new-vote__form-col']}
+                            key={nextId('new_vote__form_col')}
+                          >
                             <Input field={field}><Address /></Input>
                           </div>
                         );

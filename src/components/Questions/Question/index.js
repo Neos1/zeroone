@@ -112,7 +112,7 @@ const Question = withTranslation()(({
   votingIsActive,
 }) => (
   <div className={`
-    ${styles.question} 
+    ${styles.question}
     ${extended ? styles['question--extended'] : ''}
     ${(paramNames.length > 3 && extended) ? styles['question--short-name'] : ''}
     `}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
+import nextId from 'react-id-generator';
 import { withTranslation } from 'react-i18next';
 import { DropdownArrowIcon } from '../Icons';
 import DropdownOption from '../SimpleDropdownOption';
@@ -28,7 +29,7 @@ class SimpleDropdown extends Component {
     }),
     initIndex: propTypes.number,
     t: propTypes.func.isRequired,
-    placeholder: propTypes.string.isRequired,
+    placeholder: propTypes.string,
     isNewQuestion: propTypes.bool,
   };
 
@@ -41,6 +42,7 @@ class SimpleDropdown extends Component {
       error: null,
     },
     initIndex: null,
+    placeholder: null,
     isNewQuestion: false,
   }
 
@@ -112,7 +114,7 @@ class SimpleDropdown extends Component {
     const { opened, selectedLabel, selectedValue } = this.state;
     const getOptions = options.map((option) => (
       <DropdownOption
-        key={`dropdown-${option.label}`}
+        key={nextId('dropdown_option')}
         label={option.label}
         value={option.value}
         select={this.handleSelect}

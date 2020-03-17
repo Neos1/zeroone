@@ -93,7 +93,7 @@ class QuestionStore {
       ...acc,
       {
         value: question.id,
-        label: question.caption,
+        label: question.name,
       },
     ]), [{
       value: '*',
@@ -105,7 +105,7 @@ class QuestionStore {
     return this._questions.map((question) => (
       {
         value: question.id,
-        label: question.caption,
+        label: question.name,
       }
     ));
   }
@@ -145,11 +145,15 @@ class QuestionStore {
     if (cb) cb();
   }
 
+  /**
+   * Method for getting question groups
+   * from contract
+   */
   @action
   async fetchActualQuestionGroups() {
     const { contractService } = this.rootStore;
     const localGroupsLength = this._questionGroups.length;
-    const contractGroupsLength = await contractService.callMethod('getQuestionsAmount');
+    const contractGroupsLength = Number(await contractService.callMethod('getQuestionsAmount'));
     if (localGroupsLength < contractGroupsLength) {
       for (let i = localGroupsLength; i < contractGroupsLength; i += 1) {
       // eslint-disable-next-line no-await-in-loop
@@ -169,7 +173,8 @@ class QuestionStore {
   @action
   async fetchQuestions() {
     const { contractService } = this.rootStore;
-    const { countOfUploaded } = await contractService.checkQuestions();
+    const data = await contractService.checkQuestions();
+    const countOfUploaded = Number(data.countOfUploaded);
     for (let i = 0; i < countOfUploaded; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const question = await contractService.fetchQuestion(i);
@@ -209,7 +214,7 @@ class QuestionStore {
       for (let i = 0; i < questionsFromFileLength; i += 1) {
         const question = questionsFromFile.data[i];
         if (question) {
-          const duplicateVoting = questions.find((item) => item.caption === question.caption);
+          const duplicateVoting = questions.find((item) => item.caption === question.name);
           if (!duplicateVoting) questions.push(question);
         }
       }
@@ -226,7 +231,7 @@ class QuestionStore {
    * @param {Array} questions array of questions
    */
   async getMissingQuestions(questions) {
-    const firstQuestionIndex = 1;
+    const firstQuestionIndex = 0;
     const { contractService } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
     const questionsFromFileLength = questions.length;
@@ -326,7 +331,9 @@ class QuestionStore {
    * @param {number} id id of question
    * @returns {Array} array with lenght == 1, contains question matched by id
    */
-  @action getQuestionById = (id) => this._questions.filter((question) => question.id === Number(id))
+  @action getQuestionById = (id) => (
+    this._questions.filter((question) => question.id === Number(id))
+  )
 
   @action reset = () => {
     this._questions = [];

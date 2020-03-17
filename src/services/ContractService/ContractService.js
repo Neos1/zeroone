@@ -11,6 +11,7 @@ import {
   fs, PATH_TO_CONTRACTS, path,
 } from '../../constants/windowModules';
 import readSolFile from '../../utils/fileUtils/index';
+import UserStore from '../../stores/UserStore/UserStore';
 
 /**
  * Class for work with contracts
@@ -220,16 +221,22 @@ class ContractService {
    *
    * @returns {object} voting data
    * @param votingQuestion
-   * @param status
    * @param votingGroupId
    * @param votingData
    */
-  createVotingData(votingQuestion, status, votingGroupId, votingData) {
+  createVotingData(votingQuestion, votingGroupId, votingData) {
     const { rootStore: { userStore }, _contract } = this;
+    const votingInfo = {
+      starterGroupId: votingGroupId,
+      endTime: 0,
+      starterAddress: userStore.address,
+      questionId: votingQuestion,
+      data: votingData,
+    };
     // eslint-disable-next-line max-len
     const data = {
       // eslint-disable-next-line max-len
-      data: _contract.methods.startNewVoting(votingQuestion, status, votingGroupId, votingData).encodeABI(),
+      data: _contract.methods.startVoting(votingInfo).encodeABI(),
       from: userStore.address,
       value: '0x0',
       to: _contract.options.address,
@@ -375,7 +382,7 @@ class ContractService {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
-    const groupContainsUser = membersStore.isUserInGroup(Number(groupId) - 1, userStore.address);
+    const groupContainsUser = membersStore.isUserInGroup(Number(groupId), userStore.address);
     const data = _contract.methods.sendVote(descision).encodeABI();
 
     // eslint-disable-next-line consistent-return
