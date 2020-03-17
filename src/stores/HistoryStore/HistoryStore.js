@@ -441,11 +441,10 @@ class HistoryStore {
     //   .callMethod.getUserVote(id, userStore.address).call();
     const userVote = 0; // Number(userVoteFromContract);
     voting.userVote = userVote;
-    // voting.questionId = voting.id;
-    // voting.id = id;
-    // for (let j = 0; j < 7; j += 1) {
-    //   delete voting[j];
-    // }
+    voting.id = id;
+    for (let j = 0; j < 6; j += 1) {
+      delete voting[j];
+    }
     return voting;
   }
 
