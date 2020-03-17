@@ -1,13 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-import browserSolc from 'browser-solc';
-import { BN } from 'ethereumjs-util';
-import { number } from 'prop-types';
 import * as linker from 'solc/linker';
 import { compile } from 'zeroone-translator';
 import {
   SOL_IMPORT_REGEXP,
-  SOL_PATH_REGEXP,
   SOL_VERSION_REGEXP,
 } from '../../constants';
 import {
@@ -55,7 +51,7 @@ class ContractService {
    * compiles contracts and returning type of compiled contract, bytecode & abi
    *
    * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
-   * @param password
+   * @param {string} password password
    * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
    */
   // eslint-disable-next-line class-methods-use-this
@@ -133,7 +129,7 @@ class ContractService {
   }
 
   /**
-   * Sendind transaction with contract to blockchain
+   * Sending transaction with contract to blockchain
    *
    * @param {object} params parameters for deploying
    * @param {Array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
@@ -193,7 +189,6 @@ class ContractService {
    * @param {string} address address of contract
    * @returns {Promise} Promise with function which resolves, if address is contract
    */
-  // eslint-disable-next-line class-methods-use-this
   checkProject(address) {
     const { rootStore: { Web3Service } } = this;
     return new Promise((resolve, reject) => {
@@ -210,14 +205,24 @@ class ContractService {
    * calling contract method
    *
    * @param {string} method method, which will be called
-   * @param {string} from address of caller
-   * @param params parameters for method
+   * @param {any} params parameters for method
+   * @returns {object} data from method
    */
   async callMethod(method, ...params) {
     const data = await this._contract.methods[method](...params).call();
     return data;
   }
 
+  // TODO add correct js doc
+  /**
+   * Method create data for voting
+   *
+   * @returns {object} voting data
+   * @param votingQuestion
+   * @param status
+   * @param votingGroupId
+   * @param votingData
+   */
   createVotingData(votingQuestion, status, votingGroupId, votingData) {
     const { rootStore: { userStore }, _contract } = this;
     // eslint-disable-next-line max-len
@@ -299,8 +304,10 @@ class ContractService {
    * getting one voting
    *
    * @param {number} id id of voting
-   * @param {string} from address who calls method
+   * @returns {object} Voting data
+   * @deprecated
    */
+  // TODO delete me after
   async fetchVoting(id) {
     return this.callMethod('getVoting', [id]);
   }
@@ -310,35 +317,43 @@ class ContractService {
    * getting votes weights for voting
    *
    * @param {number} id id of voting
-   * @param {string} from address, who calls
+   * @returns {object} Voting stats data
+   * @deprecated
    */
+  // TODO delete me after
   async fetchVotingStats(id) {
     return this.callMethod('getVotingStats', [id]);
   }
 
   /**
    * Fetch length of usergroups in contract
+   *
+   * @returns {number} amount groups
    */
   fetchUserGroupsLength() {
-    return this._contract.methods.getQuestionGroupsAmount().call();
+    return this._contract.methods.getUserGroupsAmount().call();
   }
 
   /**
    * Starting the voting
    *
-   * @param {id} id id of question
+   * @param {string|number} id id of question
    * @param {string} from address, who starts
-   * @param params parameters of voting
+   * @param {any} params parameters of voting
+   * @returns {Promise} promise
+   * @deprecated
    */
+  // TODO delete me after
   async sendVotingStart(id, from, params) {
     return (this, id, from, params);
   }
 
   /**
-   * creates transaction for sending descision about voting
+   * creates transaction for sending decision about voting
    *
    * @param {number} votingId  voting
    * @param {number} descision 0 - negative, 1 - positive
+   * @returns {Promise} promise
    */
   // eslint-disable-next-line consistent-return
   sendVote(votingId, descision) {

@@ -473,7 +473,10 @@ class HistoryStore {
 
   async isUserReturnTokens() {
     const { contractService, userStore } = this.rootStore;
-    return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
+    // FIXME remove comment & console
+    console.log(contractService, userStore);
+    // return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
+    return false;
   }
 
   async lastUserVoting() {

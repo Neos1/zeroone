@@ -26,7 +26,7 @@ class QuestionStore {
     this._questionGroups = [];
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
-    // this.loading = true;
+    this.loading = false;
     this.filter = new FilterStore();
     this.interval = new AsyncInterval({
       cb: async () => {
