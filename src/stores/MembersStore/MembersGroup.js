@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import MemberItem from './MemberItem';
-import AsyncInterval from '../../utils/AsyncUtils';
+// FIXME remove comment
+// import AsyncInterval from '../../utils/AsyncUtils';
 
 class MembersGroup {
   /**
@@ -19,42 +20,49 @@ class MembersGroup {
   constructor({
     name,
     groupAddress,
-    contract,
-    totalSupply,
-    groupType,
-    tokenSymbol,
-    members,
+    // FIXME remove comment
+    // contract,
+    // totalSupply,
+    // groupType,
+    // tokenSymbol,
+    // userAddress,
+    // interval,
+    // members,
     textForEmptyState,
-    userAddress,
     groupId,
-    interval,
   }) {
+    console.log('name', name);
+    console.log('groupAddress', groupAddress);
     if (
       !name
-      || !contract
-      || !groupType
-      || !tokenSymbol
+      // FIXME remove comment
+      // || !contract
+      // || !groupType
+      // || !tokenSymbol
+      // || Array.isArray(members) === false
       || !groupAddress
-      || Array.isArray(members) === false
     ) throw new Error('Incorrect data provided!');
     this.name = name;
     this.wallet = groupAddress;
-    this.groupType = groupType;
-    this.balance = totalSupply;
-    this.contract = contract;
-    this.customTokenName = tokenSymbol;
-    this.userAddress = userAddress;
+    // FIXME remove comment
+    // this.groupType = groupType;
+    // this.balance = totalSupply;
+    // this.contract = contract;
+    // this.customTokenName = tokenSymbol;
+    // this.userAddress = userAddress;
     this.groupId = groupId;
     if (textForEmptyState && textForEmptyState.length) {
       this.textForEmptyState = textForEmptyState;
     }
-    this.addToList(members);
+    // FIXME remove comment
+    // this.addToList(members);
     this.getUserBalanceInGroup();
     this.updateInterval = 60000;
-    this.interval = new AsyncInterval({
-      timeoutInterval: interval,
-      cb: this.updateUserBalanceAndGroupAdmin,
-    });
+    // FIXME remove comment
+    // this.interval = new AsyncInterval({
+    //   timeoutInterval: interval,
+    //   cb: this.updateUserBalanceAndGroupAdmin,
+    // });
   }
 
   /** Name group (Example: Admins) */

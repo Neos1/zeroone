@@ -20,13 +20,6 @@ import AsyncInterval from '../../utils/AsyncUtils';
  * @param group
  */
 class MembersStore {
-  /**
-   * Constructor
-   *
-   * @param {Array} groups groups with members
-   * @param {object} rootStore rootStore
-   */
-
   transferSteps = {
     input: 0,
     transfering: 1,
@@ -34,6 +27,11 @@ class MembersStore {
     error: 3,
   }
 
+  /**
+   * Create a member store
+   *
+   * @param {object} rootStore rootStore
+   */
   constructor(rootStore) {
     this.rootStore = rootStore;
   }
@@ -65,8 +63,8 @@ class MembersStore {
   async fetchUserGroups() {
     await this.fetchUserGroupsLength()
       .then((length) => this.getActualUserGroups(length))
-      .then((groups) => this.getPrimaryGroupsInfo(groups))
-      .then((groups) => this.getUsersBalances(groups))
+      // .then((groups) => this.getPrimaryGroupsInfo(groups))
+      // .then((groups) => this.getUsersBalances(groups))
       .then((groups) => {
         groups.forEach((group) => {
           this.addToGroups(group);
@@ -82,8 +80,8 @@ class MembersStore {
   async getUserGroups(length) {
     const { contractService } = this.rootStore;
     const groups = [];
-    for (let i = 1; i < length; i += 1) {
-      const group = await contractService.callMethod('getUserGroup', [i]);
+    for (let i = 0; i < length; i += 1) {
+      const group = await contractService.callMethod('getUserGroup', i);
       delete group['0'];
       delete group['1'];
       delete group['2'];
