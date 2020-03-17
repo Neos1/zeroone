@@ -9,6 +9,7 @@ import {
 } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import AsyncInterval from '../../utils/AsyncUtils';
+import { tokenTypes } from '../../constants';
 
 /**
  * Store for manage Members groups
@@ -170,7 +171,7 @@ class MembersStore {
       group.contract = contract;
       group.totalSupply = await contract.methods.totalSupply().call();
       group.tokenSymbol = await contract.methods.symbol().call();
-      group.users = group.groupType === '0'
+      group.users = group.groupType === tokenTypes.ERC20
         ? [userStore.address]
         : [userStore.address];// await contract.methods.getUsers().call();
       group.groupId = i + 1;
@@ -187,6 +188,7 @@ class MembersStore {
       const { contract, groupType } = group;
       group.members = [];
       const admin = groupType === '1'
+      const admin = groupType === tokenTypes.Custom
         ? await contract.methods.owner().call()
         : null;
 
@@ -240,9 +242,10 @@ class MembersStore {
   transferTokens(groupId, from, to, count) {
     const { contract, groupType } = this.list[groupId];
     window.contract = contract;
+    console.log('contract', contract);
     // eslint-disable-next-line no-unused-vars
     const { Web3Service, userStore: { address, password }, userStore } = this.rootStore;
-    const data = groupType === '0'
+    const data = groupType === tokenTypes.ERC20
       ? contract.methods.transfer(to, Number(count)).encodeABI()
       : contract.methods.transferFrom(from, to, Number(count)).encodeABI();
     const txData = {

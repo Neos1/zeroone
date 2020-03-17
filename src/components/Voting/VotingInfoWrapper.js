@@ -17,7 +17,12 @@ import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
-import { systemQuestionsId, statusStates, userVotingStates } from '../../constants';
+import {
+  systemQuestionsId,
+  statusStates,
+  userVotingStates,
+  tokenTypes,
+} from '../../constants';
 import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
@@ -204,7 +209,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const { groupId } = this.question;
     const targetGroup = membersStore.getMemberById(groupId);
     if (!targetGroup || !targetGroup.groupType) return false;
-    return targetGroup.groupType === '0';
+    return targetGroup.groupType === tokenTypes.ERC20;
   }
 
   /**

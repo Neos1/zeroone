@@ -5,6 +5,7 @@ import { compile } from 'zeroone-translator';
 import {
   SOL_IMPORT_REGEXP,
   SOL_VERSION_REGEXP,
+  tokenTypes,
 } from '../../constants';
 import {
   fs, PATH_TO_CONTRACTS, path,
@@ -379,7 +380,7 @@ class ContractService {
 
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
-      if ((groupContainsUser) && (groupContainsUser.groupType === '0')) {
+      if ((groupContainsUser) && (groupContainsUser.groupType === tokenTypes.ERC20)) {
         this.approveErc(groupContainsUser)
           .then(() => {
             const tx = {

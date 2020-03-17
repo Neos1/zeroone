@@ -20,6 +20,7 @@ import {
   TransferSuccessMessage,
   TransferErrorMessage,
 } from '../Message';
+import { tokenTypes } from '../../constants';
 
 import styles from './Members.scss';
 
@@ -201,7 +202,7 @@ class MembersGroupComponent extends React.Component {
 
     const isIdentical = selectedWallet.toUpperCase() === address.toUpperCase();
 
-    if (groupType === '1') {
+    if (groupType === tokenTypes.Custom) {
       [admin] = administrator;
       isAdmininstrator = (address.toUpperCase() === admin.wallet.toUpperCase());
     }

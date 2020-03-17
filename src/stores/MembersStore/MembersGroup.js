@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import MemberItem from './MemberItem';
 import AsyncInterval from '../../utils/AsyncUtils';
+import { tokenTypes } from '../../constants';
 
 class MembersGroup {
   /**
@@ -139,7 +140,7 @@ class MembersGroup {
       member.wallet.toUpperCase() === address.toUpperCase()
     ));
     if ((!user || !user.setTokenBalance || !user.setWeight) && userBalance !== 0) {
-      const admin = this.groupType === '1'
+      const admin = this.groupType === tokenTypes.Custom
         ? await this.contract.methods.owner().call()
         : null;
       this.list.push(new MemberItem({
@@ -172,7 +173,7 @@ class MembersGroup {
   @action
   setNewAdmin = async () => {
     const admin = this.list.find((member) => member.isAdmin === true);
-    const newAdmin = this.groupType === '1'
+    const newAdmin = this.groupType === tokenTypes.Custom
       ? await this.contract.methods.owner().call()
       : null;
     const user = this.list.find((member) => member.wallet === newAdmin);

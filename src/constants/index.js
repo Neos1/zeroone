@@ -23,6 +23,11 @@ export const systemQuestionsId = {
   assignGroupAdmin: 4,
 };
 
+export const tokenTypes = {
+  ERC20: '0',
+  Custom: '1',
+};
+
 export const languages = {
   RUS: 'ru',
   ENG: 'en',
