@@ -21,6 +21,10 @@
 		{
 			"name": "T3sting!",
 			"address": "0x11EA9b5f667F51124DcCa76716Ca12E9D448e1B1"
+		},
+		{
+			"name": "test100500",
+			"address": "0x787B5B535718ff782EA2F56DA4B2D108eed69F8c"
 		}
 	]
 }

@@ -224,7 +224,7 @@ class ContractService {
    * @param votingData
    */
   createVotingData(votingQuestion, votingGroupId, votingData) {
-    const { rootStore: { userStore }, _contract } = this;
+    const { rootStore: { userStore, Web3Service: { web3: { eth: { abi } } } }, _contract } = this;
     const votingInfo = {
       starterGroupId: votingGroupId,
       endTime: 0,
@@ -232,6 +232,7 @@ class ContractService {
       questionId: votingQuestion,
       data: votingData,
     };
+    console.log(abi.decodeParameters(['string'], votingData));
     // eslint-disable-next-line max-len
     const data = {
       // eslint-disable-next-line max-len

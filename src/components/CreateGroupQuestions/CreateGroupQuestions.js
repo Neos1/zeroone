@@ -31,7 +31,6 @@ class CreateGroupQuestions extends React.PureComponent {
         const questionId = 2;
         const { name } = form.values();
         const [question] = questionStore.getQuestionById(questionId);
-        console.log('question', question);
         const { paramTypes, groupId } = question;
         const encodedParams = Web3Service.web3.eth.abi.encodeParameters(paramTypes, [name]);
         // const votingData = encodedParams.replace('0x', methodSelector);
