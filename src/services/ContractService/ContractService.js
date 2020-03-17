@@ -109,11 +109,11 @@ class ContractService {
     let dir;
     const compiler = 'pragma solidity 0.6.1;';
     switch (type) {
-      case ('ERC20'): case ('MERC20'):
+      case ('ERC20'):
         dir = '../../node_modules/zeroone-contracts/contracts/__vendor__/';
         break;
-      case ('Voter'):
-        dir = './Voter/';
+      case ('CustomToken'):
+        dir = '../../node_modules/zeroone-contracts/contracts/Token/';
         break;
       case ('ZeroOne'):
         dir = '../../node_modules/zeroone-contracts/contracts/ZeroOne/';
