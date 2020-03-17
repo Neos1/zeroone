@@ -187,7 +187,6 @@ class MembersStore {
       const group = groups[i];
       const { contract, groupType } = group;
       group.members = [];
-      const admin = groupType === '1'
       const admin = groupType === tokenTypes.Custom
         ? await contract.methods.owner().call()
         : null;
