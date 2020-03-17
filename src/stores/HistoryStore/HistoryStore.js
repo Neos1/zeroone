@@ -27,13 +27,13 @@ class HistoryStore {
   constructor(rootStore) {
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
-    // this.loading = true;
+    this.loading = false;
     this.filter = new FilterStore();
     this.updateHistoryInterval = new AsyncInterval({
       cb: async () => {
-        // await this.getActualState(() => {
-        //   this.returnToLastPage();
-        // });
+        await this.getActualState(() => {
+          this.returnToLastPage();
+        });
         await this.setLoadingFinish();
       },
       timeoutInterval: UPDATE_INTERVAL,
@@ -115,6 +115,7 @@ class HistoryStore {
   async getActualState(cb) {
     await this.getActualVotingList();
     this.isActiveVoting = await this.hasActiveVoting();
+    console.log('this.isActiveVoting', this.isActiveVoting);
     await this.fetchUserReturnTokens();
     if (cb) cb();
   }
@@ -154,7 +155,7 @@ class HistoryStore {
    * @function
    */
   @action fetchVotings = async () => {
-    let length = (await this.fetchVotingsCount()) - 1;
+    let length = await this.fetchVotingsCount();
     for (length; length > 0; length -= 1) {
       const voting = await this.getVotingFromContractById(length);
       const duplicateVoting = this._votings.find((item) => item.id === voting.id);
@@ -226,22 +227,12 @@ class HistoryStore {
    */
   @action
   fetchAndUpdateLastVoting = async () => {
-    const lastIndex = await this.fetchVotingsCount() - 1;
+    const lastIndex = await this.fetchVotingsCount();
     const votingFromContract = await this.getVotingFromContractById(lastIndex);
     const [voting] = this.getVotingById(lastIndex);
     voting.update(votingFromContract);
     this.writeVotingsToFile();
   }
-
-  /**
-   * Getting stats about votes in voting, selected by id
-   *
-   * @function
-   * @param {number} id id of voting
-   * @returns {Array} stats
-   */
-  // TODO fix method
-  @action getVotingStats = (id) => id
 
   @action
   reset = () => {
@@ -406,7 +397,7 @@ class HistoryStore {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(questionId);
     const { groupId } = question;
-    const memberGroup = membersStore.list[Number(groupId) - 1];
+    const memberGroup = membersStore.list[Number(groupId)];
     if (!memberGroup || !memberGroup.list) return [];
     const { list, balance } = memberGroup;
     const result = {
@@ -465,7 +456,7 @@ class HistoryStore {
    */
   async hasActiveVoting() {
     const countOfVotings = await this.fetchVotingsCount();
-    const lastVote = countOfVotings - 1;
+    const lastVote = countOfVotings;
     if (lastVote === 0) return false;
     const voting = await this.getVotingFromContractById(lastVote);
     return voting.status === statusStates.active;

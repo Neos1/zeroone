@@ -57,7 +57,7 @@ class Questions extends Component {
         return userStore.readWallet(password)
           .then(() => {
             // eslint-disable-next-line max-len
-            const transaction = contractService.createVotingData(Number(votingQuestion), 0, Number(votingGroupId), votingData);
+            const transaction = contractService.createVotingData(Number(votingQuestion), Number(votingGroupId), votingData);
             return transaction;
           })
           .then((tx) => Web3Service.createTxData(userStore.address, tx)

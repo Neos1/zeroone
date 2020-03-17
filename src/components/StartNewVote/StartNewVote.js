@@ -46,12 +46,8 @@ class StartNewVote extends React.Component {
         delete data.question;
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
-        const { params: parameters, groupId, methodSelector } = question;
-        let params = parameters.map((param) => (param[1]));
-        if (params[0] === undefined) {
-          params = [];
-        }
-        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(params, values);
+        const { paramTypes, groupId, methodSelector } = question;
+        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(paramTypes, values);
         const votingData = encodedParams.replace('0x', methodSelector);
         projectStore.setVotingData(questionId, groupId, votingData);
         dialogStore.toggle('password_form');
@@ -100,7 +96,7 @@ class StartNewVote extends React.Component {
     const { projectStore, dialogStore, history } = this.props;
     const { questionStore } = projectStore;
     const [question] = questionStore.getQuestionById(selected.value);
-    const { params, text: description } = question;
+    const { paramTypes, paramNames, text: description } = question;
     this.initIndex = Number(selected.value);
     this.setState({ description });
     // @ Clearing fields, except question selection dropdown
@@ -109,6 +105,7 @@ class StartNewVote extends React.Component {
       if (field.name === 'question') return;
       form.del(field.name);
     });
+    console.log('selected.value', selected.value);
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
       case 1:
@@ -120,26 +117,30 @@ class StartNewVote extends React.Component {
         dialogStore.toggle('create_group_question');
         break;
       default:
-        this.createFields(params);
+        this.createFields(paramTypes, paramNames);
     }
     this.setState({ isSelected: true });
   }
 
   // eslint-disable-next-line class-methods-use-this
-  createFields(params) {
-    // eslint-disable-next-line array-callback-return
-    params.map((param) => {
-      if (param.length !== 0 && param[0] !== undefined) {
-        const [name, type] = param;
+  createFields(paramTypes, paramNames) {
+    if (
+      paramTypes
+      && paramNames
+      && paramTypes.length
+      && paramNames.length
+      && paramTypes.length === paramNames.length
+    ) {
+      paramNames.forEach((name, index) => {
         this.form.add({
           name,
           type: 'text',
           label: 'parameter',
           placeholder: name,
-          rules: `required|${type}`,
+          rules: `required|${paramTypes[index]}`,
         });
-      }
-    });
+      });
+    }
   }
 
   render() {
@@ -181,7 +182,13 @@ class StartNewVote extends React.Component {
                 ? (
                   <div className={styles['new-vote__description']}>
                     {/* TODO add correct description text */}
-                    {description.length > 150 ? description.substr(0, 130) : description}
+                    {
+                      description
+                      && description.length
+                      && description.length > 150
+                        ? description.substr(0, 130)
+                        : description
+                      }
                   </div>
                 )
                 : null

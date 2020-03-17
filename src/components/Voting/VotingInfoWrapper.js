@@ -344,23 +344,18 @@ class VotingInfoWrapper extends React.PureComponent {
   prepareParameters(voting, question) {
     const { projectStore: { rootStore: { Web3Service } }, appStore: { parseFormula } } = this.props;
     const { data } = voting;
-    const { params, id } = question;
-    const votingData = `0x${data.slice(10)}`;
+    const { paramTypes, paramNames, id } = question;
+    // const votingData = `0x${data.slice(10)}`;
     let parameters;
     let decodedRawParams;
     let decodedParams;
     if (id !== 1) {
-      parameters = params[0] !== undefined
-        ? params.map((param) => param[1])
+      decodedRawParams = data !== '0x'
+        ? Web3Service.web3.eth.abi.decodeParameters(parameters, data)
         : [];
-
-      decodedRawParams = votingData !== '0x'
-        ? Web3Service.web3.eth.abi.decodeParameters(parameters, votingData)
-        : [];
-      decodedParams = params.map((param, index) => [param[0], decodedRawParams[index]]);
+      decodedParams = paramNames.map((param, index) => [param, decodedRawParams[index]]);
     } else {
-      parameters = ['uint[]', 'uint8', 'string', 'string', 'address', 'bytes4', 'uint[]', 'bytes32[]'];
-      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, votingData);
+      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(paramTypes, data);
       // PARAMETERS FOR FIRST QUESTION
       const FQP = ['Group ID', 'Status', 'Name', 'Text', 'Target', 'MethodSelector', 'Formula', 'parameters'];
       decodedParams = [
@@ -401,7 +396,7 @@ class VotingInfoWrapper extends React.PureComponent {
             }}
             voting={voting}
             index={id}
-            title={question.caption}
+            title={question.name}
             duration={Number(question.time)}
             addressContract={question.target}
             description={question.text}
