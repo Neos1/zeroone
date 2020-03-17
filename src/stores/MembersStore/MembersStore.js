@@ -42,7 +42,7 @@ class MembersStore {
 
   @observable _transferStatus = 0;
 
-  @observable loading = true;
+  @observable loading = false;
 
   @action init() {
     const { rootStore: { configStore: { UPDATE_INTERVAL } } } = this;

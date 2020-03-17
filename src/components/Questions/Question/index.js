@@ -62,13 +62,13 @@ startBlock.propTypes = {
 
 const startBlockWithRouter = withRouter(startBlock);
 
-const ParametersBlock = (params, t) => (
+const ParametersBlock = (paramNames, paramTypes, t) => (
   <div className={styles.question__right}>
     <p className={styles['question__parameter-heading']}>{t('other:parameters')}</p>
-    {params.map((param) => (
+    {paramNames.map((param, index) => (
       <div className={styles.question__parameter}>
-        <p className={styles['question__parameter-label']}>{param[0]}</p>
-        <p className={styles['question__parameter-text']}>{param[1]}</p>
+        <p className={styles['question__parameter-label']}>{param}</p>
+        <p className={styles['question__parameter-text']}>{paramTypes[index]}</p>
       </div>
     ))}
   </div>
@@ -104,32 +104,38 @@ const Content = (id, caption, text, extended) => (
 const Question = withTranslation()(({
   t,
   extended, id,
-  caption,
-  text,
+  name,
+  description,
   formula,
-  params,
+  paramNames,
+  paramTypes,
   votingIsActive,
 }) => (
   <div className={`
     ${styles.question} 
     ${extended ? styles['question--extended'] : ''}
-    ${(params.length > 3 && extended) ? styles['question--short-name'] : ''}
+    ${(paramNames.length > 3 && extended) ? styles['question--short-name'] : ''}
     `}
   >
     {
       !extended
         ? (
           <NavLink className={styles.question__left} to={`/questions/${id}`}>
-            {Content(id, caption, text, extended)}
+            {Content(id, name, description, extended)}
           </NavLink>
         )
         : (
           <div className={`${styles.question__left}`}>
-            {Content(id, caption, text, extended)}
+            {Content(id, name, description, extended)}
           </div>
         )
     }
-    {extended ? ParametersBlock(params, t) : startBlockWithRouter({ t, id, votingIsActive })}
+    {
+      extended
+        ? ParametersBlock(paramNames, paramTypes, t)
+        : startBlockWithRouter({ t, id, votingIsActive })
+    }
+
     {extended ? FormulaBlock(formula, t) : null}
   </div>
 ));
@@ -137,10 +143,11 @@ Question.propTypes = {
   id: propTypes.number.isRequired,
   extended: propTypes.bool,
   votingIsActive: propTypes.bool.isRequired,
-  caption: propTypes.string.isRequired,
-  text: propTypes.string.isRequired,
-  formula: propTypes.arrayOf(propTypes.number).isRequired,
-  params: propTypes.arrayOf(propTypes.string).isRequired,
+  name: propTypes.string.isRequired,
+  description: propTypes.string.isRequired,
+  formula: propTypes.string.isRequired,
+  paramNames: propTypes.arrayOf(propTypes.string).isRequired,
+  paramTypes: propTypes.arrayOf(propTypes.string).isRequired,
 };
 Question.defaultProps = {
   extended: false,

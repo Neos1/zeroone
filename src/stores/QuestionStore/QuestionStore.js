@@ -17,7 +17,7 @@ class QuestionStore {
 
   @observable _questionGroups;
 
-  @observable loading = true;
+  @observable loading = false;
 
   @observable filter;
 
@@ -26,7 +26,7 @@ class QuestionStore {
     this._questionGroups = [];
     this.rootStore = rootStore;
     const { configStore: { UPDATE_INTERVAL } } = rootStore;
-    this.loading = true;
+    // this.loading = true;
     this.filter = new FilterStore();
     this.interval = new AsyncInterval({
       cb: async () => {
@@ -149,13 +149,14 @@ class QuestionStore {
   async fetchActualQuestionGroups() {
     const { contractService } = this.rootStore;
     const localGroupsLength = this._questionGroups.length;
-    const contractGroupsLength = await contractService.callMethod('getQuestionGroupsLength');
+    const contractGroupsLength = await contractService.callMethod('getQuestionsAmount');
     if (localGroupsLength < contractGroupsLength) {
-      for (let i = localGroupsLength + 1; i < contractGroupsLength; i += 1) {
+      for (let i = localGroupsLength; i < contractGroupsLength; i += 1) {
       // eslint-disable-next-line no-await-in-loop
         const element = await contractService.callMethod('getQuestionGroup', i);
-        element.groupId = i;
-        this._questionGroups[i - 1] = element;
+        const [groupName] = element;
+        const groupId = i;
+        this._questionGroups[groupId] = { groupId, name: groupName };
       }
     }
   }
@@ -169,11 +170,11 @@ class QuestionStore {
   async fetchQuestions() {
     const { contractService } = this.rootStore;
     const { countOfUploaded } = await contractService.checkQuestions();
-    for (let i = 1; i < countOfUploaded; i += 1) {
+    for (let i = 0; i < countOfUploaded; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const question = await contractService.fetchQuestion(i);
       question.groupId = Number(question.groupId);
-      this.addQuestion(i, question);
+      if (question.name !== '') this.addQuestion(i, question);
     }
   }
 
@@ -273,7 +274,7 @@ class QuestionStore {
     const questionsListLength = questionsList.length;
     for (let i = 0; i < questionsListLength; i += 1) {
       const question = questionsList[i];
-      this.addQuestion(i + 1, question);
+      this.addQuestion(i, question);
     }
   }
 
@@ -314,9 +315,8 @@ class QuestionStore {
    * @param {object} question Question which will be added
    */
   @action addQuestion = (id, question) => {
-    const { Web3Service: { web3 } } = this.rootStore;
-    const duplicatedQuestion = this._questions.find((item) => item.caption === question.caption);
-    if (!duplicatedQuestion) this._questions.push(new Question(id, question, web3));
+    const duplicatedQuestion = this._questions.find((item) => item.name === question.name);
+    if (!duplicatedQuestion) this._questions.push(new Question(id, question));
   }
 
   /**

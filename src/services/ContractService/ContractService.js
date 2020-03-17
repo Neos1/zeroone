@@ -320,7 +320,7 @@ class ContractService {
    * Fetch length of usergroups in contract
    */
   fetchUserGroupsLength() {
-    return this._contract.methods.getUserGroupsLength().call();
+    return this._contract.methods.getQuestionGroupsAmount().call();
   }
 
   /**

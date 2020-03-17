@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { observable, action } from 'mobx';
 import UsergroupStore from '../UsergroupStore';
 import QuestionStore from '../QuestionStore';
@@ -49,7 +50,7 @@ class ProjectStore {
     contractService.setContract(contract);
     this.questionStore = new QuestionStore(this.rootStore);
     this.historyStore = new HistoryStore(this.rootStore);
-    membersStore.init();
+    // membersStore.init();
     this.timer = setInterval(() => {
       this.getInitStatus();
     }, 1000);
