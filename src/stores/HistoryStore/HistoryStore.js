@@ -115,7 +115,6 @@ class HistoryStore {
   async getActualState(cb) {
     await this.getActualVotingList();
     this.isActiveVoting = await this.hasActiveVoting();
-    console.log('this.isActiveVoting', this.isActiveVoting);
     await this.fetchUserReturnTokens();
     if (cb) cb();
   }
@@ -435,11 +434,10 @@ class HistoryStore {
    */
   async getVotingFromContractById(id) {
     const { contractService, userStore } = this.rootStore;
-    const voting = await contractService.callMethod('voting', [id]);
+    const voting = await contractService.callMethod('getVoting', id);
     const userVoteFromContract = await contractService
-      ._contract.methods.getUserVote(id, userStore.address).call();
+      .callMethod.getUserVote(id, userStore.address).call();
     const userVote = Number(userVoteFromContract);
-    voting.descision = await contractService.callMethod('getVotingDescision', [id]);
     voting.userVote = userVote;
     voting.questionId = voting.id;
     voting.id = id;
