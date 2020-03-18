@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 export const statusStates = {
-  active: '0',
-  closed: '1',
+  active: '1',
+  closed: '0',
 };
 
 export const votingStates = {

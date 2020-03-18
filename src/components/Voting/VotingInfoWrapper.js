@@ -38,9 +38,13 @@ class VotingInfoWrapper extends React.PureComponent {
   @observable dataStats = [];
 
   @observable dataVotes = {
-    positive: [],
-    negative: [],
+    0: {
+      positive: [],
+      negative: [],
+    },
   };
+
+  @observable selectedGroup = 0
 
   votingId = 0;
 
@@ -297,7 +301,6 @@ class VotingInfoWrapper extends React.PureComponent {
       membersStore,
       projectStore: {
         historyStore,
-        questionStore,
         rootStore: {
           contractService: {
             _contract: {
@@ -308,27 +311,33 @@ class VotingInfoWrapper extends React.PureComponent {
       },
     } = props;
     const [voting] = historyStore.getVotingById(Number(id));
-    const [question] = questionStore.getQuestionById(Number(voting.questionId));
-    const { groupId } = question;
-    const memberGroup = membersStore.getMemberById(Number(groupId));
-    if (!memberGroup) {
-      this.dataStats = [];
+
+    const { allowedGroups } = voting;
+    if (allowedGroups.length === 0) {
       return;
     }
-    let [positive, negative, totalSupply] = await methods.getVotes(id).call();
-    positive = parseInt(positive, 10);
-    negative = parseInt(negative, 10);
-    totalSupply = parseInt(totalSupply, 10);
-    const decimalPercent = totalSupply / 100;
-    const abstained = (totalSupply - (positive + negative)) / decimalPercent;
-    this.dataStats = [
-      {
+
+    allowedGroups.forEach(async (group) => {
+      this.dataStats = [];
+      const memberGroup = membersStore.getMemberGroupByAddress(group);
+      let {
+        positive,
+        negative,
+        totalSupply,
+      } = await methods.getGroupVotes(id, memberGroup.wallet).call();
+      positive = parseInt(positive, 10);
+      negative = parseInt(negative, 10);
+      totalSupply = parseInt(totalSupply, 10);
+      const decimalPercent = totalSupply / 100;
+      const abstained = (totalSupply - (positive + negative)) / decimalPercent;
+      this.dataStats.push({
         name: memberGroup.name,
+        address: group,
         pros: positive / decimalPercent,
         cons: negative / decimalPercent,
         abstained,
-      },
-    ];
+      });
+    });
   }
 
   /**
@@ -346,14 +355,14 @@ class VotingInfoWrapper extends React.PureComponent {
     const { data } = voting;
     const { paramTypes, paramNames, id } = question;
     // const votingData = `0x${data.slice(10)}`;
-    let parameters;
     let decodedRawParams;
     let decodedParams;
     if (id !== 1) {
       decodedRawParams = data !== '0x'
-        ? Web3Service.web3.eth.abi.decodeParameters(parameters, data)
+        ? Web3Service.web3.eth.abi.decodeParameters(['tuple(uint,uint,uint,uint,uint)', `tuple(${paramTypes.join(',')})`], data)
         : [];
-      decodedParams = paramNames.map((param, index) => [param, decodedRawParams[index]]);
+      delete decodedRawParams[0];
+      decodedParams = paramNames.map((param, index) => [param, decodedRawParams[1][index]]);
     } else {
       decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(paramTypes, data);
       // PARAMETERS FOR FIRST QUESTION
@@ -406,7 +415,8 @@ class VotingInfoWrapper extends React.PureComponent {
             onRejectClick={() => { this.onRejectClick(); }}
             onCompleteVoteClick={() => { this.onClosingClick(); }}
             onBarClick={
-              () => {
+              (group) => {
+                this.selectedGroup = group;
                 if (this.isERC20Type === true) {
                   dialogStore.show('is_erc20_modal_voting_info_wrapper');
                   return;
@@ -448,7 +458,7 @@ class VotingInfoWrapper extends React.PureComponent {
             header={null}
             footer={null}
           >
-            <VoterList data={this.dataVotes} />
+            <VoterList data={this.dataVotes[this.selectedGroup]} />
           </Dialog>
 
           <Dialog

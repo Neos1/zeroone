@@ -31,6 +31,7 @@ class Voting {
     data, status, startTime,
     endTime, caption, text,
     userVote, newForUser,
+    allowedGroups,
   }) {
     this.raw = {
       id, descision, questionId, data, status, startTime, endTime, caption, text, userVote,
@@ -46,6 +47,7 @@ class Voting {
     this.text = text;
     this.userVote = Number(userVote);
     this.closeVoteInProgress = false;
+    this.allowedGroups = allowedGroups;
     if (status === statusStates.active) {
       this.newForUser = newForUser !== undefined ? newForUser : true;
     }

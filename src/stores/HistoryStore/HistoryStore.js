@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-await-in-loop */
 import { observable, action, computed } from 'mobx';
+import { parseFormula } from 'zeroone-translator';
+import { DescriptorParser } from 'zeroone-translator/lib/FormulaNodeParsers/DescriptorParser';
 import Voting from './entities/Voting';
 import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
@@ -158,7 +160,6 @@ class HistoryStore {
     length -= 1;
     for (length; length >= 0; length -= 1) {
       const voting = await this.getVotingFromContractById(length);
-      console.log(voting);
       const duplicateVoting = this._votings.find((item) => item.id === voting.id);
       if (!duplicateVoting) this._votings.push(new Voting(voting));
     }
@@ -269,7 +270,7 @@ class HistoryStore {
         basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
       });
       const votingsFromFileLength = votingsFromFile.data && votingsFromFile.data.length
-        ? votingsFromFile.data.length
+        ? votingsFromFile.data.length - 1
         : 0;
       for (let i = 0; i < votingsFromFileLength; i += 1) {
         const voting = votingsFromFile.data[i];
@@ -308,7 +309,7 @@ class HistoryStore {
     const votingListFromFileLength = votingListFromFile.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
     if (countVotingFromContract > votingListFromFileLength) {
-      for (let i = votingListFromFileLength; i < countOfVotings; i += 1) {
+      for (let i = votingListFromFileLength - 1; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const voting = await this.getVotingFromContractById(i);
         const duplicateVoting = this._votings.find((item) => item.id === voting.id);
@@ -395,35 +396,40 @@ class HistoryStore {
       },
     } = this;
     const [voting] = this.getVotingById(votingId);
-    const { questionId } = voting;
-    const [question] = questionStore.getQuestionById(questionId);
-    const { groupId } = question;
-    const memberGroup = membersStore.list[Number(groupId)];
-    if (!memberGroup || !memberGroup.list) return [];
-    const { list, balance } = memberGroup;
-    const result = {
-      positive: [],
-      negative: [],
-    };
-    for (let i = 0; i < list.length; i += 1) {
-      let info = {};
-      const { wallet } = list[i];
-      const vote = await _contract.methods.getUserVote(votingId, wallet).call();
-      const tokenCount = await _contract.methods.getUserVoteWeight(votingId, wallet).call();
-      const weight = ((tokenCount / Number(balance)) * 100).toFixed(2);
-      switch (vote) {
-        case ('1'):
-          info = { wallet, weight };
-          result.positive.push(info);
-          break;
-        case ('2'):
-          info = { wallet, weight };
-          result.negative.push(info);
-          break;
-        default:
-          break;
+    const { allowedGroups } = voting;
+    const result = {};
+
+    // eslint-disable-next-line consistent-return
+    allowedGroups.forEach(async (group) => {
+      const memberGroup = membersStore.getMemberGroupByAddress(group);
+      if (!memberGroup || !memberGroup.list) return [];
+      const { list, balance } = memberGroup;
+      result[memberGroup.wallet] = {
+        positive: [],
+        negative: [],
+      };
+      for (let i = 0; i < list.length; i += 1) {
+        let info = {};
+        const { wallet } = list[i];
+        const vote = await _contract.methods
+          .getUserVote(votingId, group, wallet).call();
+        const tokenCount = await _contract.methods
+          .getUserVoteWeight(votingId, group, wallet).call();
+        const weight = ((tokenCount / Number(balance)) * 100).toFixed(2);
+        switch (vote) {
+          case ('1'):
+            info = { wallet, weight };
+            result[memberGroup].positive.push(info);
+            break;
+          case ('2'):
+            info = { wallet, weight };
+            result[memberGroup.wallet].negative.push(info);
+            break;
+          default:
+            break;
+        }
       }
-    }
+    });
     return result;
   }
 
@@ -435,18 +441,53 @@ class HistoryStore {
    * @returns {object} actual voting form contract
    */
   async getVotingFromContractById(id) {
-    const { contractService, userStore } = this.rootStore;
+    const { contractService, userStore, projectStore: { questionStore } } = this.rootStore;
     const voting = await contractService.fetchVoting(id);
-    // const userVoteFromContract = await contractService
-    //   .callMethod.getUserVote(id, userStore.address).call();
-    const userVote = 0; // Number(userVoteFromContract);
-    voting.userVote = userVote;
+    const descision = await contractService.callMethod('getVotingResult', id);
+    const [question] = questionStore.getQuestionById(Number(voting.questionId));
+    voting.descision = descision;
+    voting.caption = question.name;
+    voting.text = question.description;
+    voting.data = voting.votingData;
+    delete voting.votingData;
+    voting.allowedGroups = this.getGroupsAllowedToVoting(question);
+    const userVotes = await this.getUserVote(voting.allowedGroups, id);
+
+    voting.userVote = userVotes.length === 1 ? userVotes[0] : 0;
     voting.id = id;
     for (let j = 0; j < 6; j += 1) {
       delete voting[j];
     }
     return voting;
   }
+
+  async getUserVote(allowedGroups, votingId) {
+    const {
+      contractService: { _contract },
+      userStore: { address },
+    } = this.rootStore;
+    const votes = [];
+    for (let i = 0; i < allowedGroups.length; i += 1) {
+      const vote = await _contract.methods.getUserVote(votingId, allowedGroups[i], address).call();
+      votes.push(vote);
+    }
+
+    const set = [...new Set(votes)];
+    return set;
+  }
+
+  /**
+   * Method for finding allowed groups from formula
+   *
+   * @param {object} question quiestion, which formula will be used
+   */
+  // eslint-disable-next-line class-methods-use-this
+  getGroupsAllowedToVoting({ formula }) {
+    const list = formula.match(/(erc20{((0x)+([0-9 a-f A-F]){40})})|(custom{((0x)+([0-9 a-f A-F]){40})})/g);
+    const groups = list.map((group) => group.replace(/(erc20({)|(}))|(custom({)|(}))/g, ''));
+    return groups;
+  }
+
 
   /**
    * Method for check active voting state

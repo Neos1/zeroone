@@ -274,7 +274,8 @@ class ContractService {
     const { address, password } = userStore;
     const contractAddr = contract.options.address;
     question.target = contractAddr;
-    question.formula = compile(question.rawFormula.replace('%s', owners.groupAddress));
+    question.rawFormula = question.rawFormula.replace('%s', owners.groupAddress);
+    question.formula = compile(question.rawFormula);
     question.active = true;
 
     console.log(question);

@@ -17,6 +17,7 @@ import AsyncInterval from '../../utils/AsyncUtils';
  * @param data
  * @param groupAddress
  * @param admin
+ * @param address
  * @param group
  */
 class MembersStore {
@@ -164,7 +165,7 @@ class MembersStore {
     const { Web3Service, userStore } = this.rootStore;
     for (let i = 0; i < groups.length; i += 1) {
       const group = groups[i];
-      const abi = fs.readFileSync(path.join(PATH_TO_CONTRACTS, group.groupType === 0 ? './ERC20.abi' : './CustomToken.abi'));
+      const abi = fs.readFileSync(path.join(PATH_TO_CONTRACTS, group.groupType === '0' ? './ERC20.abi' : './CustomToken.abi'));
       const contract = Web3Service.createContractInstance(JSON.parse(abi));
       contract.options.address = await group.groupAddress;
       group.contract = contract;
@@ -172,7 +173,7 @@ class MembersStore {
       group.tokenSymbol = await contract.methods.symbol().call();
       group.users = group.groupType === '0'
         ? [userStore.address]
-        : [userStore.address];// await contract.methods.getUsers().call();
+        : await contract.methods.getUsers().call();
       group.groupId = i + 1;
       // eslint-disable-next-line no-param-reassign
       groups[i] = group;
@@ -269,6 +270,14 @@ class MembersStore {
   @action getMemberById = (id) => {
     if (!this.list) return {};
     const [group] = this.list.filter((groupItem) => groupItem.groupId === Number(id));
+    return group;
+  }
+
+  @action getMemberGroupByAddress = (address) => {
+    if (!this.list) return {};
+    const [group] = this.list.filter((groupItem) => (
+      groupItem.wallet.toLowerCase() === address.toLowerCase()
+    ));
     return group;
   }
 

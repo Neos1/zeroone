@@ -122,7 +122,6 @@ class CreateNewProjectWithTokens extends Component {
   renderSwitch(step) {
     const { t } = this.props;
     const { steps } = this;
-    console.log('this.createProject', this.createProject);
     switch (step) {
       case steps.token:
         return <InputTokenAddress form={this.connectToken} onSubmit={this.checkToken} />;

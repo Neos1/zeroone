@@ -32,7 +32,7 @@ class CreateGroupQuestions extends React.PureComponent {
         const { name } = form.values();
         const [question] = questionStore.getQuestionById(questionId);
         const { paramTypes, groupId } = question;
-        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(paramTypes, [name]);
+        const encodedParams = Web3Service.web3.eth.abi.encodeParameters(['tuple(uint256,uint256,uint256,uint256,uint256)', `tuple(${paramTypes.join(',')})`], [[0, 0, 0, 0, 0], [name]]);
         // const votingData = encodedParams.replace('0x', methodSelector);
         // TODO groupId fix
         projectStore.setVotingData(questionId, groupId, encodedParams);
