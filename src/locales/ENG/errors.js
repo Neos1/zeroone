@@ -7,6 +7,7 @@ const errors = {
   lowBalance: 'Your balance is to low for this',
   hostUnreachable: 'Host is unreachable, please check your internet connection and try again',
   transferIfNotAdmin: 'You cannot tranfer tokens from other wallets',
+  transferLocked: 'You cannot send custom tokens',
 };
 
 export default errors;
