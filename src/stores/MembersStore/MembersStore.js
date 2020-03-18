@@ -305,7 +305,7 @@ class MembersStore {
 
   @computed
   get nonERC() {
-    return this.groups.filter((group) => group.groupType !== '0')
+    return this.groups.filter((group) => group.groupType !== tokenTypes.ERC20)
       .map((group) => ({ label: group.name, value: group.wallet }));
   }
 

@@ -28,6 +28,12 @@ export const tokenTypes = {
   Custom: '1',
 };
 
+export const votingDecisionStates = {
+  default: 0,
+  agree: 1,
+  reject: 2,
+};
+
 export const languages = {
   RUS: 'ru',
   ENG: 'en',

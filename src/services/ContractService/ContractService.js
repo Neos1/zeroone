@@ -361,11 +361,11 @@ class ContractService {
    * creates transaction for sending decision about voting
    *
    * @param {number} votingId  voting
-   * @param {number} descision 0 - negative, 1 - positive
+   * @param {number} decision 0 - negative, 1 - positive
    * @returns {Promise} promise
    */
   // eslint-disable-next-line consistent-return
-  sendVote(votingId, descision) {
+  sendVote(votingId, decision) {
     const {
       ercAbi,
       _contract,
@@ -384,7 +384,7 @@ class ContractService {
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
     const groupContainsUser = membersStore.isUserInGroup(Number(groupId), userStore.address);
-    const data = _contract.methods.sendVote(descision).encodeABI();
+    const data = _contract.methods.setVote(decision).encodeABI();
 
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
@@ -405,7 +405,7 @@ class ContractService {
                 historyStore.updateVotingById({
                   id: votingId,
                   newState: {
-                    userVote: Number(descision),
+                    userVote: Number(decision),
                   },
                 });
                 groupContainsUser.updateUserBalance();
@@ -414,7 +414,7 @@ class ContractService {
               });
           })
           .catch((err) => reject(err));
-      } else if ((groupContainsUser) && (groupContainsUser.groupType !== '0')) {
+      } else if ((groupContainsUser) && (groupContainsUser.groupType !== tokenTypes.ERC20)) {
         const tx = {
           from: userStore.address,
           to: _contract.options.address,
@@ -429,7 +429,7 @@ class ContractService {
             historyStore.updateVotingById({
               id: votingId,
               newState: {
-                userVote: Number(descision),
+                userVote: Number(decision),
               },
             });
             groupContainsUser.updateUserBalance();
