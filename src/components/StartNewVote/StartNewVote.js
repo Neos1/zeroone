@@ -206,13 +206,13 @@ class StartNewVote extends React.Component {
                   onSubmit={form.onSubmit}
                 >
                   <div className={styles['new-vote__form-row']}>
-                    {form.map((field) => {
+                    {form.map((field, index) => {
                       if (field.name === 'question') return null;
                       return (field.placeholder === 'Group' || field.placeholder === 'Group address')
                         ? (
                           <div
                             className={styles['new-vote__form-col']}
-                            key={nextId('new_vote__form_col')}
+                            key={`new_vote__form_col_dropdown--${index + 1}`}
                           >
                             <SimpleDropdown
                               options={nonERC}
@@ -226,7 +226,7 @@ class StartNewVote extends React.Component {
                         : (
                           <div
                             className={styles['new-vote__form-col']}
-                            key={nextId('new_vote__form_col')}
+                            key={`new_vote__form_col_input--${index + 1}`}
                           >
                             <Input field={field}><Address /></Input>
                           </div>
