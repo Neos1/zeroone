@@ -165,7 +165,9 @@ class MembersStore {
     const { Web3Service, userStore } = this.rootStore;
     for (let i = 0; i < groups.length; i += 1) {
       const group = groups[i];
-      const abi = fs.readFileSync(path.join(PATH_TO_CONTRACTS, group.groupType === 0 ? './ERC20.abi' : './CustomToken.abi'));
+      const abi = fs.readFileSync(
+        path.join(PATH_TO_CONTRACTS, group.groupType === tokenTypes.ERC20 ? './ERC20.abi' : './CustomToken.abi'),
+      );
       const contract = Web3Service.createContractInstance(JSON.parse(abi));
       contract.options.address = await group.groupAddress;
       group.contract = contract;
@@ -173,8 +175,8 @@ class MembersStore {
       group.tokenSymbol = await contract.methods.symbol().call();
       group.users = group.groupType === tokenTypes.ERC20
         ? [userStore.address]
-        : [userStore.address];// await contract.methods.getUsers().call();
-      group.groupId = i + 1;
+        : await contract.methods.getHolders().call();
+      group.groupId = i;
       // eslint-disable-next-line no-param-reassign
       groups[i] = group;
     }
