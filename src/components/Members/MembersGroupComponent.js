@@ -200,12 +200,15 @@ class MembersGroupComponent extends React.Component {
       t,
     } = this.props;
     let isAdmininstrator = false;
-
+    const isCustomToken = groupType === tokenTypes.Custom;
     const isIdentical = selectedWallet.toUpperCase() === address.toUpperCase();
-
-    if (groupType === tokenTypes.Custom) {
+    if (isCustomToken) {
       const [groupAdmin] = administrator;
       isAdmininstrator = (address.toUpperCase() === groupAdmin.wallet.toUpperCase());
+    }
+    if (isCustomToken && !isAdmininstrator) {
+      appStore.displayAlert(t('errors:transferLocked'));
+      return;
     }
     if (isIdentical || isAdmininstrator) {
       membersStore.setTransferStatus('input');
