@@ -171,6 +171,7 @@ class CreateNewQuestionForm extends React.PureComponent {
       ['tuple(uint, uint, uint, uint, uint)', 'tuple(bool, string, string, uint, uint, string[], string[], address, bytes4, string, bytes)'],
       [[0, 0, 0, 0, 0], rawVotingData],
     );
+    console.log('votingData', votingData);
     projectStore.setVotingData(1, 0, votingData);
     dialogStore.toggle('password_form_questions');
     this.formBasic.clear();
