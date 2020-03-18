@@ -468,8 +468,6 @@ class ContractService {
       });
   }
 
-    const votingData = (data).replace('0x', question.methodSelector);
-      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
   /**
    * Method for start voting
    *
