@@ -468,33 +468,50 @@ class ContractService {
       });
   }
 
-  startVoting(questionId, params) {
-    const {
-      _contract,
-      rootStore: {
-        projectStore: { questionStore },
-        Web3Service,
-        userStore,
-      },
-    } = this;
-    const [question] = questionStore.getQuestionById(questionId);
-    const parameters = question.getParameters();
-    const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
     const votingData = (data).replace('0x', question.methodSelector);
-    const tx = {
-      data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
-      from: userStore.address,
-      to: _contract.options.address,
-      value: '0x0',
-    };
-    return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then(() => {
-        userStore.getEthBalance();
-      });
-  }
+  /**
+   * Method for start voting
+   *
+   * @returns {Promise} promise
+   * @deprecated
+   */
+  // startVoting(questionId, params) {
+  //   const {
+  //     _contract,
+  //     rootStore: {
+  //       projectStore: { questionStore },
+  //       Web3Service,
+  //       userStore,
+  //     },
+  //   } = this;
+  //   const [question] = questionStore.getQuestionById(questionId);
+  //   const { parameters } = question;
+  //   const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
+  //   const votingData = (data).replace('0x', question.methodSelector);
+  //   const votingInfo = {
+  //     starterGroupId: 0,
+  //     endTime: 0,
+  //     starterAddress: userStore.address,
+  //     questionId,
+  //     data: votingData,
+  //   };
+  //   console.log('votingInfo', votingInfo);
+  //   const tx = {
+  //     data: _contract.methods.startVoting(votingInfo).encodeABI(),
+  //     from: userStore.address,
+  //     to: _contract.options.address,
+  //     value: '0x0',
+  //   };
+  //   console.log('tx', tx);
+  //   return Web3Service.createTxData(userStore.address, tx)
+  //     .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+  //     .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+  //     .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+  //     .then(() => {
+  //       userStore.getEthBalance();
+  //     });
+  // }
 
   returnTokens() {
     const {
