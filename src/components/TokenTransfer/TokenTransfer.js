@@ -14,7 +14,7 @@ import DialogStore from '../../stores/DialogStore';
 import Input from '../Input';
 import { Password, Address, TokenCount } from '../Icons';
 import Button from '../Button/Button';
-import { EMPTY_DATA_STRING } from '../../constants';
+import { EMPTY_DATA_STRING, tokenTypes } from '../../constants';
 
 import styles from './TokenTransfer.scss';
 
@@ -162,7 +162,7 @@ class TokenTransfer extends React.Component {
           <div className={styles.wallet__wrapper}>{wallet}</div>
         </form>
         {
-          groupType !== '0'
+          groupType !== tokenTypes.ERC20
             ? (
               <div className={styles['token-transfer__button-container']}>
                 <Button
@@ -191,7 +191,7 @@ class TokenTransfer extends React.Component {
             : null
         }
         {
-          groupType !== '0'
+          groupType !== tokenTypes.ERC20
             ? (
               <Dialog
                 name={`password_form-${groupId}`}
@@ -199,7 +199,7 @@ class TokenTransfer extends React.Component {
                 footer={null}
                 header={t('fields:enterPassword')}
               >
-                <FinPassFormWrapper form={this.passwordForm} />
+                <FinPassFormWrapper form={this.passwordForm} buttonText={t('buttons:transfer')} />
               </Dialog>
             )
             : null

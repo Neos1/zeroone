@@ -9,6 +9,7 @@ import {
 } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
 import AsyncInterval from '../../utils/AsyncUtils';
+import { tokenTypes } from '../../constants';
 
 /**
  * Store for manage Members groups
@@ -165,16 +166,18 @@ class MembersStore {
     const { Web3Service, userStore } = this.rootStore;
     for (let i = 0; i < groups.length; i += 1) {
       const group = groups[i];
-      const abi = fs.readFileSync(path.join(PATH_TO_CONTRACTS, group.groupType === '0' ? './ERC20.abi' : './CustomToken.abi'));
+      const abi = fs.readFileSync(
+        path.join(PATH_TO_CONTRACTS, group.groupType === tokenTypes.ERC20 ? './ERC20.abi' : './CustomToken.abi'),
+      );
       const contract = Web3Service.createContractInstance(JSON.parse(abi));
       contract.options.address = await group.groupAddress;
       group.contract = contract;
       group.totalSupply = await contract.methods.totalSupply().call();
       group.tokenSymbol = await contract.methods.symbol().call();
-      group.users = group.groupType === '0'
+      group.users = group.groupType === tokenTypes.ERC20
         ? [userStore.address]
-        : await contract.methods.getUsers().call();
-      group.groupId = i + 1;
+        : await contract.methods.getHolders().call();
+      group.groupId = i;
       // eslint-disable-next-line no-param-reassign
       groups[i] = group;
     }
@@ -187,7 +190,7 @@ class MembersStore {
       const group = groups[i];
       const { contract, groupType } = group;
       group.members = [];
-      const admin = groupType === '1'
+      const admin = groupType === tokenTypes.Custom
         ? await contract.methods.owner().call()
         : null;
 
@@ -241,9 +244,10 @@ class MembersStore {
   transferTokens(groupId, from, to, count) {
     const { contract, groupType } = this.list[groupId];
     window.contract = contract;
+    console.log('contract', contract);
     // eslint-disable-next-line no-unused-vars
     const { Web3Service, userStore: { address, password }, userStore } = this.rootStore;
-    const data = groupType === '0'
+    const data = groupType === tokenTypes.ERC20
       ? contract.methods.transfer(to, Number(count)).encodeABI()
       : contract.methods.transferFrom(from, to, Number(count)).encodeABI();
     const txData = {
@@ -310,7 +314,7 @@ class MembersStore {
 
   @computed
   get nonERC() {
-    return this.groups.filter((group) => group.groupType !== '0')
+    return this.groups.filter((group) => group.groupType !== tokenTypes.ERC20)
       .map((group) => ({ label: group.name, value: group.wallet }));
   }
 

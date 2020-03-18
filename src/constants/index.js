@@ -17,10 +17,21 @@ export const userVotingStates = {
 };
 
 export const systemQuestionsId = {
-  addingNewQuestion: 1,
-  connectGroupUsers: 2,
-  connectGroupQuestions: 3,
-  assignGroupAdmin: 4,
+  addingNewQuestion: 0,
+  connectGroupUsers: 1,
+  connectGroupQuestions: 2,
+  assignGroupAdmin: 3,
+};
+
+export const tokenTypes = {
+  ERC20: '0',
+  Custom: '1',
+};
+
+export const votingDecisionStates = {
+  default: 0,
+  agree: 1,
+  reject: 2,
 };
 
 export const languages = {

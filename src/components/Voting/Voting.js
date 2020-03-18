@@ -113,14 +113,14 @@ class Voting extends React.Component {
           eventEmitterService,
         },
         questionStore: {
-          options,
+          newVotingOptions,
         },
       },
     } = props;
     const parsed = queryString.parse(location.search);
     if (parsed.modal && parsed.option) {
       dialogStore.show(parsed.modal);
-      const targetOption = options[Number(parsed.option)];
+      const targetOption = newVotingOptions[Number(parsed.option)];
       eventEmitterService.emit('new_vote:toggle', targetOption);
     }
     this.votingIsActive = historyStore.isVotingActive;
@@ -227,7 +227,7 @@ class Voting extends React.Component {
             footer={null}
             header={t('fields:enterPassword')}
           >
-            <FinPassFormWrapper form={this.passwordForm} />
+            <FinPassFormWrapper form={this.passwordForm} buttonText={t('buttons:continue')} />
           </Dialog>
           <Dialog
             name="progress_modal_voting"

@@ -46,7 +46,7 @@ class CreateQuestionBasicForm extends ExtendedForm {
           type: 'text',
           label: 'votingFormula',
           placeholder: i18n.t('fields:votingFormula'),
-          rules: 'required|formula',
+          rules: 'required',
         },
         {
           name: 'description',

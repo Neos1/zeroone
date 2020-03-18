@@ -5,6 +5,7 @@ import { compile } from 'zeroone-translator';
 import {
   SOL_IMPORT_REGEXP,
   SOL_VERSION_REGEXP,
+  tokenTypes,
 } from '../../constants';
 import {
   fs, PATH_TO_CONTRACTS, path,
@@ -361,11 +362,11 @@ class ContractService {
    * creates transaction for sending decision about voting
    *
    * @param {number} votingId  voting
-   * @param {number} descision 0 - negative, 1 - positive
+   * @param {number} decision 0 - negative, 1 - positive
    * @returns {Promise} promise
    */
   // eslint-disable-next-line consistent-return
-  sendVote(votingId, descision) {
+  sendVote(votingId, decision) {
     const {
       ercAbi,
       _contract,
@@ -383,12 +384,12 @@ class ContractService {
     const { questionId } = voting;
     const [question] = questionStore.getQuestionById(Number(questionId));
     const { groupId } = question;
-    const groupContainsUser = membersStore.isUserInGroup(Number(groupId) - 1, userStore.address);
-    const data = _contract.methods.sendVote(descision).encodeABI();
+    const groupContainsUser = membersStore.isUserInGroup(Number(groupId), userStore.address);
+    const data = _contract.methods.setVote(decision).encodeABI();
 
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => {
-      if ((groupContainsUser) && (groupContainsUser.groupType === '0')) {
+      if ((groupContainsUser) && (groupContainsUser.groupType === tokenTypes.ERC20)) {
         this.approveErc(groupContainsUser)
           .then(() => {
             const tx = {
@@ -405,7 +406,7 @@ class ContractService {
                 historyStore.updateVotingById({
                   id: votingId,
                   newState: {
-                    userVote: Number(descision),
+                    userVote: Number(decision),
                   },
                 });
                 groupContainsUser.updateUserBalance();
@@ -414,7 +415,7 @@ class ContractService {
               });
           })
           .catch((err) => reject(err));
-      } else if ((groupContainsUser) && (groupContainsUser.groupType !== '0')) {
+      } else if ((groupContainsUser) && (groupContainsUser.groupType !== tokenTypes.ERC20)) {
         const tx = {
           from: userStore.address,
           to: _contract.options.address,
@@ -429,7 +430,7 @@ class ContractService {
             historyStore.updateVotingById({
               id: votingId,
               newState: {
-                userVote: Number(descision),
+                userVote: Number(decision),
               },
             });
             groupContainsUser.updateUserBalance();
@@ -468,33 +469,48 @@ class ContractService {
       });
   }
 
-  startVoting(questionId, params) {
-    const {
-      _contract,
-      rootStore: {
-        projectStore: { questionStore },
-        Web3Service,
-        userStore,
-      },
-    } = this;
-    const [question] = questionStore.getQuestionById(questionId);
-    const parameters = question.getParameters();
-    const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
-    const votingData = (data).replace('0x', question.methodSelector);
-    const tx = {
-      data: _contract.methods.startNewVoting(questionId, 0, 0, votingData).encodeABI(),
-      from: userStore.address,
-      to: _contract.options.address,
-      value: '0x0',
-    };
-    return Web3Service.createTxData(userStore.address, tx)
-      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-      .then(() => {
-        userStore.getEthBalance();
-      });
-  }
+  /**
+   * Method for start voting
+   *
+   * @returns {Promise} promise
+   * @deprecated
+   */
+  // startVoting(questionId, params) {
+  //   const {
+  //     _contract,
+  //     rootStore: {
+  //       projectStore: { questionStore },
+  //       Web3Service,
+  //       userStore,
+  //     },
+  //   } = this;
+  //   const [question] = questionStore.getQuestionById(questionId);
+  //   const { parameters } = question;
+  //   const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
+  //   const votingData = (data).replace('0x', question.methodSelector);
+  //   const votingInfo = {
+  //     starterGroupId: 0,
+  //     endTime: 0,
+  //     starterAddress: userStore.address,
+  //     questionId,
+  //     data: votingData,
+  //   };
+  //   console.log('votingInfo', votingInfo);
+  //   const tx = {
+  //     data: _contract.methods.startVoting(votingInfo).encodeABI(),
+  //     from: userStore.address,
+  //     to: _contract.options.address,
+  //     value: '0x0',
+  //   };
+  //   console.log('tx', tx);
+  //   return Web3Service.createTxData(userStore.address, tx)
+  //     .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+  //     .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+  //     .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+  //     .then(() => {
+  //       userStore.getEthBalance();
+  //     });
+  // }
 
   returnTokens() {
     const {

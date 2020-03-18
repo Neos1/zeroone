@@ -20,6 +20,7 @@ import {
   TransferSuccessMessage,
   TransferErrorMessage,
 } from '../Message';
+import { tokenTypes } from '../../constants';
 
 import styles from './Members.scss';
 
@@ -96,7 +97,9 @@ class MembersGroupComponent extends React.Component {
     membersStore: PropTypes.instanceOf(MembersStore).isRequired,
     userStore: PropTypes.instanceOf(UserStore).isRequired,
     appStore: PropTypes.instanceOf(AppStore).isRequired,
-    admin: PropTypes.shape().isRequired,
+    admin: PropTypes.arrayOf(
+      PropTypes.shape({}),
+    ).isRequired,
   }
 
   constructor() {
@@ -196,14 +199,16 @@ class MembersGroupComponent extends React.Component {
       groupType,
       t,
     } = this.props;
-    let admin = [];
     let isAdmininstrator = false;
-
+    const isCustomToken = groupType === tokenTypes.Custom;
     const isIdentical = selectedWallet.toUpperCase() === address.toUpperCase();
-
-    if (groupType === '1') {
-      [admin] = administrator;
-      isAdmininstrator = (address.toUpperCase() === admin.wallet.toUpperCase());
+    if (isCustomToken) {
+      const [groupAdmin] = administrator;
+      isAdmininstrator = (address.toUpperCase() === groupAdmin.wallet.toUpperCase());
+    }
+    if (isCustomToken && !isAdmininstrator) {
+      appStore.displayAlert(t('errors:transferLocked'));
+      return;
     }
     if (isIdentical || isAdmininstrator) {
       membersStore.setTransferStatus('input');

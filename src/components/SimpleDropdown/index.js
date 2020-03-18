@@ -29,7 +29,7 @@ class SimpleDropdown extends Component {
     }),
     initIndex: propTypes.number,
     t: propTypes.func.isRequired,
-    placeholder: propTypes.string.isRequired,
+    placeholder: propTypes.string,
     isNewQuestion: propTypes.bool,
   };
 
@@ -42,6 +42,7 @@ class SimpleDropdown extends Component {
       error: null,
     },
     initIndex: null,
+    placeholder: null,
     isNewQuestion: false,
   }
 

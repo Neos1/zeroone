@@ -17,7 +17,13 @@ import TransactionProgress from '../Message/TransactionProgress';
 import SuccessMessage from '../Message/SuccessMessage';
 import ErrorMessage from '../Message/ErrorMessage';
 import ProjectStore from '../../stores/ProjectStore/ProjectStore';
-import { systemQuestionsId, statusStates, userVotingStates } from '../../constants';
+import {
+  systemQuestionsId,
+  statusStates,
+  userVotingStates,
+  tokenTypes,
+  votingDecisionStates,
+} from '../../constants';
 import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
@@ -52,7 +58,7 @@ class VotingInfoWrapper extends React.PureComponent {
     hooks: {
       onSuccess: (form) => {
         const { votingId } = this;
-        const { descision } = this.state;
+        const { decision } = this.state;
         const {
           userStore,
           dialogStore,
@@ -68,7 +74,7 @@ class VotingInfoWrapper extends React.PureComponent {
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.toggle('progress_modal_voting_info_wrapper');
-        return contractService.sendVote(votingId, descision)
+        return contractService.sendVote(votingId, decision)
           .then(async () => {
             await historyStore.fetchAndUpdateLastVoting();
             const [voting] = historyStore.getVotingById(Number(votingId));
@@ -163,7 +169,7 @@ class VotingInfoWrapper extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      descision: 0,
+      decision: votingDecisionStates.default,
     };
   }
 
@@ -208,7 +214,7 @@ class VotingInfoWrapper extends React.PureComponent {
     const { groupId } = this.question;
     const targetGroup = membersStore.getMemberById(groupId);
     if (!targetGroup || !targetGroup.groupType) return false;
-    return targetGroup.groupType === '0';
+    return targetGroup.groupType === tokenTypes.ERC20;
   }
 
   /**
@@ -258,7 +264,7 @@ class VotingInfoWrapper extends React.PureComponent {
   onVerifyClick = () => {
     const { dialogStore } = this.props;
     this.setState({
-      descision: 1,
+      decision: votingDecisionStates.agree,
     });
     dialogStore.toggle('decision_agree_voting_info_wrapper');
   }
@@ -266,7 +272,7 @@ class VotingInfoWrapper extends React.PureComponent {
   onRejectClick = () => {
     const { dialogStore } = this.props;
     this.setState({
-      descision: 2,
+      decision: votingDecisionStates.reject,
     });
     dialogStore.toggle('decision_reject_voting_info_wrapper');
   }

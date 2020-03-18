@@ -1,8 +1,17 @@
-import web3 from 'web3';
+import { compile } from 'zeroone-translator';
 
 class Question {
   constructor({
-    id, group, name, caption, time, method, formula, parameters,
+    id,
+    group,
+    name,
+    caption,
+    time,
+    method,
+    formula,
+    parameters,
+    paramTypes,
+    paramNames,
   }) {
     this.id = id;
     this.group = group;
@@ -10,28 +19,11 @@ class Question {
     this.caption = caption;
     this.time = time;
     this.method = method;
-    this.formula = formula;
+    this.rawFormula = formula;
     this.parameters = parameters;
-  }
-
-  /**
-   * convert simple formula of system question for contract
-   *
-   * @returns {Array} numeric implementation of formula for smart contract
-   */
-  getFormulaForContract() {
-    const FORMULA_REGEXP = new RegExp(/(group)|((?:[a-zA-Z0-9]{1,}))|((quorum|positive))|(>=|<=)|([0-9%]{1,})|(quorum|all)/g);
-    const matched = this.formula.match(FORMULA_REGEXP);
-    const convertedFormula = [];
-    convertedFormula.push(matched[0] === 'group' ? 0 : 1);
-    convertedFormula.push(matched[1] === 'Owners' ? 1 : 2);
-    convertedFormula.push(matched[3] === 'quorum' ? 0 : 1);
-    convertedFormula.push(matched[4] === '<=' ? 0 : 1);
-    convertedFormula.push(Number(matched[5]));
-    if (matched.length === 9) {
-      convertedFormula.push(matched[8] === 'quorum' ? 0 : 1);
-    }
-    return convertedFormula;
+    this.paramTypes = paramTypes;
+    this.paramNames = paramNames;
+    this.formula = compile(formula);
   }
 
   /**
@@ -42,11 +34,29 @@ class Question {
    */
   getUploadingParams(contractAddr) {
     const {
-      id, group, name, caption, time, method, parameters,
+      name,
+      caption,
+      group,
+      time,
+      paramNames,
+      paramTypes,
+      method,
+      rawFormula,
+      formula,
     } = this;
-    const convertedFormula = this.getFormulaForContract();
-    const params = parameters.map((param) => web3.utils.utf8ToHex(param));
-    return [[id, group, time], 0, name, caption, contractAddr, method, convertedFormula, params];
+    return [
+      true,
+      name,
+      caption,
+      group,
+      time,
+      paramNames,
+      paramTypes,
+      contractAddr,
+      method,
+      rawFormula,
+      formula,
+    ];
   }
 }
 export default Question;

@@ -125,16 +125,18 @@ class CreateNewQuestionForm extends React.PureComponent {
     } else {
       values = {};
     }
-    let parameters = [];
+    const paramTypes = [];
+    const paramNames = [];
     Object.keys(values).forEach((key, index) => {
       if (Number.isInteger(index / 2) === false) return;
       const uniqKey = this.getUniqKey(key);
       const selectValue = values[`select--${uniqKey}`];
       const inputValue = values[`input--${uniqKey}`];
-      parameters.push(inputValue, selectValue);
+      paramTypes.push(selectValue);
+      paramNames.push(inputValue);
     });
-    parameters = parameters.filter((e) => e !== '');
-    return parameters;
+    // parameters = parameters.filter((e) => e !== '');
+    return { paramTypes, paramNames };
   }
 
   /**
@@ -147,12 +149,12 @@ class CreateNewQuestionForm extends React.PureComponent {
     // eslint-disable-next-line max-len
     const {
       dialogStore,
-      projectStore: { questionStore, rootStore: { contractService } },
+      projectStore: { questionStore, rootStore: { Web3Service } },
       projectStore,
       onComplete,
     } = this.props;
     const futureQuestionId = questionStore.questions.length + 1;
-    const parameters = this.getParametersFromForm(form);
+    const { paramTypes, paramNames } = this.getParametersFromForm(form);
     const question = new Question({
       id: futureQuestionId,
       group: data.groupId,
@@ -161,11 +163,15 @@ class CreateNewQuestionForm extends React.PureComponent {
       time: Number(data.time),
       method: data.methodSelector,
       formula: data.formula,
-      parameters,
+      paramTypes,
+      paramNames,
     });
     const rawVotingData = question.getUploadingParams(data.target);
-    const votingData = contractService._contract
-      .methods.saveNewQuestion(...rawVotingData).encodeABI();
+    const votingData = Web3Service.web3.eth.abi.encodeParameters(
+      ['tuple(uint, uint, uint, uint, uint)', 'tuple(bool, string, string, uint, uint, string[], string[], address, bytes4, string, bytes)'],
+      [[0, 0, 0, 0, 0], rawVotingData],
+    );
+    console.log('votingData', votingData);
     projectStore.setVotingData(1, 0, votingData);
     dialogStore.toggle('password_form_questions');
     this.formBasic.clear();

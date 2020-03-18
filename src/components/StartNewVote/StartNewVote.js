@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import { observable } from 'mobx';
-import uniqKey from 'react-id-generator';
+import nextId from 'react-id-generator';
 import SimpleDropdown from '../SimpleDropdown';
 import { Address, QuestionIcon } from '../Icons';
 import Input from '../Input';
 import Button from '../Button/Button';
 import StarNewVoteForm from '../../stores/FormsStore/StartNewVoteForm';
+import { systemQuestionsId } from '../../constants';
 
 import styles from './StartNewVote.scss';
 
@@ -80,7 +81,7 @@ class StartNewVote extends React.Component {
     const { props, form } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
     eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.initIndex = Number(selected.value) - 1;
+      this.initIndex = Number(selected.value);
       form.$('question').set(selected.value);
       this.handleSelect(selected);
     });
@@ -105,14 +106,13 @@ class StartNewVote extends React.Component {
       if (field.name === 'question') return;
       form.del(field.name);
     });
-    console.log('selected.value', selected.value);
     // @ If Question have dedicated modal, then toggle them, else create fields
     switch (selected.value) {
-      case 1:
+      case systemQuestionsId.addingNewQuestion:
         history.push('/questions');
         dialogStore.toggle('create_question');
         break;
-      case 3:
+      case systemQuestionsId.connectGroupQuestions:
         history.push('/questions');
         dialogStore.toggle('create_group_question');
         break;
@@ -172,8 +172,8 @@ class StartNewVote extends React.Component {
               options={newVotingOptions}
               field={form.$('question')}
               onSelect={this.handleSelect}
-              initIndex={initIndex - 1}
-              key={uniqKey()}
+              initIndex={initIndex}
+              key={nextId('question_dropdown')}
             >
               <QuestionIcon />
             </SimpleDropdown>
@@ -206,11 +206,14 @@ class StartNewVote extends React.Component {
                   onSubmit={form.onSubmit}
                 >
                   <div className={styles['new-vote__form-row']}>
-                    {form.map((field) => {
+                    {form.map((field, index) => {
                       if (field.name === 'question') return null;
                       return (field.placeholder === 'Group' || field.placeholder === 'Group address')
                         ? (
-                          <div className={styles['new-vote__form-col']}>
+                          <div
+                            className={styles['new-vote__form-col']}
+                            key={`new_vote__form_col_dropdown--${index + 1}`}
+                          >
                             <SimpleDropdown
                               options={nonERC}
                               field={field}
@@ -219,10 +222,12 @@ class StartNewVote extends React.Component {
                               <Address />
                             </SimpleDropdown>
                           </div>
-
                         )
                         : (
-                          <div className={styles['new-vote__form-col']}>
+                          <div
+                            className={styles['new-vote__form-col']}
+                            key={`new_vote__form_col_input--${index + 1}`}
+                          >
                             <Input field={field}><Address /></Input>
                           </div>
                         );
