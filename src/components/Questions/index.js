@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
@@ -58,6 +59,7 @@ class Questions extends Component {
           .then(() => {
             // eslint-disable-next-line max-len
             const transaction = contractService.createVotingData(Number(votingQuestion), Number(votingGroupId), votingData);
+            console.log(transaction);
             return transaction;
           })
           .then((tx) => Web3Service.createTxData(userStore.address, tx)

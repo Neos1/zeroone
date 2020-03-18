@@ -155,8 +155,10 @@ class HistoryStore {
    */
   @action fetchVotings = async () => {
     let length = await this.fetchVotingsCount();
-    for (length; length > 0; length -= 1) {
+    length -= 1;
+    for (length; length >= 0; length -= 1) {
       const voting = await this.getVotingFromContractById(length);
+      console.log(voting);
       const duplicateVoting = this._votings.find((item) => item.id === voting.id);
       if (!duplicateVoting) this._votings.push(new Voting(voting));
     }
@@ -306,7 +308,7 @@ class HistoryStore {
     const votingListFromFileLength = votingListFromFile.length;
     const countVotingFromContract = countOfVotings - firstVotingIndex;
     if (countVotingFromContract > votingListFromFileLength) {
-      for (let i = votingListFromFileLength + firstVotingIndex; i < countOfVotings; i += 1) {
+      for (let i = votingListFromFileLength; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const voting = await this.getVotingFromContractById(i);
         const duplicateVoting = this._votings.find((item) => item.id === voting.id);
@@ -434,14 +436,13 @@ class HistoryStore {
    */
   async getVotingFromContractById(id) {
     const { contractService, userStore } = this.rootStore;
-    const voting = await contractService.callMethod('getVoting', id);
-    const userVoteFromContract = await contractService
-      .callMethod.getUserVote(id, userStore.address).call();
-    const userVote = Number(userVoteFromContract);
+    const voting = await contractService.fetchVoting(id);
+    // const userVoteFromContract = await contractService
+    //   .callMethod.getUserVote(id, userStore.address).call();
+    const userVote = 0; // Number(userVoteFromContract);
     voting.userVote = userVote;
-    voting.questionId = voting.id;
     voting.id = id;
-    for (let j = 0; j < 7; j += 1) {
+    for (let j = 0; j < 6; j += 1) {
       delete voting[j];
     }
     return voting;
