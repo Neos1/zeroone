@@ -186,6 +186,7 @@ class AppStore {
 
   // eslint-disable-next-line class-methods-use-this
   parseFormula(rawFormula) {
+    if (!rawFormula || !rawFormula.length) return '';
     const f = rawFormula.map((text) => Number(text));
     const r = [];
     let ready = '( )';

@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-await-in-loop */
 import { observable, action, computed } from 'mobx';
-import { parseFormula } from 'zeroone-translator';
-import { DescriptorParser } from 'zeroone-translator/lib/FormulaNodeParsers/DescriptorParser';
 import Voting from './entities/Voting';
 import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
@@ -147,7 +145,7 @@ class HistoryStore {
     // eslint-disable-next-line no-unused-vars
     const { contractService: { _contract } } = this.rootStore;
     const votingsLength = await _contract.methods.getVotingsAmount().call();
-    return votingsLength;
+    return Number(votingsLength);
   }
 
   /**
@@ -270,7 +268,7 @@ class HistoryStore {
         basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
       });
       const votingsFromFileLength = votingsFromFile.data && votingsFromFile.data.length
-        ? votingsFromFile.data.length - 1
+        ? votingsFromFile.data.length
         : 0;
       for (let i = 0; i < votingsFromFileLength; i += 1) {
         const voting = votingsFromFile.data[i];
@@ -304,12 +302,10 @@ class HistoryStore {
   /** Method for getting missing votings from contract */
   async getFilteredVotingList() {
     const votingListFromFile = await this.getFilteredVotingListFromFile();
-    const firstVotingIndex = 1;
     const countOfVotings = await this.fetchVotingsCount();
     const votingListFromFileLength = votingListFromFile.length;
-    const countVotingFromContract = countOfVotings - firstVotingIndex;
-    if (countVotingFromContract > votingListFromFileLength) {
-      for (let i = votingListFromFileLength - 1; i < countOfVotings; i += 1) {
+    if (countOfVotings > votingListFromFileLength) {
+      for (let i = votingListFromFileLength; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const voting = await this.getVotingFromContractById(i);
         const duplicateVoting = this._votings.find((item) => item.id === voting.id);
@@ -419,11 +415,21 @@ class HistoryStore {
         switch (vote) {
           case ('1'):
             info = { wallet, weight };
-            result[memberGroup].positive.push(info);
+            if (
+              result[memberGroup]
+              && result[memberGroup].positive
+            ) {
+              result[memberGroup].positive.push(info);
+            }
             break;
           case ('2'):
             info = { wallet, weight };
-            result[memberGroup.wallet].negative.push(info);
+            if (
+              result[memberGroup.wallet]
+              && result[memberGroup.wallet].negative
+            ) {
+              result[memberGroup.wallet].negative.push(info);
+            }
             break;
           default:
             break;
@@ -434,6 +440,26 @@ class HistoryStore {
   }
 
   /**
+   * Method for extending voting. Avoid
+   * duplicate code for @getVotingFromContractById method
+   *
+   * @returns {object} extended voting
+   */
+  async extendVotingInfo({
+    voting,
+    question,
+    id,
+  }) {
+    const resultVoting = voting;
+    resultVoting.caption = question && question.name;
+    resultVoting.text = question && question.description;
+    resultVoting.allowedGroups = this.getGroupsAllowedToVoting(question);
+    const userVotes = await this.getUserVote(voting.allowedGroups, id);
+    resultVoting.userVote = userVotes.length === 1 ? userVotes[0] : 0;
+    return resultVoting;
+  }
+
+  /**
    * Method for getting actual voting
    * from contract by id
    *
@@ -441,19 +467,21 @@ class HistoryStore {
    * @returns {object} actual voting form contract
    */
   async getVotingFromContractById(id) {
-    const { contractService, userStore, projectStore: { questionStore } } = this.rootStore;
-    const voting = await contractService.fetchVoting(id);
+    const { contractService, projectStore: { questionStore } } = this.rootStore;
+    let voting = await contractService.fetchVoting(id);
     const descision = await contractService.callMethod('getVotingResult', id);
-    const [question] = questionStore.getQuestionById(Number(voting.questionId));
     voting.descision = descision;
-    voting.caption = question.name;
-    voting.text = question.description;
+    let [question] = questionStore.getQuestionById(Number(voting.questionId));
+    if (question) {
+      voting = await this.extendVotingInfo({ voting, question, id });
+    } else {
+      // Get question from contract, for correct work!
+      question = await contractService.fetchQuestion(voting.questionId);
+      if (!question) throw new Error(`Question with id: ${voting.questionId}, not found!`);
+      voting = await this.extendVotingInfo({ voting, question, id });
+    }
     voting.data = voting.votingData;
     delete voting.votingData;
-    voting.allowedGroups = this.getGroupsAllowedToVoting(question);
-    const userVotes = await this.getUserVote(voting.allowedGroups, id);
-
-    voting.userVote = userVotes.length === 1 ? userVotes[0] : 0;
     voting.id = id;
     for (let j = 0; j < 6; j += 1) {
       delete voting[j];

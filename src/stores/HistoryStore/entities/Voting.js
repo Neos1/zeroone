@@ -1,10 +1,10 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import { statusStates } from '../../../constants';
 
 class Voting {
   raw;
 
-  @observable userVote;
+  @observable _userVote;
 
   @observable status;
 
@@ -45,12 +45,17 @@ class Voting {
     this.status = status;
     this.caption = caption;
     this.text = text;
-    this.userVote = Number(userVote);
+    this._userVote = Number(userVote);
     this.closeVoteInProgress = false;
     this.allowedGroups = allowedGroups;
     if (status === statusStates.active) {
       this.newForUser = newForUser !== undefined ? newForUser : true;
     }
+  }
+
+  @computed
+  get userVote() {
+    return Number(this._userVote);
   }
 
   /**
@@ -61,8 +66,13 @@ class Voting {
   @action
   update = (newState) => {
     Object.keys(newState).forEach((key) => {
-      this[key] = newState[key];
-      this.raw[key] = newState[key];
+      if (key === 'userVote') {
+        this._userVote = newState.userVote;
+        this.raw.userVote = newState.userVote;
+      } else {
+        this[key] = newState[key];
+        this.raw[key] = newState[key];
+      }
     });
   }
 }
