@@ -100,7 +100,7 @@ class HistoryStore {
    */
   @action
   fetchUserReturnTokens = async () => {
-    const isReturn = true; // await this.isUserReturnTokens();
+    const isReturn = await this.isUserReturnTokens();
     this.isUserReturnTokensActual = isReturn;
     return isReturn;
   }

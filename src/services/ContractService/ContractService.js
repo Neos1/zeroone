@@ -453,7 +453,7 @@ class ContractService {
 
     const tx = {
       from: userStore.address,
-      data: _contract.methods.closeVoting().encodeABI(),
+      data: _contract.methods.submitVoting().encodeABI(),
       value: '0x0',
       to: _contract.options.address,
     };
