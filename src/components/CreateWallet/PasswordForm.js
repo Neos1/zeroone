@@ -15,6 +15,16 @@ import styles from '../Login/Login.scss';
 
 @withTranslation()
 class PasswordForm extends Component {
+  static propTypes = {
+    state: propTypes.bool.isRequired,
+    form: propTypes.shape({
+      $: propTypes.func.isRequired,
+      onSubmit: propTypes.func.isRequired,
+      loading: propTypes.bool.isRequired,
+    }).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +49,6 @@ class PasswordForm extends Component {
   render() {
     const { state, form, t } = this.props;
     const { validity } = this.state;
-
     return (
       <FormBlock>
         <Heading>
@@ -74,26 +83,26 @@ class PasswordForm extends Component {
                 <br />
                 { t('explanations:passwordCreating.1')}
               </p>
-              <p>
+              <div>
                 <ul>
                   <li>
-                    <Indicator checked={validity.Num} />
+                    <Indicator checked={validity.Num || false} />
                     { t('explanations:passwordRules.numeric')}
                   </li>
                   <li>
-                    <Indicator checked={validity.High} />
+                    <Indicator checked={validity.High || false} />
                     { t('explanations:passwordRules.upperCase')}
                   </li>
                   <li>
-                    <Indicator checked={validity.Char} />
+                    <Indicator checked={validity.Char || false} />
                     { t('explanations:passwordRules.symbol')}
                   </li>
                   <li>
-                    <Indicator checked={validity.Length} />
+                    <Indicator checked={validity.Length || false} />
                     { t('explanations:passwordRules.length')}
                   </li>
                 </ul>
-              </p>
+              </div>
             </Explanation>
           </div>
         </form>
@@ -110,13 +119,4 @@ class PasswordForm extends Component {
   }
 }
 
-PasswordForm.propTypes = {
-  state: propTypes.bool.isRequired,
-  form: propTypes.shape({
-    $: propTypes.func.isRequired,
-    onSubmit: propTypes.func.isRequired,
-    loading: propTypes.bool.isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
 export default PasswordForm;

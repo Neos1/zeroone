@@ -78,17 +78,29 @@ class StartNewVote extends React.Component {
   }
 
   componentDidMount() {
-    const { props, form } = this;
+    const { props } = this;
     const { projectStore: { rootStore: { eventEmitterService } } } = props;
-    eventEmitterService.subscribe('new_vote:toggle', (selected) => {
-      this.initIndex = Number(selected.value);
-      form.$('question').set(selected.value);
-      this.handleSelect(selected);
-    });
-    eventEmitterService.subscribe('new_vote:closed', () => {
-      this.initIndex = null;
-      this.setState({ isSelected: false });
-    });
+    eventEmitterService.subscribe('new_vote:toggle', this.handleNewVoteToggle);
+    eventEmitterService.subscribe('new_vote:closed', this.handleNewVoteClose);
+  }
+
+  componentWillUnmount() {
+    const { props } = this;
+    const { projectStore: { rootStore: { eventEmitterService } } } = props;
+    eventEmitterService.off('new_vote:toggle');
+    eventEmitterService.off('new_vote:closed');
+  }
+
+  handleNewVoteToggle = (selected) => {
+    const { form } = this;
+    this.initIndex = Number(selected.value);
+    form.$('question').set(selected.value);
+    this.handleSelect(selected);
+  }
+
+  handleNewVoteClose = () => {
+    this.initIndex = null;
+    this.setState({ isSelected: false });
   }
 
   // eslint-disable-next-line consistent-return

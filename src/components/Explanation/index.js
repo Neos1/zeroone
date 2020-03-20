@@ -3,9 +3,9 @@ import propTypes from 'prop-types';
 import styles from './Explanation.scss';
 
 const Explanation = ({ children, bold }) => (
-  <p className={`${styles.explanation} ${bold ? styles['explanation--bold'] : ''}`}>
-    <p className={`${styles.explanation__string}`}>{children}</p>
-  </p>
+  <div className={`${styles.explanation} ${bold ? styles['explanation--bold'] : ''}`}>
+    <div className={`${styles.explanation__string}`}>{children}</div>
+  </div>
 );
 
 Explanation.defaultProps = {

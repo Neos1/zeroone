@@ -2,6 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
+import uniqKey from 'react-id-generator';
 import { StartIcon } from '../../Icons';
 import Button from '../../Button/Button';
 
@@ -66,7 +67,10 @@ const ParametersBlock = (paramNames, paramTypes, t) => (
   <div className={styles.question__right}>
     <p className={styles['question__parameter-heading']}>{t('other:parameters')}</p>
     {paramNames.map((param, index) => (
-      <div className={styles.question__parameter}>
+      <div
+        className={styles.question__parameter}
+        key={uniqKey('question_parameter_item')}
+      >
         <p className={styles['question__parameter-label']}>{param}</p>
         <p className={styles['question__parameter-text']}>{paramTypes[index]}</p>
       </div>
@@ -139,6 +143,7 @@ const Question = withTranslation()(({
     {extended ? FormulaBlock(formula, t) : null}
   </div>
 ));
+
 Question.propTypes = {
   id: propTypes.number.isRequired,
   extended: propTypes.bool,
@@ -149,9 +154,9 @@ Question.propTypes = {
   paramNames: propTypes.arrayOf(propTypes.string).isRequired,
   paramTypes: propTypes.arrayOf(propTypes.string).isRequired,
 };
+
 Question.defaultProps = {
   extended: false,
 };
-
 
 export default Question;
