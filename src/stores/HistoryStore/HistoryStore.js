@@ -517,6 +517,24 @@ class HistoryStore {
     return groups;
   }
 
+  async lastUserVoting() {
+    const { contractService, userStore, membersStore } = this.rootStore;
+    const { list } = membersStore;
+    let lastVoting = 0;
+    if (list && list.length) {
+      const listLength = list.length;
+      for (let i = 0; i < listLength; i += 1) {
+        const lastVotingFromContract = await contractService._contract.methods.findLastUserVoting(
+          list[i].wallet,
+          userStore.address,
+        ).call();
+        if (Number(lastVotingFromContract) > lastVoting) {
+          lastVoting = Number(lastVotingFromContract);
+        }
+      }
+    }
+    return lastVoting;
+  }
 
   /**
    * Method for check active voting state
