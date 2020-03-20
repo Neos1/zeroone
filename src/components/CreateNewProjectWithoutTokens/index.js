@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -16,6 +17,8 @@ import {
 } from '../Icons';
 import CreateTokenForm from '../../stores/FormsStore/CreateToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
+import AppStore from '../../stores/AppStore/AppStore';
+import UserStore from '../../stores/UserStore';
 
 import styles from '../Login/Login.scss';
 
@@ -23,6 +26,12 @@ import styles from '../Login/Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class CreateNewProjectWithoutTokens extends Component {
+  static propTypes = {
+    appStore: propTypes.instanceOf(AppStore).isRequired,
+    userStore: propTypes.instanceOf(UserStore).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   form = new CreateTokenForm({
     hooks: {
       onSuccess: (form) => this.createToken(form),
@@ -340,24 +349,6 @@ const InputProjectData = withTranslation()(({
   </FormBlock>
 ));
 
-CreateNewProjectWithoutTokens.propTypes = {
-  appStore: propTypes.shape({
-    deployContract: propTypes.func.isRequired,
-    checkReceipt: propTypes.func.isRequired,
-    deployArgs: propTypes.arrayOf(propTypes.any).isRequired,
-    displayAlert: propTypes.func.isRequired,
-    setProjectName: propTypes.func.isRequired,
-    password: propTypes.string.isRequired,
-    setDeployArgs: propTypes.func.isRequired,
-  }).isRequired,
-  userStore: propTypes.shape({
-    readWallet: propTypes.func.isRequired,
-    checkBalance: propTypes.func.isRequired,
-    address: propTypes.string.isRequired,
-    setPassword: propTypes.func.isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
 CreateTokenData.propTypes = {
   form: propTypes.shape({
     onSubmit: propTypes.func.isRequired,
@@ -365,9 +356,11 @@ CreateTokenData.propTypes = {
     loading: propTypes.bool.isRequired,
   }).isRequired,
 };
+
 TokenCreationAlert.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
+
 InputProjectData.propTypes = {
   form: propTypes.shape({
     $: propTypes.func.isRequired,
