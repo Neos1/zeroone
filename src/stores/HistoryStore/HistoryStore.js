@@ -456,8 +456,8 @@ class HistoryStore {
     const descision = await contractService.callMethod('getVotingResult', id);
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     voting.descision = descision;
-    voting.caption = question.name;
-    voting.text = question.description;
+    voting.caption = question && question.name;
+    voting.text = question && question.description;
     voting.data = voting.votingData;
     delete voting.votingData;
     voting.allowedGroups = this.getGroupsAllowedToVoting(question);
