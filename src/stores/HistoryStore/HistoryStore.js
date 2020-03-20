@@ -419,11 +419,21 @@ class HistoryStore {
         switch (vote) {
           case ('1'):
             info = { wallet, weight };
-            result[memberGroup].positive.push(info);
+            if (
+              result[memberGroup]
+              && result[memberGroup].positive
+            ) {
+              result[memberGroup].positive.push(info);
+            }
             break;
           case ('2'):
             info = { wallet, weight };
-            result[memberGroup.wallet].negative.push(info);
+            if (
+              result[memberGroup.wallet]
+              && result[memberGroup.wallet].negative
+            ) {
+              result[memberGroup.wallet].negative.push(info);
+            }
             break;
           default:
             break;

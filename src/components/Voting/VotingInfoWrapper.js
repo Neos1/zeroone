@@ -27,6 +27,7 @@ import {
 import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
+import DialogStore from '../../stores/DialogStore';
 import AsyncInterval from '../../utils/AsyncUtils';
 
 @withTranslation()
@@ -153,7 +154,7 @@ class VotingInfoWrapper extends React.PureComponent {
   })
 
   static propTypes = {
-    dialogStore: PropTypes.instanceOf(AppStore).isRequired,
+    dialogStore: PropTypes.instanceOf(DialogStore).isRequired,
     membersStore: PropTypes.instanceOf(MembersStore).isRequired,
     projectStore: PropTypes.instanceOf(ProjectStore).isRequired,
     match: PropTypes.shape({
@@ -336,13 +337,16 @@ class VotingInfoWrapper extends React.PureComponent {
       totalSupply = parseInt(totalSupply, 10);
       const decimalPercent = totalSupply / 100;
       const abstained = (totalSupply - (positive + negative)) / decimalPercent;
-      this.dataStats.push({
-        name: memberGroup.name,
-        address: group,
-        pros: positive / decimalPercent,
-        cons: negative / decimalPercent,
-        abstained,
-      });
+      const duplicateStat = this.dataStats.find((item) => item.name === memberGroup.name);
+      if (!duplicateStat) {
+        this.dataStats.push({
+          name: memberGroup.name,
+          address: group,
+          pros: positive / decimalPercent,
+          cons: negative / decimalPercent,
+          abstained,
+        });
+      }
     });
   }
 
@@ -414,7 +418,7 @@ class VotingInfoWrapper extends React.PureComponent {
             title={question.name}
             duration={Number(question.time)}
             addressContract={question.target}
-            description={question.text}
+            description={question.description}
             formula={question.getFormula()}
             params={params}
             onVerifyClick={() => { this.onVerifyClick(); }}
