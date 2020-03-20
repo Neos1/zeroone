@@ -21,6 +21,14 @@
 		{
 			"name": "test2000",
 			"address": "0xfdC071C54FAf6b2c9BEE26aB4C0B84B199961eda"
+		},
+		{
+			"name": "Min_Time",
+			"address": "0x975357464806debFd5d09888c9c9cd730103d974"
+		},
+		{
+			"name": "Pro_tsey",
+			"address": "0xCC4d122B0621C9F792d0022ED3C4098d050990fD"
 		}
 	]
 }

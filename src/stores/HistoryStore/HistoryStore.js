@@ -100,7 +100,7 @@ class HistoryStore {
    */
   @action
   fetchUserReturnTokens = async () => {
-    const isReturn = true; // await this.isUserReturnTokens();
+    const isReturn = await this.isUserReturnTokens();
     this.isUserReturnTokensActual = isReturn;
     return isReturn;
   }
@@ -496,18 +496,24 @@ class HistoryStore {
    */
   async hasActiveVoting() {
     const countOfVotings = await this.fetchVotingsCount();
-    const lastVote = countOfVotings;
-    if (lastVote === 0) return false;
+    const lastVote = countOfVotings - 1;
     const voting = await this.getVotingFromContractById(lastVote);
     return voting.status === statusStates.active;
   }
 
   async isUserReturnTokens() {
-    const { contractService, userStore } = this.rootStore;
-    // FIXME remove comment & console
-    console.log(contractService, userStore);
-    // return contractService._contract.methods.isUserReturnTokens(userStore.address).call();
-    return false;
+    const { contractService, userStore, membersStore } = this.rootStore;
+    const { list } = membersStore;
+    const listLength = list.length;
+    const isReturn = true;
+    for (let i = 0; i < listLength; i += 1) {
+      const isReturnTokens = await contractService._contract.methods.isUserReturnTokens(
+        list[i].wallet,
+        userStore.address,
+      ).call();
+      if (isReturnTokens === false) return false;
+    }
+    return isReturn;
   }
 
   async lastUserVoting() {

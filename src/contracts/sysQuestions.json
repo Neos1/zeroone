@@ -3,7 +3,7 @@
     "groupId": 0,
     "name": "Добавить Вопрос",
     "description": "Добавление нового вопроса",
-    "timeLimit": 36000,
+    "timeLimit": 300,
     "methodSelector": "0x9c88d333",
     "paramNames": [
       "GroupId",
@@ -31,7 +31,7 @@
     "groupId": 0,
     "name": "Подключить группу пользователей",
     "description": "Подключить новую группу пользователей для участия в голосованиях",
-    "timeLimit": 36000,
+    "timeLimit": 300,
     "methodSelector": "0x70b0e2c8",
     "paramNames": [
       "Name",
@@ -49,7 +49,7 @@
     "groupId": 0,
     "name": "Добавить группу вопросов",
     "description": "Добавить новую группу вопросов",
-    "timeLimit": 36000,
+    "timeLimit": 300,
     "methodSelector": "0xb9253b2b",
     "paramNames": [
       "Name"
@@ -63,7 +63,7 @@
     "groupId": 0,
     "name": "Установить администратора группы",
     "description": "Установка администратора в группе кастомных токенов",
-    "timeLimit": 36000,
+    "timeLimit": 300,
     "methodSelector": "0x9c88d333",
     "paramNames": [
       "Group Address",
