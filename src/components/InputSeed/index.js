@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -11,6 +12,8 @@ import { BackIcon } from '../Icons';
 import Loader from '../Loader';
 import SeedForm from '../../stores/FormsStore/SeedForm';
 import SeedInput from './SeedForm';
+import UserStore from '../../stores/UserStore/UserStore';
+import AppStore from '../../stores/AppStore/AppStore';
 
 import styles from '../Login/Login.scss';
 
@@ -18,6 +21,13 @@ import styles from '../Login/Login.scss';
 @inject('appStore', 'userStore')
 @observer
 class InputSeed extends Component {
+  static propTypes = {
+    userStore: propTypes.instanceOf(UserStore).isRequired,
+    appStore: propTypes.instanceOf(AppStore).isRequired,
+    recover: propTypes.bool.isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   seedForm = new SeedForm({
     hooks: {
       onSuccess: (form) => this.submitForm(form),
@@ -107,22 +117,5 @@ class InputSeed extends Component {
     );
   }
 }
-
-InputSeed.propTypes = {
-  userStore: propTypes.shape({
-    setMnemonicRepeat: propTypes.func.isRequired,
-    isSeedValid: propTypes.func.isRequired,
-    recoverWallet: propTypes.func.isRequired,
-    setEncryptedWallet: propTypes.func.isRequired,
-    getEthBalance: propTypes.func.isRequired,
-    saveWalletToFile: propTypes.func.isRequired,
-    mnemonic: propTypes.arrayOf(propTypes.string).isRequired,
-  }).isRequired,
-  appStore: propTypes.shape({
-    displayAlert: propTypes.func.isRequired,
-  }).isRequired,
-  recover: propTypes.bool.isRequired,
-  t: propTypes.func.isRequired,
-};
 
 export default InputSeed;

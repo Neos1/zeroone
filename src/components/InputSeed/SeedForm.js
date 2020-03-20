@@ -8,6 +8,16 @@ import styles from '../Login/Login.scss';
 
 @withTranslation()
 class SeedInput extends Component {
+  static propTypes = {
+    form: propTypes.shape({
+      onSubmit: propTypes.func.isRequired,
+      loading: propTypes.bool.isRequired,
+      $: propTypes.func.isRequired,
+    }).isRequired,
+    seed: propTypes.arrayOf(propTypes.string).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   render() {
     const {
       seed, form, t,
@@ -35,15 +45,5 @@ class SeedInput extends Component {
     );
   }
 }
-
-SeedInput.propTypes = {
-  form: propTypes.shape({
-    onSubmit: propTypes.func.isRequired,
-    loading: propTypes.bool.isRequired,
-    $: propTypes.func.isRequired,
-  }).isRequired,
-  seed: propTypes.arrayOf(propTypes.string).isRequired,
-  t: propTypes.func.isRequired,
-};
 
 export default SeedInput;

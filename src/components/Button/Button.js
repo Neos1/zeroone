@@ -53,6 +53,7 @@ const Button = ({
 Button.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.node,
     PropTypes.shape({}),
   ]).isRequired,
   icon: PropTypes.node,
