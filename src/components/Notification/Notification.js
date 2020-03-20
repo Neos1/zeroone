@@ -73,7 +73,6 @@ class Notification extends React.Component {
       this.resetNotification();
       return;
     }
-    if (Number(lastUserVoting) === 0 && userTokenReturns === false) return;
     if (Number(lastVoteIndex) !== Number(lastUserVoting) && userTokenReturns === false) {
       this.resetNotification();
       // TODO maybe make other notification description?
