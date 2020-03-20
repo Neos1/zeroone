@@ -512,6 +512,7 @@ class HistoryStore {
   // eslint-disable-next-line class-methods-use-this
   getGroupsAllowedToVoting({ formula }) {
     const list = formula.match(/(erc20{((0x)+([0-9 a-f A-F]){40})})|(custom{((0x)+([0-9 a-f A-F]){40})})/g);
+    if (!list || !list.length) return [];
     const groups = list.map((group) => group.replace(/(erc20({)|(}))|(custom({)|(}))/g, ''));
     return groups;
   }
