@@ -507,11 +507,13 @@ class HistoryStore {
     const listLength = list.length;
     const isReturn = true;
     for (let i = 0; i < listLength; i += 1) {
-      const isReturnTokens = await contractService._contract.methods.isUserReturnTokens(
-        list[i].wallet,
-        userStore.address,
-      ).call();
-      if (isReturnTokens === false) return false;
+      try {
+        const isReturnTokens = await contractService._contract.methods
+          .isUserReturnTokens(list[i].wallet, userStore.address).call();
+        if (isReturnTokens === false) return false;
+      } catch ({ message }) {
+        console.log(message);
+      }
     }
     return isReturn;
   }
