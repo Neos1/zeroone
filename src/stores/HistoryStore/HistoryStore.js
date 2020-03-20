@@ -546,17 +546,12 @@ class HistoryStore {
     return isReturn;
   }
 
-  async lastUserVoting() {
-    const { contractService, userStore } = this.rootStore;
-    return 0;// contractService._contract.methods.findLastUserVoting(userStore.address).call();
-  }
-
   async returnTokens() {
     const { contractService, Web3Service, userStore } = this.rootStore;
     const { _contract } = contractService;
     const { address, password } = userStore;
     const tx = {
-      data: contractService._contract.methods.returnTokens().encodeABI(),
+      data: contractService._contract.methods.revoke().encodeABI(),
       value: '0x0',
       from: address,
       to: _contract.options.address,
