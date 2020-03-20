@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-await-in-loop */
 import { observable, action, computed } from 'mobx';
-import { parseFormula } from 'zeroone-translator';
-import { DescriptorParser } from 'zeroone-translator/lib/FormulaNodeParsers/DescriptorParser';
 import Voting from './entities/Voting';
 import { PATH_TO_DATA } from '../../constants/windowModules';
 import { readDataFromFile, writeDataToFile } from '../../utils/fileUtils/data-manager';
@@ -147,7 +145,7 @@ class HistoryStore {
     // eslint-disable-next-line no-unused-vars
     const { contractService: { _contract } } = this.rootStore;
     const votingsLength = await _contract.methods.getVotingsAmount().call();
-    return votingsLength;
+    return Number(votingsLength);
   }
 
   /**
@@ -270,7 +268,7 @@ class HistoryStore {
         basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
       });
       const votingsFromFileLength = votingsFromFile.data && votingsFromFile.data.length
-        ? votingsFromFile.data.length - 1
+        ? votingsFromFile.data.length
         : 0;
       for (let i = 0; i < votingsFromFileLength; i += 1) {
         const voting = votingsFromFile.data[i];
@@ -304,12 +302,10 @@ class HistoryStore {
   /** Method for getting missing votings from contract */
   async getFilteredVotingList() {
     const votingListFromFile = await this.getFilteredVotingListFromFile();
-    const firstVotingIndex = 1;
     const countOfVotings = await this.fetchVotingsCount();
     const votingListFromFileLength = votingListFromFile.length;
-    const countVotingFromContract = countOfVotings - firstVotingIndex;
-    if (countVotingFromContract > votingListFromFileLength) {
-      for (let i = votingListFromFileLength - 1; i < countOfVotings; i += 1) {
+    if (countOfVotings > votingListFromFileLength) {
+      for (let i = votingListFromFileLength; i < countOfVotings; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const voting = await this.getVotingFromContractById(i);
         const duplicateVoting = this._votings.find((item) => item.id === voting.id);
@@ -455,6 +451,7 @@ class HistoryStore {
     const voting = await contractService.fetchVoting(id);
     const descision = await contractService.callMethod('getVotingResult', id);
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
+    // FIXME #1 if question not exist we have problem
     voting.descision = descision;
     voting.caption = question && question.name;
     voting.text = question && question.description;
@@ -493,6 +490,7 @@ class HistoryStore {
    */
   // eslint-disable-next-line class-methods-use-this
   getGroupsAllowedToVoting({ formula }) {
+    if (!formula) return [];
     const list = formula.match(/(erc20{((0x)+([0-9 a-f A-F]){40})})|(custom{((0x)+([0-9 a-f A-F]){40})})/g);
     const groups = list.map((group) => group.replace(/(erc20({)|(}))|(custom({)|(}))/g, ''));
     return groups;
