@@ -440,6 +440,26 @@ class HistoryStore {
   }
 
   /**
+   * Method for extending voting. Avoid
+   * duplicate code for @getVotingFromContractById method
+   *
+   * @returns {object} extended voting
+   */
+  async extendVotingInfo({
+    voting,
+    question,
+    id,
+  }) {
+    const resultVoting = voting;
+    resultVoting.caption = question && question.name;
+    resultVoting.text = question && question.description;
+    resultVoting.allowedGroups = this.getGroupsAllowedToVoting(question);
+    const userVotes = await this.getUserVote(voting.allowedGroups, id);
+    resultVoting.userVote = userVotes.length === 1 ? userVotes[0] : 0;
+    return resultVoting;
+  }
+
+  /**
    * Method for getting actual voting
    * from contract by id
    *
@@ -447,20 +467,21 @@ class HistoryStore {
    * @returns {object} actual voting form contract
    */
   async getVotingFromContractById(id) {
-    const { contractService, userStore, projectStore: { questionStore } } = this.rootStore;
-    const voting = await contractService.fetchVoting(id);
+    const { contractService, projectStore: { questionStore } } = this.rootStore;
+    let voting = await contractService.fetchVoting(id);
     const descision = await contractService.callMethod('getVotingResult', id);
-    const [question] = questionStore.getQuestionById(Number(voting.questionId));
-    // FIXME #1 if question not exist we have problem
     voting.descision = descision;
-    voting.caption = question && question.name;
-    voting.text = question && question.description;
+    let [question] = questionStore.getQuestionById(Number(voting.questionId));
+    if (question) {
+      voting = await this.extendVotingInfo({ voting, question, id });
+    } else {
+      // Get question from contract, for correct work!
+      question = await contractService.fetchQuestion(voting.questionId);
+      if (!question) throw new Error(`Question with id: ${voting.questionId}, not found!`);
+      voting = await this.extendVotingInfo({ voting, question, id });
+    }
     voting.data = voting.votingData;
     delete voting.votingData;
-    voting.allowedGroups = this.getGroupsAllowedToVoting(question);
-    const userVotes = await this.getUserVote(voting.allowedGroups, id);
-
-    voting.userVote = userVotes.length === 1 ? userVotes[0] : 0;
     voting.id = id;
     for (let j = 0; j < 6; j += 1) {
       delete voting[j];
@@ -490,7 +511,6 @@ class HistoryStore {
    */
   // eslint-disable-next-line class-methods-use-this
   getGroupsAllowedToVoting({ formula }) {
-    if (!formula) return [];
     const list = formula.match(/(erc20{((0x)+([0-9 a-f A-F]){40})})|(custom{((0x)+([0-9 a-f A-F]){40})})/g);
     const groups = list.map((group) => group.replace(/(erc20({)|(}))|(custom({)|(}))/g, ''));
     return groups;
