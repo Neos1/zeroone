@@ -41,7 +41,7 @@
     "paramTypes": [
       "string",
       "address",
-      "string"
+      "uint"
     ],
     "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   },

@@ -233,7 +233,6 @@ class ContractService {
       questionId: votingQuestion,
       data: votingData,
     };
-    console.log(abi.decodeParameters(['string'], votingData));
     // eslint-disable-next-line max-len
     const data = {
       // eslint-disable-next-line max-len
