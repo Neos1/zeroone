@@ -12,6 +12,10 @@ class EventEmitterService {
     if (!this.events[event]) this.events[event] = [];
     this.events[event].push(callback);
   }
+
+  off(event) {
+    delete this.events[event];
+  }
 }
 
 export default EventEmitterService;

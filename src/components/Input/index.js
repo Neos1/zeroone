@@ -53,11 +53,14 @@ class Input extends Component {
 }
 
 Input.propTypes = {
-  children: propTypes.element.isRequired,
+  children: propTypes.element,
   className: propTypes.string,
   field: propTypes.shape({
     error: propTypes.string,
-    value: propTypes.string.isRequired,
+    value: propTypes.oneOfType([
+      propTypes.string,
+      propTypes.number,
+    ]).isRequired,
     placeholder: propTypes.oneOfType([
       propTypes.string,
       propTypes.shape({}),
@@ -72,6 +75,7 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
+  children: null,
   className: '',
   onInput: () => null,
   defaultValue: '',
