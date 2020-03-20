@@ -9,6 +9,7 @@ import CreateQuestionDynamicForm from '../../stores/FormsStore/CreateQuestionDyn
 import FormBasic from './FormBasic';
 import Question from '../../services/ContractService/entities/Question';
 import FormDynamic from './FormDynamic';
+import { systemQuestionsId } from '../../constants';
 
 import styles from './CreateNewQuestion.scss';
 
@@ -146,7 +147,6 @@ class CreateNewQuestionForm extends React.PureComponent {
    */
   onDynamicSubmit = (form) => {
     const { data } = this;
-    // eslint-disable-next-line max-len
     const {
       dialogStore,
       projectStore: { questionStore, rootStore: { Web3Service, contractService } },
@@ -171,7 +171,7 @@ class CreateNewQuestionForm extends React.PureComponent {
       ['tuple(uint, uint, uint, uint, uint)', 'tuple(bool, string, string, uint, uint, string[], string[], address, bytes4, string, bytes)'],
       [[0, 0, 0, 0, 0], rawVotingData],
     );
-    projectStore.setVotingData(1, 0, votingData);
+    projectStore.setVotingData(systemQuestionsId.addingNewQuestion, 0, votingData);
     dialogStore.toggle('password_form_questions');
     this.formBasic.clear();
     form.clear();
