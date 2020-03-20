@@ -315,11 +315,9 @@ class ContractService {
    *
    * @param {number} id id of voting
    * @returns {object} Voting data
-   * @deprecated
    */
-  // TODO delete me after
   async fetchVoting(id) {
-    return this.callMethod('getVoting', [id]);
+    return this.callMethod('getVoting', id);
   }
 
 
