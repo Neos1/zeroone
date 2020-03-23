@@ -253,8 +253,8 @@ class VotingInfoWrapper extends React.PureComponent {
         break;
       case assignGroupAdmin:
         membersStore.getAddressesForAdminDesignate(voting.data)
-          .then(([group]) => {
-            membersStore.updateAdmin(group);
+          .then((result) => {
+            membersStore.updateAdmin(result['1']);
           });
         break;
       default:
@@ -367,7 +367,7 @@ class VotingInfoWrapper extends React.PureComponent {
     // const votingData = `0x${data.slice(10)}`;
     let decodedRawParams;
     let decodedParams;
-    if (id !== 1) {
+    if (id !== 0) {
       decodedRawParams = data !== '0x'
         ? Web3Service.web3.eth.abi.decodeParameters(['tuple(uint,uint,uint,uint,uint)', `tuple(${paramTypes.join(',')})`], data)
         : [];

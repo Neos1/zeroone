@@ -24,6 +24,10 @@ const rules = {
     // eslint-disable-next-line no-restricted-globals
     function: (value) => !isNaN(Number(value)),
   },
+  uint8: {
+    // eslint-disable-next-line no-restricted-globals
+    function: (value) => !isNaN(Number(value)),
+  },
   bytes4: {
     function: (value) => value.match(/(0x)+([0-9 a-f A-F]){8}/g),
   },

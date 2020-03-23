@@ -319,6 +319,11 @@
 				"internalType": "address",
 				"name": "_project",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
 			}
 		],
 		"name": "revoke",

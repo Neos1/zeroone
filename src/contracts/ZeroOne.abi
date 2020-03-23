@@ -1084,6 +1084,62 @@
 	{
 		"inputs": [
 			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "ballotId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum VM.Vote",
+						"name": "result",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct IZeroOne.MetaData",
+				"name": "_metaData",
+				"type": "tuple"
+			},
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "setGroupAdmin",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ballotId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"

@@ -34,13 +34,11 @@ class TokenTransfer extends React.Component {
         const {
           wallet,
           groupAddress,
-          groupId,
           userStore,
           dialogStore,
           membersStore: {
             rootStore: {
               Web3Service,
-              contractService: { _contract },
               contractService,
               projectStore: { historyStore },
             },
@@ -50,12 +48,16 @@ class TokenTransfer extends React.Component {
         const { password } = form.values();
         userStore.setPassword(password);
         dialogStore.show('progress_modal');
-        const votingData = _contract.methods
-          .setCustomGroupAdmin(groupAddress, wallet).encodeABI();
+        const votingData = Web3Service.web3.eth.abi
+          .encodeParameters(
+            ['tuple(uint,uint,uint,uint,uint)', 'address', 'address'],
+            [[0, 0, 0, 0, 0], groupAddress, wallet],
+          );
+
         return userStore.readWallet(password)
           .then(() => {
           // eslint-disable-next-line max-len
-            const transaction = contractService.createVotingData(4, 0, Number(groupId), votingData);
+            const transaction = contractService.createVotingData(3, 0, votingData);
             return transaction;
           })
           .then((tx) => Web3Service.createTxData(userStore.address, tx)

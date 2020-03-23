@@ -4,7 +4,7 @@
     "name": "Добавить Вопрос",
     "description": "Добавление нового вопроса",
     "timeLimit": 300,
-    "methodSelector": "0x9c88d333",
+    "methodSelector": "0x5fe495c3",
     "paramNames": [
       "GroupId",
       "Name",
@@ -32,7 +32,7 @@
     "name": "Подключить группу пользователей",
     "description": "Подключить новую группу пользователей для участия в голосованиях",
     "timeLimit": 300,
-    "methodSelector": "0x70b0e2c8",
+    "methodSelector": "0x6b13e1e0",
     "paramNames": [
       "Name",
       "Address",
@@ -41,7 +41,7 @@
     "paramTypes": [
       "string",
       "address",
-      "uint"
+      "uint8"
     ],
     "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   },
@@ -64,7 +64,7 @@
     "name": "Установить администратора группы",
     "description": "Установка администратора в группе кастомных токенов",
     "timeLimit": 300,
-    "methodSelector": "0x9c88d333",
+    "methodSelector": "0xa589e384",
     "paramNames": [
       "Group Address",
       "New Admin Address"

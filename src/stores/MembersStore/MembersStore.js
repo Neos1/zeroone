@@ -287,9 +287,8 @@ class MembersStore {
 
   getAddressesForAdminDesignate = (data) => new Promise((resolve) => {
     const { Web3Service: { web3: { eth } } } = this.rootStore;
-    const parameters = ['address', 'address'];
-    const input = `0x${data.substring(10)}`;
-    resolve(Object.values(eth.abi.decodeParameters(parameters, input)));
+    const parameters = ['tuple(uint,uint,uint,uint,uint)', 'address', 'address'];
+    resolve(Object.values(eth.abi.decodeParameters(parameters, data)));
   });
 
   @action

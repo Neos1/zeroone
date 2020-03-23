@@ -113,7 +113,7 @@ class ContractUploading extends Component {
         <h2 className={styles['settings__block-heading']}>{t('headings:creatingAndUpload')}</h2>
         <div className={styles['settings__block-content']}>
           <Button theme="white" onClick={() => { this.triggerModal('ERC20'); }}>ERC20</Button>
-          <Button theme="white" onClick={() => { this.triggerModal('CustomTokens'); }}>Custom tokens</Button>
+          <Button theme="white" onClick={() => { this.triggerModal('CustomToken'); }}>Custom tokens</Button>
           <Button theme="white" onClick={() => { this.triggerProjectModal(); }}>Project</Button>
         </div>
         <Dialog
