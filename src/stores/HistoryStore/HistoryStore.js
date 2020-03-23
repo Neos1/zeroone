@@ -521,6 +521,7 @@ class HistoryStore {
     const { contractService, userStore, membersStore } = this.rootStore;
     const { list } = membersStore;
     let lastVoting = 0;
+    // TODO fix empty list
     if (list && list.length) {
       const listLength = list.length;
       for (let i = 0; i < listLength; i += 1) {
