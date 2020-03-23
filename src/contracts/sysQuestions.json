@@ -13,7 +13,8 @@
       "MethodSelector",
       "Formula",
       "paramNames",
-      "paramTypes"
+      "paramTypes",
+      "Target"
     ],
     "paramTypes": [
       "uint",
@@ -23,7 +24,8 @@
       "bytes4",
       "string",
       "string[]",
-      "string[]"
+      "string[]",
+      "address"
     ],
     "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   },

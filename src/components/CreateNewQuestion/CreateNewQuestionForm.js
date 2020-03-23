@@ -175,7 +175,7 @@ class CreateNewQuestionForm extends React.PureComponent {
     dialogStore.toggle('password_form_questions');
     this.formBasic.clear();
     form.clear();
-    // onComplete();
+    onComplete();
   }
 
   renderStep = () => {

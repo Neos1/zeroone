@@ -24,7 +24,6 @@ import {
   tokenTypes,
   votingDecisionStates,
 } from '../../constants';
-import AppStore from '../../stores/AppStore/AppStore';
 import MembersStore from '../../stores/MembersStore/MembersStore';
 import UserStore from '../../stores/UserStore/UserStore';
 import DialogStore from '../../stores/DialogStore';
@@ -163,7 +162,6 @@ class VotingInfoWrapper extends React.PureComponent {
       }).isRequired,
     }).isRequired,
     userStore: PropTypes.instanceOf(UserStore).isRequired,
-    appStore: PropTypes.instanceOf(AppStore).isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -361,7 +359,7 @@ class VotingInfoWrapper extends React.PureComponent {
 
   // eslint-disable-next-line class-methods-use-this
   prepareParameters(voting, question) {
-    const { projectStore: { rootStore: { Web3Service } }, appStore: { parseFormula } } = this.props;
+    const { projectStore: { rootStore: { Web3Service } } } = this.props;
     const { data } = voting;
     const { paramTypes, paramNames, id } = question;
     // const votingData = `0x${data.slice(10)}`;
@@ -374,18 +372,23 @@ class VotingInfoWrapper extends React.PureComponent {
       delete decodedRawParams[0];
       decodedParams = paramNames.map((param, index) => [param, decodedRawParams[1][index]]);
     } else {
-      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(paramTypes, data);
-      // PARAMETERS FOR FIRST QUESTION
-      const FQP = ['Group ID', 'Status', 'Name', 'Text', 'Target', 'MethodSelector', 'Formula', 'parameters'];
-      decodedParams = [
-        [FQP[0], decodedRawParams[0][1]],
-        [FQP[1], decodedRawParams[1] === '0' ? 'Active' : 'Disabled'],
-        [FQP[2], decodedRawParams[2]],
-        [FQP[3], decodedRawParams[3]],
-        [FQP[4], decodedRawParams[4]],
-        [FQP[5], decodedRawParams[5]],
-        [FQP[6], parseFormula(decodedRawParams[6])],
+      const parameters = [
+        'tuple(uint,uint,uint,uint,uint)',
+        'tuple(bool, string, string, uint, uint, string[], string[], address, bytes4, string, bytes)',
       ];
+      decodedRawParams = Web3Service.web3.eth.abi.decodeParameters(parameters, data);
+      delete decodedRawParams[0];
+      // eslint-disable-next-line no-unused-vars
+      const [active, name, text,
+        groupId, time, parametersNames,
+        parametersTypes, target, method, formula,
+      ] = decodedRawParams[1];
+      const decoded = [
+        groupId, name, text,
+        time, method, formula,
+        parametersNames.join(','), parametersTypes.join(','), target,
+      ];
+      decodedParams = paramNames.map((param, index) => [param, decoded[index]]);
     }
     return decodedParams;
   }

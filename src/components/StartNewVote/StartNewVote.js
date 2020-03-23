@@ -48,11 +48,17 @@ class StartNewVote extends React.Component {
         const values = Object.values(data);
         const [question] = questionStore.getQuestionById(questionId);
         const { paramTypes, groupId } = question;
-        const encodedParams = Web3Service.web3.eth.abi
-          .encodeParameters(
-            ['tuple(uint256,uint256,uint256,uint256,uint256)', `tuple(${paramTypes.join(',')})`],
-            [[0, 0, 0, 0, 0], values],
-          );
+        const encodedParams = question.id === 1
+          ? Web3Service.web3.eth.abi
+            .encodeParameters(
+              ['tuple(uint256,uint256,uint256,uint256,uint256)', `tuple(${paramTypes.join(',')})`],
+              [[0, 0, 0, 0, 0], values],
+            )
+          : Web3Service.web3.eth.abi
+            .encodeParameters(
+              ['tuple(uint256,uint256,uint256,uint256,uint256)', `${paramTypes.join(',')}`],
+              [[0, 0, 0, 0, 0], values.join(',')],
+            );
         projectStore.setVotingData(questionId, groupId, encodedParams);
         dialogStore.toggle('password_form');
         return Promise.resolve();
