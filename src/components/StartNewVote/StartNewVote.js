@@ -174,6 +174,10 @@ class StartNewVote extends React.Component {
       questionStore: { newVotingOptions },
       questionStore: { rootStore: { membersStore: { nonERC } } },
     } = projectStore;
+    const groupTypes = [
+      { label: 'ERC20', value: 0 },
+      { label: 'Custom', value: 1 },
+    ];
     return (
       <div
         className={styles['new-vote']}
@@ -229,8 +233,8 @@ class StartNewVote extends React.Component {
                   <div className={styles['new-vote__form-row']}>
                     {form.map((field, index) => {
                       if (field.name === 'question') return null;
-                      return (field.placeholder === 'Group' || field.placeholder === 'Group address')
-                        ? (
+                      if (field.placeholder === 'Group' || field.placeholder === 'Group address') {
+                        return (
                           <div
                             className={styles['new-vote__form-col']}
                             key={`new_vote__form_col_dropdown--${index + 1}`}
@@ -243,15 +247,31 @@ class StartNewVote extends React.Component {
                               <Address />
                             </SimpleDropdown>
                           </div>
-                        )
-                        : (
+                        );
+                      } if (field.placeholder === 'Type' && this.initIndex === 1) {
+                        return (
                           <div
                             className={styles['new-vote__form-col']}
-                            key={`new_vote__form_col_input--${index + 1}`}
+                            key={`new_vote__form_col_dropdown--${index + 1}`}
                           >
-                            <Input field={field}><Address /></Input>
+                            <SimpleDropdown
+                              options={groupTypes}
+                              field={field}
+                              initIndex={null}
+                            >
+                              <Address />
+                            </SimpleDropdown>
                           </div>
                         );
+                      }
+                      return (
+                        <div
+                          className={styles['new-vote__form-col']}
+                          key={`new_vote__form_col_input--${index + 1}`}
+                        >
+                          <Input field={field}><Address /></Input>
+                        </div>
+                      );
                     })}
                   </div>
                   <div className={styles['new-vote__form-row']}>

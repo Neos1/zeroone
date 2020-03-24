@@ -317,7 +317,7 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_project",
+				"name": "_user",
 				"type": "address"
 			}
 		],
