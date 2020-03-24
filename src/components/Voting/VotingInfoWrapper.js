@@ -202,16 +202,15 @@ class VotingInfoWrapper extends React.PureComponent {
 
   /**
    * Method for checking whether the type
-   * of voting is ERC20
+of voting is ERC20
    *
    * @returns {boolean} is ERC20 or not
+   * @param address
    */
-  get isERC20Type() {
+  isERC20Type = (address) => {
     const { props } = this;
     const { membersStore } = props;
-    if (!this.question) return false;
-    const { groupId } = this.question;
-    const targetGroup = membersStore.getMemberById(groupId);
+    const targetGroup = membersStore.getMemberGroupByAddress(address);
     if (!targetGroup || !targetGroup.groupType) return false;
     return targetGroup.groupType === tokenTypes.ERC20;
   }
@@ -295,7 +294,7 @@ class VotingInfoWrapper extends React.PureComponent {
       },
     } = props;
     const votes = await historyStore.getVoterList(Number(id));
-    this.dataVotes = await Object.assign(this.dataVotes, votes);
+    this.dataVotes = { ...this.dataVotes, ...votes };
   }
 
   @action
@@ -430,7 +429,7 @@ class VotingInfoWrapper extends React.PureComponent {
             onBarClick={
               (group) => {
                 this.selectedGroup = group;
-                if (this.isERC20Type === true) {
+                if (this.isERC20Type(group) === true) {
                   dialogStore.show('is_erc20_modal_voting_info_wrapper');
                   return;
                 }

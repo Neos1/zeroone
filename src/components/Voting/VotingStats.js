@@ -112,7 +112,7 @@ class VotingStats extends React.PureComponent {
                     dataKey="cons"
                     fill="#000"
                     stroke="#000"
-                    onClick={() => onBarClick('cons', item)}
+                    onClick={() => onBarClick(item.address)}
                   >
                     <LabelList
                       dataKey="cons"

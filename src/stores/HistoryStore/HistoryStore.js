@@ -392,11 +392,13 @@ class HistoryStore {
       },
     } = this;
     const [voting] = this.getVotingById(votingId);
+
     const { allowedGroups } = voting;
+
     const result = {};
 
-    // eslint-disable-next-line consistent-return
-    allowedGroups.forEach(async (group) => {
+    for (let i = 0; i < allowedGroups.length; i += 1) {
+      const group = allowedGroups[i];
       const memberGroup = membersStore.getMemberGroupByAddress(group);
       if (!memberGroup || !memberGroup.list) return [];
       const { list, balance } = memberGroup;
@@ -404,9 +406,9 @@ class HistoryStore {
         positive: [],
         negative: [],
       };
-      for (let i = 0; i < list.length; i += 1) {
+      for (let j = 0; j < list.length; j += 1) {
         let info = {};
-        const { wallet } = list[i];
+        const { wallet } = list[j];
         const vote = await _contract.methods
           .getUserVote(votingId, group, wallet).call();
         const tokenCount = await _contract.methods
@@ -435,7 +437,7 @@ class HistoryStore {
             break;
         }
       }
-    });
+    }
     return result;
   }
 
