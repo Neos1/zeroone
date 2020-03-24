@@ -131,7 +131,10 @@
     "extraResources": [
       "build/wallets/**/*",
       "build/contracts/**/*",
-      "build/config.json"
+      "build/config.json",
+      "node_modules/zeroone-contracts/**/*",
+      "node_modules/zeroone-voting-vm/**/*",
+      "node_modules/zeroone-translator**/*"
     ],
     "win": {
       "target": "dir"
