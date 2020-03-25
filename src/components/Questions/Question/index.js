@@ -80,7 +80,7 @@ const ParametersBlock = (paramNames, paramTypes, t) => (
 
 const ShortDescription = (text) => (
   <p className={styles.question__description}>
-    {text}
+    {text.slice(0, 250)}
   </p>
 );
 

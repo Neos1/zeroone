@@ -64,11 +64,13 @@ class Notification extends React.Component {
       },
       notificationStore,
     } = props;
-    const hasActiveVoting = historyStore.isVotingActive;
+    const hasActiveVoting = await historyStore.isVotingActive;
+
     const userTokenReturns = await historyStore.fetchUserReturnTokens();
     const lastUserVoting = await historyStore.lastUserVoting();
     const countOfVoting = await historyStore.fetchVotingsCount();
-    const lastVoteIndex = countOfVoting;
+    const lastVoteIndex = countOfVoting - 1;
+
     if (userTokenReturns === true) {
       this.resetNotification();
       return;

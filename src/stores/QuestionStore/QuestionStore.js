@@ -153,7 +153,7 @@ class QuestionStore {
   async fetchActualQuestionGroups() {
     const { contractService } = this.rootStore;
     const localGroupsLength = this._questionGroups.length;
-    const contractGroupsLength = Number(await contractService.callMethod('getQuestionsAmount'));
+    const contractGroupsLength = Number(await contractService.callMethod('getQuestionGroupsAmount'));
     if (localGroupsLength < contractGroupsLength) {
       for (let i = localGroupsLength; i < contractGroupsLength; i += 1) {
       // eslint-disable-next-line no-await-in-loop
@@ -214,8 +214,8 @@ class QuestionStore {
       for (let i = 0; i < questionsFromFileLength; i += 1) {
         const question = questionsFromFile.data[i];
         if (question) {
-          const duplicateVoting = questions.find((item) => item.caption === question.name);
-          if (!duplicateVoting) questions.push(question);
+          const duplicateQuestion = questions.find((item) => item.caption === question.name);
+          if (!duplicateQuestion) questions.push(question);
         }
       }
     } catch {
