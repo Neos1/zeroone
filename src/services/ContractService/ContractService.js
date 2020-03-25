@@ -363,7 +363,7 @@ class ContractService {
    * @returns {Promise} promise
    */
   // eslint-disable-next-line consistent-return
-  sendVote(votingId, decision) {
+  async sendVote(votingId, decision) {
     const {
       ercAbi,
       _contract,
@@ -384,59 +384,49 @@ class ContractService {
     const groupContainsUser = membersStore.isUserInGroup(Number(groupId), userStore.address);
     const data = _contract.methods.setVote(decision).encodeABI();
 
-    // eslint-disable-next-line consistent-return
-    return new Promise((resolve, reject) => {
-      if ((groupContainsUser) && (groupContainsUser.groupType === tokenTypes.ERC20)) {
-        this.approveErc(groupContainsUser)
-          .then(() => {
-            const tx = {
-              from: userStore.address,
-              to: _contract.options.address,
-              value: '0x0',
-              data,
-            };
-            return Web3Service.createTxData(userStore.address, tx)
-              .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-              .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-              .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-              .then((rec) => {
-                historyStore.updateVotingById({
-                  id: votingId,
-                  newState: {
-                    userVote: Number(decision),
-                  },
-                });
-                groupContainsUser.updateUserBalance();
-                userStore.getEthBalance();
-                resolve(rec);
-              });
-          })
-          .catch((err) => reject(err));
-      } else if ((groupContainsUser) && (groupContainsUser.groupType !== tokenTypes.ERC20)) {
-        const tx = {
-          from: userStore.address,
-          to: _contract.options.address,
-          value: '0x0',
-          data,
-        };
-        return Web3Service.createTxData(userStore.address, tx)
-          .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-          .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-          .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
-          .then((rec) => {
-            historyStore.updateVotingById({
-              id: votingId,
-              newState: {
-                userVote: Number(decision),
-              },
-            });
-            groupContainsUser.updateUserBalance();
-            userStore.getEthBalance();
-            resolve(rec);
-          })
-          .catch((err) => reject(err));
+    const { allowedGroups } = voting;
+
+    const { length: groupsLength } = allowedGroups;
+
+    for (let i = 0; i < groupsLength; i += 1) {
+      const group = membersStore.getMemberGroupByAddress(allowedGroups[i]);
+      if (group.groupType === tokenTypes.ERC20) {
+        console.log('approving');
+        // eslint-disable-next-line no-await-in-loop
+        await this.approveErc(group);
+        console.log('approved');
       }
-    });
+    }
+
+    const tx = {
+      from: userStore.address,
+      to: _contract.options.address,
+      value: '0x0',
+      data,
+    };
+
+
+    console.log('sending');
+    // eslint-disable-next-line consistent-return
+    return new Promise((resolve, reject) => Web3Service.createTxData(userStore.address, tx)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then((rec) => {
+        historyStore.updateVotingById({
+          id: votingId,
+          newState: {
+            userVote: Number(decision),
+          },
+        });
+        for (let i = 0; i < groupsLength; i += 1) {
+          const group = membersStore.getMemberGroupByAddress(allowedGroups[i]);
+          group.updateUserBalance();
+        }
+        userStore.getEthBalance();
+        resolve(rec);
+      })
+      .catch((err) => reject(err)));
   }
 
   closeVoting() {

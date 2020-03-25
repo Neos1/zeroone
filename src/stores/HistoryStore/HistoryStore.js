@@ -228,8 +228,8 @@ class HistoryStore {
   @action
   fetchAndUpdateLastVoting = async () => {
     const lastIndex = await this.fetchVotingsCount();
-    const votingFromContract = await this.getVotingFromContractById(lastIndex);
-    const [voting] = this.getVotingById(lastIndex);
+    const votingFromContract = await this.getVotingFromContractById(lastIndex - 1);
+    const [voting] = this.getVotingById(lastIndex - 1);
     voting.update(votingFromContract);
     this.writeVotingsToFile();
   }
@@ -262,24 +262,21 @@ class HistoryStore {
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
     const votings = [];
-    try {
-      const votingsFromFile = await readDataFromFile({
-        name: 'votings',
-        basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
-      });
-      const votingsFromFileLength = votingsFromFile.data && votingsFromFile.data.length
-        ? votingsFromFile.data.length
-        : 0;
-      for (let i = 0; i < votingsFromFileLength; i += 1) {
-        const voting = votingsFromFile.data[i];
-        if (voting) {
-          const duplicateVoting = votings.find((item) => item.id === voting.id);
-          if (!duplicateVoting) votings.push(new Voting(voting));
-        }
+    const votingsFromFile = await readDataFromFile({
+      name: 'votings',
+      basicPath: `${PATH_TO_DATA}${userAddress}\\${projectAddress}`,
+    });
+    const votingsFromFileLength = votingsFromFile.data && votingsFromFile.data.length
+      ? votingsFromFile.data.length
+      : 0;
+    for (let i = 0; i < votingsFromFileLength; i += 1) {
+      const voting = votingsFromFile.data[i];
+      if (voting) {
+        const duplicateVoting = votings.find((item) => item.id === voting.id);
+        if (!duplicateVoting) votings.push(new Voting(voting));
       }
-    } catch (e) {
-      return votings;
     }
+
     votings.sort((a, b) => b.id - a.id);
     return votings;
   }
@@ -557,13 +554,9 @@ class HistoryStore {
     const listLength = list.length;
     const isReturn = true;
     for (let i = 0; i < listLength; i += 1) {
-      try {
-        const isReturnTokens = await contractService._contract.methods
-          .isUserReturnTokens(list[i].wallet, userStore.address).call();
-        if (isReturnTokens === false) return false;
-      } catch ({ message }) {
-        console.log(message);
-      }
+      const isReturnTokens = await contractService._contract.methods
+        .isUserReturnTokens(list[i].wallet, userStore.address).call();
+      if (isReturnTokens === false) return false;
     }
     return isReturn;
   }
