@@ -230,10 +230,12 @@ class MembersGroupComponent extends React.Component {
       wallet,
       token,
       list,
+      groupType,
       textForEmptyState,
       t,
     } = this.props;
     const { isOpen } = this.state;
+    console.log('list', list);
     return (
       <div className={styles.members__group}>
         <button
@@ -282,6 +284,21 @@ class MembersGroupComponent extends React.Component {
                   </div>
                 </div>
               )
+          }
+          {
+            groupType === tokenTypes.ERC20
+              ? (
+                <div className={`${styles['members__group-no-data']} ${styles['text--left']}`}>
+                  <div className={styles['members__group-no-data-icon']}>
+                    <Pudding />
+                  </div>
+                  <div className={styles['members__group-no-data-text']}>
+                    {t('other:noDataAdmins')}
+                  </div>
+                </div>
+              )
+              : null
+
           }
         </Collapse>
         <Dialog
