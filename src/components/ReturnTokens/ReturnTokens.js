@@ -73,7 +73,7 @@ class ReturnTokens extends React.Component {
         </Dialog>
         <Dialog
           name="progress_modal_return_tokens"
-          size="md"
+          size="xlg"
           footer={null}
           header={t('other:sendingTransaction')}
           closeable={false}

@@ -230,7 +230,7 @@ class Voting extends React.Component {
           </Dialog>
           <Dialog
             name="progress_modal_voting"
-            size="md"
+            size="xlg"
             footer={null}
             header={t('headings:sendingTransaction')}
             closeable={!(status === voteStatus.inProgress)}

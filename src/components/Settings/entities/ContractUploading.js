@@ -135,7 +135,7 @@ class ContractUploading extends Component {
         </Dialog>
         <Dialog
           name="progress_modal_contract_uploading"
-          size="md"
+          size="xlg"
           footer={null}
           header={t('headings:uploadingProject.heading')}
           closeable={false}

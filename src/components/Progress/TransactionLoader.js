@@ -7,7 +7,7 @@ import {
 
 import styles from './progress.scss';
 
-const TransactionProgress = withTranslation()(({ step, t }) => {
+const TransactionLoader = withTranslation()(({ step, t }) => {
   const stages = [
     [t('other:txSigning'), <SigningIcon />],
     [t('other:sending'), <SendingIcon />],
@@ -34,4 +34,4 @@ const TransactionProgress = withTranslation()(({ step, t }) => {
   );
 });
 
-export default TransactionProgress;
+export default TransactionLoader;

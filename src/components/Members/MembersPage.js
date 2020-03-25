@@ -96,7 +96,7 @@ class MembersPage extends React.Component {
           }
           <Dialog
             name="progress_modal"
-            size="md"
+            size="xlg"
             footer={null}
             header={t('headings:sendingTransaction')}
             closeable={false}

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { EMPTY_DATA_STRING } from '../../constants';
 import DefaultMessage from './DefaultMessage';
-import Loader from '../Loader';
+import { TransactionLoader } from '../Progress';
+// import Loader from '../Loader';
 
 import styles from './Message.scss';
 
@@ -16,6 +17,7 @@ class TransactionProgress extends React.Component {
   static propTypes = {
     t: PropTypes.func.isRequired,
     value: PropTypes.string,
+    step: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
@@ -27,11 +29,12 @@ class TransactionProgress extends React.Component {
       props: {
         t,
         value,
+        step,
       },
     } = this;
     return (
       <div className={styles['message--transfer-progress']}>
-        <Loader />
+        <TransactionLoader step={step} />
       </div>
     );
   }

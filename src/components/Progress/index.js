@@ -1,7 +1,7 @@
-import TransactionProgress from './TransactionProgress';
+import TransactionLoader from './TransactionLoader';
 import DeployingProgress from './DeployingProgress';
 
 export {
-  TransactionProgress,
+  TransactionLoader,
   DeployingProgress,
 };

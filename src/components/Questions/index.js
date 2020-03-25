@@ -196,7 +196,7 @@ class Questions extends Component {
           </Dialog>
           <Dialog
             name="progress_modal_questions"
-            size="md"
+            size="xlg"
             footer={null}
             header={t('headings:sendingTransaction')}
             closeable={false}
