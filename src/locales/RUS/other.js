@@ -6,6 +6,7 @@ const other = {
   sending: 'Отправка',
   txHash: 'Получение хэша',
   txReceipt: 'Получение чека',
+  txSigning: 'Подпись транзакции',
   questionsUploading: 'Загрузка вопросов',
   walletAddress: 'Кошелек',
   balance: 'Баланс',

@@ -6,6 +6,7 @@ const other = {
   sending: 'Sendind',
   txHash: 'Awaiting hash',
   txReceipt: 'Awaiting receipt',
+  txSigning: 'Transaction signing',
   questionsUploading: 'Uploading questions',
   walletAddress: 'Wallet',
   balance: 'Balance',

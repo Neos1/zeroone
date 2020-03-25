@@ -36,6 +36,7 @@ import SettingsIcon from './entities/SettingsIcon';
 import NoQuorum from './entities/NoQuorum';
 import DescisionIcon from './entities/DescisionIcon';
 import Arrow from './entities/Arrow';
+import SigningIcon from './entities/SigningIcon';
 
 export {
   AddIcon,
@@ -76,4 +77,5 @@ export {
   NoQuorum,
   DescisionIcon,
   Arrow,
+  SigningIcon,
 };
