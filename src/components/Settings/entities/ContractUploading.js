@@ -69,11 +69,19 @@ class ContractUploading extends Component {
             return Web3Service.subscribeTxReceipt(txHash);
           })
           .then((receipt) => {
-            appStore.setTransactionStep('success');
-            dialogStore.toggle('success_modal_contract_uploading');
             appStore.addProjectToList({ name, address: receipt.contractAddress });
             this.setState({ address: receipt.contractAddress });
             form.clear();
+            return receipt.contractAddress;
+          })
+          .then((contractAddress) => {
+            appStore.setTransactionStep('questionsUploading');
+            return appStore.deployQuestions(contractAddress).then(() => {
+            });
+          })
+          .then(() => {
+            appStore.setTransactionStep('success');
+            dialogStore.toggle('success_modal_contract_uploading');
           })
           .catch(() => {
             dialogStore.toggle('error_modal_contract_uploading');
@@ -98,11 +106,11 @@ class ContractUploading extends Component {
     };
   }
 
-  componentDidMount() {
-    const { dialogStore } = this.props;
-    this.setState({ contractType: 'token' });
-    dialogStore.toggle('progress_modal_contract_uploading');
-  }
+  // componentDidMount() {
+  //   const { dialogStore } = this.props;
+  //   this.setState({ contractType: 'token' });
+  //   dialogStore.toggle('progress_modal_contract_uploading');
+  // }
 
 
   triggerModal = async (contractType) => {
