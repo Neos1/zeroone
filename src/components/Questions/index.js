@@ -44,7 +44,7 @@ class Questions extends Component {
           dialogStore,
           projectStore: {
             historyStore,
-            rootStore: { Web3Service, contractService },
+            rootStore: { Web3Service, contractService, appStore },
             votingData,
             votingQuestion,
             votingGroupId,
@@ -54,27 +54,34 @@ class Questions extends Component {
         dialogStore.show('progress_modal_questions');
         const { password } = form.values();
         userStore.setPassword(password);
+        appStore.setTransactionStep('compileOrSign');
         return userStore.readWallet(password)
           .then(() => {
             // eslint-disable-next-line max-len
             const transaction = contractService.createVotingData(Number(votingQuestion), Number(votingGroupId), votingData);
-            console.log(transaction);
             return transaction;
           })
           .then((tx) => Web3Service.createTxData(userStore.address, tx)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
-            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
-          .then(() => {
-            userStore.getEthBalance();
-            dialogStore.hide();
-            history.push('/votings');
-            historyStore.getActualState();
-          })
-          .catch((error) => {
-            dialogStore.show('error_modal_questions');
-            console.error(error);
-          });
+            .then((signedTx) => {
+              appStore.setTransactionStep('sending');
+              return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+            })
+            .then((txHash) => {
+              appStore.setTransactionStep('txReceipt');
+              return Web3Service.subscribeTxReceipt(txHash);
+            })
+            .then(() => {
+              appStore.setTransactionStep('success');
+              userStore.getEthBalance();
+              dialogStore.hide();
+              history.push('/votings');
+              historyStore.getActualState();
+            })
+            .catch((error) => {
+              dialogStore.show('error_modal_questions');
+              console.error(error);
+            }));
       },
       onError: () => Promise.reject(),
     },
@@ -135,11 +142,16 @@ class Questions extends Component {
 
   render() {
     const { loading } = this;
-    const { t, projectStore, dialogStore } = this.props;
+    const {
+      t,
+      projectStore,
+      dialogStore,
+    } = this.props;
     const {
       questionStore: {
         pagination,
       },
+      rootStore: { contractService: { transactionStep } },
     } = projectStore;
     return (
       <>
@@ -201,7 +213,7 @@ class Questions extends Component {
             header={t('headings:sendingTransaction')}
             closeable={false}
           >
-            <TransactionProgress />
+            <TransactionProgress step={transactionStep} />
           </Dialog>
           <Dialog
             name="success_modal_questions"

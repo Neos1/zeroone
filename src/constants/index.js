@@ -39,6 +39,15 @@ export const languages = {
   ENG: 'en',
 };
 
+export const transactionSteps = {
+  compileOrSign: 0,
+  sending: 1,
+  txHash: 2,
+  txReceipt: 3,
+  questionsUploading: 4,
+  success: 5,
+};
+
 export const SOL_PATH_REGEXP = new RegExp(/(\"|\')(((\.{1,2}\/){1,})||(zeroone-voting-vm\/))(\w+\/){0,}?(\w+\.(?:sol))(\"|\')/g);
 export const VM_IMPORT_REGEXP = new RegExp(/(zeroone-voting-vm)([\/\\]\w+[\/\\]).{1,}(\w+\.(?:sol))/g);
 export const SOL_IMPORT_REGEXP = new RegExp(/(import)*.(\"|\')((\.{1,}\/)||(zeroone-voting-vm\/))+((\w+\/*())+(\w+\.(?:sol)))(\"|\')(;)/g);

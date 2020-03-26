@@ -183,14 +183,12 @@ class VotingInfoWrapper extends React.PureComponent {
           configStore: { UPDATE_INTERVAL },
         },
       },
-      dialogStore,
     } = props;
     const [voting] = historyStore.getVotingById(Number(id));
     const [question] = questionStore.getQuestionById(Number(voting.questionId));
     this.question = question;
     this.getVotingStats();
     this.getVotes();
-    dialogStore.show('progress_modal_voting_info_wrapper');
     this.interval = new AsyncInterval({
       timeoutInterval: UPDATE_INTERVAL,
       cb: this.updateData,
@@ -398,7 +396,7 @@ of voting is ERC20
     const { props, dataStats } = this;
     const {
       dialogStore,
-      projectStore: { historyStore, questionStore },
+      projectStore: { historyStore, questionStore, rootStore: { contractService } },
       match: { params: { id } },
       t,
     } = props;
@@ -498,7 +496,7 @@ of voting is ERC20
             header={t('other:sendingTransaction')}
             closeable={false}
           >
-            <TransactionProgress step={0} />
+            <TransactionProgress step={contractService.transactionStep} />
           </Dialog>
 
           <Dialog

@@ -233,7 +233,9 @@ class MembersGroupComponent extends React.Component {
       groupType,
       textForEmptyState,
       t,
+      membersStore: { transferStatus },
     } = this.props;
+    const { transferSteps } = this;
     const { isOpen } = this.state;
     console.log('list', list);
     return (
@@ -303,7 +305,11 @@ class MembersGroupComponent extends React.Component {
         </Collapse>
         <Dialog
           name={`transfer-token-${id}`}
-          size="md"
+          size={
+            transferStatus === transferSteps.transfering
+              ? 'xlg'
+              : 'md'
+          }
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...this.modalPropsSwitch}
         >

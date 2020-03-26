@@ -242,6 +242,7 @@ class MembersStore {
 
   @action
   transferTokens(groupId, from, to, count) {
+    const { rootStore: { appStore } } = this;
     const { contract, groupType } = this.list[groupId];
     window.contract = contract;
     console.log('contract', contract);
@@ -256,12 +257,20 @@ class MembersStore {
       to: contract.options.address,
       value: '0x0',
     };
+    appStore.setTransactionStep('compileOrSign');
     return new Promise((resolve, reject) => {
       Web3Service.createTxData(address, txData)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
-        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        .then((signedTx) => {
+          appStore.setTransactionStep('sending');
+          return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+        })
+        .then((txHash) => {
+          appStore.setTransactionStep('txReceipt');
+          return Web3Service.subscribeTxReceipt(txHash);
+        })
         .then(() => {
+          appStore.setTransactionStep('success');
           userStore.getEthBalance();
           resolve();
         })

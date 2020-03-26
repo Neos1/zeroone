@@ -3,5 +3,22 @@
   justify-content: space-between;
   width: 602px;
   margin: 0 auto;
+  padding-top: 40px;
   text-align: center;
+  &--zeroone {
+    .progress {
+      &-block {
+        .progress-line {
+          left: -51px;
+          width: 52px;
+        }
+        &.success {
+          .progress-line {
+            left: -51px;
+            width: 52px;
+          }
+        }
+      }
+    }
+  }
 }

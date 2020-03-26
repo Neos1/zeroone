@@ -562,7 +562,9 @@ class HistoryStore {
   }
 
   async returnTokens() {
-    const { contractService, Web3Service, userStore } = this.rootStore;
+    const {
+      contractService, Web3Service, userStore, appStore,
+    } = this.rootStore;
     const { _contract } = contractService;
     const { address, password } = userStore;
     const tx = {
@@ -571,11 +573,20 @@ class HistoryStore {
       from: address,
       to: _contract.options.address,
     };
+
+    appStore.setTransactionStep('compileOrSign');
     return Web3Service.createTxData(address, tx)
       .then((createdTx) => userStore.singTransaction(createdTx, password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then((signedTx) => {
+        appStore.setTransactionStep('sending');
+        return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+      })
+      .then((txHash) => {
+        appStore.setTransactionStep('txReceipt');
+        return Web3Service.subscribeTxReceipt(txHash);
+      })
       .then(() => {
+        appStore.setTransactionStep('success');
         userStore.getEthBalance();
       });
   }

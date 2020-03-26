@@ -25,6 +25,10 @@
 		{
 			"name": "Test1",
 			"address": "0x0a021E388c66Acf96a9e2a8DEbdf51446573Cd3e"
+		},
+		{
+			"name": "dsf",
+			"address": "0x44A85e0EaFE67cd2858cf04b57d820dE3Ed80137"
 		}
 	]
 }

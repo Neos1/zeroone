@@ -68,10 +68,11 @@ class Web3Service {
    * @returns {Promise} promise with web3 transaction PromiEvent
    */
   sendSignedTransaction(rawTx) {
-    const { web3: { eth: { sendSignedTransaction } } } = this;
+    const { web3: { eth: { sendSignedTransaction } }, rootStore: { appStore } } = this;
     return new Promise((resolve, reject) => {
       sendSignedTransaction(rawTx)
         .on('transactionHash', (txHash) => {
+          appStore.setTransactionStep('txHash');
           resolve(txHash);
         })
         .on('error', (error) => {

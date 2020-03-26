@@ -36,7 +36,6 @@ class ContractService {
     }
   }
 
-
   /**
    * sets instance of contract to this._contract
    *
@@ -368,6 +367,7 @@ class ContractService {
       ercAbi,
       _contract,
       rootStore: {
+        appStore,
         Web3Service,
         userStore,
         membersStore,
@@ -377,16 +377,12 @@ class ContractService {
         },
       },
     } = this;
+    appStore.setTransactionStep('compileOrSign');
     const [voting] = historyStore.getVotingById(votingId);
-    const { questionId } = voting;
-    const [question] = questionStore.getQuestionById(Number(questionId));
-    const { groupId } = question;
-    const groupContainsUser = membersStore.isUserInGroup(Number(groupId), userStore.address);
-    const data = _contract.methods.setVote(decision).encodeABI();
-
     const { allowedGroups } = voting;
-
     const { length: groupsLength } = allowedGroups;
+
+    const data = _contract.methods.setVote(decision).encodeABI();
 
     for (let i = 0; i < groupsLength; i += 1) {
       const group = membersStore.getMemberGroupByAddress(allowedGroups[i]);
@@ -405,14 +401,19 @@ class ContractService {
       data,
     };
 
-
-    console.log('sending');
     // eslint-disable-next-line consistent-return
     return new Promise((resolve, reject) => Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then((signedTx) => {
+        appStore.setTransactionStep('sending');
+        return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+      })
+      .then((txHash) => {
+        appStore.setTransactionStep('txReceipt');
+        return Web3Service.subscribeTxReceipt(txHash);
+      })
       .then((rec) => {
+        appStore.setTransactionStep('success');
         historyStore.updateVotingById({
           id: votingId,
           newState: {
@@ -435,6 +436,8 @@ class ContractService {
       rootStore: {
         Web3Service,
         userStore,
+        contractService,
+        appStore,
       },
     } = this;
 
@@ -446,11 +449,17 @@ class ContractService {
     };
 
     console.log('sending TX');
-
+    appStore.setTransactionStep('compileOrSign');
     return Web3Service.createTxData(userStore.address, tx)
       .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
-      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then((signedTx) => {
+        appStore.setTransactionStep('sending');
+        return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+      })
+      .then((txHash) => {
+        appStore.setTransactionStep('txReceipt');
+        return Web3Service.subscribeTxReceipt(txHash);
+      })
       .then(() => {
         userStore.getEthBalance();
       });

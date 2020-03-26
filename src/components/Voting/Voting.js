@@ -41,7 +41,7 @@ class Voting extends React.Component {
           dialogStore,
           projectStore: {
             historyStore,
-            rootStore: { Web3Service, contractService },
+            rootStore: { Web3Service, contractService, appStore },
             votingData,
             votingQuestion,
             votingGroupId,
@@ -51,6 +51,7 @@ class Voting extends React.Component {
         dialogStore.toggle('progress_modal_voting');
         const { password } = form.values();
         userStore.setPassword(password);
+        appStore.setTransactionStep('compileOrSign');
         return userStore.readWallet(password)
           .then(() => {
             // eslint-disable-next-line max-len
@@ -59,9 +60,16 @@ class Voting extends React.Component {
           })
           .then((tx) => Web3Service.createTxData(userStore.address, tx)
             .then((formedTx) => userStore.singTransaction(formedTx, password))
-            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => Web3Service.subscribeTxReceipt(txHash)))
+            .then((signedTx) => {
+              appStore.setTransactionStep('sending');
+              return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+            })
+            .then((txHash) => {
+              appStore.setTransactionStep('txReceipt');
+              return Web3Service.subscribeTxReceipt(txHash);
+            }))
           .then(() => {
+            appStore.setTransactionStep('success');
             dialogStore.show('success_modal_voting');
             userStore.getEthBalance();
             historyStore.getActualState();

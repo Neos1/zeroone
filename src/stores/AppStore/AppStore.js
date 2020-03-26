@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import {
   fs, path, PATH_TO_WALLETS, PATH_TO_CONTRACTS, PATH_TO_CONFIG,
 } from '../../constants/windowModules';
+import { transactionSteps } from '../../constants';
 import Alert from './entities/Alert';
 
 class AppStore {
@@ -10,6 +11,8 @@ class AppStore {
   @observable balances = {};
 
   @observable projectList = [];
+
+  @observable transactionStep = 0;
 
   @observable ERC = {
 
@@ -32,6 +35,15 @@ class AppStore {
   constructor(rootStore) {
     this.rootStore = rootStore;
     this.readWalletList();
+  }
+
+  /**
+   * set current transaction step for displaying if in modal
+   *
+   * @param {string} step key of step
+   */
+  @action setTransactionStep(step) {
+    this.transactionStep = transactionSteps[step];
   }
 
   /**
@@ -91,10 +103,14 @@ class AppStore {
   @action deployContract(type, deployArgs, password) {
     const { contractService } = this.rootStore;
     return new Promise((resolve, reject) => {
+      this.setTransactionStep('compileOrSign');
       contractService.compileContract(type, password)
-        .then(({ bytecode, abi }) => contractService.deployContract({
-          type, deployArgs, bytecode, abi, password,
-        }))
+        .then(({ bytecode, abi }) => {
+          this.setTransactionStep('sending');
+          return contractService.deployContract({
+            type, deployArgs, bytecode, abi, password,
+          });
+        })
         .then((txhash) => resolve(txhash))
         .catch((err) => reject(err));
     });

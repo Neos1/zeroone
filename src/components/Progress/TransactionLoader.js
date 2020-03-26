@@ -1,5 +1,6 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
+import { observer, inject } from 'mobx-react';
 import ProgressBlock from '../ProjectUploading/ProgressBlock';
 import {
   SigningIcon, SendingIcon, TxHashIcon, TxRecieptIcon,
@@ -7,7 +8,7 @@ import {
 
 import styles from './progress.scss';
 
-const TransactionLoader = withTranslation()(({ step, t }) => {
+const TransactionLoader = withTranslation()(inject('appStore')(observer(({ appStore: { transactionStep }, t }) => {
   const stages = [
     [t('other:txSigning'), <SigningIcon />],
     [t('other:sending'), <SendingIcon />],
@@ -22,7 +23,7 @@ const TransactionLoader = withTranslation()(({ step, t }) => {
           <ProgressBlock
             text={stage[0]}
             index={index}
-            state={step}
+            state={transactionStep}
             noline={index === 0}
             key={`stage-${index + 1}`}
           >
@@ -32,6 +33,6 @@ const TransactionLoader = withTranslation()(({ step, t }) => {
       }
     </div>
   );
-});
+})));
 
 export default TransactionLoader;

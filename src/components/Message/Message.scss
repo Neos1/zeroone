@@ -79,6 +79,8 @@
   }
 
   &--transfer-progress {
+    display: flex;
+    flex-flow: row nowrap;
     &::after {
       display: inline-block;
       min-height: 200px;

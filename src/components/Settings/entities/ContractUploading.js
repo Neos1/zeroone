@@ -22,7 +22,7 @@ class ContractUploading extends Component {
   tokenForm = new CreateTokenForm({
     hooks: {
       onSuccess: (form) => {
-        const { tokenType } = this.state;
+        const { contractType } = this.state;
         const {
           appStore, userStore, dialogStore, appStore: { rootStore: { Web3Service } },
         } = this.props;
@@ -32,9 +32,13 @@ class ContractUploading extends Component {
         userStore.setPassword(password);
         const deployArgs = [name, symbol, Number(count)];
         dialogStore.toggle('progress_modal_contract_uploading');
-        return appStore.deployContract(tokenType, deployArgs, password)
-          .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        return appStore.deployContract(contractType, deployArgs, password)
+          .then((txHash) => {
+            appStore.setTransactionStep('txReceipt');
+            return Web3Service.subscribeTxReceipt(txHash);
+          })
           .then((receipt) => {
+            appStore.setTransactionStep('success');
             dialogStore.toggle('success_modal_contract_uploading');
             this.setState({ address: receipt.contractAddress });
             form.clear();
@@ -60,8 +64,12 @@ class ContractUploading extends Component {
         const deployArgs = [address];
         dialogStore.toggle('progress_modal_contract_uploading');
         return appStore.deployContract('ZeroOne', deployArgs, password)
-          .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+          .then((txHash) => {
+            appStore.setTransactionStep('txReceipt');
+            return Web3Service.subscribeTxReceipt(txHash);
+          })
           .then((receipt) => {
+            appStore.setTransactionStep('success');
             dialogStore.toggle('success_modal_contract_uploading');
             appStore.addProjectToList({ name, address: receipt.contractAddress });
             this.setState({ address: receipt.contractAddress });
@@ -85,19 +93,28 @@ class ContractUploading extends Component {
   constructor() {
     super();
     this.state = {
-      tokenType: '',
+      contractType: '',
       address: '',
     };
   }
 
-  triggerModal = (tokenType) => {
+  componentDidMount() {
     const { dialogStore } = this.props;
-    this.setState({ tokenType });
+    this.setState({ contractType: 'token' });
+    dialogStore.toggle('progress_modal_contract_uploading');
+  }
+
+
+  triggerModal = async (contractType) => {
+    const { dialogStore } = this.props;
+    this.setState({ contractType });
+    // eslint-disable-next-line react/destructuring-assignment
     dialogStore.show('token_modal_contract_uploading');
   }
 
   triggerProjectModal = () => {
     const { dialogStore } = this.props;
+    this.setState({ contractType: 'ZeroOne' });
     dialogStore.show('project_modal_contract_uploading');
   }
 
@@ -106,7 +123,7 @@ class ContractUploading extends Component {
   }
 
   render() {
-    const { address } = this.state;
+    const { address, contractType } = this.state;
     const { t, dialogStore } = this.props;
     return (
       <div className={`${styles.settings__block} ${styles['settings__block--contracts']}`}>
@@ -114,7 +131,7 @@ class ContractUploading extends Component {
         <div className={styles['settings__block-content']}>
           <Button theme="white" onClick={() => { this.triggerModal('ERC20'); }}>ERC20</Button>
           <Button theme="white" onClick={() => { this.triggerModal('CustomToken'); }}>Custom tokens</Button>
-          <Button theme="white" onClick={() => { this.triggerProjectModal(); }}>Project</Button>
+          <Button theme="white" onClick={() => { this.triggerProjectModal('ZeroOne'); }}>Project</Button>
         </div>
         <Dialog
           name="token_modal_contract_uploading"
@@ -140,7 +157,7 @@ class ContractUploading extends Component {
           header={t('headings:uploadingProject.heading')}
           closeable={false}
         >
-          <TransactionProgress />
+          <TransactionProgress deploy type={contractType} />
         </Dialog>
         <Dialog
           name="success_modal_contract_uploading"
