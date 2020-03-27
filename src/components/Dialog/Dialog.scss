@@ -57,10 +57,16 @@
     z-index: 5;
     box-sizing: border-box;
     width: 100%;
-    padding: 25px 10px;
+    padding: 0 10px 25px;
 
     &--default {
       padding-top: 55px;
+    }
+
+    .text {
+      padding: 0 40px;
+      color: #c8c9ca;
+      font-size: 14px;
     }
   }
 

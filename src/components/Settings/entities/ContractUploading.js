@@ -133,6 +133,13 @@ class ContractUploading extends Component {
   render() {
     const { address, contractType } = this.state;
     const { t, dialogStore } = this.props;
+    const modalFooter = () => (
+      <div className="dialog__footer">
+        <p className="text">
+          {t('explanations:freeze')}
+        </p>
+      </div>
+    );
     return (
       <div className={`${styles.settings__block} ${styles['settings__block--contracts']}`}>
         <h2 className={styles['settings__block-heading']}>{t('headings:creatingAndUpload')}</h2>
@@ -153,7 +160,7 @@ class ContractUploading extends Component {
         <Dialog
           name="project_modal_contract_uploading"
           size="md"
-          footer={null}
+          footer={modalFooter()}
           header={t('headings:projectCreating.heading')}
         >
           <ProjectInputForm form={this.projectForm} />

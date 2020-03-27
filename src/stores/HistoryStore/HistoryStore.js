@@ -258,7 +258,7 @@ class HistoryStore {
    * @returns {Array} correct array of voting
    */
   async getFilteredVotingListFromFile() {
-    const { contractService, userStore } = this.rootStore;
+    const { contractService, userStore, projectStore: { questionStore } } = this.rootStore;
     const userAddress = userStore.address;
     const projectAddress = contractService._contract.options.address;
     const votings = [];
@@ -270,8 +270,14 @@ class HistoryStore {
       ? votingsFromFile.data.length
       : 0;
     for (let i = 0; i < votingsFromFileLength; i += 1) {
-      const voting = votingsFromFile.data[i];
+      let voting = votingsFromFile.data[i];
       if (voting) {
+        const { id } = voting;
+        let [question] = questionStore.getQuestionById(Number(voting.questionId));
+        if (!question) {
+          question = await contractService.fetchQuestion(voting.questionId);
+        }
+        voting = await this.extendVotingInfo({ voting, question, id });
         const duplicateVoting = votings.find((item) => item.id === voting.id);
         if (!duplicateVoting) votings.push(new Voting(voting));
       }
@@ -389,7 +395,6 @@ class HistoryStore {
       },
     } = this;
     const [voting] = this.getVotingById(votingId);
-
     const { allowedGroups } = voting;
 
     const result = {};
@@ -452,7 +457,8 @@ class HistoryStore {
     const resultVoting = voting;
     resultVoting.caption = question && question.name;
     resultVoting.text = question && question.description;
-    resultVoting.allowedGroups = this.getGroupsAllowedToVoting(question);
+    const formula = question.rawFormula ? question.rawFormula : question.formula;
+    resultVoting.allowedGroups = await this.getGroupsAllowedToVoting({ formula });
     const userVotes = await this.getUserVote(voting.allowedGroups, id);
     resultVoting.userVote = userVotes.length === 1 ? userVotes[0] : 0;
     return resultVoting;

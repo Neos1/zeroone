@@ -20,6 +20,7 @@ const explanations = {
       count: 'The total number of tokens is set by you. They can be distributed among the project participants later.',
     },
   },
+  freeze: 'On contract compiling app will freeze on several seconds, please be patient',
 };
 
 export default explanations;
