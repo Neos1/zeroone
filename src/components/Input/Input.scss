@@ -68,10 +68,12 @@
       position: absolute;
       bottom: 100%;
       margin-bottom: 4px;
-      color: $placeholderColor;
-      font-size: 14px;
-      line-height: 16px;
-      text-align: left;
+      &>span {
+        color: $placeholderColor;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: left;
+      }
     }
   }
 
@@ -153,5 +155,19 @@
       top: unset;
       bottom: -17px;
     }
+    .hint {
+      position: relative;
+      z-index: 1;
+      margin-left: 10px;
+      transform: translate(0,0);
+    }
+  }
+
+  .hint {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    z-index: 1;
+    transform: translateY(-50%);
   }
 }

@@ -15,7 +15,7 @@ class InputTextarea extends Component {
 
   render() {
     const {
-      field, className,
+      field, className, hint,
     } = this.props;
     return (
       <div
@@ -31,7 +31,10 @@ class InputTextarea extends Component {
           value={field.value}
           onChange={this.handleOnChange}
         />
-        <div className={styles['field__label--textarea']}>{field.placeholder}</div>
+        <div className={styles['field__label--textarea']}>
+          <span>{field.placeholder}</span>
+          {hint}
+        </div>
         <p className={styles['field__error-text']}>
           {field.error}
         </p>
@@ -51,11 +54,13 @@ InputTextarea.propTypes = {
     onChange: propTypes.func.isRequired,
   }).isRequired,
   onInput: propTypes.func,
+  hint: propTypes.element,
 };
 
 InputTextarea.defaultProps = {
   className: '',
   onInput: () => null,
+  hint: null,
 };
 
 export default InputTextarea;

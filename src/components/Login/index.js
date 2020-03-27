@@ -96,7 +96,10 @@ const InputForm = withTranslation()(({
       <Dropdown options={appStore.wallets} subOptions={appStore.balances} field={form.$('wallet')} onSelect={appStore.selectWallet}>
         <CreditCard />
       </Dropdown>
-      <Input type="password" field={form.$('password')}>
+      <Input
+        type="password"
+        field={form.$('password')}
+      >
         <Password />
       </Input>
       <div className={styles.form__submit}>

@@ -7,28 +7,8 @@
 	"gasLimit": 7900000,
 	"projects": [
 		{
-			"name": "21312312",
-			"address": "0xBB0cb5dA06D2a8cAf1907a854EdE290F4cfd301c"
-		},
-		{
-			"name": "213123213213sdsz",
-			"address": "0x18E10e2a4363e9581e8Df55a92a7a21b3Dce1ADB"
-		},
-		{
-			"name": "test112",
-			"address": "0x9846C8e92852FB851Ea6285485034f5ed305C290"
-		},
-		{
-			"name": "T3sting!",
-			"address": "0x59b0A0EA71F23D7A8793ecd3a3fbdF444200a301"
-		},
-		{
 			"name": "Test1",
 			"address": "0x0a021E388c66Acf96a9e2a8DEbdf51446573Cd3e"
-		},
-		{
-			"name": "dsf",
-			"address": "0x44A85e0EaFE67cd2858cf04b57d820dE3Ed80137"
 		}
 	]
 }

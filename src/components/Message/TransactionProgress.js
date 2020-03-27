@@ -18,12 +18,13 @@ class TransactionProgress extends React.Component {
     t: PropTypes.func.isRequired,
     value: PropTypes.string,
     deploy: PropTypes.bool,
-    type: PropTypes.string.isRequired,
+    type: PropTypes.string,
   }
 
   static defaultProps = {
     value: EMPTY_DATA_STRING,
     deploy: false,
+    type: '',
   }
 
   render() {

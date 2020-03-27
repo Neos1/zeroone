@@ -2,7 +2,7 @@ import React from 'react';
 import { withTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import Hint from '../Hint';
+import { Hint } from '../Hint';
 import CreateGroupQuestionsForm from '../../stores/FormsStore/CreateGroupQuestionsForm';
 import Input from '../Input';
 import { TokenName } from '../Icons';

@@ -26,7 +26,7 @@ class Input extends Component {
 
   render() {
     const {
-      children, field, className,
+      children, field, className, hint,
     } = this.props;
     return (
       <div className={`${styles.field} ${field.error ? styles['field--error'] : ''} ${className}`}>
@@ -43,6 +43,7 @@ class Input extends Component {
         >
           {field.placeholder}
         </span>
+        {hint}
         <p className={styles['field__error-text']}>
           {field.error}
         </p>
@@ -72,6 +73,7 @@ Input.propTypes = {
   }).isRequired,
   defaultValue: propTypes.oneOfType([propTypes.string, propTypes.number]),
   onInput: propTypes.func,
+  hint: propTypes.element,
 };
 
 Input.defaultProps = {
@@ -79,6 +81,7 @@ Input.defaultProps = {
   className: '',
   onInput: () => null,
   defaultValue: '',
+  hint: null,
 };
 
 export default Input;

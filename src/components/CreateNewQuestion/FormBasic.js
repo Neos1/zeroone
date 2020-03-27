@@ -3,11 +3,13 @@ import { withTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Input from '../Input';
+// import { SquareHint } from '../Hint';
 import { TokenName, DateIcon, Address } from '../Icons';
 import InputTextarea from '../Input/InputTextarea';
 import Button from '../Button/Button';
 
 import styles from './CreateNewQuestion.scss';
+import { FormulaHint, SelectorHint } from '../Hint';
 
 @withTranslation()
 @inject('projectStore')
@@ -49,19 +51,10 @@ class FormBasic extends React.Component {
         </div>
         <div className={styles['create-question__form-row']}>
           <div className={styles['create-question__form-col']}>
-            <Input field={formBasic.$('voting_formula')}>
-              <TokenName />
-            </Input>
-          </div>
-          <div className={styles['create-question__form-col']}>
-            <Input field={formBasic.$('target')}>
-              <Address />
-            </Input>
-          </div>
-        </div>
-        <div className={styles['create-question__form-row']}>
-          <div className={styles['create-question__form-col']}>
-            <Input field={formBasic.$('methodSelector')}>
+            <Input
+              field={formBasic.$('methodSelector')}
+              hint={<SelectorHint />}
+            >
               <Address />
             </Input>
             {
@@ -74,12 +67,28 @@ class FormBasic extends React.Component {
                 : null
             }
           </div>
+          <div className={styles['create-question__form-col']}>
+            <Input field={formBasic.$('target')}>
+              <Address />
+            </Input>
+          </div>
         </div>
         <div className={`${styles['create-question__form-row']} ${styles['extra-padding']}`}>
           <div
             className={`
               ${styles['create-question__form-col']}
-              ${styles['create-question__form-col--full']}
+              }
+            `}
+          >
+            <InputTextarea
+              field={formBasic.$('voting_formula')}
+              hint={<FormulaHint />}
+            />
+          </div>
+          <div
+            className={`
+              ${styles['create-question__form-col']}
+              }
             `}
           >
             <InputTextarea

@@ -72,5 +72,31 @@
     visibility: hidden;
     opacity: 0;
     transition: 0.2s;
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  &--square {
+    .hint__icon {
+      &::before{
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  &--formula {
+    .hint__text {
+      top: unset;
+      bottom: 50%;
+      width: 570px;
+      &>p {
+        margin: 5px 0;
+        font-size: 11px;
+        line-height: 13px;
+        &:first-child, &:last-child {
+          margin: 10px 0;
+        }
+      }
+    }
   }
 }

@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import propTypes from 'prop-types';
 import { NavLink, withRouter } from 'react-router-dom';
 import { withTranslation, Trans } from 'react-i18next';
 import uniqKey from 'react-id-generator';
+import { inject, observer } from 'mobx-react';
 import { StartIcon } from '../../Icons';
 import Button from '../../Button/Button';
 
@@ -96,13 +98,23 @@ const FormulaBlock = (formula, t) => (
   </p>
 );
 
-const Content = (id, caption, text, extended) => (
-  <div>
-    <p className={styles.question__id}>{`#${id}`}</p>
-    <p className={styles.question__caption}>{caption}</p>
-    {extended ? FullDescription(text) : ShortDescription(text)}
-  </div>
-);
+const Content = inject('projectStore')(observer(({
+  projectStore: { questionStore },
+  id,
+  caption,
+  text,
+  extended,
+  groupId,
+}) => {
+  const [group] = questionStore.getQuestionGroupById(groupId);
+  return (
+    <div>
+      <p className={styles.question__id}>{`#${id} - ${group.name}`}</p>
+      <p className={styles.question__caption}>{caption}</p>
+      {extended ? FullDescription(text) : ShortDescription(text)}
+    </div>
+  );
+}));
 
 // eslint-disable-next-line no-unused-vars
 const Question = withTranslation()(({
@@ -114,6 +126,7 @@ const Question = withTranslation()(({
   paramNames,
   paramTypes,
   votingIsActive,
+  groupId,
 }) => (
   <div className={`
     ${styles.question}
@@ -125,12 +138,24 @@ const Question = withTranslation()(({
       !extended
         ? (
           <NavLink className={styles.question__left} to={`/questions/${id}`}>
-            {Content(id, name, description, extended)}
+            <Content
+              id={id}
+              caption={name}
+              text={description}
+              extended={extended}
+              groupId={groupId}
+            />
           </NavLink>
         )
         : (
           <div className={`${styles.question__left}`}>
-            {Content(id, name, description, extended)}
+            <Content
+              id={id}
+              caption={name}
+              text={description}
+              extended={extended}
+              groupId={groupId}
+            />
           </div>
         )
     }

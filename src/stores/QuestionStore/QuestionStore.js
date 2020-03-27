@@ -8,6 +8,8 @@ import AsyncInterval from '../../utils/AsyncUtils';
 
 /**
  * Contains methods for working
+ *
+ * @param id
  */
 class QuestionStore {
   @observable pagination;
@@ -139,8 +141,8 @@ class QuestionStore {
    */
   @action
   async getActualState(cb) {
-    await this.getActualQuestions();
     await this.fetchActualQuestionGroups();
+    await this.getActualQuestions();
     this.loading = false;
     if (cb) cb();
   }
@@ -332,6 +334,10 @@ class QuestionStore {
    * @returns {Array} array with lenght == 1, contains question matched by id
    */
   @action getQuestionById = (id) => this._questions.filter((question) => question.id === Number(id))
+
+  @action getQuestionGroupById = (id) => (
+    this._questionGroups.filter((group) => group.groupId === id)
+  )
 
   @action reset = () => {
     this._questions = [];
