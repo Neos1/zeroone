@@ -1,6 +1,8 @@
 @import '../../assets/styles/partials/variables';
+@import '../../assets/styles/includes/mixin';
 
 .user {
+  position: relative;
   display: inline-block;
   font-size: 0;
   border: 1px solid $primary;
@@ -10,22 +12,116 @@
     vertical-align: middle;
   }
 
+  &__info {
+    position: absolute;
+    top: calc(100% + 1px);
+    right: -1px;
+    left: -1px;
+    display: none;
+    padding: 8px 10px;
+    background-color: #fff;
+    border: 1px solid $primary;
+    border-top: unset;
+    cursor: default;
+  }
+
+  &__copy {
+    padding-bottom: 7px;
+    color: rgba($color: $primary, $alpha: 0.3);
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    border-bottom: 1px solid #e6e6e6;
+  }
+
   &__wallet {
     margin: 0 10px;
     font-size: 12px;
     vertical-align: middle;
     background-color: $white;
+
     &--full {
       display: none;
     }
   }
-  &:hover {
-    .user__wallet {
-      &--full {
-        display: inline-block;
+
+  &__balances {
+    padding-top: 12px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e6e6e6;
+
+    &-top {
+      padding-bottom: 12px;
+      color: $primary;
+      font-size: 12px;
+      line-height: 100%;
+
+      span {
+        font-weight: 700;
+
+
+        &:last-child {
+          float: right;
+        }
       }
-      &--half {
-        display: none;
+    }
+  }
+
+  &__balance {
+    &-item {
+      display: block;
+      padding-bottom: 8px;
+      overflow: hidden;
+      color: $primary;
+      font-size: 12px;
+      line-height: 100%;
+      letter-spacing: 0.01em;
+
+      @include clearfix;
+
+      span {
+        &:first-child {
+          position: relative;
+          float: left;
+
+          &::after {
+            position: absolute;
+            left: calc(100% + 5px);
+            color: #c8c9ca;
+            content: '.....................................................................................................................';
+          }
+        }
+
+        &:last-child {
+          position: relative;
+          float:right;
+          padding-left: 5px;
+          background-color: #fff;
+        }
+      }
+    }
+  }
+
+  &__button {
+    padding-top: 16px;
+    padding-bottom: 9px;
+    text-align: center;
+  }
+
+  &:hover {
+    .user {
+      &__wallet {
+        &--full {
+          display: inline-block;
+        }
+
+        &--half {
+          display: none;
+        }
+      }
+
+      &__info {
+        display: block;
       }
     }
   }

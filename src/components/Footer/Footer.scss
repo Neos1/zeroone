@@ -1,0 +1,39 @@
+@import '../../assets/styles/partials/variables';
+
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 15px 0;
+  text-align: center;
+
+  a {
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    color: $border;
+    font-size: 11px;
+    text-align: center;
+    svg {
+      vertical-align: middle;
+      path {
+        transition: .2s;
+      }
+    }
+    span {
+      margin-left: 10px;
+      vertical-align: middle;
+      transition: .2s;
+    }
+    &:hover{
+      svg {
+        path {
+          opacity: 1;
+          fill: $primary;
+        }
+      }
+      span {
+        color: $primary;
+      }
+    }
+  }
+}

@@ -1,0 +1,1271 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owners",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bytes4",
+				"name": "selector",
+				"type": "bytes4"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "result",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "response",
+				"type": "bytes"
+			}
+		],
+		"name": "Call",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes4",
+				"name": "methodSelector",
+				"type": "bytes4"
+			}
+		],
+		"name": "QuestionAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"name": "QuestionGroupAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "group",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum VM.Vote",
+				"name": "userVote",
+				"type": "uint8"
+			}
+		],
+		"name": "UpdatedUserVote",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "groupAddress",
+				"type": "address"
+			}
+		],
+		"name": "UserGroupAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum VM.Vote",
+				"name": "descision",
+				"type": "uint8"
+			}
+		],
+		"name": "UserVote",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "votingId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum VM.Vote",
+				"name": "descision",
+				"type": "uint8"
+			}
+		],
+		"name": "VotingEnded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "votingId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "questionId",
+				"type": "uint256"
+			}
+		],
+		"name": "VotingStarted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "ballotId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum VM.Vote",
+						"name": "result",
+						"type": "uint8"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct IZeroOne.MetaData",
+				"name": "_meta",
+				"type": "tuple"
+			}
+		],
+		"name": "ZeroOneCall",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "ballotId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum VM.Vote",
+						"name": "result",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct IZeroOne.MetaData",
+				"name": "_metaData",
+				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "groupId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timeLimit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "paramNames",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "paramTypes",
+						"type": "string[]"
+					},
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes4",
+						"name": "methodSelector",
+						"type": "bytes4"
+					},
+					{
+						"internalType": "string",
+						"name": "rawFormula",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "formula",
+						"type": "bytes"
+					}
+				],
+				"internalType": "struct QuestionType.Question",
+				"name": "_question",
+				"type": "tuple"
+			}
+		],
+		"name": "addQuestion",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ballotId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "groupId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timeLimit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "paramNames",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "paramTypes",
+						"type": "string[]"
+					},
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes4",
+						"name": "methodSelector",
+						"type": "bytes4"
+					},
+					{
+						"internalType": "string",
+						"name": "rawFormula",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "formula",
+						"type": "bytes"
+					}
+				],
+				"internalType": "struct QuestionType.Question",
+				"name": "_question",
+				"type": "tuple"
+			}
+		],
+		"name": "addQuestion",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"internalType": "struct GroupType.Group",
+				"name": "_questionGroup",
+				"type": "tuple"
+			}
+		],
+		"name": "addQuestionGroup",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "ballotId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum VM.Vote",
+						"name": "result",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct IZeroOne.MetaData",
+				"name": "_metaData",
+				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"internalType": "struct GroupType.Group",
+				"name": "_questionGroup",
+				"type": "tuple"
+			}
+		],
+		"name": "addQuestionGroup",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ballotId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "ballotId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum VM.Vote",
+						"name": "result",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct IZeroOne.MetaData",
+				"name": "_metaData",
+				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "groupAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum UserGroup.Type",
+						"name": "groupType",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct UserGroup.Group",
+				"name": "_group",
+				"type": "tuple"
+			}
+		],
+		"name": "addUserGroup",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ballotId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "groupAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum UserGroup.Type",
+						"name": "groupType",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct UserGroup.Group",
+				"name": "_group",
+				"type": "tuple"
+			}
+		],
+		"name": "addUserGroup",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_votingId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "didUserVote",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "confirm",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "findLastUserVoting",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "votingId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_votingId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			}
+		],
+		"name": "getGroupVotes",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "positive",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "negative",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "totalSupply",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getQuestion",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "groupId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timeLimit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "paramNames",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "paramTypes",
+						"type": "string[]"
+					},
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes4",
+						"name": "methodSelector",
+						"type": "bytes4"
+					},
+					{
+						"internalType": "string",
+						"name": "rawFormula",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "formula",
+						"type": "bytes"
+					}
+				],
+				"internalType": "struct QuestionType.Question",
+				"name": "question",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getQuestionGroup",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"internalType": "struct GroupType.Group",
+				"name": "questionGroup",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getQuestionGroupsAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "length",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getQuestionsAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "length",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getUserGroup",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "groupAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum UserGroup.Type",
+						"name": "groupType",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct UserGroup.Group",
+				"name": "group",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getUserGroupsAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "length",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_votingId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserVote",
+		"outputs": [
+			{
+				"internalType": "enum VM.Vote",
+				"name": "descision",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_votingId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserVoteWeight",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "weight",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getVoting",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "starterGroupId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "starterAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "questionId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum BallotType.BallotStatus",
+				"name": "status",
+				"type": "uint8"
+			},
+			{
+				"internalType": "bytes",
+				"name": "votingData",
+				"type": "bytes"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_votingId",
+				"type": "uint256"
+			}
+		],
+		"name": "getVotingResult",
+		"outputs": [
+			{
+				"internalType": "enum VM.Vote",
+				"name": "result",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getVotingsAmount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "isProject",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "isUserReturnTokens",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "revoke",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_status",
+				"type": "bool"
+			}
+		],
+		"name": "setActiveStatus",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "changed",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "ballotId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum VM.Vote",
+						"name": "result",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct IZeroOne.MetaData",
+				"name": "_metaData",
+				"type": "tuple"
+			},
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "setGroupAdmin",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ballotId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			}
+		],
+		"name": "setQuestionGroupName",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "changed",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "enum VM.Vote",
+				"name": "_descision",
+				"type": "uint8"
+			}
+		],
+		"name": "setVote",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "starterGroupId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "starterAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "questionId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					}
+				],
+				"internalType": "struct BallotList.BallotSimple",
+				"name": "_votingPrimary",
+				"type": "tuple"
+			}
+		],
+		"name": "startVoting",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "submitVoting",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_newVoteWeight",
+				"type": "uint256"
+			}
+		],
+		"name": "updateUserVote",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

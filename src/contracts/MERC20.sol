@@ -1,4 +1,4 @@
-pragma solidity 0.5;
+pragma solidity ^0.5.15;
 
 contract MERC20 {
   string private _name;
@@ -11,7 +11,7 @@ contract MERC20 {
 	mapping (uint => mapping (address => uint256)) userBalances;
   address[] users;
 
-  constructor (string name, string symbol, uint256 decimals ) public {
+  constructor (string memory name, string memory symbol, uint256 decimals ) public {
     _name = name;
     _symbol = symbol;
     _decimals = decimals;
@@ -23,17 +23,17 @@ contract MERC20 {
     users.push(msg.sender);
   }
 
-  function symbol() external returns(string) {
+  function symbol() external returns(string memory) {
     return _symbol;
   }
-  function name() external returns(string) {
+  function name() external returns(string memory) {
     return _name;
   }
   function totalSupply() external returns(uint256) {
     return _decimals;
   }
 
-  function getUsers() external returns (address[]) {
+  function getUsers() external returns (address[] memory) {
     return users;
   }
 
@@ -56,7 +56,7 @@ contract MERC20 {
     uint usersLength = users.length;
 		uint matched = 0;
 		for (uint i = 0; i < usersLength; i++) {
-			if (users[i] == 0) {
+			if (users[i] == address(0)) {
 				matched = i;
 			}
 		}
@@ -74,9 +74,13 @@ contract MERC20 {
     return balances[user];
   }
 
+  function transferBeetweenUsers(address sender, address recipient, uint256 amount) public returns (bool)  {
+    require((msg.sender == admin) || (msg.sender == sender));
+    this.transferFrom(sender, recipient, amount);
+  }
 
-  function transferFrom(address _who, address _to, uint256 value) external {
-    require(msg.sender == admin);
+
+  function transferFrom(address _who, address _to, uint256 value) public returns (bool) {
     require(_who != address(0), "MERC20: transfer from the zero address");
     require(_to != address(0), "MERC20: transfer to the zero address");
     require(balances[_who] >= value, "MERC20: Token value must be lower or equal");
@@ -98,6 +102,10 @@ contract MERC20 {
 
   function setAdmin(address _newAdmin) external {
     admin = _newAdmin;
+  }
+  
+  function getAdmin() external returns (address adminitstrator) {
+    return admin;
   }
 
 }

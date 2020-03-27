@@ -10,6 +10,49 @@
   cursor: pointer;
   transition: 0.2s linear;
 
+  &__hint {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    z-index: 999;
+    text-align: left;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s;
+
+    &-content {
+      display: inline-block;
+      padding: 14px 16px 16px;
+      color: #4d4d4d;
+      font-size: 11px;
+      line-height: 13px;
+      white-space: nowrap;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 2px;
+    }
+  }
+
+  &--with-hint {
+    position: relative;
+
+    &:hover {
+      .btn__hint {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    &:active,
+    &:focus {
+      .btn__hint {
+        color: #000;
+      }
+    }
+  }
+
   svg,
   &__icon,
   &__text {
@@ -38,8 +81,11 @@
 
   &[disabled]{
     cursor: default;
-    opacity: .5;
-  } 
+
+    .btn__content {
+      opacity: .5;
+    }
+  }
 
   &--black {
     color: $white;
@@ -57,6 +103,22 @@
       }
     }
     &:active {
+      border-color: $primary;
+    }
+  }
+
+  &--gray-bordered {
+    color: $gray;
+    font-size: 14px;
+    line-height: 107.5%;
+    background-color: transparent;
+    border: 1px solid $gray;
+    border-radius: 2px;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover,
+    &:active {
+      color: $primary;
       border-color: $primary;
     }
   }
@@ -152,11 +214,35 @@
     }
     &:hover {
       color: $primary;
-    } 
+    }
+    &:active {
+      color: $white;
+    }
   }
 
   &--showseed {
     @extend .btn--white;
+    svg{
+      path{ 
+        fill: $white;
+      }
+    }
+    &:hover {
+      svg {
+        path {
+          fill: $white;
+          stroke: $primary;
+        }
+      }
+    } 
+    &:active {
+      svg {
+        path {
+          fill: $primary;
+          stroke: $white;
+        }
+      }
+    } 
   }
 
   &--back {
@@ -176,5 +262,94 @@
   &--310 {
     width: 310px;
   }
+
+  &--with-play-icon {
+    width: 100%;
+    padding: 26px 96px 26px 100px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+
+    .btn__text {
+      color: #000;
+      font-weight: 300;
+      font-size: 18px;
+      font-family: "Roboto";
+      line-height: 21px;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+    }
+  }
+
+  &--question-start {
+    display: inline-block;
+    background: #fff;
+
+    .btn__text {
+      display: inline-block;
+      width: 65%;
+      color: $primary;
+      font-size: 11px;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &--toggle-user {
+    padding: 10px 16px 9px;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 2px;
+
+    .btn__text {
+      color: #000;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: "Roboto";
+      line-height: 107.5%;
+    }
+  }
+
+  &--voting-decision {
+    width: 50%;
+    padding: 28px 30px 23px;
+    background-color: #fff;
+
+    .btn__text {
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+    }
+
+    &:hover {
+      border-color: $primary;
+    } 
+
+    &:active {
+      background-color: $primary;
+
+      .btn__text {
+        color: $white;
+      }
+      
+      svg {
+        path {
+          stroke: $white;
+        }
+      }
+    }
+  }
+
 }
 

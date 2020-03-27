@@ -1,0 +1,109 @@
+@import '../../assets/styles/partials/variables';
+
+.settings {
+  display: flex;
+  flex-flow: row nowrap;
+  align-self: center;
+  justify-content: space-around;
+  padding-top: 50px;
+
+  &__container {
+    display: block;
+  }
+
+  &__block {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    width: 38%;
+    padding: 45px 40px;
+    text-align: center;
+    background-color: transparent;
+    //border: 1px solid $lightGrey;
+    &-heading {
+      margin-bottom: 35px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    &-content {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      form {
+        width: 100%;
+      }
+      .field {
+        width: 100%;
+        margin-bottom: 35px;
+        &__label{
+          z-index: 0;
+        }
+      }
+      .btn--white {
+        width: 45%;
+        margin: 5px 0;
+      }
+    }
+    &--contracts {
+      width: 22%;
+      padding: 45px 15px 25px;
+      .settings__block-content{
+        .btn {
+          width: 80%;
+        }
+      }
+    }
+    &--settings {
+      .settings__block-group {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        .field {
+          width: 45%;
+        }
+      }
+      .field {
+        &::before {
+          content: unset;
+        }
+        &__input{
+          width: 100%;
+          margin: 0;
+        }
+        &__label{
+          left: 10px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+.modal-buttons {
+  margin-top: 20px;
+  .btn {
+    &:first-child {
+      margin-bottom: 15px;
+    }
+  }
+  & > p {
+    margin-top: 5px;
+    color: #000000;
+    font-weight: 300;
+    font-size: 11px;
+    text-align: center;
+    opacity: 0.7;
+  }
+}
+
+#dialog-project_modal_contract_uploading,
+#dialog-token_modal_contract_uploading {
+  .dialog {
+    &__header {
+      padding: 20px;
+      padding-top: 55px;
+    }
+    &__body {
+      padding-bottom: 50px;
+    }
+  }
+}

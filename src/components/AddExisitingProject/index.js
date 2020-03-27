@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { withTranslation } from 'react-i18next';
 import Button from '../Button/Button';
@@ -23,9 +23,7 @@ import styles from '../Login/Login.scss';
 class AddExistingProject extends Component {
   connectForm = new ConnectProjectForm({
     hooks: {
-      onSuccess: (form) => {
-        this.connectProject(form);
-      },
+      onSuccess: (form) => this.connectProject(form),
       onError: () => {
         this.showError();
       },
@@ -36,6 +34,7 @@ class AddExistingProject extends Component {
     default: 0,
     loading: 1,
     success: 2,
+    redirect: 3,
   }
 
   // eslint-disable-next-line react/static-property-placement
@@ -44,6 +43,9 @@ class AddExistingProject extends Component {
       checkProject: propTypes.func.isRequired,
       addProjectToList: propTypes.func.isRequired,
       displayAlert: propTypes.func.isRequired,
+      checkIsQuestionsUploaded: propTypes.func.isRequired,
+      gotoProject: propTypes.func.isRequired,
+      setProjectAddress: propTypes.func.isRequired,
     }).isRequired,
     t: propTypes.func.isRequired,
   };
@@ -52,29 +54,36 @@ class AddExistingProject extends Component {
     super(props);
     this.state = {
       currentStep: this.steps.default,
+      projectName: '',
+      projectAddress: '',
     };
   }
 
   connectProject = (form) => {
     const { steps } = this;
     const { appStore, t } = this.props;
-    const { name, address } = form.values();
+    const { name, address: rawAddress } = form.values();
+    const address = rawAddress.trim();
     this.setState({
       currentStep: steps.loading,
     });
     return new Promise((resolve, reject) => {
       appStore.checkProject(address)
         .then(() => {
-          this.setState({ currentStep: steps.success });
+          this.setState({
+            currentStep: steps.success,
+            projectAddress: address,
+            projectName: name,
+          });
           appStore.addProjectToList({ name, address });
-          resolve();
+          return resolve();
         })
         .catch(() => {
           appStore.displayAlert(t('errors:tryAgain'), 3000);
-          this.state = {
+          this.setState({
             currentStep: steps.default,
-          };
-          reject();
+          });
+          return reject();
         });
     });
   }
@@ -84,8 +93,27 @@ class AddExistingProject extends Component {
     appStore.displayAlert(t('errors:validationError'), 3000);
   }
 
+  startUploading = (address) => {
+    const { appStore } = this.props;
+    appStore.setProjectAddress(address);
+    this.setState({ currentStep: this.steps.redirect });
+  }
+
+  checkProject = async ({
+    address,
+    name,
+  }) => {
+    const { appStore } = this.props;
+    const isQuestionsUploaded = await appStore.checkIsQuestionsUploaded(address);
+    // eslint-disable-next-line no-unused-expressions
+    isQuestionsUploaded
+      ? appStore.gotoProject({ address, name })
+      : this.startUploading(address);
+  }
+
   renderSwitch(step) {
     const { steps } = this;
+    const { projectAddress, projectName } = this.state;
     const { t } = this.props;
     switch (step) {
       case steps.default:
@@ -100,7 +128,15 @@ class AddExistingProject extends Component {
           </LoadingBlock>
         );
       case steps.success:
-        return <MessageBlock />;
+        return (
+          <MessageBlock
+            address={projectAddress}
+            name={projectName}
+            onClick={this.checkProject}
+          />
+        );
+      case steps.redirect:
+        return <Redirect to="/uploadQuestions" />;
       default:
         return '';
     }
@@ -121,8 +157,8 @@ class AddExistingProject extends Component {
 const InputBlock = withTranslation()(({ t, form }) => (
   <FormBlock className={styles.form__block}>
     <Heading>
-      {t('headings:сonnectProject.heading')}
-      {t('headings:сonnectProject.subheading')}
+      {t('headings:connectProject.heading')}
+      {t('headings:connectProject.subheading')}
     </Heading>
     <form form={form} onSubmit={form.onSubmit}>
       <Input field={form.$('name')}>
@@ -157,13 +193,15 @@ const InputBlock = withTranslation()(({ t, form }) => (
   </FormBlock>
 ));
 
-const MessageBlock = withTranslation()(({ t }) => (
+const MessageBlock = withTranslation()(observer(({
+  t, onClick, address, name,
+}) => (
   <FormBlock>
     <Heading>
       {t('headings:projectConnected.heading')}
       {t('headings:projectConnected.subheading')}
     </Heading>
-    <Button theme="black" size="240" icon={<Login />} type="submit">
+    <Button theme="black" size="240" icon={<Login />} onClick={() => { onClick({ address, name }); }}>
       {t('buttons:toConnectedProject')}
     </Button>
     <NavLink to="/projects">
@@ -172,7 +210,7 @@ const MessageBlock = withTranslation()(({ t }) => (
       </Button>
     </NavLink>
   </FormBlock>
-));
+)));
 
 InputBlock.propTypes = {
   form: propTypes.shape({

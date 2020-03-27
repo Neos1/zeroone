@@ -1,5 +1,5 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './Heading.scss';
 
 const Heading = ({ children }) => (
@@ -10,7 +10,10 @@ const Heading = ({ children }) => (
 );
 
 Heading.propTypes = {
-  children: propTypes.arrayOf(propTypes.string).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string,
+  ]).isRequired,
 };
 
 export default Heading;

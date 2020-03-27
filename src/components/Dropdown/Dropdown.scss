@@ -2,10 +2,30 @@
 .dropdown {
   position: relative;
   display: inline-block;
-  
+
   button {
     background: transparent;
     outline: none;
+  }
+  
+  &--simple {
+    &.dropdown--opened {
+      .dropdown__options {
+        height: 160px;
+      }
+    }
+    .dropdown__options {
+      width: 100%;
+      max-height: 160px;
+    }
+    .dropdown__option {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: left;
+      text-overflow: ellipsis;
+    }
   }
 
   &__head {
@@ -39,6 +59,27 @@
     }
   }
 
+  &__error-text {
+    position: absolute;
+    bottom: -15px;
+    width: 100%;
+    font-size: 11px;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &--error {
+    .dropdown__error-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .dropdown__head {
+      border-bottom: 1px dashed rgba(0, 0, 0, 1);
+    }
+  }
+
   &__arrow {
     position: absolute;
     top: 50%;
@@ -47,10 +88,11 @@
     transform: translateY(-50%) rotate(0deg);
     transition: 0.2s;
     svg {
+      width: 12px;
       path {
         opacity: 1;
         transition: 0.2s;
-        stroke: $lightGrey;
+        stroke: $border;
       }
     }
   }
@@ -78,18 +120,26 @@
     display: inline-block;
     max-width: 80%;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     vertical-align: middle;
+    &-label {
+      position: absolute;
+      bottom: 90%;
+      left: 45px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 10px;
+    }
   }
 
   &__options {
     position: absolute;
     top: 100%;
     z-index: 1;
-    width: 155%;
+    width: 156%;
     height: 0;
     max-height: 150px;
-    padding: 5px 10px;
+    padding: 5px 0;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: $white;
@@ -97,6 +147,8 @@
     opacity: 0;
     transition: .3s ease-in-out;
     &::-webkit-scrollbar {
+      position: relative;
+      right: -30px;
       width: 20px;
     }
     /* Track */
@@ -131,16 +183,32 @@
   }
 
   &__option {
-    display: block;
-    padding: 10px 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
     border: none;
     cursor: pointer;
+    transition: .2s;
+
+    &:hover {
+      background-color: rgba($color: #E6E6E6, $alpha: .8);
+    }
+
+    &-label {
+      display: inline-block;
+      width: 320px;
+    }
   }
 
   &__suboption {
-    margin-left: 30px;
+    margin-left: 20px;
     color: $linkColor;
     font-weight: 700;
+    font-size: 14px;
+    text-align: right;
   }
 
   &--opened {

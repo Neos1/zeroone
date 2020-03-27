@@ -1,6 +1,7 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { NavLink, Redirect } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import Container from '../Container';
@@ -12,6 +13,8 @@ import Input from '../Input';
 import Button from '../Button/Button';
 import LoadingBlock from '../LoadingBlock';
 import LoginForm from '../../stores/FormsStore/LoginForm';
+import AppStore from '../../stores/AppStore/AppStore';
+import UserStore from '../../stores/UserStore/UserStore';
 
 import styles from './Login.scss';
 
@@ -19,6 +22,12 @@ import styles from './Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class Login extends Component {
+  static propTypes = {
+    appStore: PropTypes.instanceOf(AppStore).isRequired,
+    userStore: PropTypes.instanceOf(UserStore).isRequired,
+    t: PropTypes.func.isRequired,
+  };
+
   loginForm = new LoginForm({
     hooks: {
       onSuccess: (form) => this.login(form),
@@ -87,7 +96,10 @@ const InputForm = withTranslation()(({
       <Dropdown options={appStore.wallets} subOptions={appStore.balances} field={form.$('wallet')} onSelect={appStore.selectWallet}>
         <CreditCard />
       </Dropdown>
-      <Input type="password" field={form.$('password')}>
+      <Input
+        type="password"
+        field={form.$('password')}
+      >
         <Password />
       </Input>
       <div className={styles.form__submit}>
@@ -109,27 +121,14 @@ const InputForm = withTranslation()(({
   </FormBlock>
 ));
 
-Login.propTypes = {
-  appStore: propTypes.shape({
-    displayAlert: propTypes.func.isRequired,
-    readWalletList: propTypes.func.isRequired,
-  }).isRequired,
-  userStore: propTypes.shape({
-    logging: propTypes.bool.isRequired,
-    login: propTypes.func.isRequired,
-    authorized: propTypes.bool.isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
-
 InputForm.propTypes = {
-  appStore: propTypes.shape({
-    wallets: propTypes.arrayOf(propTypes.object).isRequired,
+  appStore: PropTypes.shape({
+    wallets: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
-  form: propTypes.shape({
-    $: propTypes.func.isRequired,
-    onSubmit: propTypes.func.isRequired,
-    loading: propTypes.bool.isRequired,
+  form: PropTypes.shape({
+    $: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
   }).isRequired,
 };
 

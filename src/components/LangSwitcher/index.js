@@ -2,20 +2,39 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 import propTypes from 'prop-types';
+import nextId from 'react-id-generator';
 import i18n from '../../i18n';
 import styles from './LangSwitcher.scss';
+import { getCorrectMomentLocale } from '../../utils/Date';
 
 @withTranslation()
 class LangSwitcher extends Component {
+  static propTypes = {
+    t: propTypes.func.isRequired,
+    disabled: propTypes.bool,
+    onSelect: propTypes.func,
+  }
+
+  static defaultProps = {
+    disabled: false,
+    onSelect: () => {},
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       opened: false,
+      language: null,
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+
+    window.ipcRenderer.on('change-language:confirm', (event, value) => {
+      this.changeLanguage(value);
+    });
   }
 
   componentDidMount() {
@@ -24,6 +43,9 @@ class LangSwitcher extends Component {
 
   componentWillUnmount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+    window.ipcRenderer.removeListener('change-language:confirm', (event, value) => {
+      this.changeLanguage(value);
+    });
   }
 
   setWrapperRef(node) {
@@ -37,10 +59,21 @@ class LangSwitcher extends Component {
     });
   }
 
+  changeLanguage = (value) => {
+    i18n.changeLanguage(value);
+    moment.locale(getCorrectMomentLocale(i18n.language));
+  }
+
   selectOption = (e) => {
+    const { props: { disabled, onSelect } } = this;
     const value = e.target.getAttribute('data-value');
     this.toggleOptions();
-    i18n.changeLanguage(value);
+    this.setState({ language: value });
+    if (disabled) {
+      onSelect(value);
+    } else {
+      window.ipcRenderer.send('change-language:request', value);
+    }
   }
 
   closeOptions = () => {
@@ -56,13 +89,13 @@ class LangSwitcher extends Component {
   }
 
   render() {
-    const { opened } = this.state;
+    const { opened, language: stateLanguage } = this.state;
     const { t } = this.props;
     const { language } = i18n;
     return (
       <div className={`${styles.lang} ${opened ? styles['lang--opened'] : ''}`} ref={this.setWrapperRef}>
         <span className={styles['lang--selected']} onClick={this.toggleOptions}>
-          {language}
+          {stateLanguage !== null ? stateLanguage : language}
         </span>
         <div className={styles.lang__options}>
           {
@@ -72,6 +105,7 @@ class LangSwitcher extends Component {
               className={styles.lang__option}
               data-value={item}
               onClick={this.selectOption}
+              key={nextId('lang_switcher_option')}
             >
               {`${t(`other:${item}`)} (${item})`}
             </button>
@@ -83,8 +117,5 @@ class LangSwitcher extends Component {
   }
 }
 
-LangSwitcher.propTypes = {
-  t: propTypes.func.isRequired,
-};
 
 export default LangSwitcher;

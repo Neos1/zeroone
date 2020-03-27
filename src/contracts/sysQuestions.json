@@ -1,128 +1,80 @@
 {
-  "1": {
-    "id": 1,
-    "group": 1,
+  "0": {
+    "groupId": 0,
     "name": "Добавить Вопрос",
-    "caption": "Добавление нового вопроса",
-    "time": 5,
-    "method": "0x686c52c4",
-    "formula": "(group (Owners) => condition (positive >= 20% of all))",
-    "parameters": [
+    "description": "Добавление нового вопроса",
+    "timeLimit": 300,
+    "methodSelector": "0x5fe495c3",
+    "paramNames": [
       "GroupId",
-      "uint",
       "Name",
-      "string",
       "Caption",
-      "string",
       "Time",
-      "uint",
       "MethodSelector",
-      "bytes4",
       "Formula",
+      "paramNames",
+      "paramTypes",
+      "Target"
+    ],
+    "paramTypes": [
+      "uint",
       "string",
-      "parameters",
-      "bytes32[]"
-    ],
-    "hints": {
-      "0": {
-        "desc": "Id группы вопросов, к которому он будет принадлежать",
-        "example": "1 - системные вопросы, 2 - вопросы для группы владельцев кастомных токенов"
-      },
-      "1": {
-        "desc": "Название вопроса",
-        "example": "Уничтожить проект"
-      },
-      "2": {
-        "desc": "Описание вопроса",
-        "example": "Уничтожение всего проекта, так как дальнейшее существование потеряло смысл"
-      },
-      "3": {
-        "desc": "Время, в течении которого можно будет проголосовать после того, как будет начато голосование  по данному вопросу (в минутах)",
-        "example": "10"
-      },
-      "4": {
-        "desc": "Селектор метода в контракте, который будет вызываться в случае положительного исхода голосования",
-        "example": "0xcaF1deb4"
-      },
-      "5": {
-        "desc": "Формула, по которой будут подсчитываться результаты голосования",
-        "example": "(group (Owners) => condition (positive >= 20% of all)) \r\n (group (Designers) => condition (quorum >= 20%))"
-      }
-    }
-  },
-  "2": {
-    "id": 2,
-    "group": 1,
-    "name": "Подключить группу пользователей",
-    "caption": "Подключить новую группу пользователей для участия в голосованиях",
-    "time": 5,
-    "method": "0x952b627c",
-    "formula": "(group (Owners) => condition (positive >= 20% of all))",
-    "parameters": [
-      "Name",
       "string",
-      "Address",
-      "address",
-      "Type",
-      "string"
-    ],
-    "hints": {
-      "0": {
-        "desc": "Название группы пользователей",
-        "example": "Дизайнеры"
-      },
-      "1": {
-        "desc": "Адрес контракта, в котором находятся токены, распределенные среди участников группы",
-        "example": "0х0000000000000000000000000000000000000000"
-      },
-      "2": {
-        "desc": "Тип контракта данной группы (ERC20 для контракта токенов ERC20, Custom для контракта токенов, созданного в этом приложении)",
-        "example": "ERC20, Custom"
-      }
-    }
-  },
-  "3": {
-    "id": 3,
-    "group": 1,
-    "name": "Добавить группу вопросов",
-    "caption": "Добавить новую группу вопросов",
-    "time": 5,
-    "method": "0xdf831328",
-    "formula": "(group (Owners) => condition (positive >= 20% of all))",
-    "parameters": [
-      "Name",
-      "string"
-    ],
-    "hints": {
-      "0": {
-        "desc": "Имя для группы вопросов",
-        "example": "Административные"
-      }
-    }
-  },
-  "4": {
-    "id": 4,
-    "group": 1,
-    "name": "Установить администратора группы",
-    "caption": "Установка администратора в группе кастомных токенов",
-    "time": 5,
-    "method": "0x3cc0a953",
-    "formula": "(group (Owners) => condition (positive >= 20% of all))",
-    "parameters": [
-      "Group",
-      "address",
-      "Admin address",
+      "uint",
+      "bytes4",
+      "string",
+      "string[]",
+      "string[]",
       "address"
     ],
-    "hints": {
-      "0": {
-        "desc": "Aдрес группы, в которой произойдет установка администратора",
-        "example": "0х0000000000000000000000000000000000000000"
-      },
-      "1": {
-        "desc": "Адрес пользователя, который получит администраторские привелегии",
-        "example": "0х0000000000000000000000000000000000000000"
-      }
-    }
+    "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
+  },
+  "1": {
+    "groupId": 0,
+    "name": "Подключить группу пользователей",
+    "description": "Подключить новую группу пользователей для участия в голосованиях",
+    "timeLimit": 300,
+    "methodSelector": "0x6b13e1e0",
+    "paramNames": [
+      "Name",
+      "Address",
+      "Type"
+    ],
+    "paramTypes": [
+      "string",
+      "address",
+      "uint8"
+    ],
+    "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
+  },
+  "2": {
+    "groupId": 0,
+    "name": "Добавить группу вопросов",
+    "description": "Добавить новую группу вопросов",
+    "timeLimit": 300,
+    "methodSelector": "0xb9253b2b",
+    "paramNames": [
+      "Name"
+    ],
+    "paramTypes": [
+      "string"
+    ],
+    "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
+  },
+  "3": {
+    "groupId": 0,
+    "name": "Установить администратора группы",
+    "description": "Установка администратора в группе кастомных токенов",
+    "timeLimit": 300,
+    "methodSelector": "0xa589e384",
+    "paramNames": [
+      "Group Address",
+      "New Admin Address"
+    ],
+    "paramTypes": [
+      "address",
+      "address"
+    ],
+    "rawFormula": "erc20{%s}->conditions{quorum>50%, positive>50% of all}"
   }
 }

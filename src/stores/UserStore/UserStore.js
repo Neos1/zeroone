@@ -1,6 +1,8 @@
 import { observable, action, computed } from 'mobx';
 import { Transaction as Tx } from 'ethereumjs-tx';
 import i18n from 'i18next';
+import weiToFixed from '../../utils/EthUtils/wei-to-fixed';
+import AsyncInterval from '../../utils/AsyncUtils';
 /**
  * Describes store with user data
  */
@@ -23,20 +25,34 @@ class UserStore {
 
   @observable password = '';
 
+  @observable currency = 'ETH';
+
+  @observable fullCurrencyName = 'ether';
+
+  updateBalanceInterval = null;
+
   constructor(rootStore) {
     this.rootStore = rootStore;
   }
 
+  @computed
+  get userBalance() {
+    return `${weiToFixed(this.balance, this.fullCurrencyName)} ${this.currency}`;
+  }
+
   /**
    * saves password to store for decoding wallet and transaction signing
-   *@param {string} value password from form
-  */
+param {string} value password from form
+   *
+   * @param {string} value new pass value
+   */
   @action setPassword(value) {
     this.password = value;
   }
 
   /**
    * saves v3 keystore and wallet address to store
+   *
    * @param {object} wallet JSON Keystore V3
    */
   @action setEncryptedWallet(wallet) {
@@ -45,6 +61,7 @@ class UserStore {
 
   /**
    * checking Ethereum balance for given address
+   *
    * @param {string} address wallet adddress
    * @returns {Promise} resolves with balance rounded to 5 decimal places
    */
@@ -59,8 +76,9 @@ class UserStore {
 
   /**
    * create wallet by given password
+   *
    * @param {string} password password which will be used for wallet decrypting
-   * @return {Promise} resolves on success with {v3wallet, mnemonic, privateKey, walletName}
+   * @returns {Promise} resolves on success with {v3wallet, mnemonic, privateKey, walletName}
    */
   @action createWallet(password) {
     return new Promise((resolve, reject) => {
@@ -83,13 +101,14 @@ class UserStore {
 
   /**
    * recovering wallet by mnemonic
+   *
    * @param {string} password
    * @returns {Promise} resolves with {v3wallet, privateKey}
    */
-  @action recoverWallet() {
+  @action recoverWallet(password = undefined) {
     const seed = this._mnemonicRepeat.join(' ');
     return new Promise((resolve, reject) => {
-      this.rootStore.walletService.createWallet(undefined, seed).then((data) => {
+      this.rootStore.walletService.createWallet(password, seed).then((data) => {
         if (data.v3wallet) {
           const {
             v3wallet, mnemonic, privateKey, walletName,
@@ -108,16 +127,22 @@ class UserStore {
 
   /**
    * method for authorize wallet for working with projects
+   *
    * @param {string} password password for wallet
    * @returns {Promise} resolve on success authorization
    */
   @action login(password) {
-    const { appStore } = this.rootStore;
+    const { appStore, configStore: { UPDATE_INTERVAL } } = this.rootStore;
     return this.readWallet(password)
       .then((data) => {
         this.privateKey = data.privateKey;
         this.setEncryptedWallet(JSON.parse(data.wallet));
         this.authorized = true;
+        this.setPassword(password);
+        this.updateBalanceInterval = new AsyncInterval({
+          timeoutInterval: UPDATE_INTERVAL,
+          cb: this.getEthBalance,
+        });
         Promise.resolve();
       }).catch(() => {
         appStore.displayAlert(i18n.t('errors:wrongPassword'), 3000);
@@ -127,6 +152,7 @@ class UserStore {
 
   /**
    * read wallet for any operations with it
+   *
    * @param {string} password password for wallet
    * @returns {Promise} resolves with object {v3wallet, privateKey}
    */
@@ -140,8 +166,8 @@ class UserStore {
         } else {
           reject();
         }
-      }).catch(() => {
-        reject();
+      }).catch((err) => {
+        reject(err);
       });
     });
   }
@@ -157,6 +183,7 @@ class UserStore {
 
   /**
    * checks is seed valid with walletService
+   *
    * @param {string} mnemonic mnemonic
    * @returns {bool} is valid
    */
@@ -167,13 +194,16 @@ class UserStore {
 
   /**
    * Signing transactions with private key
+   *
    * @function
    * @param {string} data rawTx
    * @param {string} password password which was used to encode Keystore V3
-   * @return Signed TX data
+   * @returns Signed TX data
    */
-  @action singTransaction(data, password) {
-    return new Promise((resolve) => {
+  @action async singTransaction(data, password) {
+    const { rootStore: { Web3Service: { web3: { eth } } } } = this;
+    const chainId = await eth.net.getId();
+    return new Promise((resolve, reject) => {
       // eslint-disable-next-line consistent-return
       this.readWallet(password).then((info) => {
         if (info instanceof Error) return false;
@@ -181,16 +211,27 @@ class UserStore {
           info.privateKey,
           'hex',
         );
-        const tx = new Tx(data, { chain: 'ropsten' });
+        // const customCommon = Common.forCustomChain(
+        //   'mainnet',
+        //   {
+        //     chainId,
+        //   },
+        //   'byzantium',
+        // );
+        const tx = new Tx(data, { chain: chainId });
         tx.sign(privateKey);
         const serialized = tx.serialize().toString('hex');
         resolve(serialized);
-      });
+      })
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
 
   /**
    * Sending transaction from user
+   *
    * @function
    * @param {string} txData Raw transaction
    */
@@ -200,11 +241,15 @@ class UserStore {
 
   /**
    * Getting user Ethereum balance
-   * @return {number} balance in ETH
+   *
+   * @returns {number} balance in ETH
    */
-  @action async getEthBalance() {
+  @action getEthBalance = async () => {
     const { Web3Service: { web3 } } = this.rootStore;
-    this.balance = await web3.eth.getBalance(this.address);
+    web3.eth.getBalance(this.address)
+      .then((result) => {
+        this.balance = result;
+      });
   }
 
   @action setMnemonic(value) {
@@ -226,6 +271,22 @@ class UserStore {
 
   @computed get mnemonic() {
     return this._mnemonic;
+  }
+
+  @action
+  reset = () => {
+    this.authorized = false;
+    this.redirectToProjects = false;
+    this.encryptedWallet = '';
+    this.walletName = '';
+    this.privateKey = '';
+    this._mnemonic = Array(12);
+    this._mnemonicRepeat = Array(12);
+    this.balance = 0;
+    this.password = '';
+    this.currency = 'ETH';
+    this.fullCurrencyName = 'ether';
+    this.updateBalanceInterval.cancel();
   }
 }
 

@@ -1,0 +1,272 @@
+.members {
+  &__page {
+    margin-bottom: 40px;
+    text-align: center;
+
+    &-loader {
+      text-align: center;
+    }
+
+    .loader {
+      margin-top: 50px;
+    }
+  }
+
+  &__top {
+    width: 100%;
+    margin-bottom: 15px;
+
+    &-button {
+      display: inline-block;
+      width: 100%;
+      padding: 26px 96px 26px 100px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      outline: none;
+      cursor: pointer;
+
+      &-icon,
+      &-text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        margin-right: 16px;
+
+        svg {
+          width: auto;
+          height: auto;
+        }
+      }
+
+      &-text {
+        color: #000;
+        font-weight: 300;
+        font-size: 18px;
+        font-family: "Roboto";
+        line-height: 21px;
+      }
+    }
+  }
+
+  &__group {
+    margin-bottom: 8px;
+
+    &-button {
+      width: 100%;
+      padding: 8px 0;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      outline: none;
+      cursor: pointer;
+    }
+
+    &-id {
+      margin-bottom: 4px;
+      color: rgba(0, 0, 0, 0.2);
+      font-weight: 300;
+      font-size: 11px;
+      font-family: "Roboto";
+      line-height: 13px;
+    }
+
+    &-main,
+    &-extra,
+    &-divider {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &-main {
+      width: 75%;
+    }
+
+    &-id,
+    &-main,
+    &-wallet {
+      padding-left: 29px;
+    }
+
+    &-extra {
+      position: relative;
+      width: calc(25% - 1px);
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    &-divider {
+      width: 1px;
+      height: 100%;
+      max-height: 112px;
+      margin-top: -6px;
+      margin-bottom: -6px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &-name {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &-description {
+      min-height: 65px;
+      margin-bottom: 8px;
+      padding-right: 15px;
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 300;
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-wallet,
+    &-token {
+      color: rgba(200, 201, 202, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-balance {
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 1);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    &-no-data {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 18px 32px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-top: unset;
+
+      &-icon,
+      &-text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        margin-right: 10px;
+      }
+
+      &-text {
+        color: #4d4d4d;
+        font-size: 11px;
+        line-height: 13px;
+        white-space: pre-line;
+      }
+    }
+
+    &-table {
+      width: 100%;
+      padding-top: 8px;
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-top: unset;
+      border-collapse: collapse;
+
+      &-th {
+        padding: 8px;
+        color: #808080;
+        font-size: 11px;
+        line-height: 13px;
+        text-align: left;
+
+        &--weight,
+        &--balance {
+          padding-right: 40px;
+          text-align: right;
+        }
+      }
+
+      &-td {
+        padding: 10px;
+
+        button {
+          width: 100%;
+          height: 100%;
+          background-color: transparent;
+          border: none;
+          outline: unset;
+          cursor: pointer;
+        }
+
+        &--is {
+          min-width: 20px;
+          padding: 0;
+          text-align: center;
+        }
+
+        &--img {
+          width: 24px;
+          padding: 0;
+        }
+
+        &--wallet {
+          padding: 10px 8px;
+          color: #000;
+          font-size: 14px;
+          line-height: 16px;
+        }
+
+        &--weight,
+        &--balance {
+          padding-right: 40px;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 16px;
+          text-align: right;
+
+          button {
+            text-align: right;
+          }
+        }
+
+        &--balance {
+          position: relative;
+
+          span {
+            position: absolute;
+            top: 50%;
+            right: -14px;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.5s;
+          }
+
+          svg {
+            width: auto;
+            height: auto;
+          }
+        }
+      }
+
+      &-tr {
+        background-color: #fff;
+        transition: background-color 0.5s;
+
+        &:hover {
+          background: #e1e4e8;
+
+          .members__group-table-td--balance {
+            span {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.text {
+  &--left {
+    text-align: left;
+  }
+}

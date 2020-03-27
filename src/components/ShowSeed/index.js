@@ -10,6 +10,7 @@ import Heading from '../Heading';
 import Explanation from '../Explanation';
 import Button from '../Button/Button';
 import { BackIcon, EyeIcon, CrossedEyeIcon } from '../Icons';
+import UserStore from '../../stores/UserStore/UserStore';
 
 import styles from '../Login/Login.scss';
 
@@ -17,6 +18,11 @@ import styles from '../Login/Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class ShowSeed extends Component {
+  static propTypes = {
+    userStore: propTypes.instanceOf(UserStore).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -67,12 +73,15 @@ class ShowSeed extends Component {
             </Button>
           </NavLink>
           <div className={`${styles.form__explanation} ${styles['form__explanation--right']}`}>
-            <Explanation>
+            <Explanation
+              bold
+            >
               <p>{t('explanations:seed.0')}</p>
               <p>{t('explanations:seed.1')}</p>
             </Explanation>
             <Button
               theme="white"
+              className="btn--showseed"
               icon={!visible ? <EyeIcon /> : <CrossedEyeIcon />}
               onClick={this.toggleWords}
             >
@@ -91,13 +100,6 @@ const SeedWord = ({ word, id, visible }) => (
     <span className="seed__word-text">{visible ? word : ('*').repeat(word.length)}</span>
   </p>
 );
-
-ShowSeed.propTypes = {
-  userStore: propTypes.shape({
-    mnemonic: propTypes.arrayOf(propTypes.string).isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
 
 SeedWord.propTypes = {
   id: propTypes.number.isRequired,

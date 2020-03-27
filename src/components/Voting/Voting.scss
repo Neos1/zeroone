@@ -1,0 +1,600 @@
+@import '../../assets/styles/includes/mixin';
+@import '../../assets/styles/partials/variables';
+
+.voting {
+  &-page {
+    margin-bottom: 40px;
+
+    &__list {
+      text-align: center;
+
+      &-empty {
+        position: relative;
+        height: 40vh;
+        min-height: 200px;
+
+        &::after {
+          display: inline-block;
+          height: 100%;
+          vertical-align: middle;
+          content: '';
+        }
+
+        p {
+          display: inline-block;
+          margin: 0;
+          padding: 30px 0;
+          color: rgba(0, 0, 0, 0.7);
+          font-weight: 300;
+          font-size: 18px;
+          line-height: 21px;
+          text-align: center;
+          vertical-align: middle;
+        }
+      }
+
+      .loader {
+        margin-top: 50px;
+      };
+    }
+
+    &__loader {
+      text-align: center;
+    }
+  }
+
+  &-info {
+    margin-bottom: 40px;
+
+    &__back {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    &__date {
+      float: right;
+      padding: 5px 0;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: middle;
+
+      span {
+        &:last-child {
+          padding-left: 24px;
+        }
+      }
+    }
+
+    &__card {
+      margin-top: 7px;
+      background-color: #fff;
+
+      &-inner {
+        padding: 20px 45px 20px;
+        border: 1px solid #e1e4e8;
+      }
+    }
+
+    &__index {
+      margin-bottom: 16px;
+      color: rgba(0, 0, 0, 0.2);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &__title {
+      margin-bottom: 8px;
+      color: #000;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &__main {
+      margin-bottom: 32px;
+      font-size: 0;
+    }
+
+    &--long-params {
+      .voting-info__description {
+        width: 40%;
+      }
+
+      .voting-info__data {
+        display: inline-flex;
+        flex-flow: row wrap;
+        width: 60%;
+        & > div {
+          width: 50%;
+          &.voting-info__block {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    &__description {
+      display: inline-block;
+      width: 50%;
+      padding-right: 50px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: top;
+    }
+
+    &__data {
+      display: inline-block;
+      width: 50%;
+      padding-left: 50px;
+      color: rgba(0, 0, 0, 1);
+      font-size: 11px;
+      line-height: 13px;
+      vertical-align: top;
+
+      &-title {
+        margin-bottom: 4px;
+      }
+
+      &-value {
+        margin-bottom: 16px;
+        font-weight: 700;
+      }
+    }
+
+    &__formula {
+      margin-bottom: 16px;
+      color: #808080;
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &__buttons {
+
+      button {
+        float: left;
+        width: 50%;
+        padding: 28px 30px 23px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        background-color: #fff;
+        border: 1px solid #e1e4e8;
+        outline: none;
+        cursor: pointer;
+
+        &:first-child {
+          position: relative;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          // &::after {
+          //   position: absolute;
+          //   top: 0;
+          //   right: 0;
+          //   width: 1px;
+          //   height: 100%;
+          //   background-color: #e1e4e8;
+          //   content: '';
+          // }
+        }
+        &:last-child {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+
+      @include clearfix;
+    }
+
+    &__button {
+      &-icon {
+        margin-bottom: 8px;
+        text-align: center;
+
+        svg {
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      &--close {
+        display: inline-block;
+        width: 100%;
+        padding: 46px;
+        color: #000;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        text-transform: uppercase;
+        background: transparent;
+        border: unset;
+        border: 1px solid #e1e4e8;
+        outline: none;
+        cursor: pointer;
+        transition: .2s linear;
+
+        &:hover {
+          border: 1px solid $primary
+        }
+
+        &:active {
+          color: $white;
+          background-color: $primary;
+        }
+
+        &:disabled {
+          cursor: default;
+          opacity: 0.6;
+        }
+      }
+    }
+
+    &__stats {
+      margin-top: 16px;
+
+      svg {
+        width: auto;
+        height: auto;
+      }
+
+      button {
+        padding: 11px 15px;
+
+        svg path {
+          fill: #fff;
+        }
+
+        &:hover {
+          svg path {
+            fill: #fff;
+          }
+        }
+
+        &:active {
+          svg path {
+            fill: #000;
+          }
+        }
+      }
+
+      &-button {
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      &-content {
+        margin-bottom: 40px;
+        padding: 40px 60px 53px;
+        background: #fff;
+        border: 1px solid #e1e4e8;
+      }
+    }
+
+    &__progress {
+      display: inline-block;
+      margin-left: 5px;
+
+      &-container {
+        padding-right: 24px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+      }
+
+      .progress-bar__indicator {
+        width: 4px;
+        height: 4px;
+        margin-right: 2px;
+
+        &--filled {
+          background-color: rgba(0, 0, 0, 0.7);
+        }
+      }
+    }
+
+    &__decision {
+      padding: 49px 20px;
+      text-align: center;
+      border: 1px solid #e1e4e8;
+
+      &-text {
+        display: inline-block;
+        margin-right: 8px;
+        color: #000;
+        font-size: 11px;
+        line-height: 13px;
+        vertical-align: middle;
+      }
+
+      &-icon {
+        display: inline-block;
+        color: #000;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        text-transform: uppercase;
+        vertical-align: middle;
+
+        svg {
+          display: inline-block;
+          width: auto;
+          height: auto;
+          margin-right: 4px;
+          vertical-align: middle;
+        }
+      }
+    }
+
+    &__result {
+      display: inline-block;
+      width: 100%;
+      padding: 33px 20px 44px;
+      text-align: center;
+      border: 1px solid #e1e4e8;
+
+      &-item {
+        display: inline-block;
+        margin: 0 32px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: left;
+        vertical-align: top;
+
+        &-value {
+          margin-top: 3px;
+          color: rgba(0, 0, 0, 1);
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+
+      .voting-info__decision-icon {
+        margin-top: 3px;
+      }
+    }
+  }
+
+  &__filter  {
+    &-dropdown {
+      display: inline-flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      width: 500px;
+      margin-right: 29px;
+
+      .dropdown {
+        width: 220px;
+      }
+    }
+
+    &-date {
+      float: right;
+    }
+  }
+
+  &__top {
+    width: 100%;
+    margin-top: 36px;
+    margin-bottom: 16px;
+  }
+
+  &__item {
+    min-height: 126px;
+    margin-bottom: 8px;
+    padding: 10px 8px 16px 30px;
+    font-size : 0;
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    transition: border-color 0.3s;
+
+    &-date,
+    &-progress {
+      display: inline-block;
+      margin-top: 8px;
+      vertical-align: middle;
+    }
+
+    &-info {
+      display: inline-block;
+      width: 54%;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    &-date {
+      width: 24%;
+      padding: 10px 0;
+      text-align: center;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 1px solid rgba(0, 0, 0, 0.1);
+
+      &-block {
+        display: inline-block;
+        padding: 0 39px;
+
+        &:first-child {
+          margin-bottom: 16px;
+        }
+      }
+
+      &-text {
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 15px;
+        text-align: left;
+      }
+    }
+
+    &-progress {
+      width: 22%;
+      padding: 0 36px;
+    }
+
+    &-index {
+      margin-bottom: 5px;
+      color: rgba(0, 0, 0, 0.2);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &-title {
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 1);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &-description {
+      margin-bottom: 10px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+    }
+
+    &:hover {
+      border: 1px solid #000;
+    }
+
+    &--new {
+      position: relative;
+      border: 1px dashed #000;
+
+      &::before {
+        left: -20px;
+      }
+
+      &::after {
+        right: -20px;
+        transform: rotate(180deg);
+      }
+
+      &::after,
+      &::before {
+        position: absolute;
+        top: 12%;
+        width: 12px;
+        height: 76%;
+        background-image: url('../../assets/images/activeVoting.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        content: '';
+      }
+    }
+  }
+
+  &__decision {
+    &--progress {
+      .voting__decision {
+        &-title {
+          margin-bottom: 8px;
+          color: #000;
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+    }
+
+    &-progress-bar {
+      text-align: center;
+    }
+
+    &-state {
+      color: rgba(0, 0, 0, 1);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    &-icon {
+      margin-top: 16px;
+      text-align: center;
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &-title {
+      margin-bottom: 4px;
+      color: rgba(0, 0, 0, 0.7);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 13px;
+      text-align: center;
+    }
+
+    &-text {
+      margin-top: 16px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 11px;
+      line-height: 13px;
+      text-align: center;
+
+      &--remained {
+        text-align: left;
+      }
+    }
+  }
+
+  &__back {
+    display: inline-block;
+    padding: 5px 35px;
+    color: #000;
+    font-size: 14px;
+    line-height: 107.5%;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 2px;
+    transition: .2s linear;
+    &:hover {
+      color: #fff;
+      background: #000;
+    }
+    &:active {
+      color: #000;
+      background: #fff;
+    }
+  }
+
+  &__stats {
+    text-align: center;
+
+    &-col {
+      display: inline-block;
+      width: 33.3333%;
+      vertical-align: top;
+
+      .recharts-wrapper {
+        margin: 0 auto;
+      }
+
+      &-title {
+        margin-top: 17px;
+        color: #000;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        text-align: center;
+      }
+
+      &-subtitle {
+        margin-top: 9px;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 11px;
+        line-height: 13px;
+        text-align: center;
+      }
+    }
+
+    @include clearfix;
+  }
+}

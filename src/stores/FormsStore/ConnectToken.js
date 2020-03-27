@@ -8,7 +8,7 @@ class ConnectTokenForm extends ExtendedForm {
       fields: [{
         name: 'address',
         type: 'text',
-        label: 'Token Address',
+        label: 'contractAddress',
         placeholder: i18n.t('fields:contractAddress'),
         rules: 'required|string|address',
       }],

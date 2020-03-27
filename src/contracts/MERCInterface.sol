@@ -1,11 +1,11 @@
-pragma solidity 0.5;
+ pragma solidity ^0.5.15;
 
 interface MERCInterface {
 
 
-  function symbol() external returns (string);
+  function symbol() external returns (string memory);
 
-  function name() external returns (string);
+  function name() external returns (string memory);
 
   function totalSupply() external returns (uint256);
 

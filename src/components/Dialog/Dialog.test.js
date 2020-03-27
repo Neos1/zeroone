@@ -203,11 +203,11 @@ describe('Dialog', () => {
       ).dive().dive();
     });
 
-    it('should has dialog--close class', () => {
+    it('should have dialog--close class', () => {
       expect(wrapper.find('.dialog').hasClass('dialog--close')).toEqual(true);
     });
 
-    it('should has dialog--open class', () => {
+    it('should have dialog--open class', () => {
       expect(wrapper.find('.dialog').hasClass('dialog--open')).toEqual(true);
     });
   });

@@ -1,0 +1,293 @@
+.date-picker {
+  position: relative;
+  display: inline-block;
+  max-width: 240px;
+
+  &__base {
+    position: relative;
+  }
+
+  &__input {
+    position: relative;
+    display: inline-block;
+    width: 73px;
+    padding: 8px 0;
+    color: #181818;
+    font-size: 14px;
+    line-height: 16px;
+    background: transparent;
+    border: unset;
+    outline: none;
+    transition: border-bottom-color 0.3s;
+
+    &-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+    }
+
+    &-placeholder {
+      position: absolute;
+      top: 50%;
+      color: rgba(24, 24, 24, 0.5);
+      font-size: 14px;
+      line-height: 16px;
+      transform: translateY(-50%);
+      cursor: text;
+      transition: all 0.3s;
+    }
+
+    &::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    &:focus {
+      & + .date-picker__input-after {
+        .date-picker__input-line {
+          background-color: rgba(0, 0, 0, 1);
+        }
+      }
+    }
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      & + .date-picker__input-after {
+        .date-picker__input-placeholder {
+          top: 0;
+          font-size: 9px;
+          line-height: 11px;
+        }
+      }
+    }
+  }
+
+  &__min {
+    margin-left: 22px;
+
+    & + .date-picker__input-after {
+      .date-picker__input-placeholder {
+        left: 38px;
+      }
+    }
+  }
+
+  label {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  &__arrow {
+    &--basic {
+      display: inline-block;
+      margin-right: 7px;
+      margin-left: 9px;
+      vertical-align: middle;
+    }
+
+    svg {
+      width: auto;
+      height: auto;
+    }
+  }
+
+  &__icon {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+
+    &::after {
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 1px;
+      height: 13px;
+      background-color: rgba(0, 0, 0, 0.1);
+      transform: translate(-50%, -50%);
+      content: "";
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    top: 50%;
+    right: -28px;
+    padding: 5px;
+    color: #e1e4e8;
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    outline: none;
+    transform: translateY(-50%);
+    visibility: hidden;
+    cursor: pointer;
+    opacity: 0;
+    transition: color 0.3s, border-color 0.3s, opacity 0.3s;
+
+    &:hover,
+    &:active {
+      color: #000;
+      border-color: #000;
+    }
+
+    &--visible {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    svg {
+      width: 7px;
+      height: 7px;
+    }
+  }
+}
+
+$month-padding: 21px;
+
+.litepicker {
+  .container__months {
+    &.columns-2 {
+      width: calc((var(--litepickerMonthWidth) * 2) + #{$month-padding * 4}) !important;
+      margin-top: 12px;
+      border: 1px solid #e1e4e8;
+      border-radius: 0;
+      box-shadow: unset;
+    }
+
+    .month-item {
+      position: relative;
+      padding: 5px $month-padding !important;
+
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 1px;
+        height: 100%;
+        background-color: #e1e4e8;
+        content: '';
+      }
+
+      &:last-child {
+        &::after {
+          content: none;
+        }
+      }
+
+      &-weekdays-row {
+        position: relative;
+
+        &::after {
+          position: absolute;
+          bottom: 0;
+          left: -$month-padding;
+          width: calc(100% + #{$month-padding * 2});
+          height: 1px;
+          background-color: #e1e4e8;
+          content: '';
+        }
+
+        & > div {
+          font-size: 14px;
+          line-height: 16px;
+          text-transform: lowercase;
+        }
+      }
+
+      .button-previous-month,
+      .button-next-month {
+        position: absolute;
+        top: 9px;
+        cursor: pointer;
+
+        svg {
+          width: auto;
+          height: auto;
+        }
+      }
+
+      .button-previous-month {
+        left: -16px;
+      }
+
+      .button-next-month {
+        right: -16px;
+        margin-top: 1px;
+      }
+    }
+
+    .month-item-header {
+      position: relative;
+      font-size: 14px;
+      line-height: 16px;
+      text-transform: uppercase;
+    }
+  }
+
+  .container__days {
+    .day-item {
+      font-size: 14px;
+      line-height: 16px;
+      border-color: transparent;
+      border-radius: 0px !important;
+      box-shadow: unset !important;
+
+      &.is-today {
+        font-weight: 700;
+      }
+
+      &:hover  {
+        background-color: rgba(128, 128, 128, 0.8) !important;
+      }
+    }
+  }
+
+  .container__tooltip {
+    margin-top: -12px;
+    padding: 5px 8px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 16px;
+    background-color: #000;
+    border-radius: 0;
+
+    &::after {
+      bottom: -10px;
+      left: calc(50% - 10px);
+      border-top: 10px solid #000;
+      border-right: 10px solid transparent;
+      border-left: 10px solid transparent;
+    }
+
+    &::before {
+      content: none;
+    }
+  }
+}
+
+:root {
+  --litepickerBgColor: #fff !important;
+  --litepickerMonthHeaderTextColor: #000 !important;
+  --litepickerMonthButton: rgba(0, 0, 0, 0.5) !important;
+  --litepickerMonthButtonHover: rgba(0, 0, 0, 0.5) !important;
+  --litepickerMonthWidth: calc(var(--litepickerDayWidth) * 7) !important;
+  --litepickerMonthWeekdayColor: #c8c9ca !important;
+  --litepickerDayColor: #000 !important;
+  --litepickerDayColorHover: #000 !important;
+  --litepickerDayIsTodayColor: #000 !important;
+  --litepickerDayIsInRange: rgba(230, 230, 230, 0.8) !important;
+  --litepickerDayIsLockedColor: rgba(230, 230, 230, 0.2) !important;
+  --litepickerDayIsBookedColor: #9e9e9e !important;
+  --litepickerDayIsStartColor: #000 !important;
+  --litepickerDayIsStartBg: rgba(128, 128, 128, 0.8) !important;
+  --litepickerDayIsEndColor: #000 !important;
+  --litepickerDayIsEndBg: rgba(128, 128, 128, 0.8) !important;
+  --litepickerDayWidth: 32px !important;
+  --litepickerButtonCancelColor: #000 !important;
+  --litepickerButtonCancelBg: rgba(128, 128, 128, 0.8) !important;
+  --litepickerButtonApplyColor: #000 !important;
+  --litepickerButtonApplyBg: rgba(128, 128, 128, 0.8) !important;
+}

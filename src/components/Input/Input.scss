@@ -12,7 +12,7 @@
 
   &__input {
     width: 85%;
-    margin-left: 20px;
+    margin-left: 17px;
     padding: 8px 0;
     vertical-align: middle;
     background: transparent;
@@ -32,6 +32,26 @@
         font-size: 9px;
       }
     }
+
+    &--textarea {
+      max-width: 100%;
+      min-height: 80px;
+      padding: 10px;
+      background-color: transparent;
+      border: 1px solid #e1e4e8;
+      border-radius: 2px;
+      outline: none;
+      transition: .2s;
+      &::-webkit-input-placeholder {
+        opacity: 0;
+      }
+      &:focus {
+        border-color: $primary;
+        & + .field__label--textarea {
+          color: $primary;
+        }
+      }
+    }
   }
 
   &__label {
@@ -43,6 +63,18 @@
     font-size: 14px;
     transform: translateY(-50%);
     transition: 0.2s;
+
+    &--textarea {
+      position: absolute;
+      bottom: 100%;
+      margin-bottom: 4px;
+      &>span {
+        color: $placeholderColor;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: left;
+      }
+    }
   }
 
   &__error-text {
@@ -54,7 +86,7 @@
     visibility: hidden;
     opacity: 0;
   }
-  
+
   &__line {
     position: absolute;
     bottom: -1px;
@@ -62,6 +94,7 @@
     width: 0;
     height: 1px;
     background-color: $primary;
+    border-bottom: 1px solid $primary;
     transition: 0.3s ease-in;
   }
 
@@ -82,6 +115,10 @@
       style: dashed;
       color: $primary;
     }
+    &.field--textarea {
+      padding-bottom: 1px;
+      border-bottom: none;
+    }
     .field__error-text {
       visibility: visible;
       opacity: 1;
@@ -100,9 +137,37 @@
       }
       &:focus {
         & ~ .field__line {
-          width: 0;
+          width: 100%;
         }
       }
+
+      &--textarea {
+        border-color: $primary;
+        border-style: dashed;
+      }
     }
+    
+  }
+
+  &--textarea {
+    position: relative;
+    .field__error-text {
+      top: unset;
+      bottom: -17px;
+    }
+    .hint {
+      position: relative;
+      z-index: 1;
+      margin-left: 10px;
+      transform: translate(0,0);
+    }
+  }
+
+  .hint {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    z-index: 1;
+    transform: translateY(-50%);
   }
 }

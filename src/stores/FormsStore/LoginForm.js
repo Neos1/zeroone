@@ -8,13 +8,13 @@ class LoginForm extends ExtendedForm {
       fields: [{
         name: 'wallet',
         type: 'text',
-        label: 'Wallet',
+        label: 'wallet',
         placeholder: i18n.t('fields:wallet'),
         rules: 'required|string',
       }, {
         name: 'password',
         type: 'password',
-        label: 'Password',
+        label: 'enterPassword',
         placeholder: i18n.t('fields:enterPassword'),
         rules: 'required|password',
 

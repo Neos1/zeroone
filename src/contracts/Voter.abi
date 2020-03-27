@@ -1,455 +1,188 @@
 [
 	{
-		"constant": true,
 		"inputs": [
 			{
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "getVotingDescision",
-		"outputs": [
-			{
-				"name": "result",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
 			}
 		],
 		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x0d24ef38"
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
-		"constant": true,
+		"anonymous": false,
 		"inputs": [
 			{
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "question",
-		"outputs": [
-			{
+				"indexed": false,
+				"internalType": "uint256",
 				"name": "groupId",
 				"type": "uint256"
 			},
 			{
+				"indexed": false,
+				"internalType": "enum Questions.Status",
 				"name": "status",
 				"type": "uint8"
 			},
 			{
+				"indexed": false,
+				"internalType": "string",
 				"name": "caption",
 				"type": "string"
 			},
 			{
+				"indexed": false,
+				"internalType": "string",
 				"name": "text",
 				"type": "string"
 			},
 			{
+				"indexed": false,
+				"internalType": "uint256",
 				"name": "time",
 				"type": "uint256"
 			},
 			{
+				"indexed": false,
+				"internalType": "address",
 				"name": "target",
 				"type": "address"
 			},
 			{
+				"indexed": false,
+				"internalType": "bytes4",
 				"name": "methodSelector",
 				"type": "bytes4"
-			},
-			{
-				"name": "_formula",
-				"type": "uint256[]"
-			},
-			{
-				"name": "_parameters",
-				"type": "bytes32[]"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x1e16f68b"
+		"name": "NewQuestion",
+		"type": "event"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "votings",
-		"outputs": [
-			{
-				"name": "votingIdIndex",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x352485b7"
-	},
-	{
-		"constant": true,
+		"anonymous": false,
 		"inputs": [
 			{
-				"name": "_id",
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "id",
 				"type": "uint256"
-			}
-		],
-		"name": "getUserGroup",
-		"outputs": [
-			{
-				"name": "name",
-				"type": "string"
 			},
 			{
-				"name": "groupType",
-				"type": "string"
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "questionId",
+				"type": "uint256"
 			},
 			{
+				"indexed": false,
+				"internalType": "enum Votings.Status",
 				"name": "status",
 				"type": "uint8"
 			},
 			{
-				"name": "groupAddress",
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "starterGroup",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "starterAddress",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "startblock",
+				"type": "uint256"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x352704b7"
+		"name": "NewVoting",
+		"type": "event"
 	},
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "getQuestionGroupsLength",
+		"name": "ERC20",
 		"outputs": [
 			{
-				"name": "length",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x392e1c84"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "votingId",
-				"type": "uint256"
-			}
-		],
-		"name": "returnTokens",
-		"outputs": [
-			{
-				"name": "status",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0x3ae1786f"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "group",
-				"type": "address"
-			},
-			{
-				"name": "admin",
-				"type": "address"
-			}
-		],
-		"name": "setCustomGroupAdmin",
-		"outputs": [
-			{
+				"internalType": "contract IERC20",
 				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0x3cc0a953"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getUserWeight",
-		"outputs": [
-			{
-				"name": "weight",
-				"type": "uint256"
+				"type": "address"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x42429139"
+		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "External",
+		"outputs": [
 			{
-				"name": "votingId",
-				"type": "uint256"
-			},
+				"internalType": "contract ExternalContract",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "addresses",
+		"outputs": [
 			{
+				"internalType": "address",
 				"name": "user",
 				"type": "address"
-			}
-		],
-		"name": "isUserReturnTokens",
-		"outputs": [
-			{
-				"name": "result",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0x4a1e82a0"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getERCTotal",
-		"outputs": [
-			{
-				"name": "balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x5b1bb4a2"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "groups",
-		"outputs": [
-			{
-				"name": "groupIdIndex",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x5bf89d9e"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_idsAndTime",
-				"type": "uint256[]"
 			},
 			{
-				"name": "_status",
-				"type": "uint8"
-			},
-			{
-				"name": "_caption",
-				"type": "string"
-			},
-			{
-				"name": "_text",
-				"type": "string"
-			},
-			{
-				"name": "_target",
-				"type": "address"
-			},
-			{
-				"name": "_methodSelector",
-				"type": "bytes4"
-			},
-			{
-				"name": "_formula",
-				"type": "uint256[]"
-			},
-			{
-				"name": "_parameters",
-				"type": "bytes32[]"
-			}
-		],
-		"name": "saveNewQuestion",
-		"outputs": [
-			{
-				"name": "_saved",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0x686c52c4"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getERCSymbol",
-		"outputs": [
-			{
-				"name": "symbol",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x7264420a"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "questions",
-		"outputs": [
-			{
-				"name": "questionIdIndex",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x77a49821"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "getQuestionGroup",
-		"outputs": [
-			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "groupType",
-				"type": "uint8"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x7fd60dfd"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_voteId",
-				"type": "uint256"
-			}
-		],
-		"name": "getUserVote",
-		"outputs": [
-			{
-				"name": "vote",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0x86194c19"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"name": "_address",
-				"type": "address"
-			},
-			{
-				"name": "_type",
-				"type": "string"
-			}
-		],
-		"name": "saveNewUserGroup",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0x952b627c"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "getCount",
-		"outputs": [
-			{
-				"name": "length",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xa87d942c"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getUserBalance",
-		"outputs": [
-			{
-				"name": "balance",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xb7013dc1"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_address",
+				"internalType": "address",
+				"name": "instance",
 				"type": "address"
 			}
 		],
-		"name": "setERC20",
-		"outputs": [],
 		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xc29a6fda"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "isActiveVoting",
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "votingId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "questionId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "votingData",
+				"type": "bytes"
+			}
+		],
+		"name": "applyVotingData",
 		"outputs": [
 			{
+				"internalType": "bool",
 				"name": "",
 				"type": "bool"
 			}
 		],
 		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xc39c89df"
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"constant": false,
@@ -458,187 +191,34 @@
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xc631b292"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_questionId",
-				"type": "uint256"
-			},
-			{
-				"name": "_status",
-				"type": "uint8"
-			},
-			{
-				"name": "_starterGroup",
-				"type": "uint256"
-			},
-			{
-				"name": "_data",
-				"type": "bytes"
-			}
-		],
-		"name": "startNewVoting",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xc7ce7f10"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_choice",
-				"type": "uint256"
-			}
-		],
-		"name": "sendVote",
-		"outputs": [
-			{
-				"name": "result",
-				"type": "uint256"
-			},
-			{
-				"name": "votePos",
-				"type": "uint256"
-			},
-			{
-				"name": "voteNeg",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xc8f5714e"
+		"type": "function"
 	},
 	{
 		"constant": true,
-		"inputs": [],
-		"name": "ERC20",
-		"outputs": [
+		"inputs": [
 			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xcc4aa204"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getERCAddress",
-		"outputs": [
-			{
+				"internalType": "address",
 				"name": "_address",
 				"type": "address"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xd094b706"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "userGroups",
+		"name": "findLastUserVoting",
 		"outputs": [
 			{
-				"name": "groupIdIndex",
+				"internalType": "uint256",
+				"name": "votingId",
 				"type": "uint256"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xd7843f54"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "addresses",
-		"outputs": [
-			{
-				"name": "user",
-				"type": "address"
-			},
-			{
-				"name": "instance",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xda0321cd"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getVotingsCount",
-		"outputs": [
-			{
-				"name": "count",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xdae7c92c"
+		"type": "function"
 	},
 	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_name",
-				"type": "string"
-			}
-		],
-		"name": "saveNewGroup",
-		"outputs": [
-			{
-				"name": "id",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xdf831328"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getUserGroupsLength",
-		"outputs": [
-			{
-				"name": "length",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xec4d819c"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
+				"internalType": "address",
 				"name": "user",
 				"type": "address"
 			}
@@ -646,87 +226,194 @@
 		"name": "findUserGroup",
 		"outputs": [
 			{
+				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
 		],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xf0c4c3e6"
+		"type": "function"
 	},
 	{
 		"constant": false,
-		"inputs": [
-			{
-				"name": "_who",
-				"type": "address"
-			},
-			{
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "transferERC20",
+		"inputs": [],
+		"name": "getCount",
 		"outputs": [
 			{
-				"name": "newBalance",
+				"internalType": "uint256",
+				"name": "length",
 				"type": "uint256"
 			}
 		],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function",
-		"signature": "0xf7448a31"
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [
 			{
+				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"
 			}
 		],
-		"name": "voting",
+		"name": "getQuestionGroup",
 		"outputs": [
 			{
-				"name": "id",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
 			},
 			{
-				"name": "status",
+				"internalType": "enum QuestionGroups.GroupType",
+				"name": "groupType",
 				"type": "uint8"
-			},
-			{
-				"name": "caption",
-				"type": "string"
-			},
-			{
-				"name": "text",
-				"type": "string"
-			},
-			{
-				"name": "startTime",
-				"type": "uint256"
-			},
-			{
-				"name": "endTime",
-				"type": "uint256"
-			},
-			{
-				"name": "data",
-				"type": "bytes"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xfd4a77f1"
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getQuestionGroupsLength",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "length",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getUserGroup",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "groupType",
+				"type": "string"
+			},
+			{
+				"internalType": "enum UserGroups.GroupStatus",
+				"name": "status",
+				"type": "uint8"
+			},
+			{
+				"internalType": "address",
+				"name": "groupAddress",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getUserGroupsLength",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "length",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_voteId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserVote",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "vote",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_voteId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "getUserVoteWeight",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenCount",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getUserWeight",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "weight",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "_votingId",
 				"type": "uint256"
 			}
@@ -734,106 +421,508 @@
 		"name": "getVotes",
 		"outputs": [
 			{
+				"internalType": "uint256[3]",
 				"name": "_votes",
 				"type": "uint256[3]"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function",
-		"signature": "0xff981099"
+		"type": "function"
 	},
 	{
+		"constant": true,
 		"inputs": [
 			{
-				"name": "_address",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getVotingDescision",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "result",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor",
-		"signature": "constructor"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
+		"constant": true,
+		"inputs": [],
+		"name": "getVotingsCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "groups",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "groupIdIndex",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "isActiveVoting",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
-				"indexed": false,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "isUserReturnTokens",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "result",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "question",
+		"outputs": [
+			{
+				"internalType": "uint256",
 				"name": "groupId",
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
+				"internalType": "enum Questions.Status",
 				"name": "status",
 				"type": "uint8"
 			},
 			{
-				"indexed": false,
+				"internalType": "string",
 				"name": "caption",
 				"type": "string"
 			},
 			{
-				"indexed": false,
+				"internalType": "string",
 				"name": "text",
 				"type": "string"
 			},
 			{
-				"indexed": false,
+				"internalType": "uint256",
 				"name": "time",
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
+				"internalType": "address",
 				"name": "target",
 				"type": "address"
 			},
 			{
-				"indexed": false,
+				"internalType": "bytes4",
 				"name": "methodSelector",
 				"type": "bytes4"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_formula",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "_parameters",
+				"type": "bytes32[]"
 			}
 		],
-		"name": "NewQuestion",
-		"type": "event",
-		"signature": "0xf74c837bcb7177c5fc07298a351f91ebaf73da24a2665c4dd592976c4e1780c9"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
+		"constant": true,
+		"inputs": [],
+		"name": "questions",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "questionIdIndex",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "returnTokens",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "status",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			}
+		],
+		"name": "saveNewGroup",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "_idsAndTime",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "enum Questions.Status",
+				"name": "_status",
+				"type": "uint8"
+			},
+			{
+				"internalType": "string",
+				"name": "_caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_text",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "_target",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes4",
+				"name": "_methodSelector",
+				"type": "bytes4"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_formula",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "bytes32[]",
+				"name": "_parameters",
+				"type": "bytes32[]"
+			}
+		],
+		"name": "saveNewQuestion",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "_saved",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_type",
+				"type": "string"
+			}
+		],
+		"name": "saveNewUserGroup",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_choice",
+				"type": "uint256"
+			}
+		],
+		"name": "sendVote",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "result",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "votePos",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "voteNeg",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "group",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "admin",
+				"type": "address"
+			}
+		],
+		"name": "setCustomGroupAdmin",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "setERC20",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_questionId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum Votings.Status",
+				"name": "_status",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_starterGroup",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "_data",
+				"type": "bytes"
+			}
+		],
+		"name": "startNewVoting",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_who",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferERC20",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "newBalance",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "userGroups",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "groupIdIndex",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "voting",
+		"outputs": [
+			{
+				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
-				"name": "questionId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
+				"internalType": "enum Votings.Status",
 				"name": "status",
 				"type": "uint8"
 			},
 			{
-				"indexed": false,
-				"name": "starterGroup",
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "text",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startTime",
 				"type": "uint256"
 			},
 			{
-				"indexed": false,
-				"name": "starterAddress",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "endTime",
+				"type": "uint256"
 			},
 			{
-				"indexed": false,
-				"name": "startblock",
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "votings",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "votingIdIndex",
 				"type": "uint256"
 			}
 		],
-		"name": "NewVoting",
-		"type": "event",
-		"signature": "0x20cd0a5d2be6a115945cf28e1511206f69d34a385fb4b9c8ee18f39fa52471c7"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ]

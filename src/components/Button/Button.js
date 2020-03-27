@@ -1,5 +1,5 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import styles from './Button.scss';
 
@@ -12,16 +12,33 @@ const Button = ({
   icon,
   iconPosition,
   onClick,
+  hint,
+  className,
 }) => (
   // eslint-disable-next-line react/button-has-type
   <button
     type={type}
     disabled={disabled}
-    className={`${styles.btn}
-                ${styles[`btn--${theme}`]}
-                ${size ? styles[`btn--${size}`] : ''}`}
+    className={`
+      ${styles.btn}
+      ${styles[`btn--${theme}`]}
+      ${size ? styles[`btn--${size}`] : ''}
+      ${hint ? styles['btn--with-hint'] : ''}
+      ${className || ''}
+    `}
     onClick={onClick}
   >
+    {
+      hint
+        ? (
+          <div className={styles.btn__hint}>
+            <div className={styles['btn__hint-content']}>
+              {hint}
+            </div>
+          </div>
+        )
+        : null
+    }
     <p className={styles.btn__content}>
       <span className={`${styles.btn__icon} ${iconPosition === 'top' ? styles['btn__icon--block'] : ''}`}>
         {icon}
@@ -34,17 +51,26 @@ const Button = ({
 );
 
 Button.propTypes = {
-  children: propTypes.oneOfType([
-    propTypes.string,
-    propTypes.shape({}),
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+    PropTypes.shape({}),
   ]).isRequired,
-  icon: propTypes.node,
-  iconPosition: propTypes.bool,
-  type: propTypes.string,
-  disabled: propTypes.bool,
-  onClick: propTypes.func.isRequired,
-  theme: propTypes.string,
-  size: propTypes.string,
+  icon: PropTypes.node,
+  iconPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ]),
+  type: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+  theme: PropTypes.string,
+  size: PropTypes.string,
+  hint: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({}),
+  ]),
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -54,6 +80,9 @@ Button.defaultProps = {
   icon: null,
   iconPosition: false,
   disabled: false,
+  onClick: () => {},
+  hint: null,
+  className: '',
 };
 
 export default Button;

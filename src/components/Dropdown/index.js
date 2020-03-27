@@ -1,18 +1,45 @@
 import React, { Component } from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import DropdownOption from '../DropdownOption';
 import { DropdownArrowIcon } from '../Icons';
+import i18n from '../../i18n';
+
 import styles from './Dropdown.scss';
 
 class Dropdown extends Component {
+  static propTypes = {
+    children: PropTypes.element,
+    options: PropTypes.arrayOf(PropTypes.object).isRequired,
+    subOptions: PropTypes.shape({}),
+    onSelect: PropTypes.func.isRequired,
+    field: PropTypes.shape({
+      set: PropTypes.func.isRequired,
+      value: PropTypes.string.isRequired,
+      placeholder: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.shape({}),
+      ]).isRequired,
+      validate: PropTypes.func.isRequired,
+      label: PropTypes.string.isRequired,
+      error: PropTypes.string,
+    }).isRequired,
+  };
+
+  static defaultProps = {
+    children: '',
+    subOptions: {},
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       selectedValue: '',
     };
-
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    window.ipcRenderer.on('change-language:confirm', () => {
+      this.updateLanguage();
+    });
   }
 
   componentDidMount() {
@@ -21,10 +48,18 @@ class Dropdown extends Component {
 
   componentWillUnmount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+    window.ipcRenderer.removeListener('change-language:confirm', () => {
+      this.updateLanguage();
+    });
   }
 
   setWrapperRef(node) {
     this.wrapperRef = node;
+  }
+
+  updateLanguage = () => {
+    const { field } = this.props;
+    field.set('placeholder', i18n.t(`fields:${field.label}`));
   }
 
   toggleOptions = () => {
@@ -36,12 +71,19 @@ class Dropdown extends Component {
     this.setState({ opened: false });
   }
 
+  calculateHeight = () => {
+    const optionsLength = document.querySelectorAll('.dropdown__option').length;
+    const height = optionsLength * 40;
+    return height > 150 ? 150 : height;
+  }
+
   handleSelect = (selected) => {
     const { onSelect, field } = this.props;
     this.setState({
       selectedValue: selected,
     });
     field.set(selected);
+    field.validate();
     onSelect(selected);
     this.toggleOptions();
   }
@@ -69,7 +111,14 @@ class Dropdown extends Component {
     ));
 
     return (
-      <div className={`${styles.dropdown} ${opened ? 'dropdown--opened' : ''}`} ref={this.setWrapperRef}>
+      <div
+        className={`
+        ${styles.dropdown}
+        ${opened ? 'dropdown--opened' : ''}
+        ${field && field.error ? styles['dropdown--error'] : ''}
+      `}
+        ref={this.setWrapperRef}
+      >
         <input type="hidden" value={field.value} />
         <button type="button" className={styles.dropdown__head} onKeyDown={this.toggleOptions} onClick={this.toggleOptions}>
           {children ? <span className={styles.dropdown__icon}>{children}</span> : ''}
@@ -81,30 +130,20 @@ class Dropdown extends Component {
           </span>
           <div className={styles['dropdown__head-line']} />
         </button>
-        <div className={styles.dropdown__options}>
+        <div
+          className={styles.dropdown__options}
+          style={{
+            height: !opened ? 0 : this.calculateHeight(),
+          }}
+        >
           {getOptions}
         </div>
+        <p className={styles['dropdown__error-text']}>
+          {field.error}
+        </p>
       </div>
     );
   }
 }
-
-Dropdown.propTypes = {
-  children: propTypes.element,
-  options: propTypes.arrayOf(propTypes.object).isRequired,
-  subOptions: propTypes.shape({}),
-  onSelect: propTypes.func.isRequired,
-  field: propTypes.shape({
-    set: propTypes.func.isRequired,
-    value: propTypes.string.isRequired,
-    placeholder: propTypes.string.isRequired,
-  }).isRequired,
-};
-
-Dropdown.defaultProps = {
-  children: '',
-  subOptions: {},
-};
-
 
 export default Dropdown;

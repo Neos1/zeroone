@@ -1,7 +1,14 @@
 .container {
   position: relative;
+  top: 55px;
   width: 100%;
   max-width: 1120px;
-  height: 100vh;
+  // height: calc(100vh - 110px);
+  min-height: calc(100% - 108px);
   margin: 0 auto;
+  padding-bottom: 50px;
+
+  &--small {
+    max-width: 845px;
+  }
 }

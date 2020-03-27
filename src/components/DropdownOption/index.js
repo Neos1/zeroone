@@ -11,7 +11,9 @@ const DropdownOption = ({
     className={styles.dropdown__option}
     onClick={() => { select(value); }}
   >
-    {label}
+    <span className={styles['dropdown__option-label']}>
+      {label}
+    </span>
     {subOption !== ''
       ? (
         <span className={styles.dropdown__suboption}>
@@ -27,10 +29,11 @@ DropdownOption.propTypes = {
   value: propTypes.string.isRequired,
   label: propTypes.string.isRequired,
   select: propTypes.func.isRequired,
-  subOption: propTypes.string.isRequired,
+  subOption: propTypes.string,
 };
 
 DropdownOption.defaultProps = {
+  subOption: '',
 };
 
 export default DropdownOption;

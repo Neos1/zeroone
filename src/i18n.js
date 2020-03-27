@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import moment from 'moment';
 import headingsEn from './locales/ENG/headings';
 import headingsRu from './locales/RUS/headings';
 import explanationsEn from './locales/ENG/explanations';
@@ -14,6 +15,9 @@ import errorsEn from './locales/ENG/errors';
 import errorsRu from './locales/RUS/errors';
 import dialogsEn from './locales/ENG/dialogs';
 import dialogsRu from './locales/RUS/dialogs';
+import 'moment/locale/ru';
+import 'moment/locale/en-gb';
+import { getCorrectMomentLocale } from './utils/Date';
 
 const resources = {
   ENG: {
@@ -49,6 +53,8 @@ i18n
       nsMode: 'default',
       useSuspense: false,
     },
+  }, () => {
+    moment.locale(getCorrectMomentLocale(i18n.language));
   });
 window.i18n = i18n;
 export default i18n;

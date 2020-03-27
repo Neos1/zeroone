@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
@@ -17,6 +18,19 @@ import styles from '../Login/Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class CreateWallet extends Component {
+  static propTypes = {
+    userStore: propTypes.shape({
+      recoverWallet: propTypes.func.isRequired,
+      saveWalletToFile: propTypes.func.isRequired,
+      createWallet: propTypes.func.isRequired,
+    }).isRequired,
+    recover: propTypes.bool,
+  };
+
+  static defaultProps = {
+    recover: false,
+  };
+
   createForm = new CreateWalletForm({
     hooks: {
       onSuccess: (form) => this.createWallet(form),
@@ -94,14 +108,5 @@ const CreationLoader = withTranslation(['headings'])(({ t }) => (
     <Loader />
   </FormBlock>
 ));
-
-CreateWallet.propTypes = {
-  userStore: propTypes.shape({
-    recoverWallet: propTypes.func.isRequired,
-    saveWalletToFile: propTypes.func.isRequired,
-    createWallet: propTypes.func.isRequired,
-  }).isRequired,
-  recover: propTypes.bool.isRequired,
-};
 
 export default CreateWallet;

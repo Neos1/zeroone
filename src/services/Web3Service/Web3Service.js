@@ -6,7 +6,9 @@ import { BN } from 'ethereumjs-util';
  */
 class Web3Service {
   /**
-   * @constructor
+   * @class
+   * @param url
+   * @param rootStore
    * @param {string} provider - provider for this.web3
    */
   constructor(url, rootStore) {
@@ -19,36 +21,38 @@ class Web3Service {
     return new Contract(abi);
   }
 
-  createTxData(address, tx, maxGasPrice) {
-    const { web3: { eth } } = this;
+  createTxData(address, tx) {
+    const { web3: { eth }, rootStore } = this;
+    // eslint-disable-next-line no-unused-vars
+    const { configStore: { MIN_GAS_PRICE, MAX_GAS_PRICE, GAS_LIMIT: gasLimit } } = rootStore;
     let transaction = { ...tx };
     return eth.getTransactionCount(address, 'pending')
       .then((nonce) => {
         transaction = { ...tx, nonce };
-        return eth.estimateGas(tx);
+        return eth.estimateGas(transaction);
       })
       .then((gas) => {
-        if (!maxGasPrice) return (Promise.resolve(gas));
+        transaction = { ...transaction, gas };
         return this.getGasPrice()
           .then((gasPrice) => {
-            const minGasPrice = 10000000000;
             const gp = new BN(gasPrice);
-            const minGp = new BN(minGasPrice);
-            const maxGp = new BN(maxGasPrice);
+            const minGp = new BN(MIN_GAS_PRICE);
+            const maxGp = new BN(MAX_GAS_PRICE);
             transaction.gasPrice = (gp.gte(minGp) && gp.lte(maxGp))
               ? gasPrice
-              : minGasPrice;
+              : MIN_GAS_PRICE;
             return Promise.resolve(transaction.gasPrice);
           })
           .catch(Promise.reject);
       })
       // eslint-disable-next-line no-unused-vars
-      .then((gasPrice) => (transaction))
+      .then((gasPrice) => ({ ...transaction, gasPrice }))
       .catch((err) => Promise.reject(err));
   }
 
   /**
    * getting gas price
+   *
    * @returns {number} gasPrice from network
    */
   getGasPrice() {
@@ -58,8 +62,10 @@ class Web3Service {
 
   /**
    * Sending transaction to contract
+   *
+   * @param rawTx
    * @param {string} txData Raw transaction (without 0x)
-   * @return {Promise} promise with web3 transaction PromiEvent
+   * @returns {Promise} promise with web3 transaction PromiEvent
    */
   sendSignedTransaction(rawTx) {
     const { web3: { eth: { sendSignedTransaction } } } = this;
@@ -76,8 +82,9 @@ class Web3Service {
 
   /**
    * checking transaction receipt by hash every 5 seconds
+   *
    * @param {string} txHash hash of transaction
-   * @return {Promise} Promise which resolves on successful receipt fetching
+   * @returns {Promise} Promise which resolves on successful receipt fetching
    */
   subscribeTxReceipt(txHash) {
     const { web3 } = this;

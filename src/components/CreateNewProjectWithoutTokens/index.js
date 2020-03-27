@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import propTypes from 'prop-types';
@@ -16,6 +17,8 @@ import {
 } from '../Icons';
 import CreateTokenForm from '../../stores/FormsStore/CreateToken';
 import CreateProjectForm from '../../stores/FormsStore/CreateProject';
+import AppStore from '../../stores/AppStore/AppStore';
+import UserStore from '../../stores/UserStore';
 
 import styles from '../Login/Login.scss';
 
@@ -23,6 +26,12 @@ import styles from '../Login/Login.scss';
 @inject('userStore', 'appStore')
 @observer
 class CreateNewProjectWithoutTokens extends Component {
+  static propTypes = {
+    appStore: propTypes.instanceOf(AppStore).isRequired,
+    userStore: propTypes.instanceOf(UserStore).isRequired,
+    t: propTypes.func.isRequired,
+  };
+
   form = new CreateTokenForm({
     hooks: {
       onSuccess: (form) => this.createToken(form),
@@ -42,6 +51,7 @@ class CreateNewProjectWithoutTokens extends Component {
     creation: 2,
     tokenCreated: 3,
     projectInfo: 4,
+    uploading: 5,
   }
 
   constructor(props) {
@@ -180,8 +190,9 @@ class CreateNewProjectWithoutTokens extends Component {
   }
 
   render() {
+    const { steps } = this;
     const { currentStep, indicatorStep } = this.state;
-    if (currentStep === 'uploading') return <Redirect to="/uploadWithNewTokens" />;
+    if (currentStep === steps.uploading) return <Redirect to="/uploadProject" />;
     return (
       <Container>
         <div className={styles.form}>
@@ -196,7 +207,9 @@ class CreateNewProjectWithoutTokens extends Component {
 const CreateTokenData = withTranslation()(inject('userStore', 'appStore')(observer((({
   t, userStore: { address }, appStore: { balances }, form,
 }) => (
-  <FormBlock>
+  <FormBlock
+    className="create-token-data"
+  >
     <Heading>
       {t('headings:newTokens.heading')}
       {t('headings:newTokens.subheading')}
@@ -328,6 +341,7 @@ const InputProjectData = withTranslation()(({
         theme="back"
         icon={<BackIcon />}
         onClick={onClick}
+        disabled={form.loading}
       >
         {t('buttons:back')}
       </Button>
@@ -335,24 +349,6 @@ const InputProjectData = withTranslation()(({
   </FormBlock>
 ));
 
-CreateNewProjectWithoutTokens.propTypes = {
-  appStore: propTypes.shape({
-    deployContract: propTypes.func.isRequired,
-    checkReceipt: propTypes.func.isRequired,
-    deployArgs: propTypes.arrayOf(propTypes.any).isRequired,
-    displayAlert: propTypes.func.isRequired,
-    setProjectName: propTypes.func.isRequired,
-    password: propTypes.string.isRequired,
-    setDeployArgs: propTypes.func.isRequired,
-  }).isRequired,
-  userStore: propTypes.shape({
-    readWallet: propTypes.func.isRequired,
-    checkBalance: propTypes.func.isRequired,
-    address: propTypes.string.isRequired,
-    setPassword: propTypes.func.isRequired,
-  }).isRequired,
-  t: propTypes.func.isRequired,
-};
 CreateTokenData.propTypes = {
   form: propTypes.shape({
     onSubmit: propTypes.func.isRequired,
@@ -360,9 +356,11 @@ CreateTokenData.propTypes = {
     loading: propTypes.bool.isRequired,
   }).isRequired,
 };
+
 TokenCreationAlert.propTypes = {
   onSubmit: propTypes.func.isRequired,
 };
+
 InputProjectData.propTypes = {
   form: propTypes.shape({
     $: propTypes.func.isRequired,

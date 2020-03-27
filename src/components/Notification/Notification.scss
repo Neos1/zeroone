@@ -1,0 +1,65 @@
+.notification {
+  &__container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  &__item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 20px 40px;
+    color: #000;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 14px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #fff;
+
+    &-close {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      display: none;
+      color: #c8c9ca;
+      background: transparent;
+      border: unset;
+      outline: none;
+      transform: translate(0, -50%);
+      cursor: pointer;
+    }
+
+    .btn {
+      &__text {
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 14px;
+      }
+    }
+
+    &--info {
+      color: #000;
+      background: #fff;
+      border: 1px solid #000;
+
+      .btn {
+        margin-left: 5px;
+        color: #000;
+        border-bottom-color: #000;
+      }
+    }
+
+    &--important {
+      color: #fff;
+      background: #000;
+      border: 1px solid #000;
+
+      .btn {
+        margin-left: 5px;
+        color: #fff;
+        border-bottom-color: #fff;
+      }
+    }
+  }
+}

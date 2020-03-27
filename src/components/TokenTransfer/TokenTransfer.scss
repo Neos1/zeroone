@@ -1,0 +1,55 @@
+@import '../../assets/styles/includes/mixin';
+
+.token-transfer {
+  text-align: center;
+
+  .input__wrapper {
+    margin-bottom: 32px;
+
+    .field {
+      width: 100%;
+      max-width: 309px;
+    }
+  }
+
+  .button__wrapper {
+    margin-top: 48px;
+    margin-bottom: 16px;
+
+    .btn {
+      width: 100%;
+      max-width: 298px;
+    }
+  }
+
+  .wallet__wrapper {
+    margin-top: 16px;
+    margin-bottom: 24px;
+    color: #808080;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &__title {
+    @include title;
+
+    margin-top: 72px;
+    margin-bottom: 73px;
+  }
+
+  &__button {
+    // compensate padding in dialog
+    width: calc(100% + 80px);
+    margin: 0px -40px -10px -40px;
+    padding: 15px 20px;
+    color: #c8c9ca;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration: underline;
+    background-color: transparent;
+    border: unset;
+    border-top: 1px solid #e1e4e8;
+    outline: none;
+    cursor: pointer;
+  }
+}

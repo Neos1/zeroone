@@ -1,8 +1,8 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import Loader from '../Loader';
 import DefaultMessage from './DefaultMessage';
+import { TransactionLoader } from '../Progress';
 
 import styles from './Message.scss';
 
@@ -27,7 +27,7 @@ class TokenInProgressMessage extends React.Component {
             {t('dialogs:someTimeText')}
           </p>
           <div className={styles.loader__container}>
-            <Loader />
+            <TransactionLoader />
           </div>
         </DefaultMessage>
       </div>

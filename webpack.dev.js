@@ -15,6 +15,9 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: './src/assets', to: './build/assets' },
+      { from: './src/wallets', to: './wallets' },
+      { from: './src/contracts', to: './contracts' },
+      { from: './src/config.json', to: './config.json' },
     ]),
   ],
   output: {
@@ -40,7 +43,7 @@ module.exports = {
           loader: 'eslint-loader',
           options: {
             failOnError: true,
-            failOnWarning: true,
+            failOnWarning: false,
           },
         }],
       }, {

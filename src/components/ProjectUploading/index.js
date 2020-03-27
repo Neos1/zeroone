@@ -31,19 +31,44 @@ class ProjectUploading extends Component {
     this.state = {
       step: this.steps.compiling,
       uploading: true,
+      contractAddress: '',
+      projectName: '',
     };
   }
 
   componentDidMount() {
     const { steps } = this;
     const {
-      appStore, appStore: { deployArgs, name }, userStore: { password }, t,
+      appStore, appStore: { deployArgs, projectAddress }, userStore: { password }, type,
     } = this.props;
-    this.setState({
-      step: steps.sending,
-    });
 
-    appStore.deployContract('project', deployArgs, password)
+    switch (type) {
+      case ('project'):
+        this.setState({
+          step: steps.sending,
+        });
+        this.deployProject(deployArgs, password);
+        break;
+      case ('question'):
+        this.setState({
+          step: steps.questions,
+        });
+        appStore.deployQuestions(projectAddress).then(() => {
+          this.setState({
+            uploading: false,
+          });
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
+  deployProject(deployArgs, password) {
+    const { steps } = this;
+    const { appStore, appStore: { name }, t } = this.props;
+
+    appStore.deployContract('ZeroOne', deployArgs, password)
       .then((txHash) => {
         this.setState({
           step: steps.receipt,
@@ -55,23 +80,33 @@ class ProjectUploading extends Component {
           this.setState({
             step: steps.questions,
           });
+          appStore.setProjectAddress(receipt.contractAddress);
           appStore.addProjectToList({ name, address: receipt.contractAddress });
           appStore.deployQuestions(receipt.contractAddress).then(() => {
             this.setState({
               uploading: false,
+              contractAddress: receipt.contractAddress,
+              projectName: name,
             });
           });
         }
-      }).catch(() => { appStore.displayAlert(t('errors:hostUnreachable'), 3000); });
+      }).catch((err) => {
+        alert(err);
+        appStore.displayAlert(t('errors:hostUnreachable'), 3000);
+      });
   }
 
   render() {
-    const { step, uploading } = this.state;
+    const {
+      step, uploading, contractAddress, projectName,
+    } = this.state;
     return (
       <Container>
         <div className={`${styles.form} ${uploading ? styles['form--ultrawide'] : ''}`}>
           {
-            uploading ? <Progress step={step} /> : <AlertBlock />
+            uploading
+              ? <Progress step={step} />
+              : <AlertBlock address={contractAddress} name={projectName} />
           }
         </div>
       </Container>
@@ -106,7 +141,7 @@ const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, s
             text={item[0]}
             index={index}
             state={step}
-            noline={index === 4}
+            noline={index === 0}
           >
             {item[1]}
           </ProgressBlock>
@@ -116,7 +151,9 @@ const Progress = withTranslation()(inject('appStore')(observer(({ t, appStore, s
   );
 })));
 
-const AlertBlock = withTranslation()(({ t }) => (
+const AlertBlock = withTranslation()(inject('appStore')(observer(({
+  t, appStore, address, name,
+}) => (
   <FormBlock>
     <Heading>
       {t('headings:projectCreated.heading')}
@@ -126,16 +163,24 @@ const AlertBlock = withTranslation()(({ t }) => (
         {t('headings:projectCreated.subheading.1')}
       </span>
     </Heading>
-    <Button theme="black" width="310" icon={<Login />} type="submit">
-      {t('buttons:toCreatedProject')}
-    </Button>
+    <NavLink to="/questions">
+      <Button
+        theme="black"
+        width="310"
+        icon={<Login />}
+        type="button"
+        onClick={() => { appStore.gotoProject({ address, name }); }}
+      >
+        {t('buttons:toCreatedProject')}
+      </Button>
+    </NavLink>
     <NavLink to="/projects">
-      <Button theme="link" type="submit">
+      <Button theme="link" type="button">
         {t('buttons:otherProject')}
       </Button>
     </NavLink>
   </FormBlock>
-));
+))));
 
 ProjectUploading.propTypes = {
   appStore: propTypes.shape({
@@ -147,11 +192,14 @@ ProjectUploading.propTypes = {
     addProjectToList: propTypes.func.isRequired,
     deployQuestions: propTypes.func.isRequired,
     displayAlert: propTypes.func.isRequired,
+    projectAddress: propTypes.func.isRequired,
+    setProjectAddress: propTypes.func.isRequired,
   }).isRequired,
   userStore: propTypes.shape({
     password: propTypes.string.isRequired,
   }).isRequired,
   t: propTypes.func.isRequired,
+  type: propTypes.string.isRequired,
 };
 
 Progress.propTypes = {

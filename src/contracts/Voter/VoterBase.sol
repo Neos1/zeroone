@@ -1,10 +1,11 @@
-pragma solidity 0.5;
+pragma solidity ^0.5.15;
 
 import "../libs/QuestionGroups.sol";
 import "../libs/UserGroups.sol";
 import "../libs/Questions.sol";
 import "../libs/Votings.sol";
 import "./VoterInterface.sol";
+import "./ExternalInterface.sol";
 import "../IERC20.sol";
 
 
@@ -21,6 +22,7 @@ contract VoterBase is VoterInterface {
     UserGroups.List public userGroups;
 
     IERC20 public ERC20;
+    ExternalContract public External;
 
     constructor() public {
         questions.init();
@@ -30,7 +32,6 @@ contract VoterBase is VoterInterface {
 
     // METHODS
     function setERC20(address _address) public {
-        ERC20 = IERC20(_address);
         userGroups.init(_address);
     }
 
@@ -55,7 +56,7 @@ contract VoterBase is VoterInterface {
         address _target,
         bytes4 _methodSelector,
         uint[] memory _formula,
-        bytes32[] memory _parameters
+        bytes32[] memory  _parameters
     ) private returns (Questions.Question memory _question) {
         Questions.Question memory question = Questions.Question({
             groupId: _idsAndTime[1],
@@ -88,14 +89,14 @@ contract VoterBase is VoterInterface {
      * @return new question id
      */
     function saveNewQuestion(
-        uint[] _idsAndTime,
+        uint[] calldata _idsAndTime,
         Questions.Status _status,
-        string  _caption,
-        string  _text,
+        string calldata  _caption,
+        string calldata  _text,
         address _target,
         bytes4 _methodSelector,
-        uint[]  _formula,
-        bytes32[] _parameters
+        uint[] calldata _formula,
+        bytes32[] calldata _parameters
 
     ) external returns (bool _saved){
         Questions.Question memory question = createNewQuestion( 
@@ -118,7 +119,7 @@ contract VoterBase is VoterInterface {
      * @return new question id
      */
     function saveNewGroup(
-        string _name
+        string calldata _name
     ) external returns (uint id) {
         QuestionGroups.Group memory group = QuestionGroups.Group({
             name: _name,
@@ -164,7 +165,7 @@ contract VoterBase is VoterInterface {
     }
 
     function getQuestionGroup(uint _id) public view returns (
-        string name,
+        string memory name,
         QuestionGroups.GroupType groupType
     ) {
         return (
@@ -177,8 +178,8 @@ contract VoterBase is VoterInterface {
         return groups.groupIdIndex ;
     }
     function getUserGroup(uint _id) public view returns (
-        string name,
-        string groupType,
+        string memory name,
+        string memory groupType,
         UserGroups.GroupStatus status,
         address groupAddress
     ) {
@@ -210,7 +211,7 @@ contract VoterBase is VoterInterface {
         uint _questionId,
         Votings.Status _status,
         uint _starterGroup,
-        bytes _data
+        bytes calldata _data
     ) external returns (bool) {
         bool canStart;
         uint votingId = votings.votingIdIndex - 1;
@@ -253,7 +254,7 @@ contract VoterBase is VoterInterface {
         string memory text,
         uint startTime,
         uint endTime,
-        bytes data
+        bytes memory data
     ){
         uint votingId = _id;
         uint questionId = votings.voting[_id].questionId;
@@ -319,7 +320,7 @@ contract VoterBase is VoterInterface {
             if (quorumPercent >= percent) {
                 if (positiveVotes > negativeVotes) {
                     votings.descision[votingId] = 1;
-                    address(this).call(votings.voting[votingId].data);
+                    callExternal(votingId, questionId);
                 } else if (positiveVotes < negativeVotes) {
                     votings.descision[votingId] = 2;
                 } else if (positiveVotes == negativeVotes) {
@@ -331,7 +332,7 @@ contract VoterBase is VoterInterface {
             if (quorumPercent <= percent) {
                 if (positiveVotes > negativeVotes) {
                     votings.descision[votingId] = 1;
-                    address(this).call(votings.voting[votingId].data);
+                    callExternal(votingId, questionId);
                 } else if (positiveVotes < negativeVotes) {
                     votings.descision[votingId] = 2;
                 } else if (positiveVotes == negativeVotes) {
@@ -342,6 +343,18 @@ contract VoterBase is VoterInterface {
         
 
         votings.voting[votingId].status = Votings.Status.ENDED;
+    }
+
+    function callExternal(uint votingId, uint questionId) internal {
+        address target = questions.question[questionId].target;
+        ExternalContract controlled = ExternalContract(target);
+        controlled.applyVotingData(votingId, questionId, votings.voting[votingId].data);
+    }
+    
+
+    function applyVotingData(uint votingId, uint questionId, bytes calldata votingData) external returns (bool) {
+        address(this).call(votingData);
+        return true;
     }
 
 
@@ -357,32 +370,41 @@ contract VoterBase is VoterInterface {
         return votes;
     }
 
-    function returnTokens(uint votingId) public returns (bool status){
+    function returnTokens() public returns (bool status){
+        uint votingId = this.findLastUserVoting(msg.sender);
 		uint questionId =  votings.voting[votingId].questionId;
 		uint groupId = questions.question[questionId].groupId;
         string memory groupType = userGroups.group[groupId].groupType;
+        string memory groupName = userGroups.names[groupId];
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         uint256 weight = votings.voting[votingId].voteWeigths[address(group)][msg.sender];
-        bool isReturned = this.isUserReturnTokens(votingId, msg.sender);
+        bool isReturned = this.isUserReturnTokens(msg.sender);
+        uint userVote = this.getUserVote(votingId, msg.sender); 
 
         if (!isReturned) {
-            if( bytes4(keccak256(groupType)) == bytes4(keccak256("ERC20"))) {
+            if(keccak256(abi.encodePacked((groupType))) == keccak256(abi.encodePacked(("ERC20")))) {
                 group.transfer(msg.sender, weight);            
             } else {
                 group.transferFrom(address(this), msg.sender, weight);
+            }
+            if (votings.voting[votingId].status != Votings.Status.ENDED) {
+                votings.voting[votingId].votes[address(group)][msg.sender] = 0;
+                votings.voting[votingId].voteWeigths[address(group)][msg.sender] = 0;
+                votings.voting[votingId].descisionWeights[userVote][groupName] -= weight;
             }
             votings.voting[votingId].tokenReturns[address(group)][msg.sender] = weight;
         }
         return true;
     }
 
-    function isUserReturnTokens(uint votingId, address user) returns (bool result) {
+    function isUserReturnTokens(address user) external view returns (bool result) {
+        uint votingId = this.findLastUserVoting(user);
         uint questionId =  votings.voting[votingId].questionId;
 		uint groupId = questions.question[questionId].groupId;
         string memory groupType = userGroups.group[groupId].groupType;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
         uint256 returnedTokens = votings.voting[votingId].tokenReturns[address(group)][user];
-        return returnedTokens > 0;
+        return votingId == 0 ? true : returnedTokens > 0;
     }
 
 
@@ -423,35 +445,40 @@ contract VoterBase is VoterInterface {
             this.closeVoting();
         }
         return (
-            votings.voting[_voteId].votes[address(group)][msg.sender] = _choice,
+            votings.voting[_voteId].votes[address(group)][msg.sender],
             votings.voting[_voteId].descisionWeights[1][groupName],
             votings.voting[_voteId].descisionWeights[2][groupName]
         );
     }
 
-    function getERCAddress() external view returns (address _address) {
-        return address(ERC20);
-    }
-
-    function getUserBalance() external view returns (uint256 balance) {
-        uint256 _balance = ERC20.balanceOf(msg.sender);
-        return _balance;
-    }
-
-    function getERCTotal() external view returns (uint256 balance) {
-        return ERC20.totalSupply();
-    }
-
-    function getERCSymbol() external view returns (string symbol) {
-        return ERC20.symbol();
-    }
-
-    function getUserVote(uint _voteId) external view returns (uint vote) {
+    function getUserVote(uint _voteId, address _user) external view returns (uint vote) {
         uint questionId = votings.voting[_voteId].questionId;
         uint groupId = questions.question[questionId].groupId;
 		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
-        return votings.voting[_voteId].votes[address(group)][msg.sender];
+        return votings.voting[_voteId].votes[address(group)][_user];
     }
+
+    function getUserVoteWeight(uint _voteId, address _user) external view returns (uint tokenCount) {
+        uint questionId = votings.voting[_voteId].questionId;
+        uint groupId = questions.question[questionId].groupId;
+		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
+        return votings.voting[_voteId].voteWeigths[address(group)][_user];
+    }
+
+    function findLastUserVoting(address _address) external view returns (uint votingId){
+        uint maxVoteId  = votings.votingIdIndex - 1;
+        uint questionId = votings.voting[maxVoteId].questionId;
+        uint groupId = questions.question[questionId].groupId;
+		IERC20 group = IERC20(userGroups.group[groupId].groupAddr);
+        while((votings.voting[maxVoteId].votes[address(group)][_address] == 0) && (maxVoteId >= 1)) {
+            maxVoteId--;
+            questionId = votings.voting[maxVoteId].questionId;
+            groupId = questions.question[questionId].groupId;
+            group = IERC20(userGroups.group[groupId].groupAddr);
+        }
+        return maxVoteId;
+    }
+
 
     function getUserWeight() external view returns (uint256 weight) {
         uint _voteId = votings.votingIdIndex - 1;
@@ -470,7 +497,7 @@ contract VoterBase is VoterInterface {
         );
     }
 
-    function saveNewUserGroup (string _name, address _address,  string _type) external {
+    function saveNewUserGroup (string calldata _name, address _address,  string calldata _type) external {
         UserGroups.UserGroup memory userGroup = UserGroups.UserGroup({
             name: _name,
             groupType: _type,
@@ -480,8 +507,8 @@ contract VoterBase is VoterInterface {
         userGroups.save(userGroup);
     } 
 
-    function setCustomGroupAdmin(address group, address admin) external returns (bool)  {    
-        require(group.call( bytes4( keccak256("setAdmin(address)")), admin));
+    function setCustomGroupAdmin(address group, address admin) external returns (bool)  {
+        group.call(abi.encodeWithSignature("setAdmin(address)", admin));
         return true;
     }
 }

@@ -1,12 +1,17 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-import browserSolc from 'browser-solc';
-import { BN } from 'ethereumjs-util';
-import { SOL_IMPORT_REGEXP, SOL_PATH_REGEXP, SOL_VERSION_REGEXP } from '../../constants';
+import * as linker from 'solc/linker';
+import { compile } from 'zeroone-translator';
+import {
+  SOL_IMPORT_REGEXP,
+  SOL_VERSION_REGEXP,
+  tokenTypes,
+} from '../../constants';
 import {
   fs, PATH_TO_CONTRACTS, path,
 } from '../../constants/windowModules';
-import Question from './entities/Question';
 import readSolFile from '../../utils/fileUtils/index';
+import UserStore from '../../stores/UserStore/UserStore';
 
 /**
  * Class for work with contracts
@@ -15,12 +20,25 @@ class ContractService {
   constructor(rootStore) {
     this._contract = {};
     this.rootStore = rootStore;
-    this.sysQuestions = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './sysQuestions.json'), 'utf8'));
-    this.ercAbi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ERC20.abi')));
+    const pathToQuestions = path.join(PATH_TO_CONTRACTS, './sysQuestions.json');
+    const pathToErcAbi = path.join(PATH_TO_CONTRACTS, './ERC20.abi');
+
+    try {
+      this.sysQuestions = JSON.parse(fs.readFileSync(pathToQuestions), 'utf8');
+    } catch (e) {
+      alert(`Error while reading file ${pathToQuestions}, please check this.`);
+    }
+
+    try {
+      this.ercAbi = JSON.parse(fs.readFileSync(pathToErcAbi));
+    } catch (e) {
+      alert(`Error while reading file ${pathToErcAbi}, please check this.`);
+    }
   }
 
   /**
    * sets instance of contract to this._contract
+   *
    * @param {object} instance instance of contract created by Web3Service
    */
   // eslint-disable-next-line consistent-return
@@ -32,56 +50,90 @@ class ContractService {
 
   /**
    * compiles contracts and returning type of compiled contract, bytecode & abi
+   *
    * @param {string} type - ERC20 - if compiling ERC20 token contract, project - if project contract
+   * @param {string} password password
    * @returns {object} contains type of compiled contract, his bytecode and abi for deploying
    */
-  compileContract(type) {
+  // eslint-disable-next-line class-methods-use-this
+  compileContract(type, password) {
+    const { rootStore: { Web3Service, userStore } } = this;
+    const { address } = userStore;
+    window.linker = linker;
     return new Promise((resolve, reject) => {
-      window.BrowserSolc.getVersions((sources, releases) => {
-        const version = releases['0.4.24'];
-        const contract = this.combineContract(type);
-        const contractName = type === 'ERC20'
-          ? ':ERC20'
-          : ':Voter';
-        window.BrowserSolc.loadVersion(version, (compiler) => {
-          const compiledContract = compiler.compile(contract);
-          const contractData = compiledContract.contracts[contractName];
-          if (contractData.interface !== '') {
-            const { bytecode, metadata } = contractData;
-            const { output: { abi } } = JSON.parse(metadata);
-            resolve({ type, bytecode, abi });
-          } else reject(new Error('Something went wrong on contract compiling'));
-        });
+      let bytecode;
+      let abi;
+
+      const contract = this.combineContract(type);
+      window.ipcRenderer.send('compile-request', { contract, type });
+      window.ipcRenderer.once('contract-compiled', async (event, compiledContract) => {
+        console.log(compiledContract);
+        if (type === 'ZeroOne') {
+          const { ZeroOne, ZeroOneVM } = compiledContract;
+          const { evm: { bytecode: { object: libraryBytecode } } } = ZeroOneVM;
+          const { evm: { bytecode: { object: ZeroOneBytecode } }, abi: ZeroOneABI } = ZeroOne;
+          const libTX = { data: `0x${libraryBytecode}` };
+          await Web3Service.createTxData(address, libTX)
+            .then((formedTx) => userStore.singTransaction(formedTx, password))
+            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+            .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+            .then(({ contractAddress }) => {
+              console.log(`library at ${contractAddress}`);
+              abi = ZeroOneABI;
+              const [link] = Object.keys(linker.findLinkReferences(ZeroOneBytecode));
+              bytecode = linker.linkBytecode(ZeroOneBytecode, { [link]: contractAddress });
+            });
+        } else if (compiledContract.abi !== '') {
+          const { evm: { bytecode: { object } }, abi: contractAbi } = compiledContract;
+          abi = contractAbi;
+          bytecode = object;
+        } else reject(new Error('Something went wrong on contract compiling'));
+
+        fs.writeFileSync(path.join(PATH_TO_CONTRACTS, `${type}.abi`), JSON.stringify(abi, null, '\t'));
+        resolve({ type, bytecode, abi });
       });
     });
   }
 
   /**
    * reading all imports in main contract file and importing all files in one output file
+   *
    * @param {string} type type of project - ERC20 for ERC-20 tokens, Project for project contract
    * @returns {string} combined contracts
    */
   // eslint-disable-next-line class-methods-use-this
   combineContract(type) {
-    const dir = type === 'ERC20' ? './' : './Voter/';
-    const compiler = 'pragma solidity ^0.4.24;';
-    const pathToMainFile = type === 'ERC20'
-      ? path.join(PATH_TO_CONTRACTS, `${dir}ERC20.sol`)
-      : path.join(PATH_TO_CONTRACTS, `${dir}Voter.sol`);
+    let dir;
+    const compiler = 'pragma solidity 0.6.1;';
+    switch (type) {
+      case ('ERC20'):
+        dir = '../../node_modules/zeroone-contracts/contracts/__vendor__/';
+        break;
+      case ('CustomToken'):
+        dir = '../../node_modules/zeroone-contracts/contracts/Token/';
+        break;
+      case ('ZeroOne'):
+        dir = '../../node_modules/zeroone-contracts/contracts/ZeroOne/';
+        break;
+      default:
+        break;
+    }
+    const pathToMainFile = path.join(PATH_TO_CONTRACTS, `${dir}${type}.sol`);
 
     const importedFiles = {};
 
     let output = readSolFile(pathToMainFile, importedFiles);
-    output = output.replace(SOL_VERSION_REGEXP, compiler);
-    output = output.replace(/(calldata)/g, '');
+    output = output.replace(SOL_VERSION_REGEXP, compiler).replace((SOL_IMPORT_REGEXP), '');
+    // output = output.replace(/(calldata)/g, '');
 
     return output;
   }
 
   /**
-   * Sendind transaction with contract to blockchain
+   * Sending transaction with contract to blockchain
+   *
    * @param {object} params parameters for deploying
-   * @param {array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
+   * @param {Array} params.deployArgs ERC20 - [Name, Symbol, Count], Project - [tokenAddress]
    * @param {string} params.bytecode bytecode of contract
    * @param {JSON} params.abi JSON interface of contract
    * @param {string} params.password password of user wallet
@@ -92,31 +144,36 @@ class ContractService {
   }) {
     const { rootStore: { Web3Service, userStore } } = this;
     const { address } = userStore;
-    const maxGasPrice = 30000000000;
     const contract = Web3Service.createContractInstance(abi);
-    const txData = contract.deploy({
+    const data = contract.deploy({
       data: `0x${bytecode}`,
       arguments: deployArgs,
     }).encodeABI();
 
+
     const tx = {
-      data: txData,
-      gasLimit: 8000000,
-      gasPrice: maxGasPrice,
+      data,
+      from: userStore.address,
+      value: '0x0',
     };
 
-    return new Promise((resolve) => {
-      Web3Service.createTxData(address, tx, maxGasPrice)
+    return new Promise((resolve, reject) => {
+      Web3Service.createTxData(address, tx)
         .then((formedTx) => userStore.singTransaction(formedTx, password))
         .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-        .then((txHash) => resolve(txHash));
+        .then((txHash) => {
+          userStore.getEthBalance();
+          resolve(txHash);
+        })
+        .catch((err) => reject(err));
     });
   }
 
   /**
    * checks erc20 tokens contract on totalSupply and symbol
+   *
    * @param {string} address address of erc20 contract
-   * @return {object} {totalSypply, symbol}
+   * @returns {object} {totalSypply, symbol}
    */
   async checkTokens(address) {
     const { rootStore: { Web3Service }, ercAbi } = this;
@@ -129,115 +186,395 @@ class ContractService {
 
   /**
    * checks is the address of contract
+   *
    * @param {string} address address of contract
-   * @return {Promise} Promise with function which resolves, if address is contract
+   * @returns {Promise} Promise with function which resolves, if address is contract
    */
-  // eslint-disable-next-line class-methods-use-this
   checkProject(address) {
     const { rootStore: { Web3Service } } = this;
     return new Promise((resolve, reject) => {
-      Web3Service.web3.eth.getCode(address).then((bytecode) => {
-        if (bytecode === '0x') reject();
-        resolve(bytecode);
-      });
+      const abi = JSON.parse(fs.readFileSync(path.join(PATH_TO_CONTRACTS, './ZeroOne.abi')));
+      const contract = Web3Service.createContractInstance(abi);
+      contract.options.address = address;
+      contract.methods.getQuestionGroupsAmount().call()
+        .then((data) => resolve())
+        .catch((err) => reject(err));
     });
   }
 
   /**
    * calling contract method
+   *
    * @param {string} method method, which will be called
-   * @param {string} from address of caller
-   * @param params parameters for method
+   * @param {any} params parameters for method
+   * @returns {object} data from method
    */
   async callMethod(method, ...params) {
     const data = await this._contract.methods[method](...params).call();
     return data;
   }
 
+  // TODO add correct js doc
+  /**
+   * Method create data for voting
+   *
+   * @returns {object} voting data
+   * @param votingQuestion
+   * @param votingGroupId
+   * @param votingData
+   */
+  createVotingData(votingQuestion, votingGroupId, votingData) {
+    const { rootStore: { userStore, Web3Service: { web3: { eth: { abi } } } }, _contract } = this;
+    const votingInfo = {
+      starterGroupId: votingGroupId,
+      endTime: 0,
+      starterAddress: userStore.address,
+      questionId: votingQuestion,
+      data: votingData,
+    };
+    // eslint-disable-next-line max-len
+    const data = {
+      // eslint-disable-next-line max-len
+      data: _contract.methods.startVoting(votingInfo).encodeABI(),
+      from: userStore.address,
+      value: '0x0',
+      to: _contract.options.address,
+    };
+    return data;
+  }
+
   /**
    * checks count of uploaded to contract questions and total count of system questions
+   *
    * @function
    * @returns {object} {countOfUploaded, totalCount}
    */
   async checkQuestions() {
-    const countOfUploaded = await this._contract.methods.getCount().call();
+    const countOfUploaded = await this._contract.methods.getQuestionsAmount().call();
     const totalCount = Object.keys(this.sysQuestions).length;
     return ({ countOfUploaded, totalCount });
   }
 
   /**
    * send question to created contract
+   *
    * @param {number} idx id of question;
-   * @return {Promise} Promise, which resolves on transaction hash
+   * @returns {Promise} Promise, which resolves on transaction hash
    */
   async sendQuestion(idx) {
+    console.log(`question id = ${idx}`);
+    const { _contract: contract, rootStore } = this;
     const {
       Web3Service, userStore,
-    } = this.rootStore;
-    const sysQuestion = this.sysQuestions[idx];
-    await this.fetchQuestion(idx).then((result) => {
-      if (result.caption === '') {
-        const { address, password } = userStore;
-        const question = new Question(sysQuestion);
-        const contractAddr = this._contract.options.address;
-        const params = question.getUploadingParams(contractAddr);
+    } = rootStore;
+    const question = this.sysQuestions[idx];
+    const owners = await contract.methods.getUserGroup(0).call();
 
-        const dataTx = this._contract.methods.saveNewQuestion(...params).encodeABI();
+    const { address, password } = userStore;
+    const contractAddr = contract.options.address;
+    question.target = contractAddr;
+    question.rawFormula = question.rawFormula.replace('%s', owners.groupAddress);
+    question.formula = compile(question.rawFormula);
+    question.active = true;
 
-        const maxGasPrice = 30000000000;
-        const rawTx = {
-          to: contractAddr,
-          data: dataTx,
-          gasLimit: 8000000,
-          value: '0x0',
-        };
+    console.log(question);
+    const dataTx = contract.methods.addQuestion(question).encodeABI();
+    console.log(dataTx);
+    const rawTx = {
+      to: contractAddr,
+      data: dataTx,
+      value: '0x0',
+    };
 
-        return new Promise((resolve) => {
-          Web3Service.createTxData(address, rawTx, maxGasPrice)
-            .then((formedTx) => userStore.singTransaction(formedTx, password))
-            .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
-            .then((txHash) => resolve(txHash));
+    return new Promise((resolve) => {
+      Web3Service.createTxData(address, rawTx)
+        .then((formedTx) => userStore.singTransaction(formedTx, password))
+        .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+        .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+        .then((receipt) => {
+          userStore.getEthBalance();
+          resolve(receipt);
         });
-      }
-      return Promise.reject();
     });
   }
 
   /**
    * Fetching one question from contract
+   *
    * @param {number} id id of question
-   * @returns {Object} Question data from contract
+   * @returns {object} Question data from contract
    */
   fetchQuestion(id) {
-    return this.callMethod('question', [id]);
+    return this.callMethod('getQuestion', id);
   }
 
   /**
    * getting one voting
+   *
    * @param {number} id id of voting
-   * @param {string} from address who calls method
+   * @returns {object} Voting data
    */
   async fetchVoting(id) {
-    return this.callMethod('getVoting', [id]);
+    return this.callMethod('getVoting', id);
   }
+
 
   /**
    * getting votes weights for voting
+   *
    * @param {number} id id of voting
-   * @param {string} from address, who calls
+   * @returns {object} Voting stats data
+   * @deprecated
    */
+  // TODO delete me after
   async fetchVotingStats(id) {
     return this.callMethod('getVotingStats', [id]);
   }
 
   /**
-   * Starting the voting
-   * @param {id} id id of question
-   * @param {string} from address, who starts
-   * @param params parameters of voting
+   * Fetch length of usergroups in contract
+   *
+   * @returns {number} amount groups
    */
+  fetchUserGroupsLength() {
+    return this._contract.methods.getUserGroupsAmount().call();
+  }
+
+  /**
+   * Starting the voting
+   *
+   * @param {string|number} id id of question
+   * @param {string} from address, who starts
+   * @param {any} params parameters of voting
+   * @returns {Promise} promise
+   * @deprecated
+   */
+  // TODO delete me after
   async sendVotingStart(id, from, params) {
     return (this, id, from, params);
+  }
+
+  /**
+   * creates transaction for sending decision about voting
+   *
+   * @param {number} votingId  voting
+   * @param {number} decision 0 - negative, 1 - positive
+   * @returns {Promise} promise
+   */
+  // eslint-disable-next-line consistent-return
+  async sendVote(votingId, decision) {
+    const {
+      ercAbi,
+      _contract,
+      rootStore: {
+        appStore,
+        Web3Service,
+        userStore,
+        membersStore,
+        projectStore: {
+          historyStore,
+          questionStore,
+        },
+      },
+    } = this;
+    appStore.setTransactionStep('compileOrSign');
+    const [voting] = historyStore.getVotingById(votingId);
+    const { allowedGroups } = voting;
+    const { length: groupsLength } = allowedGroups;
+
+    const data = _contract.methods.setVote(decision).encodeABI();
+
+    for (let i = 0; i < groupsLength; i += 1) {
+      const group = membersStore.getMemberGroupByAddress(allowedGroups[i]);
+      if (group.groupType === tokenTypes.ERC20) {
+        console.log('approving');
+        // eslint-disable-next-line no-await-in-loop
+        await this.approveErc(group);
+        console.log('approved');
+      }
+    }
+
+    const tx = {
+      from: userStore.address,
+      to: _contract.options.address,
+      value: '0x0',
+      data,
+    };
+
+    // eslint-disable-next-line consistent-return
+    return new Promise((resolve, reject) => Web3Service.createTxData(userStore.address, tx)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+      .then((signedTx) => {
+        appStore.setTransactionStep('sending');
+        return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+      })
+      .then((txHash) => {
+        appStore.setTransactionStep('txReceipt');
+        return Web3Service.subscribeTxReceipt(txHash);
+      })
+      .then((rec) => {
+        appStore.setTransactionStep('success');
+        historyStore.updateVotingById({
+          id: votingId,
+          newState: {
+            userVote: Number(decision),
+          },
+        });
+        for (let i = 0; i < groupsLength; i += 1) {
+          const group = membersStore.getMemberGroupByAddress(allowedGroups[i]);
+          group.updateUserBalance();
+        }
+        userStore.getEthBalance();
+        resolve(rec);
+      })
+      .catch((err) => reject(err)));
+  }
+
+  closeVoting() {
+    const {
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+        contractService,
+        appStore,
+      },
+    } = this;
+
+    const tx = {
+      from: userStore.address,
+      data: _contract.methods.submitVoting().encodeABI(),
+      value: '0x0',
+      to: _contract.options.address,
+    };
+
+    console.log('sending TX');
+    appStore.setTransactionStep('compileOrSign');
+    return Web3Service.createTxData(userStore.address, tx)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+      .then((signedTx) => {
+        appStore.setTransactionStep('sending');
+        return Web3Service.sendSignedTransaction(`0x${signedTx}`);
+      })
+      .then((txHash) => {
+        appStore.setTransactionStep('txReceipt');
+        return Web3Service.subscribeTxReceipt(txHash);
+      })
+      .then(() => {
+        userStore.getEthBalance();
+      });
+  }
+
+  /**
+   * Method for start voting
+   *
+   * @returns {Promise} promise
+   * @deprecated
+   */
+  // startVoting(questionId, params) {
+  //   const {
+  //     _contract,
+  //     rootStore: {
+  //       projectStore: { questionStore },
+  //       Web3Service,
+  //       userStore,
+  //     },
+  //   } = this;
+  //   const [question] = questionStore.getQuestionById(questionId);
+  //   const { parameters } = question;
+  //   const data = Web3Service.web3.eth.abi.encodeParameters(parameters, params);
+  //   const votingData = (data).replace('0x', question.methodSelector);
+  //   const votingInfo = {
+  //     starterGroupId: 0,
+  //     endTime: 0,
+  //     starterAddress: userStore.address,
+  //     questionId,
+  //     data: votingData,
+  //   };
+  //   console.log('votingInfo', votingInfo);
+  //   const tx = {
+  //     data: _contract.methods.startVoting(votingInfo).encodeABI(),
+  //     from: userStore.address,
+  //     to: _contract.options.address,
+  //     value: '0x0',
+  //   };
+  //   console.log('tx', tx);
+  //   return Web3Service.createTxData(userStore.address, tx)
+  //     .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+  //     .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+  //     .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+  //     .then(() => {
+  //       userStore.getEthBalance();
+  //     });
+  // }
+
+  returnTokens() {
+    const {
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+        membersStore,
+        projectStore: {
+          historyStore,
+          questionStore,
+        },
+      },
+    } = this;
+    const data = _contract.methods.returnTokens().encodeABI();
+    const tx = {
+      from: userStore.address,
+      to: _contract.options.address,
+      value: '0x0',
+      data,
+    };
+    return Web3Service.createTxData(userStore.address, tx)
+      .then((formedTx) => userStore.singTransaction(formedTx, userStore.password))
+      .then((signedTx) => Web3Service.sendSignedTransaction(`0x${signedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(async (rec) => {
+        userStore.getEthBalance();
+        const lastVotingId = await _contract.methods.findLastUserVoting().call();
+        const [voting] = historyStore.getVotingById(Number(lastVotingId));
+        const { questionId } = voting;
+        const [question] = questionStore.getQuestionById(Number(questionId));
+        const { groupId } = question;
+        const [group] = membersStore.getMemberById(Number(groupId));
+        group.updateUserBalance();
+      });
+  }
+
+  /**
+   * approve token transfer from user to Voter contract
+   *
+   * @param {object} group group instance
+   */
+  approveErc(group) {
+    const {
+      ercAbi,
+      _contract,
+      rootStore: {
+        Web3Service,
+        userStore,
+      },
+    } = this;
+    const ercContract = Web3Service.createContractInstance(ercAbi);
+    ercContract.options.address = group.wallet;
+    // eslint-disable-next-line max-len
+    const txData = ercContract.methods.approve(_contract.options.address, userStore.address).encodeABI();
+    const tx = {
+      data: txData,
+      from: userStore.address,
+      value: '0x0',
+      to: group.wallet,
+    };
+    return Web3Service.createTxData(userStore.address, tx)
+      .then((createdTx) => userStore.singTransaction(createdTx, userStore.password))
+      .then((formedTx) => Web3Service.sendSignedTransaction(`0x${formedTx}`))
+      .then((txHash) => Web3Service.subscribeTxReceipt(txHash))
+      .then(() => {
+        userStore.getEthBalance();
+      });
   }
 
   /**
