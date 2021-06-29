@@ -1,0 +1,48 @@
+@import '../../assets/styles/partials/variables';
+
+.logo{
+  display: table;
+  height: 53px;
+  color: $primary;
+  text-decoration: none;
+  border: 3px solid $primary;
+
+  &__dark {
+    display: table-cell;
+    min-width: 49px;
+    padding: 0 5px;
+    font-size: 0;
+    text-align: center;
+    background: $primary;
+    transition: 0.3s;
+    span {
+      color: $white;
+      font-weight: bold;
+      font-size: 32px;
+      font-family: "Roboto Mono";
+    }
+  }
+
+  &__light {
+    display: table-cell;
+    min-width: 79px;
+    padding: 0 10px 0 10px;
+    font-size: 0;
+    text-align: center;
+    vertical-align: middle;
+    background: $white;
+    transition: 0.3s;
+    span {
+      font-weight: 700;
+      font-size: 14px;
+      font-family: "Grotesk";
+    }
+  }
+  
+  &:hover {
+    .logo__dark,
+    .logo__light {
+      filter: invert(100%);
+    }
+  }
+}

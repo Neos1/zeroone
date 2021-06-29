@@ -1,0 +1,17 @@
+{
+	"host": "https://ropsten.infura.io/v3/14b2319f08e24f3aadfe1aa933301b38",
+	"projects": [
+		{
+			"name": "tetete",
+			"address": "0x1Df6AdA9f170D0FdFb075140333A44c0C651f4AC"
+		},
+		{
+			"name": "test",
+			"address": "0x1Cd9D97EC3f3283cD564bB82f7d0Ee2737D6F352"
+		},
+		{
+			"name": "T3st",
+			"address": "0xACA55c33D67d549CacA4f700D0319B865D8E0FC5"
+		}
+	]
+}

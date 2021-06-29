@@ -1,15 +1,23 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './App';
+import { Provider } from 'mobx-react';
+import SimpleRouter from './components/Router/SimpleRouter';
+import rootStore from './stores/RootStore';
+import Alert from './components/Alert';
+import './i18n';
+
 import './assets/styles/style.scss';
 
-/**
- * Represents a book.
- * @param {string} title - The title of the book.
- * @param {string} author - The author of the book.
- */
+const { userStore, appStore, dialogStore } = rootStore;
 
 render(
-  <App />,
+  <Provider
+    appStore={appStore}
+    userStore={userStore}
+    dialogStore={dialogStore}
+  >
+    <SimpleRouter />
+    <Alert />
+  </Provider>,
   document.getElementById('root'),
 );

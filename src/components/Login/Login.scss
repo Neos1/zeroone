@@ -1,0 +1,452 @@
+@import '../../assets/styles/partials/variables';
+.form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  background-color: $white;
+  border: 1px solid $lightGrey;
+  transform: translate(-50%, -50%);
+  &--wide {
+    width: 550px;
+    .form__block {
+      padding: 60px 50px;
+    }
+  }
+
+  &--ultrawide {
+    width: 1062px;
+    .form__block {
+      padding: 70px 90px 110px;
+    }
+  }
+
+  &__block {
+    padding: 60px 44px;
+    text-align: center;
+    .heading {
+      margin-bottom: 60px;
+    }
+    .dropdown {
+      width: 100%;
+      margin: 10px 0;
+    }
+    .field {
+      width: 100%;
+      margin: 10px 0;
+    }
+    .btn {
+      display: block;
+      margin: 10px auto;
+      &--default {
+        width: 100%;
+        margin: 42px auto 20px;
+      }
+    }
+    form, .add-project {
+      padding: 0 50px;
+    }
+  }
+
+  &__submit {
+    text-align: center;
+  }
+
+  .btn--back {
+    position: absolute;
+    bottom: -62px;
+    left: 50%;
+    transform: translateX(-50%);
+    svg{
+      width: 14px;
+      height: 12px;
+      margin-right: 3px;
+    }
+  }
+
+  &__explanation {
+    position: absolute;
+    top: 50%;
+    width: 60%;
+    text-align: left;
+    transform: translateY(-50%);
+    &--left {
+      right: 103.5%;
+    }
+    &--right {
+      left: 102%;
+    }
+    ul {
+      list-style: none;
+      .indicator {
+        margin: 7px 5px;
+        vertical-align: middle;
+      }
+    }
+    strong{
+      font-weight: 700;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    .field {
+      width: 45%;
+      &__input {
+        width: 70%;
+      }
+    }
+  }
+
+  &__token {
+    display: flex;
+    &-half {
+      display: inline-block;
+      width: calc(50% - 1px);
+    }
+    &-label {
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    &-divider {
+      display: inline-block;
+      width: 1px;
+      background-color: $primary;
+      opacity: .1;
+    }
+    &-value {
+      color: $secondary;
+      font-size: 14px;
+    }
+  }
+
+  &__wallet {
+    font-size: 12px;
+    &-label{
+      margin-bottom: 15px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    &-text {
+      color: $border
+    }
+  }
+}
+.seed {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  &__word {
+    display: inline-block;
+    width: 33%;
+    margin-bottom: 30px;
+    text-align: left;
+    &-id {
+      display: inline-block;
+      margin-right: 10px;
+      color: #181818;
+      opacity: .5;
+    
+    }
+    &-text {
+      font-weight: bold;
+    }
+  }
+
+  .field {
+    position: relative;
+    width: 30%;
+    padding: 8px 5px;
+    &:before {
+      left: 30px;
+    }
+    &__input {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 65%;
+      margin-left: 0;
+      transform: translateY(-50%);
+      &:not(:placeholder-shown) {
+        & ~ .field__line {
+          width: 0%;
+        }
+      }
+      &:focus {
+        & ~ .field__line {
+          width: 100%;
+        }
+      }
+    }
+    &__line {
+      width: 0;
+    }
+  }
+}
+
+.projects {
+  display: grid;
+  grid-row-gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+
+  .btn {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+}
+
+.create, .add-project {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  &>a {
+    display: inline-block;
+    width: calc(50% - 5px);
+    .btn--white {
+      display: inline-block;
+      width: 100%;
+      svg {
+        path {
+          fill: $white
+        }
+      }
+      &:active {
+        svg {
+          path {
+            fill: $primary;
+            stroke: $white;
+          }
+        }
+      }
+      &>.btn__content{
+        display: inline-block;
+        &>*{
+          display: unset;
+        }
+      }
+    }
+  }
+} 
+.create {
+
+  .btn--white {
+    padding: 15px;
+    svg {
+      height: 25px;
+      margin: 0 0 10px;
+      path {
+        fill: $white;
+      }
+    }
+    .btn__content{
+      .btn__text {
+        display: block;
+        width: 80%;
+        margin: 5px auto 0;
+      }
+    }
+    
+  }
+
+  &__label {
+    display: inline-block;
+    margin-bottom: 0px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+}
+
+.progress {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+
+  &-block {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    transition: .3s linear; 
+    &__icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: inline-block;
+      transform: translate(-50%, -50%);
+      & > svg {
+        width: 42px;
+        height: 42px;
+        path {
+          transition: .2s;
+          fill: rgba($color: $primary, $alpha: .5);
+        }
+      }
+    }
+    &>svg {
+      position: absolute;
+      top: 0%;
+      left: 50%;
+      width: 80px;
+      height: 80px;
+      transform: translate(-50%, 0%) scale(1);
+    }
+    & > img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: .5;
+    }
+    &>p{
+      width: 100%;
+      margin: 90px 0 0;
+      color: #37474F;
+      font-size: 12px;
+      opacity: .5;
+      span {
+        display: block;
+        margin-bottom: 10px;
+      }
+      &+strong {
+        display: inline-block;
+        width: 165%;
+        margin: 5px 0 0 -35%;
+      }
+    }
+    .stroke-animation {
+      opacity: 0;
+    }
+
+    &.success{
+      .progress-block__icon {
+        &>svg {
+          path {
+            fill: rgba($color: $primary, $alpha: 1);
+          }
+        }
+      }
+      .stroke-still {
+        stroke-dasharray: 0;
+        stroke: rgba($color: $primary, $alpha: 1);
+      }
+      & > img {
+        opacity: 1;
+      }
+      .progress-line{
+        width: 96px;
+        border: 1px solid rgba($color: $primary, $alpha: 1);
+        opacity: 1;
+      }
+      &>p {
+        color: $primary;
+        opacity: 1;
+      }
+    }
+  
+    &.active{
+      & > img {
+        opacity: 1;
+      }
+      .stroke-animation {
+        opacity: 1;
+      }
+      .progress-block__icon {
+        svg {
+          path {
+            fill: $primary
+          }
+        }
+      }
+      .progress-line {
+        opacity: 1;
+      }
+      .stroke-still {
+        stroke: transparent;
+      }
+      &>p{
+        color: $primary;
+        opacity: 1;
+      }
+    }
+  }
+
+  &-line {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 96px;
+    border: 1px dashed rgba($color: $primary, $alpha: .5);
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: .3s ease-in;
+  }
+}
+
+.stroke {
+
+  &-still {
+    stroke-dasharray: 2;
+    stroke-width: 4;
+    transition: .2s;
+    stroke: rgba($color: $primary, $alpha: .5);
+  }
+
+  &-animation {
+    stroke-width: 4;
+    transform-origin: center center;
+    animation: stroke-spacing 4s ease-in, stroke-color 5.2s linear;
+    animation-play-state: running;
+    animation-delay: 0;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+  }
+}
+
+.step-indicator {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  color: #808080;
+  font-size: 12px;
+  text-align: center;
+  transform: translate(-50%, 30%);
+}
+
+@keyframes stroke-spacing {
+  0% {
+    stroke-dasharray: 0 200;
+  }
+  45% {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 200 200;
+  }
+  90% {
+    stroke-dashoffset: -200;
+    stroke-dasharray: 200 200;
+  }
+  100% {
+    stroke-dashoffset: -200;
+    stroke-dasharray: 200 200;
+  }
+}
+
+@keyframes stroke-color {
+  0%  { stroke: $primary; }
+  24% { stroke: $primary; }
+  25% { stroke: $primary; }
+  49% { stroke: $primary; }
+  50% { stroke: $primary; }
+  74% { stroke: $primary; }
+  75% { stroke: $primary; }
+  99% { stroke: $primary; }
+}

@@ -1,0 +1,177 @@
+@import '../../assets/styles/partials/variables';
+.dropdown {
+  position: relative;
+  display: inline-block;
+  
+  button {
+    background: transparent;
+    outline: none;
+  }
+
+  &__head {
+    position: relative;
+    width: 100%;
+    padding: 8px 15px 8px 5px;
+    text-align: left;
+    border: unset;
+    border-bottom: 1px solid $lightGrey;
+    cursor: pointer;
+    transition: 0.2s linear;
+    &-line {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background-color: $primary;
+      transition: 0.2s ease-in;
+    }
+    &:hover {
+      border-color: $border;
+      .dropdown__arrow {
+        svg {
+          path {
+            opacity: 1;
+            stroke: $border;
+          }
+        }
+      }
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    right:  0;
+    font-size: 0;
+    transform: translateY(-50%) rotate(0deg);
+    transition: 0.2s;
+    svg {
+      path {
+        opacity: 1;
+        transition: 0.2s;
+        stroke: $lightGrey;
+      }
+    }
+  }
+
+  &__icon {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    svg {
+      vertical-align: middle;
+    }
+    &:after {
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      width: 1px;
+      height: 13px;
+      background-color: $lightGrey;
+      transform: translate(-50%, -50%);
+      content: "";
+    }
+  }
+
+  &__selected {
+    display: inline-block;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+
+  &__options {
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+    width: 155%;
+    height: 0;
+    max-height: 150px;
+    padding: 5px 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: $white;
+    border: 1px solid #E1E4E8;
+    opacity: 0;
+    transition: .3s ease-in-out;
+    &::-webkit-scrollbar {
+      width: 20px;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: #fff;
+      border: 2px solid #f1f1f1;
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background-image: url(../../assets/images/thumb.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      border: 1px solid $border;
+    }
+    &::-webkit-scrollbar-button:vertical:decrement{
+      width: 20px;
+      height: 20px;
+      background-image: url(../../assets/images/scrollbarBtn.svg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+    &::-webkit-scrollbar-button:vertical:increment{
+      position: relative;
+      width: 20px;
+      height: 20px;
+      background-image: url(../../assets/images/scrollbarBtnDown.svg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+  }
+
+  &__option {
+    display: block;
+    padding: 10px 0;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__suboption {
+    margin-left: 30px;
+    color: $linkColor;
+    font-weight: 700;
+  }
+
+  &--opened {
+    .dropdown__head {
+      &-line {
+        width: 100%;
+      }
+      &:hover {
+        .dropdown__arrow {
+          transform: translateY(-50%)rotate(180deg);
+          svg {
+            path {
+              opacity: 1;
+              stroke: $primary;
+            }
+          }
+        }
+      }
+    }
+    .dropdown__arrow {
+      transform: translateY(-50%)rotate(180deg);
+      svg {
+        path {
+          opacity: 1;
+          stroke: $primary;
+        }
+      }
+    }
+    .dropdown__options {
+      height: 150px;
+      opacity: 1;
+    }
+  }
+}

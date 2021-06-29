@@ -1,0 +1,21 @@
+const buttons = {
+  login: 'Войти',
+  newWallet: 'Создать новый ключ',
+  forgotPassword: 'Забыли пароль?',
+  showSeed: 'Показать фразу',
+  hideSeed: 'Скрыть фразу',
+  seedWroted: 'Я записал',
+  addProject: 'Добавить проект',
+  create: 'Создать',
+  connect: 'Подключить',
+  continue: 'Продолжить',
+  finish: 'Завершить',
+  back: 'Назад',
+  otherProject: 'Выбрать другой проект',
+  toConnectedProject: 'К подлюченному проекту',
+  toCreatedProject: 'К созданному проекту',
+  withTokens: 'Подключить контракт и создать проект',
+  withoutTokens: 'Создать новые токены и проект',
+  toWallets: 'К выбору кошелька',
+};
+export default buttons;
